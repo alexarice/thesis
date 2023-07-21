@@ -120,28 +120,6 @@
 %%%%%
 \RequirePackage{graphicx}           % Required for the UC Logo (on the title page)
 \RequirePackage{calc}               % Used for calculating margins and laying out the title page
-\RequirePackage{setspace}      	    % Used for selecting single or onehalf line spacing.
-\RequirePackage{microtype}          % Improvement of general text appearance 
-
-% Hyperref should be included in any case, but we make it non-obtrusive (i.e.: no hyperlink borders).
-% Why do we need a separate treatment of hyperref for the techreport? Because the guidelines say so. :)
-\ifcam@techreport
-    % TODO: If the thesis is compiled to PS, include the 'dvips' option to hyperref.
-    \RequirePackage[
-        pdfpagelabels=false,
-        pdfborder={0 0 0},
-        pdfusetitle=true
-    ]{hyperref}
-\else
-    \RequirePackage[
-        pdffitwindow=true,
-        pdfpagelabels=true,
-        colorlinks=false,
-        pdfborder={0 0 0},
-        pdfusetitle=true
-    ]{hyperref}
-\fi
-\RequirePackage[all]{hypcap}        % Fixes links to floats (must be included after hyperref).
 
 % Create the index
 \ifcam@index
@@ -219,35 +197,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Fonts
-%%
-%%%%%
-
-% Font recommended by the Computer Laboratory (Adobe Sabon).
-% Note: You might need to install it first.
-% \renewcommand\rmdefault{psb}
-
-% Use the times font if the user selected this option.
-\ifcam@times
-    \RequirePackage{times}
-\fi
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% Line spacing
-%%
-%%%%%
-
-% One-and-a-half spacing (required by board of graduate studies).
-% (Should remove this for Computer Laboratory technical report.)
-\ifcam@techreport\else%
-    \onehalfspacing%
-\fi
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
 %% Variable definitions and default values: these variables should be defined by
 %% the user (somewhere in the preamble). For example, to put the abstract into
 %% the thesis, the thesis writer should type the following somewhere in the
@@ -301,7 +250,7 @@
 \newcommand{\@submissionnotice}{%
 \ifcam@firstyr
 First year report submitted
-\else 
+\else
 \ifcam@secondyr
 Second year report submitted
 \else
@@ -472,7 +421,7 @@ for the degree of Doctor of Philosophy%
 \else
 {\ifcam@firstyr
 % First and second yr report don't need the declaration
-\else 
+\else
 \ifcam@secondyr
 %
 \else
@@ -537,7 +486,7 @@ This dissertation does not exceed the prescribed limit of 60\,000 words.
 
 \ifcam@firstyr
 % First and second yr report don't need the acknowledgements
-\else 
+\else
 {\ifcam@secondyr
 %
 \else
