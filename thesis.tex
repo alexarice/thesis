@@ -60,83 +60,70 @@
 %%
 \chapter{Introduction}
 
+\todo[inline] {Write intro here}
+
 \section{Higher categories}
 \label{sec:higher-categories}
 
 A higher category is a generalisation of the ordinary notion of a category to allow higher dimensional structure. This manifests in the form of allowing arrows or morphisms to have their source or target be another morphism instead of an object. More precisely, higher categories are equipped with the notion of an \(n\)-cell, where an \((n+1)\)-cell has source and target \(n\)-cells, and \(0\)-cells play the role of objects in an ordinary category.
-\todo[inline]{Higher categories through pictures}
 
-\todo[inline]{Composition}
+\todo[inline]{Introduce Globular sets, use pictures of arrows}
 
-\todo[inline]{Example of 2-categories with interchange}
-
-One of the simplest examples of a higher category is a 2-category. These have just \(0\), \(1\), and \(2\)-cells, and no structure higher than this.\todo{remove this}
-
-\begin{definition}
-  A (strict) \emph{2-category} consists of:
-  \begin{itemize}
-  \item A set of objects (or \(0\)-cells).
-  \item For every pair of \(0\) cells \(x, y \in X\), a set of \(1\)-cells. We write \(f \colon x \to y\) to say that \(f\) is in this set and say that \(f\) has source \(x\) and target \(y\). We may draw this as:
-    \[
-      \begin{tikzcd}
-	x & y
-	\arrow["f", from=1-1, to=1-2]
-      \end{tikzcd}
-    \]
-    Two \(1\)-cells are \emph{parallel} if they have the same source and target.
-  \item For every parallel pair of \(1\)-cells \(f,g \colon x \to y\), a set of \(2\)-cells. Elements of this set are written \(\alpha \colon f \to g\), similar to \(1\)-cells, and may be drawn:
-
-    \[\begin{tikzcd}
-	x & y
-	\arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-12pt}, from=1-1, to=1-2]
-	\arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=12pt}, from=1-1, to=1-2]
-	\arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
-      \end{tikzcd}
-    \]
-  \item For each \(0\)-cell \(x\), an identity \(1\)-cell \(\iden{x} \colon x \to x\).
-  \item For each \(1\)-cell \(f\), an identity \(0\)-cell \(\iden{f} \colon f \to f\).
-  \item For \(1\)-cells \(f \colon x \to y\) and \(g \colon y \to z\), a composition \(g \circ f \colon x \to z\).
-  \item For \(2\)-cells \(\alpha \colon f \to g\) and \(\beta \colon g \to h\), a vertical composition \(\beta \circ_v \alpha \colon f \to h\).
-  \item
-  \end{itemize}
-\end{definition}\todo{remove this}
-
-\todo[inline]{Example: Category of categories}
-
-\todo[inline]{Formal definition of globular set}
-
-\todo[inline]{Note on coinductive definitions}
+\todo[inline]{Composition, with pictures}
 
 \todo[inline]{Definition of strict \(\infty\)-category}
+
+\todo[inline]{Note on coinductive definitions}
 
 \subsection{Strictness}
 \label{sec:strictness}
 
 The \(\infty\)-categories we have defined so far are known as \emph{strict} infinity categories.
 
+\todo[inline]{Talk about isomorphism vs equality}
+
+\todo[inline]{Define bicategory?}
+
+\todo[inline]{Exponential blowup in number of coherence moves needed}
+
 \section{Type theory preliminaries}
 \label{sec:type-theory}
 
-\subsection{Models of type theory}
-\label{sec:models-type-theory}
+\todo[inline]{Background on type theory}
 
-\subsection{Formalisation}
-\label{sec:formalisation}
+\todo[inline]{Dependent type theory}
+
+\todo[inline]{MLTT/HoTT}
+
+\todo[inline]{Properties of type theories}
 
 \section{The type theory \Catt}
 \label{sec:type-theory-catt}
 
+\todo[inline]{High level presentation of Catt}
+
+\todo[inline]{We give a more formal definition in the next section}
+
+\todo[inline]{Talk about models of Catt here}
+
+\subsection{Formalisation}
+\label{sec:formalisation}
+
 \chapter{A general presentation of \Catt}
 \label{cha:gener-pres-catt}
+
+\todo[inline]{Should be able take this mainly from cattsua paper}
 
 \section{\Catt with equality}
 \label{sec:catt-with-equality}
 
+\section{Properties of \Catt with equality}
+\label{sec:properties-catt-with}
+
 \section{Support conditions}
 \label{sec:support-conditions}
 
-\section{Properties of \Catt with equality}
-\label{sec:properties-catt-with}
+\todo[inline]{Ideas about invertibility here?}
 
 \chapter{Constructions in \Catt}
 \label{sec:operations-catt}
@@ -153,14 +140,30 @@ The \(\infty\)-categories we have defined so far are known as \emph{strict} infi
 \section{Insertion}
 \label{sec:insertion}
 
-\chapter{\Cattsu : \Catt with strict units}
+\chapter{Semistrict versions of \Catt}
 \label{cha:cattsu}
 
-\chapter{\Cattsa : \Catt with strict associativity}
-\label{cha:cattsa}
+\subsection{\Cattsu}
+\label{sec:cattsu}
 
-\chapter{\Cattsua : \Catt with strict units and associativity}
-\label{cha:cattsua}
+\subsection{\Cattsua}
+\label{sec:cattsua}
+
+\subsection{Rehydration}
+\label{sec:rehydration}
+
+\todo[inline]{Explain original motivation}
+
+\todo[inline]{Explain connection to equivalence}
+
+\todo[inline]{core problem with rehydration}
+
+\subsubsection{Rehydration by dimension}
+\label{sec:rehydr-dimens}
+
+\subsubsection{Rehydration by cylinders}
+\label{sec:rehydr-cylind}
+
 
 
 
