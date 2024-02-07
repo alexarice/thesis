@@ -59,32 +59,105 @@
 %% Thesis body:
 %%
 \chapter{Introduction}
+\Things to go in introduction:
+\begin{itemize}
+\item Motivation for higher categories
+\item Motivation for semistrictness
+\item Introduce 3 classes of coherences
+\item Ideas of semistrictness
+\item Link to graphical ideas
+\item Story behind Catt - HoTT - Brunerei
+\item Link to Grothedieck higher cats
+\end{itemize}
 
-\todo[inline] {Write intro here}
+\chapter{Background}
+\label{sec:background}
+
+We begin with an overview of the important concepts required for the rest of the thesis. Throughout, we will assume knowledge of various basic concepts from computer science, as well as a basic knowledge of category theory (including functor categories, presheafs, and (co)limits). The following sections introduce a form of globular higher categories, present the necessary type theory prerequisites, and give a definition of the type theory \Catt, close to the original definition.
+
+This section additionally serves as a place to introduce the various syntax and notation which will be used throughout the rest of the thesis.
 
 \section{Higher categories}
 \label{sec:higher-categories}
 
 A higher category is a generalisation of the ordinary notion of a category to allow higher dimensional structure. This manifests in the form of allowing arrows or morphisms to have their source or target be another morphism instead of an object. More precisely, higher categories are equipped with the notion of an \(n\)-cell, where an \((n+1)\)-cell has source and target \(n\)-cells, and \(0\)-cells play the role of objects in an ordinary category.
 
-\todo[inline]{Introduce Globular sets, use pictures of arrows}
+The role of objects is played by \(0\)-cells, with \(1\)-cells as the morphisms between these objects. For \(0\)-cells \(x\) and \(y\), a \(1\)-cell \(f\) with source \(x\) and target \(y\) will be drawn as:
+\[
+  \begin{tikzcd}
+    x & y
+    \arrow["f", from=1-1, to=1-2]
+  \end{tikzcd}
+\]
+or may be written as \(f\colon x \to y\).\todo{should arrowheads be smaller?} Two cells are \emph{parallel} if they have the same source and target. Between any two parallel \(n\)-cells \(f\) and \(g\), we have a set of \((n+1)\)-cells between them. A \(2\)-cell \(\alpha : f \to g\) may be drawn as:
+\[
+  \begin{tikzcd}
+    x & y
+    \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-12pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=12pt}, from=1-1, to=1-2]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
+  \end{tikzcd}
+\]
+and a \(3\)-cell between parallel \(2\)-cells \(\alpha\) and \(\beta\) could be could be drawn as:
+\[
+  \begin{tikzcd}
+    x && y
+    \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-15pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=15pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "\alpha"', shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "\beta", shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
+    \arrow[shorten <=4pt, shorten >=4pt, triple, from=2, to=3]
+  \end{tikzcd}
+\]
 
-\todo[inline]{Composition, with pictures}
+Just as in ordinary \(1\)-category theory, we expect to be able to compose morphisms. For \(1\)-cells, nothing has changed, given \(1\)-cells \(f\colon x \to y\) and \(g \colon y \to z\) we form the composition \(f \star g\):
+\[
+  \begin{tikzcd}
+    x & y & z
+    \arrow[from=1-1, to=1-2]
+    \arrow[from=1-2, to=1-3]
+  \end{tikzcd}
+\]
+which has source \(x\) and target \(z\). We pause here to note that composition will be given in ``diagrammatic order'' throughout the whole thesis, which is the opposite of the order of function composition but the same as the order of the arrows if drawn head to tail. This is chosen as it will be common for us to draw higher dimensional arrows in a diagram, and rare for us to consider categories where the higher arrows are given by functions. In an attempt to avoid confusion, we use a star (\(\star\)) to represent composition of arrows or cells in a higher category, and will use a circle \(\circ\) only for function composition.
+
+\todo[inline]{Two dimension/3 dimension composition}
+
+In two dimensions we get our first deviation from
+
+\todo[inline]{Formal definition of globular set}
+
+\todo[inline]{Note on coinductive definitions}
 
 \todo[inline]{Definition of strict \(\infty\)-category}
 
-\todo[inline]{Note on coinductive definitions}
+\todo[inline]{Example: Eckmann Hilton}
 
 \subsection{Strictness}
 \label{sec:strictness}
 
 The \(\infty\)-categories we have defined so far are known as \emph{strict} infinity categories.
 
-\todo[inline]{Talk about isomorphism vs equality}
+\todo[inline]{Isomorphism vs equality}
 
-\todo[inline]{Define bicategory?}
+\todo[inline]{Topological example}
+
+\todo[inline]{Smaller monoidal category example}
+
+\todo[inline]{Definition of monoidal category}
+
+\todo[inline]{Strictification for monoidal categories}
+
+\todo[inline]{All works for 2-categories}
+
+\todo[inline]{Eckmann-Hilton in weak setting}
+
+\todo[inline]{Braiding and counter example for 3-dimension semistrictification.}
 
 \todo[inline]{Exponential blowup in number of coherence moves needed}
+
+\todo[inline]{Informal description of weak infinity categories}
+
+\todo[inline]{Conjectures}
 
 \section{Type theory preliminaries}
 \label{sec:type-theory}
@@ -105,9 +178,6 @@ The \(\infty\)-categories we have defined so far are known as \emph{strict} infi
 \todo[inline]{We give a more formal definition in the next section}
 
 \todo[inline]{Talk about models of Catt here}
-
-\subsection{Formalisation}
-\label{sec:formalisation}
 
 \chapter{A general presentation of \Catt}
 \label{cha:gener-pres-catt}

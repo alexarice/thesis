@@ -184,3 +184,8 @@ backrefstyle=two]%
 \usepackage{quiver}
 
 \usepackage{todonotes}
+
+\tikzset{
+  Rightarrow/.style={double equal sign distance,>={Implies},->},
+  triple/.style={-,preaction={draw,Rightarrow}}
+}
