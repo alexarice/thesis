@@ -95,18 +95,18 @@ or may be written as \(f: x \to y\).\todo{should arrowheads be smaller?} Two cel
     x & y
     \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-12pt}, from=1-1, to=1-2]
     \arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=12pt}, from=1-1, to=1-2]
-    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
   \end{tikzcd}
 \]
-and a \(3\)-cell between parallel \(2\)-cells \(\alpha\) and \(\beta\) could be could be drawn as:
+and a \(3\)-cell \(\gamma\) between parallel \(2\)-cells \(\alpha\) and \(\beta\) could be could be drawn as:
 \[
   \begin{tikzcd}
     x && y
     \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-15pt}, from=1-1, to=1-3]
     \arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=15pt}, from=1-1, to=1-3]
-    \arrow[""{name=2, anchor=center, inner sep=0}, "\alpha"', shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
-    \arrow[""{name=3, anchor=center, inner sep=0}, "\beta", shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
-    \arrow[shorten <=4pt, shorten >=4pt, triple, from=2, to=3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "\alpha", shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "\beta"', shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\gamma", shorten <=4pt, shorten >=4pt, Rightarrow, nfold=3, from=2, to=3]
   \end{tikzcd}
 \]
 
@@ -125,11 +125,11 @@ In two dimensions, there is no longer a singular composition operation. For \(2\
 \[
   \begin{tikzcd}
     x && y
-    \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-24pt}, from=1-1, to=1-3]
-    \arrow[""{name=1, anchor=center, inner sep=0}, "h"', curve={height=24pt}, from=1-1, to=1-3]
+    \arrow[""{name=0, anchor=center, inner sep=0}, "f"', curve={height=24pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "h", curve={height=-24pt}, from=1-1, to=1-3]
     \arrow[""{name=2, anchor=center, inner sep=0}, "g"{description}, from=1-1, to=1-3]
-    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=2]
-    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=0, to=2]
+    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
   \end{tikzcd}
 \]
 
@@ -139,23 +139,103 @@ We refer to this composition as \emph{vertical composition}. We can also compose
 \[
   \begin{tikzcd}
     x & y & z
-    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=18pt}, from=1-1, to=1-2]
-    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-2, to=1-3]
-    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=18pt}, from=1-2, to=1-3]
-    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=0, to=1]
-    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, from=2, to=3]
+    \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "i", curve={height=-18pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "h"', curve={height=18pt}, from=1-2, to=1-3]
+    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=3, to=2]
   \end{tikzcd}
 \]
 
 This composition is called the \emph{horizontal composition}, and is written \(\alpha \star_0 \beta\). The subscript refers to the dimension of the shared boundary in the composition, with the \(1\)-cell \(g\) being the shared boundary in the vertical composition example and the \(0\)-cell \(y\) being the shared boundary in the horizontal composition example. The dimension of this shared boundary is the \emph{codimension} of the composition.
 
-\todo[inline]{3d composition}
+This pattern continues with \(3\)-cells, which can be composed at codimension \(0\), \(1\), or \(2\), as below:
 
+% https://q.uiver.app/#q=WzAsNyxbMiwwLCJcXGJ1bGxldCJdLFswLDAsIlxcYnVsbGV0Il0sWzMsMCwiXFxidWxsZXQiXSxbNSwwLCJcXGJ1bGxldCJdLFs2LDAsIlxcYnVsbGV0Il0sWzcsMCwiXFxidWxsZXQiXSxbOCwwLCJcXGJ1bGxldCJdLFsxLDAsIiIsMCx7ImN1cnZlIjotM31dLFsxLDAsIiIsMix7ImN1cnZlIjozfV0sWzIsMywiIiwwLHsiY3VydmUiOi00fV0sWzIsMywiIiwyLHsiY3VydmUiOjR9XSxbMiwzXSxbNCw1LCIiLDAseyJjdXJ2ZSI6LTN9XSxbNCw1LCIiLDIseyJjdXJ2ZSI6M31dLFs1LDYsIiIsMix7ImN1cnZlIjotM31dLFs1LDYsIiIsMix7ImN1cnZlIjozfV0sWzgsNywiIiwyLHsib2Zmc2V0IjotNSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs4LDcsIiIsMCx7Im9mZnNldCI6NSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs4LDcsIiIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTAsMTEsIiIsMix7Im9mZnNldCI6LTQsInNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTAsMTEsIiIsMCx7Im9mZnNldCI6NCwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsxMSw5LCIiLDEseyJvZmZzZXQiOi00LCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzExLDksIiIsMSx7Im9mZnNldCI6NCwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsxMywxMiwiIiwyLHsib2Zmc2V0IjotMywic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsxMywxMiwiIiwwLHsib2Zmc2V0IjozLCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzE1LDE0LCIiLDIseyJvZmZzZXQiOi0zLCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzE1LDE0LCIiLDAseyJvZmZzZXQiOjMsInNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTYsMTgsIlxcZ2FtbWEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzE4LDE3LCJcXGRlbHRhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsyMSwyMiwiXFxnYW1tYSIsMCx7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTksMjAsIlxcZGVsdGEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzIzLDI0LCJcXGdhbW1hIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsyNSwyNiwiXFxkZWx0YSIsMCx7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XV0=
+\[
+  \begin{tikzcd}
+    \bullet && \bullet & \bullet && \bullet & \bullet & \bullet & \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=18pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-24pt}, from=1-4, to=1-6]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=24pt}, from=1-4, to=1-6]
+    \arrow[""{name=4, anchor=center, inner sep=0}, from=1-4, to=1-6]
+    \arrow[""{name=5, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-7, to=1-8]
+    \arrow[""{name=6, anchor=center, inner sep=0}, curve={height=18pt}, from=1-7, to=1-8]
+    \arrow[""{name=7, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-8, to=1-9]
+    \arrow[""{name=8, anchor=center, inner sep=0}, curve={height=18pt}, from=1-8, to=1-9]
+    \arrow[""{name=9, anchor=center, inner sep=0}, shift left=5, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
+    \arrow[""{name=10, anchor=center, inner sep=0}, shift right=5, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
+    \arrow[""{name=11, anchor=center, inner sep=0}, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
+    \arrow[""{name=12, anchor=center, inner sep=0}, shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=4]
+    \arrow[""{name=13, anchor=center, inner sep=0}, shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=4]
+    \arrow[""{name=14, anchor=center, inner sep=0}, shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=4, to=2]
+    \arrow[""{name=15, anchor=center, inner sep=0}, shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=4, to=2]
+    \arrow[""{name=16, anchor=center, inner sep=0}, shift left=3, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=6, to=5]
+    \arrow[""{name=17, anchor=center, inner sep=0}, shift right=3, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=6, to=5]
+    \arrow[""{name=18, anchor=center, inner sep=0}, shift left=3, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=8, to=7]
+    \arrow[""{name=19, anchor=center, inner sep=0}, shift right=3, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=8, to=7]
+    \arrow["\gamma", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=9, to=11]
+    \arrow["\delta", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=11, to=10]
+    \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold=3, from=14, to=15]
+    \arrow["\delta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold=3, from=12, to=13]
+    \arrow["\gamma", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=16, to=17]
+    \arrow["\delta", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=18, to=19]
+  \end{tikzcd}
+\]
+\todo[inline]{Coherences}
 
-\todo[inline]{Formal definition of globular set}
+The \(\infty\)-categories that we study in this thesis will be globular, meaning that their cells form a globular set. A globular set can be seen as natural extension of the data of a category, whose data can be arranged into the following diagram:
+% https://q.uiver.app/#q=WzAsMixbMCwwLCJZIl0sWzEsMCwiWCJdLFswLDEsInMiLDAseyJvZmZzZXQiOi0xfV0sWzAsMSwidCIsMix7Im9mZnNldCI6MX1dXQ==
+\[
+  \begin{tikzcd}
+    M & O
+    \arrow["s", shift left, from=1-1, to=1-2]
+    \arrow["t"', shift right, from=1-1, to=1-2]
+  \end{tikzcd}
+\]
+where \(O\) is a set of objects, \(M\) is a set of all morphisms, and \(s\) and \(t\) are functions assigning each morphism to its source and target object respectively. \(2\)-cells can be added to this diagram in a natural way:
 
-\todo[inline]{Note on coinductive definitions}
+% https://q.uiver.app/#q=WzAsMyxbMSwwLCJDXzEiXSxbMiwwLCJDXzAiXSxbMCwwLCJDXzIiXSxbMCwxLCJzXzAiLDAseyJvZmZzZXQiOi0xfV0sWzAsMSwidF8wIiwyLHsib2Zmc2V0IjoxfV0sWzIsMCwic18xIiwwLHsib2Zmc2V0IjotMX1dLFsyLDAsInRfMSIsMix7Im9mZnNldCI6MX1dXQ==
+\[
+  \begin{tikzcd}
+    {C_2} & {C_1} & {C_0}
+    \arrow["{s_0}", shift left, from=1-2, to=1-3]
+    \arrow["{t_0}"', shift right, from=1-2, to=1-3]
+    \arrow["{s_1}", shift left, from=1-1, to=1-2]
+    \arrow["{t_1}"', shift right, from=1-1, to=1-2]
+  \end{tikzcd}
+\]
+In a globular set, the source and target of any cell must be parallel, meaning they share the same source and target. This condition is imposed by \emph{globularity conditions}. Adding these and iterating the process leads to the following definition.
+
+\begin{definition}
+  A globular set \(\mathcal{G}\), is given by a family of sets \(G_n\) for \(n \in \mathbb{N}\), along with source and target functions \(s_n,t_n : G_{n+1} \to G_n\), forming the following diagram:
+  % https://q.uiver.app/#q=WzAsNSxbMywwLCJDXzEiXSxbNCwwLCJDXzAiXSxbMiwwLCJDXzIiXSxbMSwwLCJDXzMiXSxbMCwwLCJcXGRvdHMiXSxbMCwxLCJzXzAiLDAseyJvZmZzZXQiOi0xfV0sWzAsMSwidF8wIiwyLHsib2Zmc2V0IjoxfV0sWzIsMCwic18xIiwwLHsib2Zmc2V0IjotMX1dLFsyLDAsInRfMSIsMix7Im9mZnNldCI6MX1dLFszLDIsInRfMiIsMix7Im9mZnNldCI6MX1dLFszLDIsInNfMiIsMCx7Im9mZnNldCI6LTF9XSxbNCwzLCIiLDAseyJvZmZzZXQiOjF9XSxbNCwzLCIiLDAseyJvZmZzZXQiOi0xfV1d
+  \[
+    \begin{tikzcd}
+      \cdots & {C_3} & {C_2} & {C_1} & {C_0}
+      \arrow["{s_0}", shift left, from=1-4, to=1-5]
+      \arrow["{t_0}"', shift right, from=1-4, to=1-5]
+      \arrow["{s_1}", shift left, from=1-3, to=1-4]
+      \arrow["{t_1}"', shift right, from=1-3, to=1-4]
+      \arrow["{t_2}"', shift right, from=1-2, to=1-3]
+      \arrow["{s_2}", shift left, from=1-2, to=1-3]
+      \arrow[shift right, from=1-1, to=1-2]
+      \arrow[shift left, from=1-1, to=1-2]
+    \end{tikzcd}
+  \]
+  and satisfying the \emph{globularity conditions}:
+  \begin{align*}
+    s_n \circ s_{n+1} &= s_n \circ t_{n+1}\\
+    t_n \circ s_{n+1} &= t_n \circ t_{n+1}
+  \end{align*}
+  for all \(n \in \mathbb{N}\).
+\end{definition}
+
+Given a globular set \(\mathcal{G}\), we will call the elements of \(G_n\) the \(n\)-cells and write \(f : x \to y\) for an \((n+1)\)-cell \(f\) where \(s_n(f) = x\) and \(t_n(f) = y\). Further we will drop the subscripts on \(s_n\) and \(t_n\) when they are clear.
+
+\todo[inline]{Add coinductive definition?}
 
 \todo[inline]{Definition of strict \(\infty\)-category}
 
