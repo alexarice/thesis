@@ -3,7 +3,6 @@
 \usepackage{packages}
 \usepackage{macros}
 
-
 \title{A type-theoretic approach to semistrict higher categories}
 
 %% The full name of the author (e.g.: James Smith):
@@ -185,54 +184,118 @@ This pattern continues with \(3\)-cells, which can be composed at codimension \(
   \end{tikzcd}
 \]
 
-For every \(n\)-cell \(x\), there is an \((n+1)\)-cell \(\iden{x} : x \to x\), called the \emph{identity morphism}.
+For every \(n\)-cell \(x\), there is an \((n+1)\)-cell \(\id(x) : x \to x\), called the \emph{identity morphism}.
 
 As with 1-categories, \(\infty\)-categories need to satisfy certain equalities, which fall into 3 groups: associativity, unitality, and interchange. The associativity laws are the same as for 1-categories, only now a law is needed for each composition (every dimension and codimension).
 
 Unitality is again similar to the case for 1-categories, except we again need unitality laws for each composition. We note that for lower codimension compositions, an iterated identity is needed. For example given a \(2\)-cell \(\alpha : f \to g\), the appropriate equation for left unitality of horizontal composition is:
-\[ \iden{\iden{x}} \star_0 \alpha = \alpha \]
+\[ \id(\id(x)) \star_0 \alpha = \alpha \]
 In general for a unit to be cancelled, it must be iterated a number of times equal to the difference between the dimension and codimension of the composition.
 
 Interchange laws do not appear in 1-categories, and specify how compositions of different dimensions interact. The first interchange law states that for suitable \(2\)-cells \(\alpha\), \(\beta\), \(\gamma\), and \(\delta\), that:
 \[ (\alpha \star_0 \gamma) \star_1 (\beta \star_0 \delta) = (\alpha \star_1 \beta) \star_0 ()\]
 This can be diagrammatically depicted as:
+\newsavebox{\innertop}
+\savebox{\innertop}{
+  \adjustbox{scale=0.8}{\begin{tikzcd}[ampersand replacement=\&,column sep=small]
+    \bullet \& \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-12pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=12pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-12pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=12pt}, from=1-2, to=1-3]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=2]
+  \end{tikzcd}}}
+\newsavebox{\innerbot}
+\savebox{\innerbot}{
+  \adjustbox{scale=0.8}{\begin{tikzcd}[ampersand replacement=\&,column sep=small]
+    \bullet \& \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-12pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=12pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-12pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=12pt}, from=1-2, to=1-3]
+    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\delta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=2]
+  \end{tikzcd}}}
+\newsavebox{\innerleft}
+\savebox{\innerleft}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
+    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+  \end{tikzcd}}}
+\newsavebox{\innerright}
+\savebox{\innerright}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+    \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
+    \arrow["\delta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+  \end{tikzcd}}}
 \[
-  \begin{tikzcd}[row sep = small]
-    \bullet & \bullet & \bullet \\
-    & {\star_1} \\
-    \bullet & \bullet & \bullet
-    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=18pt}, from=1-1, to=1-2]
-    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-2, to=1-3]
-    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=18pt}, from=1-2, to=1-3]
-    \arrow[""{name=4, anchor=center, inner sep=0}, curve={height=-18pt}, from=3-1, to=3-2]
-    \arrow[""{name=5, anchor=center, inner sep=0}, curve={height=18pt}, from=3-1, to=3-2]
-    \arrow[""{name=6, anchor=center, inner sep=0}, curve={height=-18pt}, from=3-2, to=3-3]
-    \arrow[""{name=7, anchor=center, inner sep=0}, curve={height=18pt}, from=3-2, to=3-3]
-    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=5, to=4]
-    \arrow["\gamma", shorten <=5pt, shorten >=5pt, Rightarrow, from=7, to=6]
-    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
-    \arrow["\delta", shorten <=5pt, shorten >=5pt, Rightarrow, from=3, to=2]
-  \end{tikzcd}
-  \quad=\quad
-  \begin{tikzcd}
-    \bullet & \bullet
-    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-2]
-    \arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-2]
-    \arrow["\alpha"', shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
-    \arrow["\beta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
-  \end{tikzcd}
-  \star_0
-  \begin{tikzcd}
-    \bullet & \bullet
-    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-2]
-    \arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-2]
-    \arrow["\gamma"', shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
-    \arrow["\delta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+  \begin{tikzcd}[column sep=small]
+    \bullet &&&&& \bullet & {=} & \bullet &&& \bullet &&& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, from=1-1, to=1-6]
+    \arrow[""{name=1, anchor=center, inner sep=0}, draw=none, controls=+(90:2) and +(90:2), from=1-1, to=1-6]
+    \arrow[""{name=2, anchor=center, inner sep=0}, draw=none, controls=+(90:-2) and +(90:-2), from=1-1, to=1-6]
+    \arrow[""{name=4, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=1-8, to=1-11]
+    \arrow[""{name=5, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-8, to=1-11]
+    \arrow[""{name=6, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=1-11, to=1-14]
+    \arrow[""{name=8, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-11, to=1-14]
+    \arrow["\usebox{\innertop}"{description, inner sep = 0,xshift = -1.2pt}, shorten <=4pt, shorten >=4pt, Rightarrow, nfold, from=2, to=0]
+    \arrow["\usebox{\innerbot}"{description, inner sep = 0,xshift = -1.2pt}, shorten <=4pt, shorten >=4pt, Rightarrow, nfold, from=0, to=1]
+    \arrow[""{name=1, anchor=center, inner sep=0}, controls=+(90:2) and +(90:2), from=1-1, to=1-6]
+    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(90:-2) and +(90:-2), from=1-1, to=1-6]
+    \arrow["\usebox{\innerleft}"{description, inner sep = 0,xshift = -1.3pt}, shorten <=2pt, shorten >=2pt, Rightarrow, nfold, from=5, to=4]
+    \arrow["\usebox{\innerright}"{description, inner sep = 0,xshift = -1.3pt}, shorten <=2pt, shorten >=2pt, Rightarrow, nfold, from=8, to=6]
+    \arrow[controls=+(80:1.5) and +(100:1.5), from=1-8, to=1-11]
+    \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-8, to=1-11]
+    \arrow[controls=+(80:1.5) and +(100:1.5), from=1-11, to=1-14]
+    \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-11, to=1-14]
   \end{tikzcd}
 \]
+% \[
+%   \begin{tikzcd}[row sep = small]
+%     \bullet & \bullet & \bullet \\
+%     & {\star_1} \\
+%     \bullet & \bullet & \bullet
+%     \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-1, to=1-2]
+%     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=18pt}, from=1-1, to=1-2]
+%     \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-2, to=1-3]
+%     \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=18pt}, from=1-2, to=1-3]
+%     \arrow[""{name=4, anchor=center, inner sep=0}, curve={height=-18pt}, from=3-1, to=3-2]
+%     \arrow[""{name=5, anchor=center, inner sep=0}, curve={height=18pt}, from=3-1, to=3-2]
+%     \arrow[""{name=6, anchor=center, inner sep=0}, curve={height=-18pt}, from=3-2, to=3-3]
+%     \arrow[""{name=7, anchor=center, inner sep=0}, curve={height=18pt}, from=3-2, to=3-3]
+%     \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=5, to=4]
+%     \arrow["\gamma", shorten <=5pt, shorten >=5pt, Rightarrow, from=7, to=6]
+%     \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+%     \arrow["\delta", shorten <=5pt, shorten >=5pt, Rightarrow, from=3, to=2]
+%   \end{tikzcd}
+%   \quad=\quad
+%   \begin{tikzcd}
+%     \bullet & \bullet
+%     \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-2]
+%     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-2]
+%     \arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-2]
+%     \arrow["\alpha"', shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
+%     \arrow["\beta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+%   \end{tikzcd}
+%   \star_0
+%   \begin{tikzcd}
+%     \bullet & \bullet
+%     \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-2]
+%     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-2]
+%     \arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-2]
+%     \arrow["\gamma"', shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
+%     \arrow["\delta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+%   \end{tikzcd}
+% \]
 There are also interchange laws for the interaction of composition and identities; A composition of two identities is the same as an identity on the composition of the underlying cells.
 
 
@@ -283,9 +346,7 @@ In a globular set, the source and target of any cell must be parallel, meaning t
   for all \(n \in \mathbb{N}\). A morphism of globular sets \(F : \mathcal{G} \to \mathcal{H}\) is a collection of functions \(f_n : G_n \to H_n\) which commute with source and target maps.
 \end{definition}
 
-Given a globular set \(\mathcal{G}\), we will call the elements of \(G_n\) the \(n\)-cells and write \(f : x \to y\) for an \((n+1)\)-cell \(f\) where \(s_n(f) = x\) and \(t_n(f) = y\). Further we will drop the subscripts on \(s_n\) and \(t_n\) when they are clear. Further, we write \(s^n\) and \(t^n\) to denote \(s\) or \(t\) applied \(n\) times. We can now give the definition of a (strict) \(\infty\)-category.
-
-\todo[inline]{Add coinductive definition?}
+Given a globular set \(\mathcal{G}\), we will call the elements of \(G_n\) the \(n\)-cells and write \(f : x \to y\) for an \((n+1)\)-cell \(f\) where \(s_n(f) = x\) and \(t_n(f) = y\). Further we will drop the subscripts on \(s_n\) and \(t_n\) when they are clear. Further, we write \(s^n\) and \(t^n\) to denote \(s\) or \(t\) applied \(n\) times. We can now give the definition of a (strict) \(\infty\)-category.\todo{Add coinductive definition?}
 
 \begin{definition}
   A (strict) \(\infty\)-category is a globular set \(\mathcal{G}\) with operations:
@@ -301,7 +362,7 @@ Given a globular set \(\mathcal{G}\), we will call the elements of \(G_n\) the \
         t(f) \star_m t(g)&\text{otherwise}
       \end{cases*}
     \end{align*}
-  \item For \(n\)-cell \(x\), an identity \((n+1)\)-cell \(\iden{x} : x \to x\).
+  \item For \(n\)-cell \(x\), an identity \((n+1)\)-cell \(\id(x) : x \to x\).
   \end{itemize}
   and satisfying equalities:
   \begin{itemize}
@@ -309,23 +370,171 @@ Given a globular set \(\mathcal{G}\), we will call the elements of \(G_n\) the \
     \[ (f \star_m g) \star_m h = f \star_m (g \star_m h) \]
   \item Unitality: Given \(m < n\) and \(n\)-cell \(f\):
     \begin{align*}
-      \iden{s^{n-m}(f)} \star_m f &= f\\
-      f \star_m \iden{t^{n-m}(f)} &= f
+      \id(s^{n-m}(f)) \star_m f &= f\\
+      f \star_m \id(t^{n-m}(f)) &= f
     \end{align*}
-  \item Composition interchange: If \(m < m' < n\) and \(\alpha\), \(\beta\), \(\gamma\), and \(\delta\) be \(n\)-cells with
-    \[t^{n-m'}(\alpha) = s^{n-m'}(\beta)\qquad
-      t^{n-m'}(\gamma) = s^{n-m'}(\delta)\qquad
-      t^{n-m}(\alpha) = s^{n-m}(\gamma)\]
+  \item Composition interchange: If \(o < m < n\) and \(\alpha\), \(\beta\), \(\gamma\), and \(\delta\) be \(n\)-cells with
+    \[t^{n-m}(\alpha) = s^{n-m}(\beta)\qquad
+      t^{n-m}(\gamma) = s^{n-m}(\delta)\qquad
+      t^{n-o}(\alpha) = s^{n-o}(\gamma)\]
     then:
-    \[(\alpha \star_m \gamma) \star_{m'} (\beta \star_m \delta) = (\alpha \star_{m'} \beta) \star_m (\gamma \star_{m'} \delta)\]
+    \[(\alpha \star_o \gamma) \star_m (\beta \star_o \delta) = (\alpha \star_m \beta) \star_o (\gamma \star_m \delta)\]
   \item Identity interchange: Let \(m < n\) and \(f\) and \(g\) be \(n\)-cells with \(t^{n-m}(f) = s^{n-m}(g)\). Then:
-    \[\iden{f} \star_m \iden{g} = \iden{f \star_m g}\]
+    \[\id(f) \star_m \id(g) = \id(f \star_m g)\]
   \end{itemize}
   A morphism of \(\infty\) categories is a morphism of the underlying globular sets which preserves composition and identities.
 \end{definition}
 
-\todo[inline]{Free infty cat, monad}
-\todo[inline]{Example: Eckmann Hilton}
+There is a clear forgetful functor from the category of strict infinity categories to the category of globular sets, which has a left adjoint given by taking the free strict infinity category over a globular set. \todo{Do i need monad?}
+
+We end this section with an example of a non-trivial application of the axioms of an infinity category, known as the Eckmann-Hilton argument. The argument show's that any two scalars (morphisms from the identity to the identity) commute.
+
+\begin{proposition}[Eckmann-Hilton]
+  Let \(x\) be an \(n\)-cell in an \(\infty\)-category and let \(\alpha\) and \(\beta\) be \((n+2)\)-cells with source and target \(\id(x)\). Then \(\alpha \star_{n+1} \beta = \beta \star_{n+1} \alpha\).
+\end{proposition}
+\begin{proof}
+  The cells \(\alpha\) and \(\beta\) can be manoeuvred around each other as follows:
+  \begin{align*}
+    &\phantom{{}={}} \alpha \star_{n+1} \beta \\
+    &= (\alpha \star_n i) \star_{n+1} (i \star_n \beta)&\text{Unitality}\\
+    &= (\alpha \star_{n+1} i) \star_n (i \star_{n+1} \beta)&\text{Interchange}\\
+    &= \alpha \star_n \beta &\text{Unitality}\\
+    &= (i \star_{n+1} \alpha) \star_n (\beta \star_{n+1} i)&\text{Unitality}\\
+    &= (i \star_n \beta) \star_{n+1} (\alpha \star_n i)&\text{Interchange}\\
+    &= \beta \star_{n+1} \alpha&\text{Unitality}
+  \end{align*}
+  Where \(i = \id(\id(x))\).
+\end{proof}
+
+We give a more graphical proof in \cref{fig:eh}. In this proof the \(\alpha\) is moved to the left of \(\beta\), though we equally could have moved it round the right, and the choice made was arbitrary.
+
+\newsavebox{\ehalpha}
+\savebox{\ehalpha}{\adjustbox{scale=0.8}{
+  \begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=10pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=10pt}, from=1-2, to=1-3]
+    \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\id"', shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=2]
+  \end{tikzcd}}}
+\newsavebox{\ehbeta}
+\savebox{\ehbeta}{\adjustbox{scale=0.8}{
+  \begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=10pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=10pt}, from=1-2, to=1-3]
+    \arrow["\id"',  shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=2]
+  \end{tikzcd}}}
+\newsavebox{\ehlefttop}
+\savebox{\ehlefttop}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+     \bullet \& \bullet
+     \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
+     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+     \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+     \arrow["\alpha", color= blue, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
+     \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+   \end{tikzcd}}}
+\newsavebox{\ehrighttop}
+\savebox{\ehrighttop}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
+    \arrow["\beta", color=red, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+  \end{tikzcd}}}
+\newsavebox{\ehleftbot}
+\savebox{\ehleftbot}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
+    \arrow["\alpha", color=blue, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+  \end{tikzcd}}}
+\newsavebox{\ehrightbot}
+\savebox{\ehrightbot}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+    \arrow["\beta", color=red, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
+    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+  \end{tikzcd}}}
+
+\begin{figure}[h]
+  \centering
+
+  \[
+    \begin{tikzcd}[ampersand replacement=\&,column sep=small]
+      \bullet \&\& \bullet \& = \& \bullet \&\&\&\&\& \bullet \& = \& \bullet \&\&\& \bullet \&\&\& \bullet \\
+      \\
+      \&\&\&\&\&\&\&\&\&\&\&\&\&\& = \\
+      \\
+      \bullet \&\& \bullet \& = \& \bullet \&\&\&\&\& \bullet \& = \& \bullet \&\&\& \bullet \&\&\& \bullet
+      \arrow[""{name=0, anchor=center, inner sep=0}, "\id", curve={height=-24pt}, from=1-1, to=1-3]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "\id"', curve={height=24pt}, from=1-1, to=1-3]
+      \arrow[""{name=2, anchor=center, inner sep=0}, "\id"{description}, from=1-1, to=1-3]
+      \arrow[""{name=3, anchor=center, inner sep=0}, draw=none, controls=+(90:1.8) and +(90:1.8), from=1-5, to=1-10]
+      \arrow[""{name=4, anchor=center, inner sep=0}, draw=none, controls=+(90:-1.8) and +(90:-1.8), from=1-5, to=1-10]
+      \arrow[""{name=5, anchor=center, inner sep=0}, from=1-5, to=1-10]
+      \arrow[""{name=6, anchor=center, inner sep=0}, draw=none, controls=+(90:1.8) and +(90:1.8), from=5-5, to=5-10]
+      \arrow[""{name=7, anchor=center, inner sep=0}, draw=none, controls=+(90:-1.8) and +(90:-1.8), from=5-5, to=5-10]
+      \arrow[""{name=8, anchor=center, inner sep=0}, from=5-5, to=5-10]
+      \arrow[""{name=9, anchor=center, inner sep=0}, "\id", curve={height=-24pt}, from=5-1, to=5-3]
+      \arrow[""{name=10, anchor=center, inner sep=0}, "\id"', curve={height=24pt}, from=5-1, to=5-3]
+      \arrow[""{name=11, anchor=center, inner sep=0}, "\id"{description}, from=5-1, to=5-3]
+      \arrow[""{name=12, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=1-12, to=1-15]
+      \arrow[""{name=13, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-12, to=1-15]
+      \arrow[""{name=14, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=1-15, to=1-18]
+      \arrow[""{name=15, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-15, to=1-18]
+      \arrow[""{name=16, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=5-12, to=5-15]
+      \arrow[""{name=17, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=5-12, to=5-15]
+      \arrow[""{name=18, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=5-15, to=5-18]
+      \arrow[""{name=19, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=5-15, to=5-18]
+      \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=3pt, shorten >=5pt, Rightarrow, nfold, from=1, to=2]
+      \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=5pt, shorten >=3pt, Rightarrow, nfold, from=2, to=0]
+      \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=3pt, shorten >=5pt, Rightarrow, nfold, from=10, to=11]
+      \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=5pt, shorten >=3pt, Rightarrow, nfold, from=11, to=9]
+      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=4, to=5]
+      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=5, to=3]
+      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=7, to=8]
+      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=8, to=6]
+      \arrow["\usebox{\ehlefttop}"{description,inner sep = 0,xshift = -1.3pt, yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=13, to=12]
+      \arrow["\usebox{\ehrighttop}"{description,inner sep = 0,xshift = -1.3pt,yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=15, to=14]
+      \arrow["\usebox{\ehleftbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=17, to=16]
+      \arrow["\usebox{\ehrightbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=19, to=18]
+      \arrow[controls=+(90:1.8) and +(90:1.8), from=1-5, to=1-10]
+      \arrow[controls=+(90:-1.8) and +(90:-1.8), from=1-5, to=1-10]
+      \arrow[controls=+(90:1.8) and +(90:1.8), from=5-5, to=5-10]
+      \arrow[controls=+(90:-1.8) and +(90:-1.8), from=5-5, to=5-10]
+      \arrow[controls=+(80:1.5) and +(100:1.5), from=1-12, to=1-15]
+      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-12, to=1-15]
+      \arrow[controls=+(80:1.5) and +(100:1.5), from=1-15, to=1-18]
+      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-15, to=1-18]
+      \arrow[controls=+(80:1.5) and +(100:1.5), from=5-12, to=5-15]
+      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=5-12, to=5-15]
+      \arrow[controls=+(80:1.5) and +(100:1.5), from=5-15, to=5-18]
+      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=5-15, to=5-18]
+    \end{tikzcd}
+  \]
+  \caption{The Eckmann-Hilton argument}
+  \label{fig:eh}
+\end{figure}
+
+\subsection{Pasting schemes}
+\label{sec:pasting-schemes}
+
+
 
 \subsection{Strictness}
 \label{sec:strictness}
