@@ -323,33 +323,71 @@ where \(O\) is a set of objects, \(M\) is a set of all morphisms, and \(s\) and 
 In a globular set, the source and target of any cell must be parallel, meaning they share the same source and target. This condition is imposed by \emph{globularity conditions}. Adding these and iterating the process leads to the following definition.
 
 \begin{definition}
-  A globular set \(\mathcal{G}\), is given by a family of sets \(G_n\) for \(n \in \mathbb{N}\), along with source and target functions \(s_n,t_n : G_{n+1} \to G_n\), forming the following diagram:
-  % https://q.uiver.app/#q=WzAsNSxbMywwLCJDXzEiXSxbNCwwLCJDXzAiXSxbMiwwLCJDXzIiXSxbMSwwLCJDXzMiXSxbMCwwLCJcXGRvdHMiXSxbMCwxLCJzXzAiLDAseyJvZmZzZXQiOi0xfV0sWzAsMSwidF8wIiwyLHsib2Zmc2V0IjoxfV0sWzIsMCwic18xIiwwLHsib2Zmc2V0IjotMX1dLFsyLDAsInRfMSIsMix7Im9mZnNldCI6MX1dLFszLDIsInRfMiIsMix7Im9mZnNldCI6MX1dLFszLDIsInNfMiIsMCx7Im9mZnNldCI6LTF9XSxbNCwzLCIiLDAseyJvZmZzZXQiOjF9XSxbNCwzLCIiLDAseyJvZmZzZXQiOi0xfV1d
-  \[
-    \begin{tikzcd}
-      \cdots & {C_3} & {C_2} & {C_1} & {C_0}
-      \arrow["{s_0}", shift left, from=1-4, to=1-5]
-      \arrow["{t_0}"', shift right, from=1-4, to=1-5]
-      \arrow["{s_1}", shift left, from=1-3, to=1-4]
-      \arrow["{t_1}"', shift right, from=1-3, to=1-4]
-      \arrow["{t_2}"', shift right, from=1-2, to=1-3]
-      \arrow["{s_2}", shift left, from=1-2, to=1-3]
-      \arrow[shift right, from=1-1, to=1-2]
-      \arrow[shift left, from=1-1, to=1-2]
-    \end{tikzcd}
-  \]
-  and satisfying the \emph{globularity conditions}:
+  The category of globes \(\mathbf{G}\) has objects given by the natural numbers and morphisms generated from \(\mathbf{s}_n, \mathbf{t}_n : n \to n + 1\) quotiented by the \emph{globularity conditions}:
   \begin{align*}
-    s_n \circ s_{n+1} &= s_n \circ t_{n+1}\\
-    t_n \circ s_{n+1} &= t_n \circ t_{n+1}
+    \mathbf{s}_{n+1} \circ \mathbf{s}_n &= \mathbf{t}_{n+1} \circ \mathbf{s}_n\\
+    \mathbf{s}_{n+1} \circ \mathbf{t}_n &= \mathbf{t}_{n+1} \circ \mathbf{t}_n\\
   \end{align*}
-  for all \(n \in \mathbb{N}\). A morphism of globular sets \(F : \mathcal{G} \to \mathcal{H}\) is a collection of functions \(f_n : G_n \to H_n\) which commute with source and target maps.
-\end{definition}
 
-Given a globular set \(\mathcal{G}\), we will call the elements of \(G_n\) the \(n\)-cells and write \(f : x \to y\) for an \((n+1)\)-cell \(f\) where \(s_n(f) = x\) and \(t_n(f) = y\). Further we will drop the subscripts on \(s_n\) and \(t_n\) when they are clear. Further, we write \(s^n\) and \(t^n\) to denote \(s\) or \(t\) applied \(n\) times. We can now give the definition of a (strict) \(\infty\)-category.\todo{Add coinductive definition?}
+   The category of globular sets \(\mathbf{Glob}\), is the presheaf category \([\mathbf{G}, \mathbf{Set}]\).
+ \end{definition}
+
+Unwrapping this definition, a globular set \(G\) consists of sets \(G(n)\) for each \(n \in \mathbb{N}\), with source and target maps \(s_n, t_n : G(n+1) \to G(n)\), forming the following diagram:
+\[
+  \begin{tikzcd}
+    \cdots & {G(3)} & {G(2)} & {G(1)} & {G(0)}
+    \arrow["{s_0}", shift left, from=1-4, to=1-5]
+    \arrow["{t_0}"', shift right, from=1-4, to=1-5]
+    \arrow["{s_1}", shift left, from=1-3, to=1-4]
+    \arrow["{t_1}"', shift right, from=1-3, to=1-4]
+    \arrow["{t_2}"', shift right, from=1-2, to=1-3]
+    \arrow["{s_2}", shift left, from=1-2, to=1-3]
+    \arrow[shift right, from=1-1, to=1-2]
+    \arrow[shift left, from=1-1, to=1-2]
+  \end{tikzcd}
+\]
+and satisfying the globularity conditions. A morphism of globular sets \(F : G \to H\) is a collection of functions \(G(n) \to H(n)\) which commute with source and target maps.
+
+Given a globular set \(G\), we will call the elements of \(G(n)\) the \(n\)-cells and write \(f : x \to y\) for an \((n+1)\)-cell \(f\) where \(s_n(f) = x\) and \(t_n(f) = y\). Further we will drop the subscripts on \(s_n\) and \(t_n\) when they are clear and write \(s^n\) and \(t^n\) to denote \(s\) or \(t\) applied \(n\) times.\todo{Add coinductive definition?}
+
+\begin{example}
+  The \(n\)-disc \(D^n\) is a finite globular set given by \(Y(n)\), where \(Y\) is the Yoneda functor \(\mathbf{G} \to \mathbf{Glob}\). \(D^n\), has no \(k\)-cells for \(k > n\), a single \(n\)-cell \(d_n\), and two \(m\)-cells \(d_m^-\) and \(d_m^+\) for \(m < n\). Every \((m+1)\)-cell of \(D^n\) has source \(d_m^-\) and target \(d_m^+\). The first few discs are depicted in \cref{fig:discs}. The Yoneda lemma tells us that a map of globular sets \(D^n \to G\) is the same as an \(n\)-cell of \(G\) (in fact the \(n\)-cell which \(d_n\) is sent to).
+\end{example}
+
+\begin{figure}[h]
+  \centering
+  \begin{tabular}{P{3cm} P{3cm} P{3cm} P{3cm}}
+    \(D^0\)&\(D^1\)&\(D^2\)&\(D^3\)\\
+    {\begin{tikzcd}
+        d_0
+      \end{tikzcd}
+    }&{\begin{tikzcd}[ampersand replacement=\&]
+        d_0^- \& d_0^+
+        \arrow[from=1-1, to=1-2, "d_1"]
+      \end{tikzcd}
+       }&{\begin{tikzcd}[ampersand replacement=\&]
+           d_0^- \& d_0^+
+           \arrow[""{name=0, anchor=center, inner sep=0}, "d_1^+", curve={height=-18pt}, from=1-1, to=1-2]
+           \arrow[""{name=1, anchor=center, inner sep=0}, "d_1^-"', curve={height=18pt}, from=1-1, to=1-2]
+           \arrow["d_2", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+         \end{tikzcd}
+          }&{\begin{tikzcd}[ampersand replacement=\&]
+              d_0^- \&\& d_0^+
+              \arrow[""{name=0, anchor=center, inner sep=0}, "d_1^+", curve={height=-25pt}, from=1-1, to=1-3]
+              \arrow[""{name=1, anchor=center, inner sep=0}, "d_1^-"', curve={height=25pt}, from=1-1, to=1-3]
+              \arrow[""{name=2, anchor=center, inner sep=0}, "d_2^-", shift left=12pt,Rightarrow, nfold, shorten <=5pt, shorten >=5pt, from=1,to=0]
+              \arrow[""{name=3, anchor=center, inner sep=0}, "d_2^+"', shift right=12pt,Rightarrow, nfold, shorten <=5pt, shorten >=5pt, from=1,to=0]
+              \arrow["d_3", Rightarrow, nfold = 3, shorten <=3pt, shorten >=3pt,from=2,to=3]
+            \end{tikzcd}}
+  \end{tabular}
+  \caption{The first disc globular sets}
+  \label{fig:discs}
+\end{figure}
+
+We can now give the definition of a (strict) \(\infty\)-category.
 
 \begin{definition}
-  A (strict) \(\infty\)-category is a globular set \(\mathcal{G}\) with operations:
+  A (strict) \(\infty\)-category is a globular set \(G\) with operations:
   \begin{itemize}
   \item For \(m < n\), a composition \(\star_m\) taking \(n\)-cells \(f\) and \(g\) with \(t^{n-m}(f) = s^{n-m}(g)\) and giving an \(n\)-cell \(f \star_m g\) with:
     \begin{align*}
@@ -406,7 +444,7 @@ We end this section with an example of a non-trivial application of the axioms o
   Where \(i = \id(\id(x))\).
 \end{proof}
 
-We give a more graphical proof in \cref{fig:eh}. In this proof the \(\alpha\) is moved to the left of \(\beta\), though we equally could have moved it round the right, and the choice made was arbitrary.
+We give a more graphical representation of the proof in \cref{fig:eh}. In this proof the \(\alpha\) is moved to the left of \(\beta\), though we equally could have moved it round the right, and the choice made was arbitrary.
 
 \newsavebox{\ehalpha}
 \savebox{\ehalpha}{\adjustbox{scale=0.8}{

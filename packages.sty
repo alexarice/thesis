@@ -187,4 +187,9 @@ backrefstyle=two]%
 
 \usepackage{adjustbox}
 
+\usepackage{cellspace}
+\usepackage{makecell}
+\setlength\cellspacetoplimit{5pt} \setlength\cellspacebottomlimit{5pt}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
 \usepackage{todonotes}
