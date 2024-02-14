@@ -79,6 +79,7 @@ This section additionally serves as a place to introduce the various syntax and 
 \section{Higher categories}
 \label{sec:higher-categories}
 
+\todo[inline]{Add references throughout}
 A higher category is a generalisation of the ordinary notion of a category to allow higher dimensional structure. This manifests in the form of allowing arrows or morphisms to have their source or target be another morphism instead of an object. More precisely, higher categories are equipped with the notion of an \(n\)-cell, where an \((n+1)\)-cell has source and target \(n\)-cells, and \(0\)-cells play the role of objects in an ordinary category.
 
 The role of objects is played by \(0\)-cells, with \(1\)-cells as the morphisms between these objects. For \(0\)-cells \(x\) and \(y\), a \(1\)-cell \(f\) with source \(x\) and target \(y\) will be drawn as:
@@ -348,10 +349,11 @@ Unwrapping this definition, a globular set \(G\) consists of sets \(G(n)\) for e
 \]
 and satisfying the globularity conditions. A morphism of globular sets \(F : G \to H\) is a collection of functions \(G(n) \to H(n)\) which commute with source and target maps.
 
-Given a globular set \(G\), we will call the elements of \(G(n)\) the \(n\)-cells and write \(f : x \to y\) for an \((n+1)\)-cell \(f\) where \(s_n(f) = x\) and \(t_n(f) = y\). Further we will drop the subscripts on \(s_n\) and \(t_n\) when they are clear and write \(s^n\) and \(t^n\) to denote \(s\) or \(t\) applied \(n\) times.\todo{Add coinductive definition?}
+Given a globular set \(G\), we will call the elements of \(G(n)\) the \(n\)-cells and write \(f : x \to y\) for an \((n+1)\)-cell \(f\) where \(s_n(f) = x\) and \(t_n(f) = y\). We further define the \(n\)-boundary operators \(\delta_n^-\) and \(\delta_n^+\) which take the source or target respectively of a \((n+k)\)-cell \(k\) times, returning an \(n\)-cell.
 
 \begin{example}
-  The \(n\)-disc \(D^n\) is a finite globular set given by \(Y(n)\), where \(Y\) is the Yoneda functor \(\mathbf{G} \to \mathbf{Glob}\). \(D^n\), has no \(k\)-cells for \(k > n\), a single \(n\)-cell \(d_n\), and two \(m\)-cells \(d_m^-\) and \(d_m^+\) for \(m < n\). Every \((m+1)\)-cell of \(D^n\) has source \(d_m^-\) and target \(d_m^+\). The first few discs are depicted in \cref{fig:discs}. The Yoneda lemma tells us that a map of globular sets \(D^n \to G\) is the same as an \(n\)-cell of \(G\) (in fact the \(n\)-cell which \(d_n\) is sent to).
+  \label{ex:disc}
+  The \(n\)-disc \(D^n\) is a finite globular set given by \(Y(n)\), where \(Y\) is the Yoneda functor \(\mathbf{G} \to \mathbf{Glob}\). \(D^n\), has no \(k\)-cells for \(k > n\), a single \(n\)-cell \(d_n\), and two \(m\)-cells \(d_m^-\) and \(d_m^+\) for \(m < n\). Every \((m+1)\)-cell of \(D^n\) has source \(d_m^-\) and target \(d_m^+\). The first few discs are depicted in \cref{fig:discs}. The Yoneda lemma tells us that a map of globular sets \(D^n \to G\) is the same as an \(n\)-cell of \(G\). For an \(n\)-cell \(x\) of \(G\), we let \(\{x\}\) be the unique map \(D^n \to G\) which sends \(d_n\) to \(x\).
 \end{example}
 
 \begin{figure}[h]
@@ -389,7 +391,7 @@ We can now give the definition of a (strict) \(\infty\)-category.
 \begin{definition}
   A (strict) \(\infty\)-category is a globular set \(G\) with operations:
   \begin{itemize}
-  \item For \(m < n\), a composition \(\star_m\) taking \(n\)-cells \(f\) and \(g\) with \(t^{n-m}(f) = s^{n-m}(g)\) and giving an \(n\)-cell \(f \star_m g\) with:
+  \item For \(m < n\), a composition \(\star_m\) taking \(n\)-cells \(f\) and \(g\) with \(\delta_m^+(f) = \delta_m^-(g)\) and giving an \(n\)-cell \(f \star_m g\) with:
     \begin{align*}
       s(f \star_m g) &= \begin{cases*}
         s(f)&\text{if \(m = n - 1\)}\\
@@ -404,20 +406,20 @@ We can now give the definition of a (strict) \(\infty\)-category.
   \end{itemize}
   and satisfying equalities:
   \begin{itemize}
-  \item Associativity: Given \(m < n\) and \(n\)-cells \(f\), \(g\), and \(h\) with \(t^{n-m}(f) = s^{n-m}(g)\) and \(t^{n-m}(g) = s^{n-m}(h)\):
+  \item Associativity: Given \(m < n\) and \(n\)-cells \(f\), \(g\), and \(h\) with \(\delta_m^+(f) = \delta_m^-(g)\) and \(\delta_m^+(g) = \delta_m^-(h)\):
     \[ (f \star_m g) \star_m h = f \star_m (g \star_m h) \]
   \item Unitality: Given \(m < n\) and \(n\)-cell \(f\):
     \begin{align*}
-      \id(s^{n-m}(f)) \star_m f &= f\\
-      f \star_m \id(t^{n-m}(f)) &= f
+      \id^{n-m}(\delta_m^-(f)) \star_m f &= f\\
+      f \star_m \id^{n-m}(\delta_m^+(f)) &= f
     \end{align*}
   \item Composition interchange: If \(o < m < n\) and \(\alpha\), \(\beta\), \(\gamma\), and \(\delta\) be \(n\)-cells with
-    \[t^{n-m}(\alpha) = s^{n-m}(\beta)\qquad
-      t^{n-m}(\gamma) = s^{n-m}(\delta)\qquad
-      t^{n-o}(\alpha) = s^{n-o}(\gamma)\]
+    \[\delta_m^+(\alpha) = \delta_m^-(\beta)\qquad
+      \delta_m^+(\gamma) = \delta_m^-(\delta)\qquad
+      \delta_o^+(\alpha) = \delta_o^-(\gamma)\]
     then:
     \[(\alpha \star_o \gamma) \star_m (\beta \star_o \delta) = (\alpha \star_m \beta) \star_o (\gamma \star_m \delta)\]
-  \item Identity interchange: Let \(m < n\) and \(f\) and \(g\) be \(n\)-cells with \(t^{n-m}(f) = s^{n-m}(g)\). Then:
+  \item Identity interchange: Let \(m < n\) and \(f\) and \(g\) be \(n\)-cells with \(\delta_m^+(f) = \delta_m^-(g)\). Then:
     \[\id(f) \star_m \id(g) = \id(f \star_m g)\]
   \end{itemize}
   A morphism of \(\infty\) categories is a morphism of the underlying globular sets which preserves composition and identities.
@@ -428,6 +430,7 @@ There is a clear forgetful functor from the category of strict infinity categori
 We end this section with an example of a non-trivial application of the axioms of an infinity category, known as the Eckmann-Hilton argument. The argument show's that any two scalars (morphisms from the identity to the identity) commute.
 
 \begin{proposition}[Eckmann-Hilton]
+  \label{prop:eh}
   Let \(x\) be an \(n\)-cell in an \(\infty\)-category and let \(\alpha\) and \(\beta\) be \((n+2)\)-cells with source and target \(\id(x)\). Then \(\alpha \star_{n+1} \beta = \beta \star_{n+1} \alpha\).
 \end{proposition}
 \begin{proof}
@@ -569,9 +572,206 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
   \label{fig:eh}
 \end{figure}
 
-\subsection{Pasting schemes}
-\label{sec:pasting-schemes}
+\subsection{Pasting diagrams}
+\label{sec:pasting-diagrams}
 
+\todo{Reference batanin and leinster here}
+
+The definition of \(\infty\)-categories given in the previous section is close in spirit to the the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:strictness}, that this sort of definitions do not scale well to our eventual setting of weak higher categories.
+
+The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by the pairing of a special class of globular set known as a \emph{pasting diagram}, and a map from this pasting diagram into \(G\). Due to this equivalence, the compositional structure of an infinity category is completely described by these pasting diagrams. From any pasting diagram we must be able to obtain an element of the free \(\infty\)-category, and this element must be unique.
+
+Informally, we can define a pasting diagram to be a finite globular set which admits a unique full composite, where a full composite of a globular set \(G\) is an element of the free \(\infty\)-category over \(G\) which uses all the maximal elements. This functions as the primary intuition on the role of pasting diagrams, but other more combinatorial definitions are easier to use and manipulate in practice.
+
+Before giving a more formal definition of pasting diagrams, we explore some examples and non-examples.
+
+The disc contexts introduced in \cref{ex:disc} are all examples of pasting diagrams. The unique ``composite'' of these globular sets is just given by their maximal element, noting that we allow a singular cell in our informal definition of composite. The uniqueness of this is trivial as the only possible operations we could apply are compositions with units, which gives the same cell under the laws of an \(\infty\)-category.
+
+The diagrams used to graphically represent our composition operations (of which we recall three below) are also pasting diagrams.
+
+\[
+  \begin{tikzcd}
+    x & y & z
+    \arrow["f", from=1-1, to=1-2]
+    \arrow["g", from=1-2, to=1-3]
+  \end{tikzcd}
+  \qquad
+  \begin{tikzcd}
+    x && y
+    \arrow[""{name=0, anchor=center, inner sep=0}, "f"', curve={height=24pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "h", curve={height=-24pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "g"{description}, from=1-1, to=1-3]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=0, to=2]
+    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
+  \end{tikzcd}
+  \qquad
+    \begin{tikzcd}
+    x & y & z
+    \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "i", curve={height=-18pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "h"', curve={height=18pt}, from=1-2, to=1-3]
+    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=3, to=2]
+  \end{tikzcd}
+\]
+
+The composite of these diagrams is just the composite of the two maximal cells with the appropriate codimension.
+
+We can also consider composites which are not binary composites of two cells of equal dimension. For example the following globular set is a pasting diagram:
+
+\[
+  \begin{tikzcd}
+    x & y & z
+    \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
+    \arrow["h", from=1-2, to=1-3]
+    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
+  \end{tikzcd}
+\]
+with a composite given by \(\alpha \star_0 \id(h)\). This operation is fairly common (in fact we have already seen it in \cref{prop:eh}) and is known as \emph{whiskering}. In this case we would say that the composite is given by the right whiskering of \(\alpha\) with \(h\).
+
+The 1-dimensional pasting diagrams are all given by chains of 1-cells of the form:
+\[x_0 \overset{f_0}\to x_1 \overset{f_1}\to x_2 \overset{f_2}\to \cdots \overset{f_n}\to x_{n+1}\]
+There are multiple ways to form a composite over these diagrams by repeated binary composition, however these all have the same result due to associativity.
+
+Lastly we look at the diagram, where all the \(0\)-cells and \(1\)-cells are assumed to be distinct:
+
+\[
+  \begin{tikzcd}[column sep = large]
+    \bullet & \bullet & \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-2]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-2, to=1-3]
+    \arrow[""{name=4, anchor=center, inner sep=0}, curve={height=30pt}, from=1-2, to=1-3]
+    \arrow[""{name=5, anchor=center, inner sep=0}, from=1-2, to=1-3]
+    \arrow["\alpha", shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
+    \arrow["\beta", shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+    \arrow["\gamma", shorten <=4pt, shorten >=4pt, Rightarrow, from=4, to=5]
+    \arrow["\delta", shorten <=4pt, shorten >=4pt, Rightarrow, from=5, to=3]
+  \end{tikzcd}
+\]
+
+We get a composite given by \((\alpha \star_1 \beta) \star_0 (\gamma \star_1 \delta)\). The uniqueness of this composite is due to the interchange law. \todo{Give some other examples in a figure?}
+
+Non-examples of pasting diagrams roughly fall into two groups: those that do not admit a composite, and those that admit many distinct composites. The following three globular sets fail to admit a composite (the last is drawn in a box to emphasise that \(z\) is part of the same globular set as \(x\), \(y\), \(f\), \(g\), and \(\alpha\)):
+
+\[
+  \begin{tikzcd}[column sep=large, row sep = small]
+    & y \\
+    x \\
+    & z
+    \arrow["f", pos=0.6, from=2-1, to=1-2]
+    \arrow["g"', pos=0.6, from=2-1, to=3-2]
+  \end{tikzcd}
+  \qquad
+  \begin{tikzcd}[column sep=large]
+    x & y
+    \arrow["f", curve={height=-12pt}, from=1-1, to=1-2]
+    \arrow["g"', curve={height=12pt}, from=1-1, to=1-2]
+  \end{tikzcd}
+  \qquad
+  \fbox{\begin{tikzcd}[column sep=scriptsize, ampersand replacement = \&]
+    x \&\& y \& z
+    \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-18pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=18pt}, from=1-1, to=1-3]
+    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+  \end{tikzcd}}
+\]
+The globular set with a single \(0\)-cell \(x\), and a single \(1\)-cell \(f : x \to x\) has too many composites: \(f\) and \(f \star_0 f\) need not be equal in an infinity category.
+
+To describe the free \(\infty\)-category in terms of pasting diagrams we need to be able to extract a composite from a pasting diagram, and construct a pasting diagram from an arbitrary composite. Each pasting diagram having a unique composite solves the former issue.
+
+To be able to construct a pasting diagram from a composite, we wish to equip our set of pasting diagrams itself with the structure of an \(\infty\)-category. We therefore need our pasting diagrams to have a notion of boundary and a notion of composition. A natural candidate for composition is given by colimits, as \(\mathbf{Glob}\) has all colimits due to being a presheaf category, and so it is sufficient for our class of pasting diagrams to be closed under these specific colimits. In fact, it is sufficient to contain a class of limits known as \emph{globular sums}.
+
+\begin{definition}
+  A globular category is a category \(\mathcal{C}\), equipped with a functor \(\mathbf{G} \to \mathcal{C}\), specifying certain objects as discs in the category. In a globular category, we write \(D^n\) for the image of \(n\) under this functor. A \emph{globular sum} is a colimit of a diagram of the form:
+  \[
+    \begin{tikzcd}[column sep = tiny, row sep = tiny]
+      {D^{i_0}} && {D^{i_1}} && {D^{i_2}} && {D^{i_n}} && {D^{i_{n+1}}} \\
+      &&&&& \cdots \\
+      & {D^{j_0}} && {D^{j_1}} &&&& {D^{j_n}}
+      \arrow["{f_0}", from=3-2, to=1-1]
+      \arrow["{g_0}"', from=3-2, to=1-3]
+      \arrow["{f_n}", from=3-8, to=1-7]
+      \arrow["{g_n}"', from=3-8, to=1-9]
+      \arrow["{f_1}", from=3-4, to=1-3]
+      \arrow["{g_1}"', from=3-4, to=1-5]
+    \end{tikzcd}
+  \]
+  Where all morphisms \(f_i, g_i\) are in the image of the functor \(\mathbf{G} \to \mathcal{C}\).
+\end{definition}
+
+We can finally give our first definition of a pasting diagram.
+
+\todo[inline]{Reference Ara?}
+\begin{definition}
+  The category \(\mathbf{Glob}\) is a globular category with functor \(\mathbf{G} \to \mathbf{Glob}\) given by the Yoneda embedding. The category of \emph{pasting diagrams} ,\(\mathbf{Pd}\), is the full subcategory containing the globular sets which are globular sums.
+  The boundary of an \((n+1)\)-dimensional pasting diagram is given by replacing each instance of \(D^{n+1}\) by \(D^n\) in it's globular sum representation. There are two canonical maps including the boundary into the original pasting diagram, whose images give the source and target of the pasting diagram.
+\end{definition}
+
+We finish this section with one larger example.
+
+\begin{example}
+  The following depicts a \(2\)-dimensional pasting diagram.
+  \[
+    \begin{tikzcd}
+      x & y & z & w
+      \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-2]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
+      \arrow["h"', from=1-2, to=1-3]
+      \arrow[""{name=2, anchor=center, inner sep=0}, "k", curve={height=-24pt}, from=1-3, to=1-4]
+      \arrow[""{name=3, anchor=center, inner sep=0}, "i"', curve={height=24pt}, from=1-3, to=1-4]
+      \arrow[""{name=4, anchor=center, inner sep=0}, "j"{description}, from=1-3, to=1-4]
+      \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
+      \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=4]
+      \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=4, to=2]
+    \end{tikzcd}
+  \]
+  which has the following globular sum decomposition:
+  % https://q.uiver.app/#q=WzAsMTMsWzAsMCwieCJdLFsyLDAsInkiXSxbOCwwLCJ6Il0sWzEwLDAsInciXSxbMywxLCJ5Il0sWzQsMCwieSJdLFs2LDAsInoiXSxbNywxLCJ6Il0sWzksMF0sWzEwLDEsInoiXSxbMTIsMSwidyJdLFsxMiwwLCJ6Il0sWzE0LDAsInciXSxbMCwxLCJnIiwwLHsiY3VydmUiOi0zfV0sWzAsMSwiZiIsMix7ImN1cnZlIjozfV0sWzIsMywiaSIsMix7ImN1cnZlIjo0fV0sWzIsMywiaiIsMV0sWzUsNiwiaCIsMl0sWzQsMSwiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzQsNSwiIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzksMTAsImoiLDFdLFsxMSwxMiwiaiIsMV0sWzExLDEyLCJrIiwxLHsiY3VydmUiOi00fV0sWzcsNiwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzcsMiwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzE0LDEzLCJcXGFscGhhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsxNSwxNiwiXFxiZXRhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsyMSwyMiwiXFxnYW1tYSIsMCx7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMjAsMywiIiwxLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwfSwibGV2ZWwiOjEsInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsyMCwxMSwiIiwxLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwfSwibGV2ZWwiOjEsInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dXQ==
+  \[
+    \begin{tikzcd}[column sep=tiny, row sep = small]
+      x && y && y && z && z & {} & w && z && w \\
+      &&& y &&&& z &&& z && w
+      \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-3]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-3]
+      \arrow[""{name=2, anchor=center, inner sep=0}, "i"', curve={height=24pt}, from=1-9, to=1-11]
+      \arrow[""{name=3, anchor=center, inner sep=0}, "j"{description}, from=1-9, to=1-11]
+      \arrow["h"', from=1-5, to=1-7]
+      \arrow[dashed, from=2-4, to=1-3]
+      \arrow[dashed, from=2-4, to=1-5]
+      \arrow[""{name=4, anchor=center, inner sep=0}, "j"{description}, from=2-11, to=2-13]
+      \arrow[""{name=5, anchor=center, inner sep=0}, "j"{description}, from=1-13, to=1-15]
+      \arrow[""{name=6, anchor=center, inner sep=0}, "k"{description}, curve={height=-24pt}, from=1-13, to=1-15]
+      \arrow[dashed, from=2-8, to=1-7]
+      \arrow[dashed, from=2-8, to=1-9]
+      \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
+      \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=3]
+      \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=5, to=6]
+      \arrow[shorten <=6pt, dashed, from=4, to=1-11]
+      \arrow[shorten <=6pt, dashed, from=4, to=1-13]
+    \end{tikzcd}
+  \]
+  The source and target of the diagram are given by:
+  \[
+    \begin{tikzcd}
+      x & y & z & w
+      \arrow["g", curve={height=-18pt}, from=1-1, to=1-2]
+      \arrow["h", from=1-2, to=1-3]
+      \arrow["k", curve={height=-24pt}, from=1-3, to=1-4]
+    \end{tikzcd}
+    \qquad\text{and}\qquad
+    \begin{tikzcd}
+      x & y & z & w
+      \arrow["f"', curve={height=18pt}, from=1-1, to=1-2]
+      \arrow["h", from=1-2, to=1-3]
+      \arrow["i"', curve={height=24pt}, from=1-3, to=1-4]
+    \end{tikzcd}
+  \]
+  which are isomorphic pasting diagrams.
+\end{example}
 
 
 \subsection{Strictness}
