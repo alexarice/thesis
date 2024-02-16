@@ -1,4 +1,4 @@
-\documentclass{cam-thesis}
+\documentclass[techreport]{cam-thesis}
 
 \usepackage{packages}
 \usepackage{macros}
@@ -95,7 +95,7 @@ or may be written as \(f: x \to y\).\todo{should arrowheads be smaller?} Two cel
     x & y
     \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-12pt}, from=1-1, to=1-2]
     \arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=12pt}, from=1-1, to=1-2]
-    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
   \end{tikzcd}
 \]
 and a \(3\)-cell \(\gamma\) between parallel \(2\)-cells \(\alpha\) and \(\beta\) could be could be drawn as:
@@ -104,8 +104,8 @@ and a \(3\)-cell \(\gamma\) between parallel \(2\)-cells \(\alpha\) and \(\beta\
     x && y
     \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-15pt}, from=1-1, to=1-3]
     \arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=15pt}, from=1-1, to=1-3]
-    \arrow[""{name=2, anchor=center, inner sep=0}, "\alpha", shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
-    \arrow[""{name=3, anchor=center, inner sep=0}, "\beta"', shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "\alpha", shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "\beta"', shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
     \arrow["\gamma", shorten <=4pt, shorten >=4pt, Rightarrow, nfold=3, from=2, to=3]
   \end{tikzcd}
 \]
@@ -128,8 +128,8 @@ In two dimensions, there is no longer a singular composition operation. For \(2\
     \arrow[""{name=0, anchor=center, inner sep=0}, "f"', curve={height=24pt}, from=1-1, to=1-3]
     \arrow[""{name=1, anchor=center, inner sep=0}, "h", curve={height=-24pt}, from=1-1, to=1-3]
     \arrow[""{name=2, anchor=center, inner sep=0}, "g"{description}, from=1-1, to=1-3]
-    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=0, to=2]
-    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=2]
+    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
   \end{tikzcd}
 \]
 
@@ -143,8 +143,8 @@ We refer to this composition as \emph{vertical composition}. We can also compose
     \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, "i", curve={height=-18pt}, from=1-2, to=1-3]
     \arrow[""{name=3, anchor=center, inner sep=0}, "h"', curve={height=18pt}, from=1-2, to=1-3]
-    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
-    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=3, to=2]
+    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, from=3, to=2]
   \end{tikzcd}
 \]
 
@@ -165,17 +165,17 @@ This pattern continues with \(3\)-cells, which can be composed at codimension \(
     \arrow[""{name=6, anchor=center, inner sep=0}, curve={height=18pt}, from=1-7, to=1-8]
     \arrow[""{name=7, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-8, to=1-9]
     \arrow[""{name=8, anchor=center, inner sep=0}, curve={height=18pt}, from=1-8, to=1-9]
-    \arrow[""{name=9, anchor=center, inner sep=0}, shift left=5, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
-    \arrow[""{name=10, anchor=center, inner sep=0}, shift right=5, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
-    \arrow[""{name=11, anchor=center, inner sep=0}, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
-    \arrow[""{name=12, anchor=center, inner sep=0}, shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=4]
-    \arrow[""{name=13, anchor=center, inner sep=0}, shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=4]
-    \arrow[""{name=14, anchor=center, inner sep=0}, shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=4, to=2]
-    \arrow[""{name=15, anchor=center, inner sep=0}, shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=4, to=2]
-    \arrow[""{name=16, anchor=center, inner sep=0}, shift left=3, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=6, to=5]
-    \arrow[""{name=17, anchor=center, inner sep=0}, shift right=3, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=6, to=5]
-    \arrow[""{name=18, anchor=center, inner sep=0}, shift left=3, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=8, to=7]
-    \arrow[""{name=19, anchor=center, inner sep=0}, shift right=3, shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=8, to=7]
+    \arrow[""{name=9, anchor=center, inner sep=0}, shift left=5, shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow[""{name=10, anchor=center, inner sep=0}, shift right=5, shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow[""{name=11, anchor=center, inner sep=0}, shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow[""{name=12, anchor=center, inner sep=0}, shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=4]
+    \arrow[""{name=13, anchor=center, inner sep=0}, shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=4]
+    \arrow[""{name=14, anchor=center, inner sep=0}, shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=4, to=2]
+    \arrow[""{name=15, anchor=center, inner sep=0}, shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=4, to=2]
+    \arrow[""{name=16, anchor=center, inner sep=0}, shift left=3, shorten <=5pt, shorten >=5pt, Rightarrow, from=6, to=5]
+    \arrow[""{name=17, anchor=center, inner sep=0}, shift right=3, shorten <=5pt, shorten >=5pt, Rightarrow, from=6, to=5]
+    \arrow[""{name=18, anchor=center, inner sep=0}, shift left=3, shorten <=5pt, shorten >=5pt, Rightarrow, from=8, to=7]
+    \arrow[""{name=19, anchor=center, inner sep=0}, shift right=3, shorten <=5pt, shorten >=5pt, Rightarrow, from=8, to=7]
     \arrow["\gamma", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=9, to=11]
     \arrow["\delta", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=11, to=10]
     \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold=3, from=14, to=15]
@@ -204,8 +204,8 @@ This can be diagrammatically depicted as:
     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=12pt}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-12pt}, from=1-2, to=1-3]
     \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=12pt}, from=1-2, to=1-3]
-    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
-    \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=2]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+    \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=2]
   \end{tikzcd}}}
 \newsavebox{\innerbot}
 \savebox{\innerbot}{
@@ -215,8 +215,8 @@ This can be diagrammatically depicted as:
     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=12pt}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-12pt}, from=1-2, to=1-3]
     \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=12pt}, from=1-2, to=1-3]
-    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
-    \arrow["\delta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=2]
+    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+    \arrow["\delta", shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=2]
   \end{tikzcd}}}
 \newsavebox{\innerleft}
 \savebox{\innerleft}{
@@ -225,8 +225,8 @@ This can be diagrammatically depicted as:
     \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
-    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
   \end{tikzcd}}}
 \newsavebox{\innerright}
 \savebox{\innerright}{
@@ -235,8 +235,8 @@ This can be diagrammatically depicted as:
     \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-    \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
-    \arrow["\delta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+    \arrow["\delta", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
   \end{tikzcd}}}
 \[
   \begin{tikzcd}[column sep=small]
@@ -248,12 +248,12 @@ This can be diagrammatically depicted as:
     \arrow[""{name=5, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-8, to=1-11]
     \arrow[""{name=6, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=1-11, to=1-14]
     \arrow[""{name=8, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-11, to=1-14]
-    \arrow["\usebox{\innertop}"{description, inner sep = 0,xshift = -1.2pt}, shorten <=4pt, shorten >=4pt, Rightarrow, nfold, from=2, to=0]
-    \arrow["\usebox{\innerbot}"{description, inner sep = 0,xshift = -1.2pt}, shorten <=4pt, shorten >=4pt, Rightarrow, nfold, from=0, to=1]
+    \arrow["\usebox{\innertop}"{description, inner sep = 0,xshift = -1.2pt}, shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+    \arrow["\usebox{\innerbot}"{description, inner sep = 0,xshift = -1.2pt}, shorten <=4pt, shorten >=4pt, Rightarrow, from=0, to=1]
     \arrow[""{name=1, anchor=center, inner sep=0}, controls=+(90:2) and +(90:2), from=1-1, to=1-6]
     \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(90:-2) and +(90:-2), from=1-1, to=1-6]
-    \arrow["\usebox{\innerleft}"{description, inner sep = 0,xshift = -1.3pt}, shorten <=2pt, shorten >=2pt, Rightarrow, nfold, from=5, to=4]
-    \arrow["\usebox{\innerright}"{description, inner sep = 0,xshift = -1.3pt}, shorten <=2pt, shorten >=2pt, Rightarrow, nfold, from=8, to=6]
+    \arrow["\usebox{\innerleft}"{description, inner sep = 0,xshift = -1.3pt}, shorten <=2pt, shorten >=2pt, Rightarrow, from=5, to=4]
+    \arrow["\usebox{\innerright}"{description, inner sep = 0,xshift = -1.3pt}, shorten <=2pt, shorten >=2pt, Rightarrow, from=8, to=6]
     \arrow[controls=+(80:1.5) and +(100:1.5), from=1-8, to=1-11]
     \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-8, to=1-11]
     \arrow[controls=+(80:1.5) and +(100:1.5), from=1-11, to=1-14]
@@ -377,8 +377,8 @@ Given a globular set \(G\), we will call the elements of \(G(n)\) the \(n\)-cell
               d_0^- \&\& d_0^+
               \arrow[""{name=0, anchor=center, inner sep=0}, "d_1^+", curve={height=-25pt}, from=1-1, to=1-3]
               \arrow[""{name=1, anchor=center, inner sep=0}, "d_1^-"', curve={height=25pt}, from=1-1, to=1-3]
-              \arrow[""{name=2, anchor=center, inner sep=0}, "d_2^-", shift left=12pt,Rightarrow, nfold, shorten <=5pt, shorten >=5pt, from=1,to=0]
-              \arrow[""{name=3, anchor=center, inner sep=0}, "d_2^+"', shift right=12pt,Rightarrow, nfold, shorten <=5pt, shorten >=5pt, from=1,to=0]
+              \arrow[""{name=2, anchor=center, inner sep=0}, "d_2^-", shift left=12pt,Rightarrow, shorten <=5pt, shorten >=5pt, from=1,to=0]
+              \arrow[""{name=3, anchor=center, inner sep=0}, "d_2^+"', shift right=12pt,Rightarrow, shorten <=5pt, shorten >=5pt, from=1,to=0]
               \arrow["d_3", Rightarrow, nfold = 3, shorten <=3pt, shorten >=3pt,from=2,to=3]
             \end{tikzcd}}
   \end{tabular}
@@ -457,8 +457,8 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=10pt}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-2, to=1-3]
     \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=10pt}, from=1-2, to=1-3]
-    \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
-    \arrow["\id"', shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=2]
+    \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+    \arrow["\id"', shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=2]
   \end{tikzcd}}}
 \newsavebox{\ehbeta}
 \savebox{\ehbeta}{\adjustbox{scale=0.8}{
@@ -468,8 +468,8 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=10pt}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-2, to=1-3]
     \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=10pt}, from=1-2, to=1-3]
-    \arrow["\id"',  shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
-    \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=2]
+    \arrow["\id"',  shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+    \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=2]
   \end{tikzcd}}}
 \newsavebox{\ehlefttop}
 \savebox{\ehlefttop}{
@@ -478,8 +478,8 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
      \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
      \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
      \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-     \arrow["\alpha", color= blue, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
-     \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+     \arrow["\alpha", color= blue, shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+     \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
    \end{tikzcd}}}
 \newsavebox{\ehrighttop}
 \savebox{\ehrighttop}{
@@ -488,8 +488,8 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
     \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
-    \arrow["\beta", color=red, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+    \arrow["\beta", color=red, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
   \end{tikzcd}}}
 \newsavebox{\ehleftbot}
 \savebox{\ehleftbot}{
@@ -498,8 +498,8 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
     \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
-    \arrow["\alpha", color=blue, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+    \arrow["\alpha", color=blue, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
   \end{tikzcd}}}
 \newsavebox{\ehrightbot}
 \savebox{\ehrightbot}{
@@ -508,8 +508,8 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
     \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-    \arrow["\beta", color=red, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
-    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\beta", color=red, shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
   \end{tikzcd}}}
 
 \begin{figure}[h]
@@ -542,18 +542,18 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
       \arrow[""{name=17, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=5-12, to=5-15]
       \arrow[""{name=18, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=5-15, to=5-18]
       \arrow[""{name=19, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=5-15, to=5-18]
-      \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=3pt, shorten >=5pt, Rightarrow, nfold, from=1, to=2]
-      \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=5pt, shorten >=3pt, Rightarrow, nfold, from=2, to=0]
-      \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=3pt, shorten >=5pt, Rightarrow, nfold, from=10, to=11]
-      \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=5pt, shorten >=3pt, Rightarrow, nfold, from=11, to=9]
-      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=4, to=5]
-      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=5, to=3]
-      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=7, to=8]
-      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=8, to=6]
-      \arrow["\usebox{\ehlefttop}"{description,inner sep = 0,xshift = -1.3pt, yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=13, to=12]
-      \arrow["\usebox{\ehrighttop}"{description,inner sep = 0,xshift = -1.3pt,yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=15, to=14]
-      \arrow["\usebox{\ehleftbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=17, to=16]
-      \arrow["\usebox{\ehrightbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=19, to=18]
+      \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=3pt, shorten >=5pt, Rightarrow, from=1, to=2]
+      \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=5pt, shorten >=3pt, Rightarrow, from=2, to=0]
+      \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=3pt, shorten >=5pt, Rightarrow, from=10, to=11]
+      \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=5pt, shorten >=3pt, Rightarrow, from=11, to=9]
+      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=4, to=5]
+      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=5, to=3]
+      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=7, to=8]
+      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=8, to=6]
+      \arrow["\usebox{\ehlefttop}"{description,inner sep = 0,xshift = -1.3pt, yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=13, to=12]
+      \arrow["\usebox{\ehrighttop}"{description,inner sep = 0,xshift = -1.3pt,yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=15, to=14]
+      \arrow["\usebox{\ehleftbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=17, to=16]
+      \arrow["\usebox{\ehrightbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=19, to=18]
       \arrow[controls=+(90:1.8) and +(90:1.8), from=1-5, to=1-10]
       \arrow[controls=+(90:-1.8) and +(90:-1.8), from=1-5, to=1-10]
       \arrow[controls=+(90:1.8) and +(90:1.8), from=5-5, to=5-10]
@@ -577,11 +577,11 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
 
 \todo{Reference batanin and leinster here}
 
-The definition of \(\infty\)-categories given in the previous section is close in spirit to the the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:strictness}, that this sort of definitions do not scale well to our eventual setting of weak higher categories.
+The definition of \(\infty\)-categories given in the previous section is close in spirit to the the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:strictness}, that these sort of definitions do not scale well to our eventual setting of weak higher categories.
 
-The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by the pairing of a special class of globular set known as a \emph{pasting diagram}, and a map from this pasting diagram into \(G\). Due to this equivalence, the compositional structure of an infinity category is completely described by these pasting diagrams. From any pasting diagram we must be able to obtain an element of the free \(\infty\)-category, and this element must be unique.
+The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by the pairing of a special class of globular set known as a \emph{pasting diagram}, and a map from this pasting diagram into \(G\). To do this, it must be possible to obtain a canonical composite from each pasting diagram.
 
-Informally, we can define a pasting diagram to be a finite globular set which admits a unique full composite, where a full composite of a globular set \(G\) is an element of the free \(\infty\)-category over \(G\) which uses all the maximal elements. This functions as the primary intuition on the role of pasting diagrams, but other more combinatorial definitions are easier to use and manipulate in practice.
+Informally, we can define a \(n\)-dimensional pasting diagram to be a finite globular set which admits a unique full composite of dimension \(n\), where a full composite of a globular set \(G\) is an element of the free \(\infty\)-category over \(G\) which uses all the maximal elements. This functions as the primary intuition on the role of pasting diagrams.
 
 Before giving a more formal definition of pasting diagrams, we explore some examples and non-examples.
 
@@ -601,8 +601,8 @@ The diagrams used to graphically represent our composition operations (of which 
     \arrow[""{name=0, anchor=center, inner sep=0}, "f"', curve={height=24pt}, from=1-1, to=1-3]
     \arrow[""{name=1, anchor=center, inner sep=0}, "h", curve={height=-24pt}, from=1-1, to=1-3]
     \arrow[""{name=2, anchor=center, inner sep=0}, "g"{description}, from=1-1, to=1-3]
-    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=0, to=2]
-    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=1]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=2]
+    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
   \end{tikzcd}
   \qquad
     \begin{tikzcd}
@@ -611,8 +611,8 @@ The diagrams used to graphically represent our composition operations (of which 
     \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, "i", curve={height=-18pt}, from=1-2, to=1-3]
     \arrow[""{name=3, anchor=center, inner sep=0}, "h"', curve={height=18pt}, from=1-2, to=1-3]
-    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
-    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=3, to=2]
+    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, from=3, to=2]
   \end{tikzcd}
 \]
 
@@ -626,7 +626,7 @@ We can also consider composites which are not binary composites of two cells of 
     \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-2]
     \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
     \arrow["h", from=1-2, to=1-3]
-    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
+    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
   \end{tikzcd}
 \]
 with a composite given by \(\alpha \star_0 \id(h)\). This operation is fairly common (in fact we have already seen it in \cref{prop:eh}) and is known as \emph{whiskering}. In this case we would say that the composite is given by the right whiskering of \(\alpha\) with \(h\).
@@ -683,7 +683,7 @@ The globular set with a single \(0\)-cell \(x\), and a single \(1\)-cell \(f : x
 
 To describe the free \(\infty\)-category in terms of pasting diagrams we need to be able to extract a composite from a pasting diagram, and construct a pasting diagram from an arbitrary composite. Each pasting diagram having a unique composite solves the former issue.
 
-To be able to construct a pasting diagram from a composite, we wish to equip our set of pasting diagrams itself with the structure of an \(\infty\)-category. We therefore need our pasting diagrams to have a notion of boundary and a notion of composition. A natural candidate for composition is given by colimits, as \(\mathbf{Glob}\) has all colimits due to being a presheaf category, and so it is sufficient for our class of pasting diagrams to be closed under these specific colimits. In fact, it is sufficient to contain a class of limits known as \emph{globular sums}.
+To be able to construct a pasting diagram from a composite, we wish to equip our set of pasting diagrams itself with the structure of an \(\infty\)-category. We therefore need our pasting diagrams to have a notion of boundary and a notion of composition. A natural candidate for composition is given by colimits, as \(\mathbf{Glob}\) has all colimits due to being a presheaf category, and so it is sufficient for our class of pasting diagrams to be closed under these specific colimits. In fact, it is sufficient to contain a class of colimits known as \emph{globular sums}.
 
 \begin{definition}
   A globular category is a category \(\mathcal{C}\), equipped with a functor \(\mathbf{G} \to \mathcal{C}\), specifying certain objects as discs in the category. In a globular category, we write \(D^n\) for the image of \(n\) under this functor. A \emph{globular sum} is a colimit of a diagram of the form:
@@ -707,8 +707,8 @@ We can finally give our first definition of a pasting diagram.
 
 \todo[inline]{Reference Ara?}
 \begin{definition}
-  The category \(\mathbf{Glob}\) is a globular category with functor \(\mathbf{G} \to \mathbf{Glob}\) given by the Yoneda embedding. The category of \emph{pasting diagrams} ,\(\mathbf{Pd}\), is the full subcategory containing the globular sets which are globular sums.
-  The boundary of an \((n+1)\)-dimensional pasting diagram is given by replacing each instance of \(D^{n+1}\) by \(D^n\) in it's globular sum representation. There are two canonical maps including the boundary into the original pasting diagram, whose images give the source and target of the pasting diagram.
+  The category \(\mathbf{Glob}\) is a globular category with functor \(\mathbf{G} \to \mathbf{Glob}\) given by the Yoneda embedding. The category of \emph{pasting diagrams}, \(\mathbf{Pd}\), is the full subcategory containing the globular sets which are globular sums.
+  The boundary of an \((n+1)\)-dimensional pasting diagram is given by replacing each instance of \(D^{n+1}\) by \(D^n\) in its globular sum representation. There are two canonical maps including the boundary into the original pasting diagram, whose images give the source and target of the pasting diagram.
 \end{definition}
 
 We finish this section with one larger example.
@@ -724,9 +724,9 @@ We finish this section with one larger example.
       \arrow[""{name=2, anchor=center, inner sep=0}, "k", curve={height=-24pt}, from=1-3, to=1-4]
       \arrow[""{name=3, anchor=center, inner sep=0}, "i"', curve={height=24pt}, from=1-3, to=1-4]
       \arrow[""{name=4, anchor=center, inner sep=0}, "j"{description}, from=1-3, to=1-4]
-      \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
-      \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=3, to=4]
-      \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=4, to=2]
+      \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+      \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=4]
+      \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, from=4, to=2]
     \end{tikzcd}
   \]
   which has the following globular sum decomposition:
@@ -747,9 +747,9 @@ We finish this section with one larger example.
       \arrow[""{name=6, anchor=center, inner sep=0}, "k"{description}, curve={height=-24pt}, from=1-13, to=1-15]
       \arrow[dashed, from=2-8, to=1-7]
       \arrow[dashed, from=2-8, to=1-9]
-      \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, nfold, from=1, to=0]
-      \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=2, to=3]
-      \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold, from=5, to=6]
+      \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+      \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=3]
+      \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, from=5, to=6]
       \arrow[shorten <=6pt, dashed, from=4, to=1-11]
       \arrow[shorten <=6pt, dashed, from=4, to=1-13]
     \end{tikzcd}
@@ -772,28 +772,110 @@ We finish this section with one larger example.
   \]
   which are isomorphic pasting diagrams.
 \end{example}
-
+\todo{This diagram looks awful}
 
 \subsection{Strictness}
 \label{sec:strictness}
 
-The \(\infty\)-categories we have defined so far are known as \emph{strict} infinity categories.
+The \(\infty\)-categories we have defined so far have all been strict \(\infty\)-categories, meaning that the laws are required to hold up to equality. In ordinary \(1\)-category theory, isomorphism is usually preferred over equality for comparing objects. Similarly, when we have access to higher dimensional arrows, it follows that that we can also consider isomorphisms between morphisms, and therefore consider laws such as associativity up to isomorphism instead of equality.
 
-\todo[inline]{Isomorphism vs equality}
+Topological spaces provide one of the primary examples for where it is useful to consider weak laws. Given a topological space \(X\), we can define a globular set of paths and homotopies. Let the \(0\)-cells be given by points \(x\) of the topological space, let morphisms from \(x\) to \(y\) be given as paths \(I \to X\) (where \(I\) is the topological interval \([0,1]\)) which send \(0\) to \(x\) and \(1\) to \(y\), and let higher cells be given by homotopies. The natural composition of two paths \(p\) and \(q\) is the following path:
+\[
+  (p \star q)(i) =
+  \begin{cases*}
+    p(2i)&when \(i < 0.5\)\\
+    q(2i-1)&when \(i \geq 0.5\)
+  \end{cases*}
+\]
+which effectively lines up the paths end to end. Given \(3\) paths \(p\), \(q\), and \(r\), the compositions \((p \star q) \star r\) and \(p \star (q \star r)\) are not identical but are equal up to homotopy, meaning the two compositions are isomorphic. Therefore in this case the composition \(p \star q\) does not form a strict \(\infty\)-category structure, but rather a weak structure.
 
-\todo[inline]{Topological example}
+We start our exploration of weak higher categories by considering the lower dimension case of bicategories (weak \(2\)-categories). Here, interchange must still be given by a strict equality, as there are no non-trivial \(3\)-cells in a \(2\)-category. However, associativity and unitality can be given by isomorphisms known as associators and unitors:
+\begin{alignat*}{2}
+  &\alpha_{f,g,h} &&: (f \star_0 g) \star_0 h \to f \star_0 (g \star_0 h)\\
+  &\lambda_f &&: \id(x) \star_0 f \to f\\
+  &\rho_f &&: f \star_0 \id(y) \to f
+\end{alignat*}
+for \(f : x \to y\), \(g : y \to z\), and \(h : z \to w\).
 
-\todo[inline]{Smaller monoidal category example}
+\begin{example}
+  \label{ex:spans}
+  All strict 2-categories are also bicategories. The bicategory of spans is an example of a bicategory which is not strict. Starting with a category \(\mathcal{C}\) equipped with chosen pullbacks, we define the bicategory of spans over \(\mathcal{C}\) to be:
+  \begin{itemize}
+  \item Objects are the same as \(\mathcal{C}\)
+  \item Morphisms \(A\) to \(B\) are spans \(A \leftarrow C \to B\).
+  \item A 2-morphism from \(A \leftarrow C \to B\) to \(A \leftarrow C' \to B\) is a morphism \(C \to C'\) such that the following diagram commutes:
+    \[
+      \begin{tikzcd}[row sep = small]
+	& C \\
+	A && B \\
+	& {C'}
+	\arrow[from=1-2, to=3-2]
+	\arrow[from=3-2, to=2-1]
+	\arrow[from=1-2, to=2-1]
+	\arrow[from=1-2, to=2-3]
+	\arrow[from=3-2, to=2-3]
+      \end{tikzcd}
+    \]
+  \item Compositions and identities of 2-morphisms is given by composition and identities of the underlying morphisms in \(\mathcal{C}\).
+  \item The identity on an object \(A\) is the span \(A \leftarrow A \to A\).
+  \item Given spans \(A \leftarrow D \to B\) and \(B \leftarrow E \to C\), their composite is given by the pullback:
+    \[
+      \begin{tikzcd}[row sep=small]
+	&& {D \times_B E} \\
+	& D && E \\
+	A && B && C
+	\arrow[from=2-2, to=3-1]
+	\arrow[from=2-2, to=3-3]
+	\arrow[from=2-4, to=3-3]
+	\arrow[from=2-4, to=3-5]
+	\arrow[from=1-3, to=2-2]
+	\arrow[from=1-3, to=2-4]
+	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=-45}, draw=none, from=1-3, to=3-3]
+      \end{tikzcd}
+    \]
+  \item Associators and unitors are given by the universal property of the pullback.
+  \end{itemize}
+\end{example}
 
-\todo[inline]{Definition of monoidal category}
+In general, there could be many possible isomorphisms between \((f \star g) \star h\) and \(f \star (g \star h)\), and we require that the chosen morphisms satisfy certain compatibility properties. The first is that each of the associator, left unitor, and right unitor should be a natural isomorphism. The second is a property known as \emph{coherence}, saying that any two parallel morphisms built purely from naturality moves, associators, and unitors must be equal.
 
-\todo[inline]{Strictification for monoidal categories}
+For bicategories it is sufficient to give two coherence laws: the triangle equality and pentagon equality. The triangle equality identifies two ways of cancelling the identity in the composite \(f \star \id \star g\), giving a compatibility between the left and right unitors. It is given by the following commutative diagram:
 
-\todo[inline]{All works for 2-categories}
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCIoZiBcXHN0YXIgXFxpZCkgXFxzdGFyIGciXSxbMiwwLCJmIFxcc3RhciAoXFxpZCBcXHN0YXIgZykiXSxbMSwxLCJmIFxcc3RhciBnIl0sWzAsMSwiXFxhbHBoYV97ZixcXGlkLGd9Il0sWzAsMiwiXFxyaG9fZiBcXHN0YXJfMCBcXGlkKGcpIiwyXSxbMSwyLCJcXGlkKGYpXFxzdGFyXzBcXGxhbWJkYV9nIl1d
+\[
+  \begin{tikzcd}
+    {(f \star \id) \star g} && {f \star (\id \star g)} \\
+    & {f \star g}
+    \arrow["{\alpha_{f,\id,g}}", from=1-1, to=1-3]
+    \arrow["{\rho_f \star_0 \id(g)}"', from=1-1, to=2-2]
+    \arrow["{\id(f)\star_0\lambda_g}", from=1-3, to=2-2]
+  \end{tikzcd}
+\]
 
+The pentagon equation identifies two ways of associating \(((f \star g) \star h) \star k\) to \(f \star (g \star (h \star k))\). It is given by the diagram below:
+% https://q.uiver.app/#q=WzAsNSxbMSwzLCIoZiBcXHN0YXIgKGcgXFxzdGFyIGgpKSBcXHN0YXIgayJdLFswLDEsIigoZiBcXHN0YXIgZykgXFxzdGFyIGgpIFxcc3RhciBrIl0sWzIsMCwiKGYgXFxzdGFyIGcpIFxcc3RhciAoaCBcXHN0YXIgaykiXSxbNCwxLCJmIFxcc3RhciAoZyBcXHN0YXIgKGggXFxzdGFyIGspKSJdLFszLDMsImYgXFxzdGFyICgoZyBcXHN0YXIgaCkgXFxzdGFyIGspIl0sWzEsMiwiXFxhbHBoYV97ZiBcXHN0YXIgZyxoLGt9Il0sWzIsMywiXFxhbHBoYV97ZixnLGhcXHN0YXIga30iXSxbMSwwLCJcXGFscGhhX3tmLGcsaH0gXFxzdGFyXzAgXFxpZChrKSIsMl0sWzAsNCwiXFxhbHBoYV97ZixnXFxzdGFyIGgsa30iLDJdLFs0LDMsIlxcaWQoZilcXHN0YXJfMCBcXGFscGhhX3tnLGgsa30iLDJdXQ==
+\[
+  \begin{tikzcd}[column sep = -1.5em]
+    && {(f \star g) \star (h \star k)} \\
+    {((f \star g) \star h) \star k} &&&& {f \star (g \star (h \star k))} \\
+    \\
+    & {(f \star (g \star h)) \star k} && {f \star ((g \star h) \star k)}
+    \arrow["{\alpha_{f \star g,h,k}}", from=2-1, to=1-3]
+    \arrow["{\alpha_{f,g,h\star k}}", from=1-3, to=2-5]
+    \arrow["{\alpha_{f,g,h} \star_0 \id(k)}"', from=2-1, to=4-2]
+    \arrow["{\alpha_{f,g\star h,k}}"', from=4-2, to=4-4]
+    \arrow["{\id(f)\star_0 \alpha_{g,h,k}}"', from=4-4, to=2-5]
+  \end{tikzcd}
+\]
+
+Surprisingly, these two equations are enough to give full coherence. For the example of spans from \cref{ex:spans}, these two equations follow from the uniqueness of the universal morphism.
+
+\todo[inline]{Move to 3-categories}
 \todo[inline]{Eckmann-Hilton in weak setting}
 
-\todo[inline]{Braiding and counter example for 3-dimension semistrictification.}
+\todo[inline]{Strictification for bicategories}
+
+\todo[inline]{Braiding and counter example for 3-dimension strictification}
 
 \todo[inline]{Exponential blowup in number of coherence moves needed}
 
