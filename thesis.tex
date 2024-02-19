@@ -2,6 +2,7 @@
 
 \usepackage{packages}
 \usepackage{macros}
+\addbibresource{thesis.bib}
 
 \title{A type-theoretic approach to semistrict higher categories}
 
@@ -579,11 +580,11 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
 
 The definition of \(\infty\)-categories given in the previous section is close in spirit to the the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:strictness}, that these sort of definitions do not scale well to our eventual setting of weak higher categories.
 
-The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by the pairing of a special class of globular set known as a \emph{pasting diagram}, and a map from this pasting diagram into \(G\). To do this, it must be possible to obtain a canonical composite from each pasting diagram.
+There is a special class of (finite) globular sets known as \emph{pasting diagrams}. The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by a pasting diagram and a map from this pasting diagram into \(G\). To do this, it must be possible to obtain a canonical composite from each pasting diagram.
 
 Informally, we can define a \(n\)-dimensional pasting diagram to be a finite globular set which admits a unique full composite of dimension \(n\), where a full composite of a globular set \(G\) is an element of the free \(\infty\)-category over \(G\) which uses all the maximal elements. This functions as the primary intuition on the role of pasting diagrams.
 
-Before giving a more formal definition of pasting diagrams, we explore some examples and non-examples.
+Before giving a more formal definition of pasting diagrams, we explore some examples and non-examples. A more indepth discussion of pasting diagrams and representations of free strict \(\infty\)-categories using them can be found in \citeauthor{leinster2004higher}~\cite{leinster2004higher}. In contrast to \citeauthor{leinster2004higher}, we consider pasting diagrams as a full subcategory of globular sets, rather than a separate category with a function sending each pasting diagram to a globular set.
 
 The disc contexts introduced in \cref{ex:disc} are all examples of pasting diagrams. The unique ``composite'' of these globular sets is just given by their maximal element, noting that we allow a singular cell in our informal definition of composite. The uniqueness of this is trivial as the only possible operations we could apply are compositions with units, which gives the same cell under the laws of an \(\infty\)-category.
 
@@ -870,16 +871,27 @@ The pentagon equation identifies two ways of associating \(((f \star g) \star h)
 
 Surprisingly, these two equations are enough to give full coherence. For the example of spans from \cref{ex:spans}, these two equations follow from the uniqueness of the universal morphism.
 
-\todo[inline]{Move to 3-categories}
+To move from weak \(2\)-categories to weak \(3\)-categories, new coherence cells for interchangers are added to replace the interchanger equalities, and new equalities must be added to specify the interaction between the interchangers and other coherence morphisms. Furthermore, the triangle and pentagon equation from \(2\)-categories will become an isomorphisms in a weak \(3\)-category, causing more coherence equations to be added.
+
+As we move up in dimension, the number of coherence morphisms and equalities required increases exponentially.
+
+\todo[inline]{Exponential blowup in number of coherence moves needed}
+
+Because of this complexity, we look for more uniform ways to represent the operations and axioms of an \(\infty\)-category. In this thesis, we will work with the type theory \Catt, which is based on a definition of \(\infty\)-categories due to \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck}, which is itself based on a definition of \(\infty\)-groupoid by \citeauthor{PursuingStacks}~\cite{PursuingStacks}. We will sketch the ideas behind these definitions here, and give a definition of \Catt in \cref{sec:type-theory-catt}.
+
+\todo[inline]{Grothendieck definition}
+
+\todo[inline]{Implies invertibility}
+
+\todo[inline]{Maltsiniotis definition}
+
 \todo[inline]{Eckmann-Hilton in weak setting}
 
 \todo[inline]{Strictification for bicategories}
 
 \todo[inline]{Braiding and counter example for 3-dimension strictification}
 
-\todo[inline]{Exponential blowup in number of coherence moves needed}
 
-\todo[inline]{Informal description of weak infinity categories}
 
 \todo[inline]{Conjectures}
 
