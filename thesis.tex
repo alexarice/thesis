@@ -687,12 +687,12 @@ To describe the free \(\infty\)-category in terms of pasting diagrams we need to
 To be able to construct a pasting diagram from a composite, we wish to equip our set of pasting diagrams itself with the structure of an \(\infty\)-category. We therefore need our pasting diagrams to have a notion of boundary and a notion of composition. A natural candidate for composition is given by colimits, as \(\mathbf{Glob}\) has all colimits due to being a presheaf category, and so it is sufficient for our class of pasting diagrams to be closed under these specific colimits. In fact, it is sufficient to contain a class of colimits known as \emph{globular sums}.
 
 \begin{definition}
-  A globular category is a category \(\mathcal{C}\), equipped with a functor \(\mathbf{G} \to \mathcal{C}\), specifying certain objects as discs in the category. In a globular category, we write \(D^n\) for the image of \(n\) under this functor. A \emph{globular sum} is a colimit of a diagram of the form:
+  A globular category is a category \(\mathcal{C}\), equipped with a disc functor \(D : \mathbf{G} \to \mathcal{C}\), specifying certain objects as discs in the category. A \emph{globular sum} is a colimit of a diagram of the form:
   \[
     \begin{tikzcd}[column sep = tiny, row sep = tiny]
-      {D^{i_0}} && {D^{i_1}} && {D^{i_2}} && {D^{i_n}} && {D^{i_{n+1}}} \\
+      {D(i_0)} && {D(i_1)} && {D(i_2)} && {D(i_n)} && {D(i_{n+1})} \\
       &&&&& \cdots \\
-      & {D^{j_0}} && {D^{j_1}} &&&& {D^{j_n}}
+      & {D(j_0)} && {D(j_1)} &&&& {D(j_n)}
       \arrow["{f_0}", from=3-2, to=1-1]
       \arrow["{g_0}"', from=3-2, to=1-3]
       \arrow["{f_n}", from=3-8, to=1-7]
@@ -701,16 +701,17 @@ To be able to construct a pasting diagram from a composite, we wish to equip our
       \arrow["{g_1}"', from=3-4, to=1-5]
     \end{tikzcd}
   \]
-  Where all morphisms \(f_i, g_i\) are in the image of the functor \(\mathbf{G} \to \mathcal{C}\).
+  Where all morphisms \(f_i\) are a composite of source maps (\(D(\mathbf{s}_n)\) for some \(n\)) and the morphisms \(g_i\) are a composite of target maps (\(D(\mathbf{t}_n)\) for some \(n\)). A \emph{globular extension} is a globular category where all globular sums exist, and a morphism of globular extensions is a functor of the underlying categories commuting with the disc functors and preserving globular sums.
 \end{definition}
 
 We can finally give our first definition of a pasting diagram.
 
-\todo[inline]{Reference Ara?}
 \begin{definition}
   The category \(\mathbf{Glob}\) is a globular category with functor \(\mathbf{G} \to \mathbf{Glob}\) given by the Yoneda embedding. The category of \emph{pasting diagrams}, \(\mathbf{Pd}\), is the full subcategory containing the globular sets which are globular sums.
   The boundary of an \((n+1)\)-dimensional pasting diagram is given by replacing each instance of \(D^{n+1}\) by \(D^n\) in its globular sum representation. There are two canonical maps including the boundary into the original pasting diagram, whose images give the source and target of the pasting diagram.
 \end{definition}
+
+The category of pasting diagrams clearly forms a globular category, with the functor \(\mathbf{G} \to \mathbf{Pd}\) sending \(n\) to \(D^n\). It is a globular extension and is in fact the universal globular extension; it is initial in the category of globular extensions~\cite{Ara}.
 
 We finish this section with one larger example.
 
@@ -873,9 +874,7 @@ Surprisingly, these two equations are enough to give full coherence. For the exa
 
 To move from weak \(2\)-categories to weak \(3\)-categories, new coherence cells for interchangers are added to replace the interchanger equalities, and new equalities must be added to specify the interaction between the interchangers and other coherence morphisms. Furthermore, the triangle and pentagon equation from \(2\)-categories will become an isomorphisms in a weak \(3\)-category, causing more coherence equations to be added.
 
-As we move up in dimension, the number of coherence morphisms and equalities required increases exponentially.
-
-\todo[inline]{Exponential blowup in number of coherence moves needed}
+As we move up in dimension, the number of coherence morphisms and equalities required increases exponentially. Whereas a bicategory has 11 operations (1-identity, 2-identity, 1-composition, vertical composition, horizontal composition, left unitor (and inverse), right unitor (and inverse), and associator (and inverse)), where as a fully weak tricategory already has around 51 operations~\cite{gurski2006algebraic}\footnote{The number here is obtained by unwrapping various subdefinitions and should be treated as approximate.}. Comparisons between the size of partially weak definitions can be found in \cite{bar2017data}.
 
 Because of this complexity, we look for more uniform ways to represent the operations and axioms of an \(\infty\)-category. In this thesis, we will work with the type theory \Catt, which is based on a definition of \(\infty\)-categories due to \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck}, which is itself based on a definition of \(\infty\)-groupoid by \citeauthor{PursuingStacks}~\cite{PursuingStacks}. We will sketch the ideas behind these definitions here, and give a definition of \Catt in \cref{sec:type-theory-catt}.
 
