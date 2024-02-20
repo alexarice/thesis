@@ -426,7 +426,7 @@ We can now give the definition of a (strict) \(\infty\)-category.
   A morphism of \(\infty\) categories is a morphism of the underlying globular sets which preserves composition and identities.
 \end{definition}
 
-There is a clear forgetful functor from the category of strict infinity categories to the category of globular sets, which has a left adjoint given by taking the free strict infinity category over a globular set. \todo{Do i need monad?}
+There is a clear forgetful functor from the category of strict infinity categories to the category of globular sets, which has a left adjoint given by taking the free strict infinity category over a globular set.
 
 We end this section with an example of a non-trivial application of the axioms of an infinity category, known as the Eckmann-Hilton argument. The argument show's that any two scalars (morphisms from the identity to the identity) commute.
 
@@ -654,7 +654,7 @@ Lastly we look at the diagram, where all the \(0\)-cells and \(1\)-cells are ass
   \end{tikzcd}
 \]
 
-We get a composite given by \((\alpha \star_1 \beta) \star_0 (\gamma \star_1 \delta)\). The uniqueness of this composite is due to the interchange law. \todo{Give some other examples in a figure?}
+We get a composite given by \((\alpha \star_1 \beta) \star_0 (\gamma \star_1 \delta)\). The uniqueness of this composite is due to the interchange law.
 
 Non-examples of pasting diagrams roughly fall into two groups: those that do not admit a composite, and those that admit many distinct composites. The following three globular sets fail to admit a composite (the last is drawn in a box to emphasise that \(z\) is part of the same globular set as \(x\), \(y\), \(f\), \(g\), and \(\alpha\)):
 
@@ -701,7 +701,11 @@ To be able to construct a pasting diagram from a composite, we wish to equip our
       \arrow["{g_1}"', from=3-4, to=1-5]
     \end{tikzcd}
   \]
-  Where all morphisms \(f_i\) are a composite of source maps (\(D(\mathbf{s}_n)\) for some \(n\)) and the morphisms \(g_i\) are a composite of target maps (\(D(\mathbf{t}_n)\) for some \(n\)). A \emph{globular extension} is a globular category where all globular sums exist, and a morphism of globular extensions is a functor of the underlying categories commuting with the disc functors and preserving globular sums.
+  Where all morphisms \(f_i\) are a composite of source maps (\(D(\mathbf{s}_n)\) for some \(n\)) and the morphisms \(g_i\) are a composite of target maps (\(D(\mathbf{t}_n)\) for some \(n\)). Given that the maps \(f_i\) and \(g_i\) are uniquely determined, we may write such a globular sum as:
+
+  \[ D(i_0) \amalg_{D(j_0)} D(i_1) \amalg_{D(j_1)} D(i_2) \cdots D(i_n) \amalg_{D(j_n)} D(i_{n+ 1})\]
+
+  A \emph{globular extension} is a globular category where all globular sums exist, and a morphism of globular extensions is a functor of the underlying categories commuting with the disc functors and preserving globular sums.
 \end{definition}
 
 We can finally give our first definition of a pasting diagram.
@@ -878,11 +882,73 @@ As we move up in dimension, the number of coherence morphisms and equalities req
 
 Because of this complexity, we look for more uniform ways to represent the operations and axioms of an \(\infty\)-category. In this thesis, we will work with the type theory \Catt, which is based on a definition of \(\infty\)-categories due to \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck}, which is itself based on a definition of \(\infty\)-groupoid by \citeauthor{PursuingStacks}~\cite{PursuingStacks}. We will sketch the ideas behind these definitions here, and give a definition of \Catt in \cref{sec:type-theory-catt}.
 
-\todo[inline]{Grothendieck definition}
+The key insight behind Grothendieck's definition is that pasting diagrams should be weakly contractible, instead of containing a unique composite. Whereas in a strict \(\infty\)-category, each pasting diagram effectively has 1 composite, in a weak \(\infty\)-category there can be many operations over a pasting diagram.
 
-\todo[inline]{Implies invertibility}
+These operations are assembled into a globular extension called a \emph{coherator}. A weak \(\infty\)-groupoid is then a presheaf on this coherator for which the opposite functor preserves globular sums (alternatively, the dual notion of globular product could be defined, and such a presheaf could be asked to preserve globular products). The objects of a coherator are given by pasting diagrams, with \(D^n\) being sent to the \(n\)-cells of the category and other pasting diagrams being sent to composable sets of cells (as determined by the preservation of globular sums).
 
-\todo[inline]{Maltsiniotis definition}
+Operations over a pasting diagram \(P\) in the coherator are given by morphisms \(D^n \to P\). When we take a presheaf over this, we obtain a function that takes an \(P\)-shaped collection of cells to a single \(n\)-cell. Operations can be precomposed with source and target maps \(D^{n-1} \to D^n\) to get the source and target of an operation. To build the coherator, we start by taking the category of pasting diagrams. The ``operations'' of this category consist solely of the inclusions of discs into pasting diagrams, and correspond to picking a single element from the pasting diagram. Other operations are then built using the following guiding principle.
+
+\begin{principle-groupoid}
+  Let \(f\) and \(g\) be two parallel operations over a pasting diagram \(P\). Then there is an operation \(h\) over \(P\) with source \(f\) and target \(g\).
+\end{principle-groupoid}
+
+We define a pair of operations \(f,g : D^n \to X\) to be \emph{parallel} if \(n = 0\) or \(n > 0\) and \(f \circ \mathbf{s}_{n-1} = g \circ \mathbf{s}_{n-1}\) and \(f \circ \mathbf{t}_{n-1} = g \circ \mathbf{t}_{n-1}\). A \emph{lift} for such a pair of parallel operations is an operation \(h : D^{n+1} \to X\) such that \(h \circ \mathbf{s}_{n} = f\) and \(h \circ \mathbf{t}_n = g\). Closing under the principle then amounts to inductively adding lifts for all parallel operations, while ensuring that the category remains a globular extension.
+
+We start with some basic operations: Consider the pasting diagram \(A\):
+
+\[
+  \begin{tikzcd}
+    x & y & z
+    \arrow["a", from=1-1, to=1-2]
+    \arrow["b", from=1-2, to=1-3]
+  \end{tikzcd}
+\]
+
+where \(A = D^1 \amalg D^1\). Our rule now tells us that since \(x\) and \(z\) are elements of \(A\), that there should be an operation returning a cell with source \(x\) and target \(z\), namely the composition of \(a\) and \(b\). In the language of coherators, there are operations \(f, g : D^0 \to A\), where \(f\) includes into the source of the first disc of \(A\), and \(g\) includes into the target of the second disc of \(A\). These are trivially parallel, and so there exists a lift \(h : D^1 \to A\), giving 1-composition. Similarly, if we take the pasting diagram with a single \(0\)-cell \(x\) and no other cells, then applying our rule with \(f,g\) both being the operation returning the element \(x\) produces an operation with source and target \(x\), the identity on \(x\).
+
+We can generate more complicated operations with this principle, consider pasting diagram \(B\):
+\[
+  \begin{tikzcd}
+    x & y & z & w
+    \arrow["f", from=1-1, to=1-2]
+    \arrow["g", from=1-2, to=1-3]
+    \arrow["h", from=1-3, to=1-4]
+  \end{tikzcd}
+\]
+We already know the coherator contains 1-composition, and using composition and the universal property of globular sums, we can generate operations realising the compound composites \((f \star g) \star h\) and \(f \star (g \star h)\). The principle then gives us an operation returning the \(2\)-cell \((f \star g) \star h \to f \star (g \star h)\), which is of course our associator. This one principle allows us to generate all the structure we need, as well as structure that is arguably unnecessary, such as ternary compositions that did not appear in the definition of bicategory.
+
+Unfortunately, as we have already mentioned, Grothendieck's definition is for \(\infty\)-groupoids, where everything is invertible, instead of \(\infty\)-categories in full generality, as we want to study in this thesis. This can be seen by taking the pasting diagram \(C\):
+\[
+  \begin{tikzcd}
+    x & y
+    \arrow["f", from=1-1, to=1-2]
+  \end{tikzcd}
+\]
+and applying the rule with \(f\) returning \(y\) and \(g\) returning \(x\), giving an operation that returns a \(1\)-cell \(f^{-1} : y \to x\), the inverse of \(f\). The rule as we have stated it is too powerful.
+
+Maltsiniotis' definition provides a solution to this problem by giving a more refined version of the principle. Whereas Grothendieck's definition treats all operations as coherences, Maltsiniotis' definition splits operations into two classes: compositions and equivalences. Both classes are obtained by restricting the classes of parallel operations that admit lifts.
+
+We begin by defining what it means for an operation to be algebraic:
+\begin{definition}
+  Let \(\mathcal{C}\) be a globular extension for which the canonical functor \(P : \mathbf{Pd} \to \mathcal{C}\) is faithful and the identity on objects. Then an operation \(f : D^n \to X\) in \(\mathcal{C}\) is \emph{algebraic} if whenever \(f = P(g) \circ f'\), \(g = \id\).
+\end{definition}
+Intuitively, an operation is algebraic when it does not factor through any proper inclusion. Algebraicity is equivalent to requiring that an operation makes use of all the (locally maximal) elements of the pasting diagram.
+
+Equivalences contain the various invertible laws of our \(\infty\)-categories such as associators, unitors, identities, and interchangers. For two operations \(f,g : D^n \to X\) to admit a lift under the rule for equivalences, they must both be algebraic. This gives the following rule:
+
+\begin{principle-category}[Equivalences]
+  Let \(f\) and \(g\) be two parallel operations over a pasting diagram \(P\). If both \(f\) and \(g\) use all locally maximal variables of \(f\), then there is an operation over \(P\) with source \(f\) and target \(g\).
+\end{principle-category}
+
+Clearly any operations generated by this principle are invertible, as the extra condition imposed is symmetric. For compositions we introduce the following asymmetric principle, recalling that pasting diagrams are equipped with source and target inclusions, and letting \(\partial^-(P)\) and \(\partial^+(P)\) be the images of these inclusions:
+
+\begin{principle-category}[Composites]
+  Let \(f\) and \(g\) are parallel operations over a (non-singleton) pasting diagram \(P\) such that \(f\) uses all locally maximal cells of \(\partial^-(P)\) and no cells outside of \(\partial^-(P)\) and \(g\) uses all locally maximal cells of \(\partial^+(P)\) and no cells outside of \(\partial^+(P)\). Then there is an operation over \(P\) with source \(f\) and target \(g\).
+\end{principle-category}
+
+The condition required to form a composite can be expressed by the operation \(f : D^n \to P\) factoring into an algebraic map composed with the source inclusion into \(P\), and similar for \(g\) with the target inclusion. It can be easily checked that the inverse operation given above does not satisfy the criteria for being an equivalence or composite.
+
+As with Grothendieck's definition, a coherator can be made by closing the globular extension of pasting diagrams under these restricted principles, and then weak \(\infty\)-categories can be defined to be presheaves on this coherator such that the opposite functor preserves globular sums.
 
 \todo[inline]{Eckmann-Hilton in weak setting}
 
@@ -894,17 +960,6 @@ Because of this complexity, we look for more uniform ways to represent the opera
 
 \todo[inline]{Conjectures}
 
-\section{Type theory preliminaries}
-\label{sec:type-theory}
-
-\todo[inline]{Background on type theory}
-
-\todo[inline]{Dependent type theory}
-
-\todo[inline]{MLTT/HoTT}
-
-\todo[inline]{Properties of type theories}
-
 \section{The type theory \Catt}
 \label{sec:type-theory-catt}
 
@@ -914,7 +969,7 @@ Because of this complexity, we look for more uniform ways to represent the opera
 
 \todo[inline]{Talk about models of Catt here}
 
-\chapter{A general presentation of \Catt}
+\chapter{A formalised presentation of \Catt with equality}
 \label{cha:gener-pres-catt}
 
 \todo[inline]{Should be able take this mainly from cattsua paper}

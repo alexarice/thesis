@@ -129,6 +129,9 @@ backrefstyle=two]%
 \colorlet{ShadeOfYellow}{yellow!5!white}
 \colorlet{ShadeOfGreen} {green!5!white}
 \colorlet{ShadeOfBrown} {brown!10!white}
+
+% Add a blue for principles
+\colorlet{ShadeOfBlue}{cyan!5!white}
 % But we also shade proofs
 \colorlet{ShadeOfGray}  {gray!10!white}
 
@@ -137,6 +140,8 @@ backrefstyle=two]%
 \declaretheorem[sibling=theorem,style=definition]{definition}
 \declaretheorem[sibling=theorem,style=definition]{example}
 \declaretheorem[sibling=theorem,style=remark]{remark}
+\declaretheorem[style=theorem,name=Guiding principle for groupoids,numbered=no]{principle-groupoid}
+\declaretheorem[style=theorem,name=Guiding principle for categories,numbered=no]{principle-category}
 % Now we set the shading using the tcolorbox package.
 %
 % The related thmtools' option "shaded" and the package mdframed seem to have
@@ -175,6 +180,8 @@ backrefstyle=two]%
 \setenvcolor{definition}{ShadeOfYellow}
 \setenvcolor{example}{ShadeOfGreen}
 \setenvcolor{remark}{ShadeOfBrown}
+\setenvcolor{principle-groupoid}{ShadeOfBlue}
+\setenvcolor{principle-category}{ShadeOfBlue}
 \setenvcolor{proof}{ShadeOfGray}
 \declaretheorem[sibling=theorem,style=remark,numbered=no]{claim}
 
