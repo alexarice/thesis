@@ -65,6 +65,7 @@ Things to go in introduction:
 \item Motivation for semistrictness
 \item Introduce 3 classes of coherences
 \item Ideas of semistrictness
+\item Existing 3-dimensional semistrictness results
 \item Link to graphical ideas
 \item Story behind Catt - HoTT - Brunerei
 \item Link to Grothedieck higher cats
@@ -73,7 +74,7 @@ Things to go in introduction:
 \chapter{Background}
 \label{sec:background}
 
-We begin with an overview of the important concepts required for the rest of the thesis. Throughout, we will assume knowledge of various basic concepts from computer science, as well as a basic knowledge of category theory (including functor categories, presheafs, and (co)limits). The following sections introduce a form of globular higher categories, present the necessary type theory prerequisites, and give a definition of the type theory \Catt, close to the original definition.
+We begin with an overview of the important concepts required for the rest of the thesis. Throughout, we will assume knowledge of various basic concepts from computer science, as well as a basic knowledge of category theory (including functor categories, presheafs, and (co)limits) and type theory. The following sections introduce a form of globular higher categories and give a definition of the type theory \Catt, close to the original definition.
 
 This section additionally serves as a place to introduce the various syntax and notation which will be used throughout the rest of the thesis.
 
@@ -301,7 +302,7 @@ This can be diagrammatically depicted as:
 There are also interchange laws for the interaction of composition and identities; A composition of two identities is the same as an identity on the composition of the underlying cells.
 
 
-The \(\infty\)-categories that we study in this thesis will be globular, meaning that their cells form a globular set. A globular set can be seen as natural extension of the data of a category, whose data can be arranged into the following diagram:
+The \(\infty\)-categories that we study in this thesis will be globular, meaning that their cells form a globular set. A globular set can be seen as natural extension of the data of a category, whose data can be arranged into the following diagram:\todo{Need a remark somewhere about other shapes of higher category}
 % https://q.uiver.app/#q=WzAsMixbMCwwLCJZIl0sWzEsMCwiWCJdLFswLDEsInMiLDAseyJvZmZzZXQiOi0xfV0sWzAsMSwidCIsMix7Im9mZnNldCI6MX1dXQ==
 \[
   \begin{tikzcd}
@@ -578,7 +579,7 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
 
 \todo{Reference batanin and leinster here}
 
-The definition of \(\infty\)-categories given in the previous section is close in spirit to the the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:strictness}, that these sort of definitions do not scale well to our eventual setting of weak higher categories.
+The definition of \(\infty\)-categories given in the previous section is close in spirit to the the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:weak}, that these sort of definitions do not scale well to our eventual setting of weak higher categories.
 
 There is a special class of (finite) globular sets known as \emph{pasting diagrams}. The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by a pasting diagram and a map from this pasting diagram into \(G\). To do this, it must be possible to obtain a canonical composite from each pasting diagram.
 
@@ -738,7 +739,7 @@ We finish this section with one larger example.
   which has the following globular sum decomposition:
   % https://q.uiver.app/#q=WzAsMTMsWzAsMCwieCJdLFsyLDAsInkiXSxbOCwwLCJ6Il0sWzEwLDAsInciXSxbMywxLCJ5Il0sWzQsMCwieSJdLFs2LDAsInoiXSxbNywxLCJ6Il0sWzksMF0sWzEwLDEsInoiXSxbMTIsMSwidyJdLFsxMiwwLCJ6Il0sWzE0LDAsInciXSxbMCwxLCJnIiwwLHsiY3VydmUiOi0zfV0sWzAsMSwiZiIsMix7ImN1cnZlIjozfV0sWzIsMywiaSIsMix7ImN1cnZlIjo0fV0sWzIsMywiaiIsMV0sWzUsNiwiaCIsMl0sWzQsMSwiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzQsNSwiIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzksMTAsImoiLDFdLFsxMSwxMiwiaiIsMV0sWzExLDEyLCJrIiwxLHsiY3VydmUiOi00fV0sWzcsNiwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzcsMiwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzE0LDEzLCJcXGFscGhhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsxNSwxNiwiXFxiZXRhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsyMSwyMiwiXFxnYW1tYSIsMCx7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMjAsMywiIiwxLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwfSwibGV2ZWwiOjEsInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsyMCwxMSwiIiwxLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwfSwibGV2ZWwiOjEsInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dXQ==
   \[
-    \begin{tikzcd}[column sep=tiny, row sep = small]
+    \begin{tikzcd}[column sep=small, row sep = small]
       x && y && y && z && z & {} & w && z && w \\
       &&& y &&&& z &&& z && w
       \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-3]
@@ -778,10 +779,9 @@ We finish this section with one larger example.
   \]
   which are isomorphic pasting diagrams.
 \end{example}
-\todo{This diagram looks awful}
 
-\subsection{Strictness}
-\label{sec:strictness}
+\subsection{Weak higher categories}
+\label{sec:weak}
 
 The \(\infty\)-categories we have defined so far have all been strict \(\infty\)-categories, meaning that the laws are required to hold up to equality. In ordinary \(1\)-category theory, isomorphism is usually preferred over equality for comparing objects. Similarly, when we have access to higher dimensional arrows, it follows that that we can also consider isomorphisms between morphisms, and therefore consider laws such as associativity up to isomorphism instead of equality.
 
@@ -950,24 +950,123 @@ The condition required to form a composite can be expressed by the operation \(f
 
 As with Grothendieck's definition, a coherator can be made by closing the globular extension of pasting diagrams under these restricted principles, and then weak \(\infty\)-categories can be defined to be presheaves on this coherator such that the opposite functor preserves globular sums.
 
-\todo[inline]{Eckmann-Hilton in weak setting}
+\begin{remark}
+  We have claimed that a coherator can be formed by closing under adding lifts to parallel operations, though this is not precise and there are actually multiple ways of performing this closure that lead to different coherators. For example, one could add the lift for 1-composition twice, to get two distinct 1-composition operations, as long as one also added a lift between these now parallel operations. Grothendieck gives a general schema for producing coherators, and conjectures that any two coherators give rise to equivalent models of \(\infty\)-categories.
+\end{remark}
 
-\todo[inline]{Strictification for bicategories}
+We now turn our attention back to the proof of Eckmann-Hilton from \cref{fig:eh}. Given a \(0\)-cell \(x\) and two scalars \(\alpha, \beta : \id(x) \to \id(x)\), we expect the Eckmann-Hilton argument to give us an isomorphism in a weak higher category, rather than the equality obtained in the strict case. In fact we immediately see that equalities 2, 3, and 4 in the proof can be immediately replaced by isomorphisms (interchangers and unitors).
 
-\todo[inline]{Braiding and counter example for 3-dimension strictification}
+The first and last equalities however are more problematic, although at first we may believe that there should exist some horizontal unitor isomorphism, upon closer inspection the two compositions do not even have the same boundary and so are not parallel. The composition \(\alpha \star_1 \beta\) has source and target \(\id(x)\), whereas the source of \(\alpha \star_0 \id(\id(x))\) is \(\id(x) \star_0 \id(x)\).
 
+To recover the proof in a weak setting, the intermediate composites must be composed with unitors so that they all have source and target \(\id(x)\). To give equivalences for the first and last step, these unitors must be moved around with naturality moves, and at a critical point the isomorphism \(\lambda_{\id(x)} \simeq \rho_{\id(x)}\) is required. Multiple full proofs of Eckmann-Hilton will be given in \cref{sec:rehydration}. The proof of Eckmann-Hilton is vastly simpler in strict case, mainly due to the presence of the equation \(\id(x) \star_0 \id(x) = \id(x)\).
+%  It is natural to ask whether it is necessary to work with weak higher categories at all, given the extra complexity.
 
+% For bicategories, it turns out that the answer is no. Every bicategory is biequivalent to a strict 2-category~\cite[Theorem 1.4]{gordon1995coherence}, meaning that to prove any equation holds in a bicategory, it suffices to prove that the same equation holds in a strict 2-category. This allows the more general notion of bicategory to be used without incurring extra proof burden.
 
-\todo[inline]{Conjectures}
+% For more than 2-dimensions, this full strictification is no longer possible.\todo{This should all likely go in the introduction}
+
+\subsection{Computads}
+\label{sec:computads}
+
+A free group is generated by a set, and a free category is generated by a directed graph, and so it is a natural question what the generating data for a free higher category is. We have already seen that a free higher category can be generated by a globular set, but free \(infty\)-categories can also be generated by data that does not form a globular set.
+
+Consider the minimum data needed to to state the Eckmann-Hilton principle~(\cref{prop:eh}). We require a single \(0\)-cell \(x\), and two \(2\)-cells \(\alpha, \beta : \id(x) \to \id(x)\). This data does not form a globular set as, for example, the source of the \(2\)-cell \(\alpha\) is not in the generating data, but is rather an operation applied to the data. We could try to remedy this by adding a new \(1\)-cell \(f\) to the data to represent \(\id(x)\), but then the connection between \(\id(x)\) and \(f\) would be lost and \(f\) and \(\id(x)\) would be distinct in any free \(\infty\)-category generated on this data.
+
+The correct generating data for an \(\infty\)-category is a \emph{computad}. A version for 2-categories was introduced by \citeauthor{street1976limits}~\cite{street1976limits}, which allows a generating \(2\)-cell to have a composite or identity as its source or target. These were extended to strict \(\infty\)-categories by \citeauthor{burroni1993higher}~\cite{burroni1993higher} and weak \(\infty\)-categories by
+\citeauthor{batanin1998computads}~\cite{batanin1998computads}, which allow the source and target of an \(n\)-cell to be any \((n-1)\)-cell of the free \(\infty\)-category generated by the lower dimensional data.
+
+A modern approach to computads for weak \(\infty\)-categories is given by \citeauthor{dean2022computads}~\cite{dean2022computads}, which avoids much of the complexity of globular operads, relying only on (mutual) structural induction. This definition of a computad is much closer in style (and is inspired by) the type theory \Catt which we review in \cref{sec:type-theory-catt}.
 
 \section{The type theory \Catt}
 \label{sec:type-theory-catt}
 
-\todo[inline]{High level presentation of Catt}
+In this section we give an overview of the dependent type theory \Catt~\cite{finster2017type}. \Catt serves as a definition of weak \(\infty\)-categories, by defining a weak \(\infty\)-category to be a model of the type theory (e.g. using categories with families~\cite{MR1474535}). In \cref{cha:gener-pres-catt}, we give a more general and comprehensive presentation of \Catt, allowing the addition of equality relations to the type theory, preempting \cref{cha:cattstrict}. In contrast this section presents the version of \Catt closer to the one found in the literature, and compares its various constructions to the ideas introduced in \cref{sec:weak}.
 
-\todo[inline]{We give a more formal definition in the next section}
+\subsection{Syntax of \Catt}
+\label{sec:syntax-catt}
+
+\Catt has 4 classes of syntax: contexts, terms, types, and substitutions.
+\begin{itemize}
+\item Contexts contain a list of variables with an associated type. We can consider contexts as finite computads, the generating data for a weak \(\infty\)-category (see \cref{sec:computads}). It is alternatively valid to consider contexts in \Catt as finitely generated \(\infty\)-categories. The set of contexts contains all globular sets (and hence all pasting diagrams).
+\item Terms over a context \(\Gamma\) correspond to the operations from \cref{sec:weak}. Terms can either be a variable, which corresponds to the operations which pick a single cell out of a globular set, or those generated by the unique constructor \(\mathsf{coh}\), which correspond to the operations generated by lifting. A term over a context \(\Gamma\) can also be seen as a element of the free \(\infty\)-category generated from \(\Gamma\).
+\item Types over a context \(\Gamma\) consist of a collection of terms over the same context, and contain the boundary information for a term.
+\item Substitutions from a context \(\Gamma\) to a context \(\Delta\) are a mapping from variables of \(\Gamma\) to terms of \(\Delta\). These play the role of functors between the \(\infty\)-categories generated by \(\Gamma\) and \(\Delta\) and are also syntactically crucial for forming compound composites in the theory.
+\end{itemize}
+
+\begin{figure}[h]
+  \centering
+    \begin{tabular}{Sc Sc}
+    {
+    \begin{prooftree}
+      \hypo{\phantom{\Term}} \infer1{\emptyset : \Ctx}
+    \end{prooftree}
+    }
+    &
+      {
+      \begin{prooftree}
+        \hypo{\Gamma : \Ctx} \hypo{A : \Type_\Gamma}
+        \infer2{\Gamma, (x : A) : \Ctx}
+      \end{prooftree}}
+    \\
+    {
+    \begin{prooftree}
+      \hypo{\phantom{\Term}} \infer1{\langle \rangle : \emptyset \to \Gamma}
+    \end{prooftree}
+    }
+    & {
+      \begin{prooftree}
+        \hypo{\sigma : \Delta \to \Gamma} \hypo{t : \Term_\Gamma}
+        \infer2{\langle \sigma , x \mapsto t \rangle : (\Delta, x : A) \to \Gamma}
+      \end{prooftree}
+      }
+    \\
+    {
+    \begin{prooftree}
+      \hypo{\phantom{\Type}} \infer1{\star : \Type_\Gamma}
+    \end{prooftree}
+    }
+    & {
+      \begin{prooftree}
+        \hypo{A : \Type_\Gamma} \hypo{s : \Term_\Gamma} \hypo{t : \Term_\Gamma}
+        \infer3{\arr s A t : \Type_\Gamma}
+      \end{prooftree}
+      }
+    \\
+    {
+    \begin{prooftree}
+      \hypo{x \in \Gamma\vphantom{\Type}} \infer1{x : \Term_\Gamma}
+    \end{prooftree}
+    }
+    & {
+      \begin{prooftree}
+        \hypo{\Delta : \Ctx} \hypo{A : \Type_\Delta} \hypo{\sigma : \Delta \to \Gamma}
+        \infer3{\Coh \Delta A \sigma : \Term_\Gamma}
+      \end{prooftree}
+      }
+
+    \end{tabular}
+
+    \vspace{-5pt}
+  \caption{Syntax constructions in \Catt.}
+  \label{fig:syntax}
+\end{figure}
+
+The rules for constructing each piece of syntax are given in \cref{fig:syntax}. As opposed to the original paper on \Catt, we fibre terms, types, and substitutions over contexts, allowing us to avoid any problems with substitution only extending to a partial operation on terms. We write \(\Ctx\) for the set of contexts, \(\Term_\Gamma\) for the set of terms in a context \(\Gamma\), \(\Type_\Gamma\) for the set of types in a context \(\Gamma\), and write \(\sigma : \Delta \to \Gamma\) when \(\sigma\) is a substitution taking variables of \(\Delta\) to terms of \(\Gamma\)\footnote{In the literature, substitutions are often written as going in the opposite direction. We emphasise here that the direction of our substitution morphisms agrees with the direction of the function from variables to terms the direction of the induced functor between the \(\infty\)-categories freely generated from the contexts, and the direction of arrows in a Grothendieck coherator}.
+
+The action of a substitution \(\sigma : \Delta \to \Gamma\) can be extended from variables to all terms \(t \in \Term_\Delta\), types \(A \in \Type_\Delta\), and substitutions \(\tau : \Theta \to \Delta\) by mutual recursion:
+\todo[inline]{Direction for substitution/composition}
+\begin{alignat*}{3}
+  &x \sub \sigma &&= t&\qquad&\text{if }(x \mapsto t) \in \sigma\\
+  &\Coh \Theta A \tau \sub \sigma &&= \Coh \Theta A {\sigma \bullet \tau}
+\end{alignat*}\todo{Finish this}
+
+\todo[inline]{Free variables/Ps-contexts}
+
+\todo[inline]{Typing}
 
 \todo[inline]{Talk about models of Catt here}
+
+\todo[inline]{Reference Thibaut's paper}
 
 \chapter{A formalised presentation of \Catt with equality}
 \label{cha:gener-pres-catt}
@@ -1001,13 +1100,31 @@ As with Grothendieck's definition, a coherator can be made by closing the globul
 \label{sec:insertion}
 
 \chapter{Semistrict versions of \Catt}
-\label{cha:cattsu}
+\label{cha:cattstrict}
 
 \section{\Cattsu}
 \label{sec:cattsu}
 
+\todo[inline]{Include disc trivialisation}
+
 \section{\Cattsua}
 \label{sec:cattsua}
+
+\section{Towards normalisation by evaluation}
+\label{sec:towards-nbe}
+
+\todo[inline]{Explain implementation in depth}
+
+\section{Further theories}
+\label{sec:further-theories}
+
+\todo[inline]{Generalised insertion}
+
+\todo[inline]{Endo-coherence removal variation?}
+
+\todo[inline]{Missing equation from grey categories}
+
+\todo[inline]{Interchange and generalised pasting diagrams}
 
 \section{Rehydration}
 \label{sec:rehydration}
@@ -1023,6 +1140,8 @@ As with Grothendieck's definition, a coherator can be made by closing the globul
 
 \subsection{Rehydration by cylinders}
 \label{sec:rehydr-cylind}
+
+
 
 
 
