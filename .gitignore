@@ -17,5 +17,6 @@ auto
 *.snm
 *.toc
 *.vrb
+*-SAVE-ERROR
 ltximg
 !CollegeShields/*

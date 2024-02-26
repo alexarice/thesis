@@ -1016,7 +1016,7 @@ In this section we give an overview of the dependent type theory \Catt~\cite{fin
     & {
       \begin{prooftree}
         \hypo{\sigma : \Delta \to \Gamma} \hypo{t : \Term_\Gamma}
-        \infer2{\langle \sigma , x \mapsto t \rangle : (\Delta, x : A) \to \Gamma}
+        \infer2{\langle \sigma , x \mapsto t \rangle : \Delta, (x : A) \to \Gamma}
       \end{prooftree}
       }
     \\
@@ -1052,6 +1052,8 @@ In this section we give an overview of the dependent type theory \Catt~\cite{fin
 \end{figure}
 
 The rules for constructing each piece of syntax are given in \cref{fig:syntax}. As opposed to the original paper on \Catt, we fibre terms, types, and substitutions over contexts, allowing us to avoid any problems with substitution only extending to a partial operation on terms. We write \(\Ctx\) for the set of contexts, \(\Term_\Gamma\) for the set of terms in a context \(\Gamma\), \(\Type_\Gamma\) for the set of types in a context \(\Gamma\), and write \(\sigma : \Delta \to \Gamma\) when \(\sigma\) is a substitution taking variables of \(\Delta\) to terms of \(\Gamma\). In the literature, substitutions are often written as going in the opposite direction. We emphasise here that the direction of our substitution morphisms agrees with the direction of the function from variables to terms, the direction of the induced functor between the \(\infty\)-categories freely generated from the domain and codomain contexts, and the direction of arrows in a Grothendieck coherator.
+
+We write \(\equiv\) for \emph{syntactic equality}, up to renaming of variables and \(\alpha\)-equivalence. The various pieces of syntax will be considered as equal up to this relation, which can be achieved by using a de Brujin index representation of the syntax as we present in \cref{cha:gener-pres-catt} for the formalisation. However, we continue to use named variables in the prose of the thesis to aid readability. We contrast this with the equality symbol, \(=\), which will represent the equality derived from extra equality rules we have placed on \Catt in \cref{sec:catt-with-equality}, and will be referred to as \emph{definitional equality}.
 
 The action of a substitution \(\sigma : \Delta \to \Gamma\) can be extended from variables to all terms \(t \in \Term_\Delta\), types \(A \in \Type_\Delta\), and substitutions \(\tau : \Theta \to \Delta\) by mutual recursion:
 \begin{alignat*}{3}
@@ -1098,6 +1100,10 @@ The free variables of a term is often the wrong notion to use for testing algebr
 
 We will see later\todo{Cross ref} that for well-typed terms \(t\) of typed \(A\) that the support of \(t\) is equal to \(\FV(t) \cup \FV(A)\) and that \(\Supp(A) = \FV(A)\) for well-formed types. Modifying \Catt to use support therefore does not change the theory.
 
+We lastly define the \emph{dimension} of types, contexts, and terms. For types this is defined recursively:
+\[ \dim(\star) = 0 \qquad \dim(\arr s A t) = 1 + \dim(A) \]
+For contexts we define \(\dim(\Gamma)\) to be the maximum of the dimension of each type in \(\Gamma\). For coherences \(\Coh \Gamma A \sigma\), the dimension is given by \(\dim(A)\), and for variables the dimension is given by the dimension of the associatiated type in the context.
+
 \subsection{Ps-contexts}
 \label{sec:ps-contexts}
 
@@ -1105,25 +1111,80 @@ We need to be able to describe pasting diagrams within the theory \Catt. As cont
 
 \[ \Delta \vdash_{\mathsf{ps}} x : A \qquad \text{and}\qquad \Delta \vdash_{\mathsf{ps}} \]
 
-If the first judgement holds, then \(\Delta\) is a pasting diagram for which a disc can be attached to the variable \(x\), which has type \(A\). The contexts \(\Delta\) for which the second judgement holds are fully formed pasting diagrams, which we call \emph{Ps-contexts} (short for pasting scheme contexts). The rules for these judgements are given in \todo{Do figure}.
+If the first judgement holds, then \(\Delta\) is a pasting diagram for which a disc can be attached to the variable \(x\), called a \emph{dangling variable}, which has type \(A\). The contexts \(\Delta\) for which the second judgement holds are fully formed pasting diagrams, which we call \emph{Ps-contexts} (short for pasting scheme contexts). The rules for these judgements are given in \cref{fig:ps-context}.
+
+We note that these rules do not just specify which globular sets are pasting diagrams, but they also specify an ordering on the elements of the pasting diagram, ensuring that there is a unique Ps-context for each pasting diagram. For example, the following judgement holds:
+\begin{equation}
+  \label[judgement]{judg:ps}
+  (x : \star), (y : \star), (f : \arr x \star y), (z: \star), (g : \arr y \star z) \vdash_{\mathsf{ps}}
+\end{equation}
+However, the context:
+\[(y : \star), (z : \star), (g : \arr y \star z), (x : \star), (f : \arr x \star y)\]
+represents the same globular set but is not a Ps-context.
+
+\begin{figure}[h]
+  \centering
+  \begin{mathpar}
+    \inferrule{ }{(x : \star) \vdash_{\mathsf{ps}} x : \star}{(\textsc{pss})}
+    \and
+    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : A}{\Gamma, (y : A), (f : \arr x A y)}{(\textsc{pse})}
+    \and
+    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \arr s A t}{\Gamma \vdash_{\mathsf{ps}} t : A}{\textsc{psd}}
+    \and
+    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \star}{\Gamma \vdash_{\mathsf{ps}}}(\textsc{ps})
+  \end{mathpar}
+  \caption{Rules for Ps-contexts}
+  \label{fig:ps-context}
+\end{figure}
 
 \begin{example}
-  \todo[inline]{Example of ps-context derivation}
+  \cref{judg:ps} is given by the following derivation:
+  \[\begin{prooftree}
+    \hypo{ }
+    \infer1[(\textsc{pss})]{(x : \star) \vdash_{\mathsf{ps}} x : \star}
+    \infer1[(\textsc{pse})]{(x : \star), (y : \star), (f : \arr x \star y) \vdash_{\mathsf{ps}} f : \arr x \star y}
+    \infer1[(\textsc{psd})]{(x : \star), (y : \star), (f : \arr x \star y) \vdash_{\mathsf{ps}} y : \star}
+    \infer1[(\textsc{pse})]{(x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \vdash_{\mathsf{ps}} g : \arr x \star y}
+    \infer1[(\textsc{psd})]{(x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \vdash_{\mathsf{ps}} z : \star}
+    \infer1[(\textsc{ps})]{(x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \vdash_{\mathsf{ps}}}
+  \end{prooftree}\]
+The applications of (\textsc{pse}) allow new variables to be added to the context, by adding a fresh variable, and attaching a variable from the dangling variable to the new fresh variable. The rule (\textsc{psd}) encodes that if we can attach a variable to \(f : x \to y\), then we can also attach a variable to \(y\). Finally, the rule (\textsc{ps}) forces as many (\textsc{psd}) rules to be applied as possible before completing the derivation, ensuring that derivations of Ps-contexts are unique.
 \end{example}
 
-\todo[inline]{Source and target for pasting diagram}
+We now state the following theorem, which follows immediately from \cite[Theorem~53]{benjamin2021globular}.
 
-\todo[inline]{Theorem: Ps-contexts are pasting diagrams}
+\begin{theorem}
+  The set of Ps-contexts is in bijection with the set of pasting diagrams.
+\end{theorem}
+
+In order to use Ps-contexts as our notion of pasting diagram, we need to be able to identify the source and target variables of each Ps-context. This will be done by equipping Ps-contexts with boundary substitutions, and letting the source and target variables be those in the support of these substitutions.
+
+More precisely, for each Ps-context \(\Gamma\) and \(i \in \mathbb{N}\), we define a Ps-context \(\bound i \Gamma\), and substitutions:
+\[ \inc i - \Gamma : \bound i \Gamma \to \Gamma \qquad \text{and}\qquad \inc i + \Gamma : \bound i \Gamma \to \Gamma\]
+Intuitively, the context \(\bound i \Gamma\) can be constructed by removing any variables of dimension greater than \(i\) from \(\Gamma\), and quotienting the dimension \(i\) variables by the (symmetric transitive closure of the) relation \(x \sim y\) if there exists an \(f : x \to y\). The inclusions then send this quotiented variable to the variable appearing first in the equivalence class for the source inclusion, and the variable appearing last in the class for the target inclusion.
+
+These contexts and substitutions can be defined by recursion on the context \(\Gamma\):
+\todo[inline]{Put rules in}
+
+\todo[inline]{Compare to the original sets}
+
+\todo[inline]{Cite results}
 
 \subsection{Typing for \Catt}
 \label{sec:typing-catt}
+
+\subsection{Basic constructions}
+\label{sec:basic-constructions}
 
 \subsection{Models of \Catt}
 \label{sec:models-catt}
 
 \todo[inline]{Talk about models of Catt here}
 
-\todo[inline]{Reference Thibaut's paper}
+\subsection{Suspension}
+\label{sec:suspension}
+
+
 
 \chapter{A formalised presentation of \Catt with equality}
 \label{cha:gener-pres-catt}
@@ -1143,9 +1204,6 @@ If the first judgement holds, then \(\Delta\) is a pasting diagram for which a d
 
 \chapter{Constructions in \Catt}
 \label{sec:operations-catt}
-
-\section{Basic constructions}
-\label{sec:basic-constructions}
 
 \section{Structured terms}
 \label{sec:structured-terms}
