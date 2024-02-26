@@ -1067,8 +1067,7 @@ For every context \(\Gamma\), there is an identity substitution \(\id_\Gamma\), 
 
 The coherence constructor \(\Coh \Delta A \sigma\) allows us to construct lifts between parallel operations over pasting diagrams. The context \(\Delta\) plays the role of the pasting diagram. The type \(A\) will always be of the form \(\arr s B t\), and the terms \(s\) and \(t\) play the role of the parallel operation (with the type \(\arr s B t\) being well typed ensuring that \(s\) and \(t\) are parallel). The substitution \(\sigma : \Delta \to \Gamma\) holds the data of a set of arguments to the coherence, allowing compound composites/operations to be formed and taking the role of composition of morphisms in the coherator.
 
-We next define the free variables of each piece of syntax. These will be used to encode the condition of an operation being algebraic from the theory of non-invertible coherators. For a term \(t \in \Term_\Gamma\), a type \(A \in \Type_\Gamma\) and a substitution \(\sigma : \Delta \to \Gamma\) we define their free variables \(\FV(t)\), \(\FV(A)\), and \(\FV(\sigma)\) as subsets of the variables of \(\Gamma\) by mutual recursion.
-
+We next define the free variables of each piece of syntax. These will be used to encode the condition of an operation being algebraic from the theory of non-invertible coherators. Let \(\Var(\Gamma)\) denote the variables of \(\Gamma\). For a term \(t \in \Term_\Gamma\), a type \(A \in \Type_\Gamma\) and a substitution \(\sigma : \Delta \to \Gamma\) we define their free variables \(\FV(t), \FV(A), \FV(\sigma) \subseteq \Var(\Gamma)\) by mutual recursion.
 \begin{alignat*}{3}
   &\FV(x) &&= \{x\} &\qquad&\text{if \(x\) is a variable}\\
   &\FV(\Coh \Delta A \sigma) &&= \FV(\sigma)\\
@@ -1078,15 +1077,49 @@ We next define the free variables of each piece of syntax. These will be used to
   &\FV(\langle \sigma , t \rangle) &&= \FV(\sigma) \cup \FV(t)
 \end{alignat*}
 
-Lastly we need to be able to describe pasting diagrams. As contexts model globular sets it is natural to treat pasting diagrams as a subset of contexts. We do this by introducing the judgements:
+The free variables of a term is often the wrong notion to use for testing algebraicity. For example in the context \(D^1\), the term \(d_1\) has free variables \(\{d_1\}\), whereas the unary composite of \(d_1\), \(\Coh {D_1} {\arr {d_0^-} \star {d_0^+}} {\id_{D^1}}\), has free variables \(\{d_0^-,d_0^+,d_1\}\). To remedy this, the original paper considers \(\FV(t) \cup \FV(A)\), for a term \(t\) of type \(A\). In this thesis we instead define the support of each piece of syntax, a purely syntactic construction.
 
-\[ \Delta \vdash_{\mathsf{ps}} \qquad \text{and}\qquad \Delta \vdash x : A \]
+\begin{definition}
+  Fix a context \(\Gamma\). The subset \(V \subseteq \Var(\Gamma)\) is \emph{downwards closed} if for all \((x : A) \in \Gamma\) we have:
+  \[x \in V \implies \FV(A) \subseteq V\]
+  The downwards closure of a set \(V\) in a context \(\Gamma\), \(\DC_\Gamma(V)\) can be defined by induction on the context:
+  \begin{alignat*}{2}
+    &\DC_\emptyset(\emptyset) &&= \emptyset\\
+    &\DC_{\Gamma, x : A}(V) &&=
+                               \begin{cases*}
+                                 \DC_\Gamma(V)&if \(x \not\in V\)\\
+                                 \{x\} \cup \DC_\Gamma(V \cup \FV(A))&if \(x \in V\)\\
+                               \end{cases*}
+  \end{alignat*}
+  The support of a term, type, or substitution is then defined as the downwards closure of its free variables:
+  \[ \Supp(t) = \DC_\Gamma(\FV(t))\qquad \Supp(A) = \DC_\Gamma(\FV(A))\qquad \Supp(\sigma) = \DC_\Gamma(\FV(\sigma)) \]
+  for terms \(t \in \Term_\Gamma\), types \(A \in \Type_\Gamma\), and substitutions \(\sigma : \Delta \to \Gamma\).
+\end{definition}
 
+We will see later\todo{Cross ref} that for well-typed terms \(t\) of typed \(A\) that the support of \(t\) is equal to \(\FV(t) \cup \FV(A)\) and that \(\Supp(A) = \FV(A)\) for well-formed types. Modifying \Catt to use support therefore does not change the theory.
 
+\subsection{Ps-contexts}
+\label{sec:ps-contexts}
 
+We need to be able to describe pasting diagrams within the theory \Catt. As contexts model globular sets it is natural to treat pasting diagrams as a subset of contexts and will build pasting diagrams by iteratively attaching discs to a context. This is done by introducing the judgements:
 
+\[ \Delta \vdash_{\mathsf{ps}} x : A \qquad \text{and}\qquad \Delta \vdash_{\mathsf{ps}} \]
 
-\todo[inline]{Typing}
+If the first judgement holds, then \(\Delta\) is a pasting diagram for which a disc can be attached to the variable \(x\), which has type \(A\). The contexts \(\Delta\) for which the second judgement holds are fully formed pasting diagrams, which we call \emph{Ps-contexts} (short for pasting scheme contexts). The rules for these judgements are given in \todo{Do figure}.
+
+\begin{example}
+  \todo[inline]{Example of ps-context derivation}
+\end{example}
+
+\todo[inline]{Source and target for pasting diagram}
+
+\todo[inline]{Theorem: Ps-contexts are pasting diagrams}
+
+\subsection{Typing for \Catt}
+\label{sec:typing-catt}
+
+\subsection{Models of \Catt}
+\label{sec:models-catt}
 
 \todo[inline]{Talk about models of Catt here}
 
