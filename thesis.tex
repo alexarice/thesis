@@ -112,7 +112,7 @@ and a \(3\)-cell \(\gamma\) between parallel \(2\)-cells \(\alpha\) and \(\beta\
   \end{tikzcd}
 \]
 
-Just as in ordinary \(1\)-category theory, we expect to be able to compose morphisms. For \(1\)-cells, nothing has changed, given \(1\)-cells \(f: x \to y\) and \(g : y \to z\) we form the composition \(f \star g\):
+Just as in ordinary \(1\)-category theory, we expect to be able to compose morphisms. For \(1\)-cells, nothing has changed, given \(1\)-cells \(f: x \to y\) and \(g : y \to z\) we form the composition \(f * g\):
 \[
   \begin{tikzcd}
     x & y & z
@@ -120,9 +120,9 @@ Just as in ordinary \(1\)-category theory, we expect to be able to compose morph
     \arrow[from=1-2, to=1-3, "g"]
   \end{tikzcd}
 \]
-which has source \(x\) and target \(z\). We pause here to note that composition will be given in ``diagrammatic order'' throughout the whole thesis, which is the opposite of the order of function composition but the same as the order of the arrows if drawn head to tail. This is chosen as it will be common for us to draw higher dimensional arrows in a diagram, and rare for us to consider categories where the higher arrows are given by functions. In an attempt to avoid confusion, we use a star (\(\star\)) to represent composition of arrows or cells in a higher category, and will use a circle (\(\circ\)) only for function composition.
+which has source \(x\) and target \(z\). We pause here to note that composition will be given in ``diagrammatic order'' throughout the whole thesis, which is the opposite of the order of function composition but the same as the order of the arrows if drawn head to tail. This is chosen as it will be common for us to draw higher dimensional arrows in a diagram, and rare for us to consider categories where the higher arrows are given by functions. In an attempt to avoid confusion, we use an asterisk (\(*\)) to represent composition of arrows or cells in a higher category, and will use a circle (\(\circ\)) only for function composition.
 
-In two dimensions, there is no longer a singular composition operation. For \(2\)-cells \(\alpha : f \to g\) and \(\beta : g \to h\), the composite \(\alpha \star_1 \beta\) can be formed as before:
+In two dimensions, there is no longer a singular composition operation. For \(2\)-cells \(\alpha : f \to g\) and \(\beta : g \to h\), the composite \(\alpha *_1 \beta\) can be formed as before:
 % https://q.uiver.app/#q=WzAsMixbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzAsMSwiZiIsMCx7ImN1cnZlIjotNH1dLFswLDEsImgiLDIseyJjdXJ2ZSI6NH1dLFswLDEsImciLDFdLFsyLDQsIlxcYWxwaGEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzQsMywiXFxiZXRhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dXQ==
 \[
   \begin{tikzcd}
@@ -150,7 +150,7 @@ We refer to this composition as \emph{vertical composition}. We can also compose
   \end{tikzcd}
 \]
 
-This composition is called the \emph{horizontal composition}, and is written \(\alpha \star_0 \beta\). The subscript refers to the dimension of the shared boundary in the composition, with the \(1\)-cell \(g\) being the shared boundary in the vertical composition example and the \(0\)-cell \(y\) being the shared boundary in the horizontal composition example. The dimension of this shared boundary is the \emph{codimension} of the composition.
+This composition is called the \emph{horizontal composition}, and is written \(\alpha *_0 \beta\). The subscript refers to the dimension of the shared boundary in the composition, with the \(1\)-cell \(g\) being the shared boundary in the vertical composition example and the \(0\)-cell \(y\) being the shared boundary in the horizontal composition example. The dimension of this shared boundary is the \emph{codimension} of the composition.
 
 This pattern continues with \(3\)-cells, which can be composed at codimension \(0\), \(1\), or \(2\), as below:
 
@@ -192,11 +192,11 @@ For every \(n\)-cell \(x\), there is an \((n+1)\)-cell \(\id(x) : x \to x\), cal
 As with 1-categories, \(\infty\)-categories need to satisfy certain equalities, which fall into 3 groups: associativity, unitality, and interchange. The associativity laws are the same as for 1-categories, only now a law is needed for each composition (every dimension and codimension).
 
 Unitality is again similar to the case for 1-categories, except we again need unitality laws for each composition. We note that for lower codimension compositions, an iterated identity is needed. For example given a \(2\)-cell \(\alpha : f \to g\), the appropriate equation for left unitality of horizontal composition is:
-\[ \id(\id(x)) \star_0 \alpha = \alpha \]
+\[ \id(\id(x)) *_0 \alpha = \alpha \]
 In general for a unit to be cancelled, it must be iterated a number of times equal to the difference between the dimension and codimension of the composition.
 
 Interchange laws do not appear in 1-categories, and specify how compositions of different dimensions interact. The first interchange law states that for suitable \(2\)-cells \(\alpha\), \(\beta\), \(\gamma\), and \(\delta\), that:
-\[ (\alpha \star_0 \gamma) \star_1 (\beta \star_0 \delta) = (\alpha \star_1 \beta) \star_0 ()\]
+\[ (\alpha *_0 \gamma) *_1 (\beta *_0 \delta) = (\alpha *_1 \beta) *_0 ()\]
 This can be diagrammatically depicted as:
 \newsavebox{\innertop}
 \savebox{\innertop}{
@@ -265,7 +265,7 @@ This can be diagrammatically depicted as:
 % \[
 %   \begin{tikzcd}[row sep = small]
 %     \bullet & \bullet & \bullet \\
-%     & {\star_1} \\
+%     & {*_1} \\
 %     \bullet & \bullet & \bullet
 %     \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-1, to=1-2]
 %     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=18pt}, from=1-1, to=1-2]
@@ -289,7 +289,7 @@ This can be diagrammatically depicted as:
 %     \arrow["\alpha"', shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
 %     \arrow["\beta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
 %   \end{tikzcd}
-%   \star_0
+%   *_0
 %   \begin{tikzcd}
 %     \bullet & \bullet
 %     \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-2]
@@ -393,15 +393,15 @@ We can now give the definition of a (strict) \(\infty\)-category.
 \begin{definition}
   A (strict) \(\infty\)-category is a globular set \(G\) with operations:
   \begin{itemize}
-  \item For \(m < n\), a composition \(\star_m\) taking \(n\)-cells \(f\) and \(g\) with \(\delta_m^+(f) = \delta_m^-(g)\) and giving an \(n\)-cell \(f \star_m g\) with:
+  \item For \(m < n\), a composition \(*_m\) taking \(n\)-cells \(f\) and \(g\) with \(\delta_m^+(f) = \delta_m^-(g)\) and giving an \(n\)-cell \(f *_m g\) with:
     \begin{align*}
-      s(f \star_m g) &= \begin{cases*}
+      s(f *_m g) &= \begin{cases*}
         s(f)&\text{if \(m = n - 1\)}\\
-        s(f) \star_m s(g)&\text{otherwise}
+        s(f) *_m s(g)&\text{otherwise}
       \end{cases*}\\
-      t(f \star_m g) &= \begin{cases*}
+      t(f *_m g) &= \begin{cases*}
         t(g)&\text{if \(m = n - 1\)}\\
-        t(f) \star_m t(g)&\text{otherwise}
+        t(f) *_m t(g)&\text{otherwise}
       \end{cases*}
     \end{align*}
   \item For \(n\)-cell \(x\), an identity \((n+1)\)-cell \(\id(x) : x \to x\).
@@ -409,20 +409,20 @@ We can now give the definition of a (strict) \(\infty\)-category.
   and satisfying equalities:
   \begin{itemize}
   \item Associativity: Given \(m < n\) and \(n\)-cells \(f\), \(g\), and \(h\) with \(\delta_m^+(f) = \delta_m^-(g)\) and \(\delta_m^+(g) = \delta_m^-(h)\):
-    \[ (f \star_m g) \star_m h = f \star_m (g \star_m h) \]
+    \[ (f *_m g) *_m h = f *_m (g *_m h) \]
   \item Unitality: Given \(m < n\) and \(n\)-cell \(f\):
     \begin{align*}
-      \id^{n-m}(\delta_m^-(f)) \star_m f &= f\\
-      f \star_m \id^{n-m}(\delta_m^+(f)) &= f
+      \id^{n-m}(\delta_m^-(f)) *_m f &= f\\
+      f *_m \id^{n-m}(\delta_m^+(f)) &= f
     \end{align*}
   \item Composition interchange: If \(o < m < n\) and \(\alpha\), \(\beta\), \(\gamma\), and \(\delta\) be \(n\)-cells with
     \[\delta_m^+(\alpha) = \delta_m^-(\beta)\qquad
       \delta_m^+(\gamma) = \delta_m^-(\delta)\qquad
       \delta_o^+(\alpha) = \delta_o^-(\gamma)\]
     then:
-    \[(\alpha \star_o \gamma) \star_m (\beta \star_o \delta) = (\alpha \star_m \beta) \star_o (\gamma \star_m \delta)\]
+    \[(\alpha *_o \gamma) *_m (\beta *_o \delta) = (\alpha *_m \beta) *_o (\gamma *_m \delta)\]
   \item Identity interchange: Let \(m < n\) and \(f\) and \(g\) be \(n\)-cells with \(\delta_m^+(f) = \delta_m^-(g)\). Then:
-    \[\id(f) \star_m \id(g) = \id(f \star_m g)\]
+    \[\id(f) *_m \id(g) = \id(f *_m g)\]
   \end{itemize}
   A morphism of \(\infty\) categories is a morphism of the underlying globular sets which preserves composition and identities.
 \end{definition}
@@ -433,18 +433,18 @@ We end this section with an example of a non-trivial application of the axioms o
 
 \begin{proposition}[Eckmann-Hilton]
   \label{prop:eh}
-  Let \(x\) be an \(n\)-cell in an \(\infty\)-category and let \(\alpha\) and \(\beta\) be \((n+2)\)-cells with source and target \(\id(x)\). Then \(\alpha \star_{n+1} \beta = \beta \star_{n+1} \alpha\).
+  Let \(x\) be an \(n\)-cell in an \(\infty\)-category and let \(\alpha\) and \(\beta\) be \((n+2)\)-cells with source and target \(\id(x)\). Then \(\alpha *_{n+1} \beta = \beta *_{n+1} \alpha\).
 \end{proposition}
 \begin{proof}
   The cells \(\alpha\) and \(\beta\) can be manoeuvred around each other as follows:
   \begin{align*}
-    &\phantom{{}={}} \alpha \star_{n+1} \beta \\
-    &= (\alpha \star_n i) \star_{n+1} (i \star_n \beta)&\text{Unitality}\\
-    &= (\alpha \star_{n+1} i) \star_n (i \star_{n+1} \beta)&\text{Interchange}\\
-    &= \alpha \star_n \beta &\text{Unitality}\\
-    &= (i \star_{n+1} \alpha) \star_n (\beta \star_{n+1} i)&\text{Unitality}\\
-    &= (i \star_n \beta) \star_{n+1} (\alpha \star_n i)&\text{Interchange}\\
-    &= \beta \star_{n+1} \alpha&\text{Unitality}
+    &\phantom{{}={}} \alpha *_{n+1} \beta \\
+    &= (\alpha *_n i) *_{n+1} (i *_n \beta)&\text{Unitality}\\
+    &= (\alpha *_{n+1} i) *_n (i *_{n+1} \beta)&\text{Interchange}\\
+    &= \alpha *_n \beta &\text{Unitality}\\
+    &= (i *_{n+1} \alpha) *_n (\beta *_{n+1} i)&\text{Unitality}\\
+    &= (i *_n \beta) *_{n+1} (\alpha *_n i)&\text{Interchange}\\
+    &= \beta *_{n+1} \alpha&\text{Unitality}
   \end{align*}
   Where \(i = \id(\id(x))\).
 \end{proof}
@@ -631,7 +631,7 @@ We can also consider composites which are not binary composites of two cells of 
     \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
   \end{tikzcd}
 \]
-with a composite given by \(\alpha \star_0 \id(h)\). This operation is fairly common (in fact we have already seen it in \cref{prop:eh}) and is known as \emph{whiskering}. In this case we would say that the composite is given by the right whiskering of \(\alpha\) with \(h\).
+with a composite given by \(\alpha *_0 \id(h)\). This operation is fairly common (in fact we have already seen it in \cref{prop:eh}) and is known as \emph{whiskering}. In this case we would say that the composite is given by the right whiskering of \(\alpha\) with \(h\).
 
 The 1-dimensional pasting diagrams are all given by chains of 1-cells of the form:
 \[x_0 \overset{f_0}\to x_1 \overset{f_1}\to x_2 \overset{f_2}\to \cdots \overset{f_n}\to x_{n+1}\]
@@ -655,7 +655,7 @@ Lastly we look at the diagram, where all the \(0\)-cells and \(1\)-cells are ass
   \end{tikzcd}
 \]
 
-We get a composite given by \((\alpha \star_1 \beta) \star_0 (\gamma \star_1 \delta)\). The uniqueness of this composite is due to the interchange law.
+We get a composite given by \((\alpha *_1 \beta) *_0 (\gamma *_1 \delta)\). The uniqueness of this composite is due to the interchange law.
 
 Non-examples of pasting diagrams roughly fall into two groups: those that do not admit a composite, and those that admit many distinct composites. The following three globular sets fail to admit a composite (the last is drawn in a box to emphasise that \(z\) is part of the same globular set as \(x\), \(y\), \(f\), \(g\), and \(\alpha\)):
 
@@ -681,7 +681,7 @@ Non-examples of pasting diagrams roughly fall into two groups: those that do not
     \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
   \end{tikzcd}}
 \]
-The globular set with a single \(0\)-cell \(x\), and a single \(1\)-cell \(f : x \to x\) has too many composites: \(f\) and \(f \star_0 f\) need not be equal in an infinity category.
+The globular set with a single \(0\)-cell \(x\), and a single \(1\)-cell \(f : x \to x\) has too many composites: \(f\) and \(f *_0 f\) need not be equal in an infinity category.
 
 To describe the free \(\infty\)-category in terms of pasting diagrams we need to be able to extract a composite from a pasting diagram, and construct a pasting diagram from an arbitrary composite. Each pasting diagram having a unique composite solves the former issue.
 
@@ -787,19 +787,19 @@ The \(\infty\)-categories we have defined so far have all been strict \(\infty\)
 
 Topological spaces provide one of the primary examples for where it is useful to consider weak laws. Given a topological space \(X\), we can define a globular set of paths and homotopies. Let the \(0\)-cells be given by points \(x\) of the topological space, let morphisms from \(x\) to \(y\) be given as paths \(I \to X\) (where \(I\) is the topological interval \([0,1]\)) which send \(0\) to \(x\) and \(1\) to \(y\), and let higher cells be given by homotopies. The natural composition of two paths \(p\) and \(q\) is the following path:
 \[
-  (p \star q)(i) =
+  (p * q)(i) =
   \begin{cases*}
     p(2i)&when \(i < 0.5\)\\
     q(2i-1)&when \(i \geq 0.5\)
   \end{cases*}
 \]
-which effectively lines up the paths end to end. Given \(3\) paths \(p\), \(q\), and \(r\), the compositions \((p \star q) \star r\) and \(p \star (q \star r)\) are not identical but are equal up to homotopy, meaning the two compositions are isomorphic. Therefore in this case the composition \(p \star q\) does not form a strict \(\infty\)-category structure, but rather a weak structure.
+which effectively lines up the paths end to end. Given \(3\) paths \(p\), \(q\), and \(r\), the compositions \((p * q) * r\) and \(p * (q * r)\) are not identical but are equal up to homotopy, meaning the two compositions are isomorphic. Therefore in this case the composition \(p * q\) does not form a strict \(\infty\)-category structure, but rather a weak structure.
 
-We start our exploration of weak higher categories by considering the lower dimension case of bicategories (weak \(2\)-categories). Here, interchange must still be given by a strict equality, as there are no non-trivial \(3\)-cells in a \(2\)-category. However, associativity and unitality can be given by isomorphisms known as associators and unitors:
+\paragraph{Weak 2-categories} We start our exploration of weak higher categories by considering the lower dimension case of bicategories (weak \(2\)-categories). Here, interchange must still be given by a strict equality, as there are no non-trivial \(3\)-cells in a \(2\)-category. However, associativity and unitality can be given by isomorphisms known as associators and unitors:
 \begin{alignat*}{2}
-  &\alpha_{f,g,h} &&: (f \star_0 g) \star_0 h \to f \star_0 (g \star_0 h)\\
-  &\lambda_f &&: \id(x) \star_0 f \to f\\
-  &\rho_f &&: f \star_0 \id(y) \to f
+  &\alpha_{f,g,h} &&: (f *_0 g) *_0 h \to f *_0 (g *_0 h)\\
+  &\lambda_f &&: \id(x) *_0 f \to f\\
+  &\rho_f &&: f *_0 \id(y) \to f
 \end{alignat*}
 for \(f : x \to y\), \(g : y \to z\), and \(h : z \to w\).
 
@@ -843,40 +843,40 @@ for \(f : x \to y\), \(g : y \to z\), and \(h : z \to w\).
   \end{itemize}
 \end{example}
 
-In general, there could be many possible isomorphisms between \((f \star g) \star h\) and \(f \star (g \star h)\), and we require that the chosen morphisms satisfy certain compatibility properties. The first is that each of the associator, left unitor, and right unitor should be a natural isomorphism. The second is a property known as \emph{coherence}, saying that any two parallel morphisms built purely from naturality moves, associators, and unitors must be equal.
+In general, there could be many possible isomorphisms between \((f * g) * h\) and \(f * (g * h)\), and we require that the chosen morphisms satisfy certain compatibility properties. The first is that each of the associator, left unitor, and right unitor should be a natural isomorphism. The second is a property known as \emph{coherence}, saying that any two parallel morphisms built purely from naturality moves, associators, and unitors must be equal.
 
-For bicategories it is sufficient to give two coherence laws: the triangle equality and pentagon equality. The triangle equality identifies two ways of cancelling the identity in the composite \(f \star \id \star g\), giving a compatibility between the left and right unitors. It is given by the following commutative diagram:
+For bicategories it is sufficient to give two coherence laws: the triangle equality and pentagon equality. The triangle equality identifies two ways of cancelling the identity in the composite \(f * \id * g\), giving a compatibility between the left and right unitors. It is given by the following commutative diagram:
 
 % https://q.uiver.app/#q=WzAsMyxbMCwwLCIoZiBcXHN0YXIgXFxpZCkgXFxzdGFyIGciXSxbMiwwLCJmIFxcc3RhciAoXFxpZCBcXHN0YXIgZykiXSxbMSwxLCJmIFxcc3RhciBnIl0sWzAsMSwiXFxhbHBoYV97ZixcXGlkLGd9Il0sWzAsMiwiXFxyaG9fZiBcXHN0YXJfMCBcXGlkKGcpIiwyXSxbMSwyLCJcXGlkKGYpXFxzdGFyXzBcXGxhbWJkYV9nIl1d
 \[
   \begin{tikzcd}
-    {(f \star \id) \star g} && {f \star (\id \star g)} \\
-    & {f \star g}
+    {(f * \id) * g} && {f * (\id * g)} \\
+    & {f * g}
     \arrow["{\alpha_{f,\id,g}}", from=1-1, to=1-3]
-    \arrow["{\rho_f \star_0 \id(g)}"', from=1-1, to=2-2]
-    \arrow["{\id(f)\star_0\lambda_g}", from=1-3, to=2-2]
+    \arrow["{\rho_f *_0 \id(g)}"', from=1-1, to=2-2]
+    \arrow["{\id(f)*_0\lambda_g}", from=1-3, to=2-2]
   \end{tikzcd}
 \]
 
-The pentagon equation identifies two ways of associating \(((f \star g) \star h) \star k\) to \(f \star (g \star (h \star k))\). It is given by the diagram below:
+The pentagon equation identifies two ways of associating \(((f * g) * h) * k\) to \(f * (g * (h * k))\). It is given by the diagram below:
 % https://q.uiver.app/#q=WzAsNSxbMSwzLCIoZiBcXHN0YXIgKGcgXFxzdGFyIGgpKSBcXHN0YXIgayJdLFswLDEsIigoZiBcXHN0YXIgZykgXFxzdGFyIGgpIFxcc3RhciBrIl0sWzIsMCwiKGYgXFxzdGFyIGcpIFxcc3RhciAoaCBcXHN0YXIgaykiXSxbNCwxLCJmIFxcc3RhciAoZyBcXHN0YXIgKGggXFxzdGFyIGspKSJdLFszLDMsImYgXFxzdGFyICgoZyBcXHN0YXIgaCkgXFxzdGFyIGspIl0sWzEsMiwiXFxhbHBoYV97ZiBcXHN0YXIgZyxoLGt9Il0sWzIsMywiXFxhbHBoYV97ZixnLGhcXHN0YXIga30iXSxbMSwwLCJcXGFscGhhX3tmLGcsaH0gXFxzdGFyXzAgXFxpZChrKSIsMl0sWzAsNCwiXFxhbHBoYV97ZixnXFxzdGFyIGgsa30iLDJdLFs0LDMsIlxcaWQoZilcXHN0YXJfMCBcXGFscGhhX3tnLGgsa30iLDJdXQ==
 \[
   \begin{tikzcd}[column sep = -1.5em]
-    && {(f \star g) \star (h \star k)} \\
-    {((f \star g) \star h) \star k} &&&& {f \star (g \star (h \star k))} \\
+    && {(f * g) * (h * k)} \\
+    {((f * g) * h) * k} &&&& {f * (g * (h * k))} \\
     \\
-    & {(f \star (g \star h)) \star k} && {f \star ((g \star h) \star k)}
-    \arrow["{\alpha_{f \star g,h,k}}", from=2-1, to=1-3]
-    \arrow["{\alpha_{f,g,h\star k}}", from=1-3, to=2-5]
-    \arrow["{\alpha_{f,g,h} \star_0 \id(k)}"', from=2-1, to=4-2]
-    \arrow["{\alpha_{f,g\star h,k}}"', from=4-2, to=4-4]
-    \arrow["{\id(f)\star_0 \alpha_{g,h,k}}"', from=4-4, to=2-5]
+    & {(f * (g * h)) * k} && {f * ((g * h) * k)}
+    \arrow["{\alpha_{f * g,h,k}}", from=2-1, to=1-3]
+    \arrow["{\alpha_{f,g,h* k}}", from=1-3, to=2-5]
+    \arrow["{\alpha_{f,g,h} *_0 \id(k)}"', from=2-1, to=4-2]
+    \arrow["{\alpha_{f,g* h,k}}"', from=4-2, to=4-4]
+    \arrow["{\id(f)*_0 \alpha_{g,h,k}}"', from=4-4, to=2-5]
   \end{tikzcd}
 \]
 
 Surprisingly, these two equations are enough to give full coherence. For the example of spans from \cref{ex:spans}, these two equations follow from the uniqueness of the universal morphism.
 
-To move from weak \(2\)-categories to weak \(3\)-categories, new coherence cells for interchangers are added to replace the interchanger equalities, and new equalities must be added to specify the interaction between the interchangers and other coherence morphisms. Furthermore, the triangle and pentagon equation from \(2\)-categories will become an isomorphisms in a weak \(3\)-category, causing more coherence equations to be added.
+\paragraph{Weak \(\infty\)-categories} To move from weak \(2\)-categories to weak \(3\)-categories, new coherence cells for interchangers are added to replace the interchanger equalities, and new equalities must be added to specify the interaction between the interchangers and other coherence morphisms. Furthermore, the triangle and pentagon equation from \(2\)-categories will become an isomorphisms in a weak \(3\)-category, causing more coherence equations to be added.
 
 As we move up in dimension, the number of coherence morphisms and equalities required increases exponentially. Whereas a bicategory has 11 operations (1-identity, 2-identity, 1-composition, vertical composition, horizontal composition, left unitor (and inverse), right unitor (and inverse), and associator (and inverse)), where as a fully weak tricategory already has around 51 operations~\cite{gurski2006algebraic}\footnote{The number here is obtained by unwrapping various subdefinitions and should be treated as approximate.}. Comparisons between the size of partially weak definitions can be found in \cite{bar2017data}.
 
@@ -915,7 +915,7 @@ We can generate more complicated operations with this principle, consider pastin
     \arrow["h", from=1-3, to=1-4]
   \end{tikzcd}
 \]
-We already know the coherator contains 1-composition, and using composition and the universal property of globular sums, we can generate operations realising the compound composites \((f \star g) \star h\) and \(f \star (g \star h)\). The principle then gives us an operation returning the \(2\)-cell \((f \star g) \star h \to f \star (g \star h)\), which is of course our associator. This one principle allows us to generate all the structure we need, as well as structure that is arguably unnecessary, such as ternary compositions that did not appear in the definition of bicategory.
+We already know the coherator contains 1-composition, and using composition and the universal property of globular sums, we can generate operations realising the compound composites \((f * g) * h\) and \(f * (g * h)\). The principle then gives us an operation returning the \(2\)-cell \((f * g) * h \to f * (g * h)\), which is of course our associator. This one principle allows us to generate all the structure we need, as well as structure that is arguably unnecessary, such as ternary compositions that did not appear in the definition of bicategory.
 
 Unfortunately, as we have already mentioned, Grothendieck's definition is for \(\infty\)-groupoids, where everything is invertible, instead of \(\infty\)-categories in full generality, as we want to study in this thesis. This can be seen by taking the pasting diagram \(C\):
 \[
@@ -956,9 +956,9 @@ As with Grothendieck's definition, a coherator can be made by closing the globul
 
 We now turn our attention back to the proof of Eckmann-Hilton from \cref{fig:eh}. Given a \(0\)-cell \(x\) and two scalars \(\alpha, \beta : \id(x) \to \id(x)\), we expect the Eckmann-Hilton argument to give us an isomorphism in a weak higher category, rather than the equality obtained in the strict case. In fact we immediately see that equalities 2, 3, and 4 in the proof can be immediately replaced by isomorphisms (interchangers and unitors).
 
-The first and last equalities however are more problematic, although at first we may believe that there should exist some horizontal unitor isomorphism, upon closer inspection the two compositions do not even have the same boundary and so are not parallel. The composition \(\alpha \star_1 \beta\) has source and target \(\id(x)\), whereas the source of \(\alpha \star_0 \id(\id(x))\) is \(\id(x) \star_0 \id(x)\).
+The first and last equalities however are more problematic, although at first we may believe that there should exist some horizontal unitor isomorphism, upon closer inspection the two compositions do not even have the same boundary and so are not parallel. The composition \(\alpha *_1 \beta\) has source and target \(\id(x)\), whereas the source of \(\alpha *_0 \id(\id(x))\) is \(\id(x) *_0 \id(x)\).
 
-To recover the proof in a weak setting, the intermediate composites must be composed with unitors so that they all have source and target \(\id(x)\). To give equivalences for the first and last step, these unitors must be moved around with naturality moves, and at a critical point the isomorphism \(\lambda_{\id(x)} \simeq \rho_{\id(x)}\) is required. Multiple full proofs of Eckmann-Hilton will be given in \cref{sec:rehydration}. The proof of Eckmann-Hilton is vastly simpler in strict case, mainly due to the presence of the equation \(\id(x) \star_0 \id(x) = \id(x)\).
+To recover the proof in a weak setting, the intermediate composites must be composed with unitors so that they all have source and target \(\id(x)\). To give equivalences for the first and last step, these unitors must be moved around with naturality moves, and at a critical point the isomorphism \(\lambda_{\id(x)} \simeq \rho_{\id(x)}\) is required. Multiple full proofs of Eckmann-Hilton will be given in \cref{sec:rehydration}. The proof of Eckmann-Hilton is vastly simpler in strict case, mainly due to the presence of the equation \(\id(x) *_0 \id(x) = \id(x)\).
 %  It is natural to ask whether it is necessary to work with weak higher categories at all, given the extra complexity.
 
 % For bicategories, it turns out that the answer is no. Every bicategory is biequivalent to a strict 2-category~\cite[Theorem 1.4]{gordon1995coherence}, meaning that to prove any equation holds in a bicategory, it suffices to prove that the same equation holds in a strict 2-category. This allows the more general notion of bicategory to be used without incurring extra proof burden.
@@ -989,7 +989,7 @@ In this section we give an overview of the dependent type theory \Catt~\cite{fin
 \begin{itemize}
 \item Contexts contain a list of variables with an associated type. We can consider contexts as finite computads, the generating data for a weak \(\infty\)-category (see \cref{sec:computads}). It is alternatively valid to consider contexts in \Catt as finitely generated \(\infty\)-categories. The set of contexts contains all globular sets (and hence all pasting diagrams).
 \item Terms over a context \(\Gamma\) correspond to the operations from \cref{sec:weak}. Terms can either be a variable, which corresponds to the operations which pick a single cell out of a globular set, or those generated by the unique constructor \(\mathsf{coh}\), which correspond to the operations generated by lifting. A term over a context \(\Gamma\) can also be seen as a element of the free \(\infty\)-category generated from \(\Gamma\).
-\item Types over a context \(\Gamma\) consist of a collection of terms over the same context, and contain the boundary information for a term. Types either take the form of the constructor \(\star\), the type of \(0\)-cells (which have no boundary data), or an arrow type \(\arr s A t\), where \(s\) and \(t\) are terms giving the source and target of the boundary and the type \(A\) gives lower dimensional boundary information\footnote{This can be viewed as a directed version of the equality type \(s =_A t\) from Martin-L\"of type theory}.
+\item Types over a context \(\Gamma\) consist of a collection of terms over the same context, and contain the boundary information for a term. Types either take the form of the constructor \(*\), the type of \(0\)-cells (which have no boundary data), or an arrow type \(\arr s A t\), where \(s\) and \(t\) are terms giving the source and target of the boundary and the type \(A\) gives lower dimensional boundary information\footnote{This can be viewed as a directed version of the equality type \(s =_A t\) from Martin-L\"of type theory}.
 \item Substitutions from a context \(\Gamma\) to a context \(\Delta\) are a mapping from variables of \(\Gamma\) to terms of \(\Delta\). These play the role of functors between the \(\infty\)-categories generated by \(\Gamma\) and \(\Delta\) and are also syntactically crucial for forming compound composites in the theory.
 \end{itemize}
 
@@ -1239,6 +1239,90 @@ Thus, we immediately get that a presheaf over \(\Catt^{\mathsf{ps}}\) which pres
 
 \subsection{Basic constructions}
 \label{sec:basic-constructions}
+
+We now introduce some examples of basic categorical operations in order to give some early examples. Suppose we have terms \(a : \arr s \star t\) and \(b : \arr t \star u\) in some context \(\Gamma\). Then the Ps-context
+\[ \Delta = (x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \]
+from \cref{judg:ps} can be used to form the 1-composite:
+\[ a *_0 b = \Coh \Delta {\arr x \star z} {\langle s, t, a, u, b \rangle}\]
+It is often not necessary to give all the terms in a substitution, especially when the substitution is from a pasting diagram (or more generally a globular set). In these cases it is sufficient to give terms for the \emph{locally maximal} variables of the context, those that do not appear as the source or target of another variable. For \(\Delta\), the locally maximal variables are \(f\) and \(g\), and so it suffices to give the substitution above as \(\langle a , b \rangle\), with the rest of the terms being inferable.
+
+The disc contexts \(D^n\) can be formed in \Catt as the analogue of the disc globular sets given in \cref{ex:disc} and satisfy the property that a substitution from a disc context \(D^n\) contains the same data as a term and \(n\)-dimensional type. Given a term \(t\) of type \(A\) in context \(\Gamma\), we write this substitution \(\{A,t\} : D^{\dim(A)} \to \Gamma\). All disc contexts are Ps-contexts.
+
+Using these, the identity can be formed on a term \(t\) of type \(A\) in \(\Gamma\):
+\[\id(A,t) = \Coh {D^n} {\arr {d_n} {} {d_n}} {\{A, t\}}\]
+where \(\dim(A) = n\), which is typed using the rule for equivalences. The structure of this term changes for different values of \(n\), and we will relate these different terms in \cref{sec:suspension}. As before, the non-locally maximal elements of a substitution
+can be inferred, and so we may write \(\id(t)\) or \(\{t\}\) when the type \(A\) is inferable\footnote{In \Catt, all types are inferable, though later it may be necessary to specify the exact type we are using up to syntactic equality.}.
+
+\paragraph{Standard coherences}
+The composite and identity above form part of a more general collection of coherences, which we call \emph{standard coherences}.
+
+\begin{definition}
+  Given a pasting diagram \(\Delta\), we mutually define for all \(n\) the \emph{standard coherence} \(\mathcal{C}_\Delta^n\), the \emph{standard term} \(\mathcal{T}_\Delta^n\), and the \emph{standard type} \(\mathcal{U}_\Delta^n\):
+  \begin{alignat*}{2}
+    &\mathcal{C}_\Delta^n &&= \Coh \Delta {\mathcal{U}_\Delta^n} {\id_\Delta}\\
+    &\mathcal{T}_\Delta^n &&=
+                           \begin{cases}
+                             d^n &\text{when \(\Delta\) is the disc \(D^n\)}\\
+                             \mathcal{C}_\Delta^n &\text{otherwise}
+                           \end{cases}\\
+    &\mathcal{U}_\Delta^0 &&= \star\\
+    &\mathcal{U}_\Delta^{n+1} &&= \arr {\mathcal{T}_{\bound n \Delta}^n \sub {\inc n - \Delta}} {\mathcal{U}_\Delta^n} {\mathcal{T}_{\bound n \Delta}^n \sub {\inc n + \Delta}}
+  \end{alignat*}
+  The standard type takes the standard term over each boundary of \(\Delta\), includes these all back into \(\Delta\) and assembles them into a type. When \(n = \dim(\Delta)\) we will refer to the standard coherence as the \emph{standard composite}.
+\end{definition}
+
+It is immediate that the composite \(a *_0 b\) is given by \(\mathcal{C}_\Delta^1\sub{\langle a , b \rangle}\) and the identity on a term \(t\) of dimension \(n\) is given by \(\mathcal{C}_{D^n}^{n+1}\sub{\{t\}}\). This construction can be used to generate all the composites in the definition of a strict \(\infty\)-category. For example the vertical composite of \(2\)-cells is the standard composite over the context given by the diagram:
+\[
+  \begin{tikzcd}
+    x && y
+    \arrow[""{name=0, anchor=center, inner sep=0}, "f"', curve={height=24pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "h", curve={height=-24pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "g"{description}, from=1-1, to=1-3]
+    \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=2]
+    \arrow["\beta", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+  \end{tikzcd}
+\]
+and the horizontal composite of \(2\)-cells is the standard composite over:
+\[
+  \begin{tikzcd}
+    x & y & z
+    \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "i", curve={height=-18pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "h"', curve={height=18pt}, from=1-2, to=1-3]
+    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, from=3, to=2]
+  \end{tikzcd}
+\]
+Noting that the standard type over the above diagram has source \(f * h\) and target \(g * i\), themselves being standard compositions demonstrating the mutual recursive behaviour of these constructions.
+
+\begin{remark}
+  Above we gave two Ps-contexts by drawing a diagram of the globular set that they represent. Ps-contexts fix the order that variables occur in and as such the mapping from Ps-contexts to globular sets is injective. The use of diagrams to define Ps-contexts is therefore unambiguous.
+\end{remark}
+
+\paragraph{Further examples}
+The substitution component of a coherence allows operations to be combined into compound operations. Consider the (Ps-)context given by the following diagram:
+\[\Gamma =
+  \begin{tikzcd}
+    s & t & u & v
+    \arrow["a", from=1-1, to=1-2]
+    \arrow["b", from=1-2, to=1-3]
+    \arrow["c", from=1-3, to=1-4]
+  \end{tikzcd}
+\]
+There are (at least) 3 ways to compose together the elements of this context. We could take the unbiased ternary composite \(a * b * c = \mathcal{C}_\Gamma^1\sub{\langle a, b, c\rangle}\), but could also construct either biased composite:
+\begin{align*}
+  (a * b) * c &= \mathcal{C}_\Delta^1\sub{\langle \mathcal{C}_\Delta^1\sub{\langle a,b\rangle}, c\rangle}\\
+  a * (b * c) &= \mathcal{C}_\Delta^1\sub{\langle a, \mathcal{C}_\Delta^1\sub{\langle b, c\rangle}\rangle}\\
+\end{align*}
+Using the equivalence typing rule, we can relate these biased composite with the following term:
+\[ \alpha_{a,b,c} = \Coh \Gamma {\arr {(a * b) * c} {} {a * (b * c)}} {\id_\Gamma}\]
+which is the associator. Similarly for a term \(f : \arr x \star y\), unitors can be form over the disc context \(D^1\) using the equivalence rule:
+\begin{align*}
+  \lambda_f &= \Coh {D^1} {\arr {\id(d_0^-) * d_1} {} {d_1}} {\{f\}}\\
+  \rho_f &= \Coh {D^1}  {\arr {d_1 * \id(d_0^-)} {} {d_1}} {\{f\}}
+\end{align*}
+The remainder of the operations for a 2-category can be defined similarly, as each displays the equivalence of two terms built over a pasting diagram. We observe that both the unitors and associator (as well as any coherence typed with the equivalence rule) are trivially invertible.
 
 \subsection{Suspension}
 \label{sec:suspension}
