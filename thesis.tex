@@ -81,8 +81,7 @@ This section additionally serves as a place to introduce the various syntax and 
 \section{Higher categories}
 \label{sec:higher-categories}
 
-\todo[inline]{Add references throughout}
-A higher category is a generalisation of the ordinary notion of a category to allow higher dimensional structure. This manifests in the form of allowing arrows or morphisms to have their source or target be another morphism instead of an object. More precisely, higher categories are equipped with the notion of an \(n\)-cell, where an \((n+1)\)-cell has source and target \(n\)-cells, and \(0\)-cells play the role of objects in an ordinary category.
+A higher category is a generalisation of the ordinary notion of a category to allow higher dimensional structure. This manifests in the form of allowing arrows or morphisms to have their source or target be another morphism instead of an object. More precisely, higher categories are equipped with the notion of an \(n\)-cell, where an \((n+1)\)-cell has source and target \(n\)-cells, and \(0\)-cells play the role of objects in an ordinary category. There are many differing definitions of higher categories (see \cite{leinster2001survey}), some of which use different shapes of cell. In this thesis, we will study globular higher categories, in particular those defined by the type theory \Catt~\cite{finster2017type}, which are known to be equivalent to a definition of \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck} based off an earlier definition by \citeauthor{PursuingStacks}~\cite{PursuingStacks}, which we introduce in \cref{sec:weak}.
 
 The role of objects is played by \(0\)-cells, with \(1\)-cells as the morphisms between these objects. For \(0\)-cells \(x\) and \(y\), a \(1\)-cell \(f\) with source \(x\) and target \(y\) will be drawn as:
 \[
@@ -91,7 +90,7 @@ The role of objects is played by \(0\)-cells, with \(1\)-cells as the morphisms 
     \arrow["f", from=1-1, to=1-2]
   \end{tikzcd}
 \]
-or may be written as \(f: x \to y\).\todo{should arrowheads be smaller?} Two cells are \emph{parallel} if they have the same source and target. Between any two parallel \(n\)-cells \(f\) and \(g\), we have a set of \((n+1)\)-cells between them. A \(2\)-cell \(\alpha : f \to g\) may be drawn as:
+or may be written as \(f: x \to y\). Two cells are \emph{parallel} if they have the same source and target. Between any two parallel \(n\)-cells \(f\) and \(g\), we have a set of \((n+1)\)-cells between them. A \(2\)-cell \(\alpha : f \to g\) may be drawn as:
 \[
   \begin{tikzcd}
     x & y
@@ -262,47 +261,11 @@ This can be diagrammatically depicted as:
     \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-11, to=1-14]
   \end{tikzcd}
 \]
-% \[
-%   \begin{tikzcd}[row sep = small]
-%     \bullet & \bullet & \bullet \\
-%     & {*_1} \\
-%     \bullet & \bullet & \bullet
-%     \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-1, to=1-2]
-%     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=18pt}, from=1-1, to=1-2]
-%     \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-2, to=1-3]
-%     \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=18pt}, from=1-2, to=1-3]
-%     \arrow[""{name=4, anchor=center, inner sep=0}, curve={height=-18pt}, from=3-1, to=3-2]
-%     \arrow[""{name=5, anchor=center, inner sep=0}, curve={height=18pt}, from=3-1, to=3-2]
-%     \arrow[""{name=6, anchor=center, inner sep=0}, curve={height=-18pt}, from=3-2, to=3-3]
-%     \arrow[""{name=7, anchor=center, inner sep=0}, curve={height=18pt}, from=3-2, to=3-3]
-%     \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=5, to=4]
-%     \arrow["\gamma", shorten <=5pt, shorten >=5pt, Rightarrow, from=7, to=6]
-%     \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
-%     \arrow["\delta", shorten <=5pt, shorten >=5pt, Rightarrow, from=3, to=2]
-%   \end{tikzcd}
-%   \quad=\quad
-%   \begin{tikzcd}
-%     \bullet & \bullet
-%     \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-2]
-%     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-2]
-%     \arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-2]
-%     \arrow["\alpha"', shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
-%     \arrow["\beta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
-%   \end{tikzcd}
-%   *_0
-%   \begin{tikzcd}
-%     \bullet & \bullet
-%     \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-2]
-%     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-2]
-%     \arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-2]
-%     \arrow["\gamma"', shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
-%     \arrow["\delta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
-%   \end{tikzcd}
-% \]
+
 There are also interchange laws for the interaction of composition and identities; A composition of two identities is the same as an identity on the composition of the underlying cells.
 
 
-The \(\infty\)-categories that we study in this thesis will be globular, meaning that their cells form a globular set. A globular set can be seen as natural extension of the data of a category, whose data can be arranged into the following diagram:\todo{Need a remark somewhere about other shapes of higher category}
+The \(\infty\)-categories that we study in this thesis will be globular, meaning that their cells form a globular set. A globular set can be seen as natural extension of the data of a category, whose data can be arranged into the following diagram:
 % https://q.uiver.app/#q=WzAsMixbMCwwLCJZIl0sWzEsMCwiWCJdLFswLDEsInMiLDAseyJvZmZzZXQiOi0xfV0sWzAsMSwidCIsMix7Im9mZnNldCI6MX1dXQ==
 \[
   \begin{tikzcd}
@@ -329,10 +292,10 @@ In a globular set, the source and target of any cell must be parallel, meaning t
   The category of globes \(\mathbf{G}\) has objects given by the natural numbers and morphisms generated from \(\mathbf{s}_n, \mathbf{t}_n : n \to n + 1\) quotiented by the \emph{globularity conditions}:
   \begin{align*}
     \mathbf{s}_{n+1} \circ \mathbf{s}_n &= \mathbf{t}_{n+1} \circ \mathbf{s}_n\\
-    \mathbf{s}_{n+1} \circ \mathbf{t}_n &= \mathbf{t}_{n+1} \circ \mathbf{t}_n\\
+    \mathbf{s}_{n+1} \circ \mathbf{t}_n &= \mathbf{t}_{n+1} \circ \mathbf{t}_n
   \end{align*}
 
-   The category of globular sets \(\mathbf{Glob}\), is the presheaf category \([\mathbf{G}, \mathbf{Set}]\).
+The category of globular sets \(\mathbf{Glob}\), is the presheaf category \([\mathbf{G}, \mathbf{Set}]\).
  \end{definition}
 
 Unwrapping this definition, a globular set \(G\) consists of sets \(G(n)\) for each \(n \in \mathbb{N}\), with source and target maps \(s_n, t_n : G(n+1) \to G(n)\), forming the following diagram:
@@ -387,6 +350,10 @@ Given a globular set \(G\), we will call the elements of \(G(n)\) the \(n\)-cell
   \caption{The first disc globular sets}
   \label{fig:discs}
 \end{figure}
+
+\begin{remark}
+  Globular sets are not the only natural extension of the data of a 1-category. The form of this data in a definition of a higher category is referred to as the \emph{shape} of the cells. Notable alternatives to globular sets include simplicial sets, opetopic sets, and cubical sets.
+\end{remark}\todo{Could put some references in here}
 
 We can now give the definition of a (strict) \(\infty\)-category.
 
@@ -577,15 +544,15 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
 \subsection{Pasting diagrams}
 \label{sec:pasting-diagrams}
 
-\todo{Reference batanin and leinster here}
-
 The definition of \(\infty\)-categories given in the previous section is close in spirit to the the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:weak}, that these sort of definitions do not scale well to our eventual setting of weak higher categories.
 
 There is a special class of (finite) globular sets known as \emph{pasting diagrams} (sometimes known as pasting schemes). The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by a pasting diagram and a map from this pasting diagram into \(G\). To do this, it must be possible to obtain a canonical composite from each pasting diagram.
 
 Informally, we can define a \(n\)-dimensional pasting diagram to be a finite globular set which admits a unique full composite of dimension \(n\), where a full composite of a globular set \(G\) is an element of the free \(\infty\)-category over \(G\) which uses all the maximal elements. This functions as the primary intuition on the role of pasting diagrams.
 
-Before giving a more formal definition of pasting diagrams, we explore some examples and non-examples. A more indepth discussion of pasting diagrams and representations of free strict \(\infty\)-categories using them can be found in \citeauthor{leinster2004higher}~\cite{leinster2004higher}. In contrast to \citeauthor{leinster2004higher}, we consider pasting diagrams as a full subcategory of globular sets, rather than a separate category with a function sending each pasting diagram to a globular set.
+Pasting diagrams were used directly by \citeauthor{batanin1998monoidal}~\cite{batanin1998monoidal} to give a defintion of weak \(\infty\)-categories, and will be pivotal in \cref{sec:weak} to define the variety of higher categories that \Catt is based on. A more indepth discussion of pasting diagrams, representations of free strict \(\infty\)-categories using them, and their use in the definition of weak higher categories can be found in \citetitle{leinster2004higher}~\cite{leinster2004higher}.
+
+Before giving a more formal definition of pasting diagrams, we explore some examples and non-examples. In contrast to \citeauthor{leinster2004higher}, we consider pasting diagrams as a full subcategory of globular sets, rather than a separate category with a function sending each pasting diagram to a globular set.
 
 The disc contexts introduced in \cref{ex:disc} are all examples of pasting diagrams. The unique ``composite'' of these globular sets is just given by their maximal element, noting that we allow a singular cell in our informal definition of composite. The uniqueness of this is trivial as the only possible operations we could apply are compositions with units, which gives the same cell under the laws of an \(\infty\)-category.
 
@@ -796,11 +763,11 @@ Topological spaces provide one of the primary examples for where it is useful to
 which effectively lines up the paths end to end. Given \(3\) paths \(p\), \(q\), and \(r\), the compositions \((p * q) * r\) and \(p * (q * r)\) are not identical but are equal up to homotopy, meaning the two compositions are isomorphic. Therefore in this case the composition \(p * q\) does not form a strict \(\infty\)-category structure, but rather a weak structure.
 
 \paragraph{Weak 2-categories} We start our exploration of weak higher categories by considering the lower dimension case of bicategories (weak \(2\)-categories). Here, interchange must still be given by a strict equality, as there are no non-trivial \(3\)-cells in a \(2\)-category. However, associativity and unitality can be given by isomorphisms known as associators and unitors:
-\begin{alignat*}{2}
-  &\alpha_{f,g,h} &&: (f *_0 g) *_0 h \to f *_0 (g *_0 h)\\
-  &\lambda_f &&: \id(x) *_0 f \to f\\
-  &\rho_f &&: f *_0 \id(y) \to f
-\end{alignat*}
+\begin{align*}
+  \alpha_{f,g,h} &: (f *_0 g) *_0 h \to f *_0 (g *_0 h)\\
+  \lambda_f &: \id(x) *_0 f \to f\\
+  \rho_f &: f *_0 \id(y) \to f
+\end{align*}
 for \(f : x \to y\), \(g : y \to z\), and \(h : z \to w\).
 
 \begin{example}
@@ -1056,28 +1023,28 @@ The rules for constructing each piece of syntax are given in \cref{fig:syntax}. 
 We write \(\equiv\) for \emph{syntactic equality}, up to renaming of variables and \(\alpha\)-equivalence. The various pieces of syntax will be considered as equal up to this relation, which can be achieved by using a de Brujin index representation of the syntax as we present in \cref{cha:gener-pres-catt} for the formalisation. However, we continue to use named variables in the prose of the thesis to aid readability, assuming that all variables in a context are always distinct. We contrast this with the equality symbol, \(=\), which will represent the equality derived from extra equality rules we have placed on \Catt in \cref{sec:catt-with-equality}, and will be referred to as \emph{definitional equality}.
 
 The action of a substitution \(\sigma : \Delta \to \Gamma\) can be extended from variables to all terms \(t \in \Term_\Delta\), types \(A \in \Type_\Delta\), and substitutions \(\tau : \Theta \to \Delta\) by mutual recursion:
-\begin{alignat*}{3}
-  &x \sub \sigma &&= t&\qquad&\text{if }(x \mapsto t) \in \sigma\\
-  &\Coh \Theta A \tau \sub \sigma &&= \Coh \Theta A {\tau \bullet \sigma}\\
-  &\star \sub \sigma &&= \star\\
-  &\arr s A t \sub \sigma &&= \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}\\
-  &\langle \rangle \bullet \sigma &&= \langle \rangle\\
-  &\langle \tau , t \rangle \bullet \sigma &&= \langle \tau \bullet \sigma , t \sub \sigma \rangle
-\end{alignat*}
+\begin{align*}
+  x \sub \sigma &= t&\text{if }(x \mapsto t) \in \sigma\\
+  \Coh \Theta A \tau \sub \sigma &= \Coh \Theta A {\tau \bullet \sigma}\\
+  \star \sub \sigma &= \star\\
+  \arr s A t \sub \sigma &= \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}\\
+  \langle \rangle \bullet \sigma &= \langle \rangle\\
+  \langle \tau , t \rangle \bullet \sigma &= \langle \tau \bullet \sigma , t \sub \sigma \rangle
+\end{align*}
 
 For every context \(\Gamma\), there is an identity substitution \(\id_\Gamma\), which sends every variable to itself, which along with composition of substitutions above gives a category of contexts and substitutions.
 
 The coherence constructor \(\Coh \Delta A \sigma\) allows us to construct lifts between parallel operations over pasting diagrams. The context \(\Delta\) plays the role of the pasting diagram. The type \(A\) will always be of the form \(\arr s B t\), and the terms \(s\) and \(t\) play the role of the parallel operation (with the type \(\arr s B t\) being well typed ensuring that \(s\) and \(t\) are parallel). The substitution \(\sigma : \Delta \to \Gamma\) holds the data of a set of arguments to the coherence, allowing compound composites/operations to be formed and taking the role of composition of morphisms in the coherator.
 
 We next define the free variables of each piece of syntax. These will be used to encode the condition of an operation being algebraic from the theory of non-invertible coherators. Let \(\Var(\Gamma)\) denote the variables of \(\Gamma\). For a term \(t \in \Term_\Gamma\), a type \(A \in \Type_\Gamma\) and a substitution \(\sigma : \Delta \to \Gamma\) we define their free variables \(\FV(t), \FV(A), \FV(\sigma) \subseteq \Var(\Gamma)\) by mutual recursion.
-\begin{alignat*}{3}
-  &\FV(x) &&= \{x\} &\qquad&\text{if \(x\) is a variable}\\
-  &\FV(\Coh \Delta A \sigma) &&= \FV(\sigma)\\
-  &\FV(\star) &&= \{\}\\
-  &\FV(\arr s A t) &&= \FV(s) \cup \FV(A) \cup \FV(t)\\
-  &\FV(\langle \rangle) &&= \{\}\\
-  &\FV(\langle \sigma , t \rangle) &&= \FV(\sigma) \cup \FV(t)
-\end{alignat*}
+\begin{align*}
+  \FV(x) &= \{x\} &\text{if \(x\) is a variable}\\
+  \FV(\Coh \Delta A \sigma) &= \FV(\sigma)\\
+  \FV(\star) &= \{\}\\
+  \FV(\arr s A t) &= \FV(s) \cup \FV(A) \cup \FV(t)\\
+  \FV(\langle \rangle) &= \{\}\\
+  \FV(\langle \sigma , t \rangle) &= \FV(\sigma) \cup \FV(t)
+\end{align*}
 
 The free variables of a term is often the wrong notion to use for testing algebraicity. For example in the context \(D^1\), the term \(d_1\) has free variables \(\{d_1\}\), whereas the unary composite of \(d_1\), \(\Coh {D_1} {\arr {d_0^-} \star {d_0^+}} {\id_{D^1}}\), has free variables \(\{d_0^-,d_0^+,d_1\}\). To remedy this, the original paper considers \(\FV(t) \cup \FV(A)\), for a term \(t\) of type \(A\). In this thesis we instead define the support of each piece of syntax, a purely syntactic construction.
 
@@ -1085,14 +1052,14 @@ The free variables of a term is often the wrong notion to use for testing algebr
   Fix a context \(\Gamma\). The subset \(V \subseteq \Var(\Gamma)\) is \emph{downwards closed} if for all \((x : A) \in \Gamma\) we have:
   \[x \in V \implies \FV(A) \subseteq V\]
   The downwards closure of a set \(V\) in a context \(\Gamma\), \(\DC_\Gamma(V)\) can be defined by induction on the context:
-  \begin{alignat*}{2}
-    &\DC_\emptyset(\emptyset) &&= \emptyset\\
-    &\DC_{\Gamma, x : A}(V) &&=
+  \begin{align*}
+    \DC_\emptyset(\emptyset) &= \emptyset\\
+    \DC_{\Gamma, x : A}(V) &=
                                \begin{cases*}
                                  \DC_\Gamma(V)&if \(x \not\in V\)\\
                                  \{x\} \cup \DC_\Gamma(V \cup \FV(A))&if \(x \in V\)\\
                                \end{cases*}
-  \end{alignat*}
+  \end{align*}
   The support of a term, type, or substitution is then defined as the downwards closure of its free variables:
   \[ \Supp(t) = \DC_\Gamma(\FV(t))\qquad \Supp(A) = \DC_\Gamma(\FV(A))\qquad \Supp(\sigma) = \DC_\Gamma(\FV(\sigma)) \]
   for terms \(t \in \Term_\Gamma\), types \(A \in \Type_\Gamma\), and substitutions \(\sigma : \Delta \to \Gamma\).
@@ -1164,22 +1131,22 @@ More precisely, for each Ps-context \(\Gamma\) and \(i \in \mathbb{N}\), we defi
 Intuitively, the context \(\bound i \Gamma\) can be constructed by removing any variables of dimension greater than \(i\) from \(\Gamma\), and quotienting the dimension \(i\) variables by the (symmetric transitive closure of the) relation \(x \sim y\) if there exists an \(f : x \to y\). The inclusions then send this quotiented variable to the variable appearing first in the equivalence class for the source inclusion, and the variable appearing last in the class for the target inclusion.
 
 These contexts and substitutions can be defined by recursion on the context \(\Gamma\):
-\begin{alignat*}{2}
-  &\bound i {(x : \star)} &&= {(x : \star)}\\
-  &\bound i {\Gamma, (y : A), (f : \arr x A y)} &&=
+\begin{align*}
+  \bound i {(x : \star)} &= {(x : \star)}\\
+  \bound i {\Gamma, (y : A), (f : \arr x A y)} &=
                                                   \begin{cases*}
                                                     \bound i \Gamma&if \(i \leq \dim(A)\)\\
                                                     \bound i \Gamma, (y : A), (f : \arr x A y)&otherwise
                                                   \end{cases*}\\
-  &\inc i \epsilon {(x : \star)} &&= \langle x \rangle\\
-  &\inc i \epsilon {\Gamma, (y : A) , (f : \arr x A y)} &&=
+  \inc i \epsilon {(x : \star)} &= \langle x \rangle\\
+  \inc i \epsilon {\Gamma, (y : A) , (f : \arr x A y)} &=
                                                            \begin{cases*}
-                                                             \inc i \epsilon \Gamma&if \(i < \dim(A)\)\\
+                                                             \mathrlap{\inc i \epsilon \Gamma}{\phantom{\bound i \Gamma, (y : A), (f : \arr x A y)}}&if \(i < \dim(A)\)\\
                                                              \inc i - \Gamma&if \(i = \dim(A)\) and \(\epsilon = -\)\\
                                                              \replace(\inc i + \Gamma, y)&if \(i = \dim(A)\) and \(\epsilon = +\)\\
                                                              \langle \inc i \epsilon \Gamma, y, f \rangle &otherwise
                                                            \end{cases*}
-\end{alignat*}
+\end{align*}
 where \(\epsilon \in \{-,+\}\) and \(\replace(\langle \sigma, s \rangle, t) = \langle \sigma, t \rangle\). As it will be common to take the boundary of \(\Gamma\) at the dimension below the dimension of \(\Gamma\) itself, we write
 \[\inc {} \epsilon \Gamma = \inc {\dim(\Gamma) - 1} \epsilon \Gamma\]
 when \(\dim(\Gamma)\) is not zero.
@@ -1191,7 +1158,7 @@ In the original \Catt paper, these inclusion substitutions are not given and ins
 
 We now have all the prerequisites in place to state the typing rules for \Catt. These take the form of 4 judgements (not including the judgements for Ps-contexts introduced in \cref{sec:ps-contexts}):
 \begin{alignat*}{2}
-  &\Gamma \vdash&\quad&\text{\(\Gamma \in \Ctx\) is a well-formed context.}\\
+  &\Gamma \vdash&\qquad&\text{\(\Gamma \in \Ctx\) is a well-formed context.}\\
   &\Gamma \vdash A&&\text{\(A \in \Type_\Gamma\) is a well-formed type in context \(\Gamma\).}\\
   &\Gamma \vdash t : A &&\text{\(t \in \Term_\Gamma\) is a well-formed term of type \(A \in \Type_\Gamma\).}\\
   &\Gamma \vdash \sigma : \Delta &&\text{\(\sigma : \Delta \to \Gamma\) is a well-formed substitution.}
@@ -1271,6 +1238,8 @@ The composite and identity above form part of a more general collection of coher
   The standard type takes the standard term over each boundary of \(\Delta\), includes these all back into \(\Delta\) and assembles them into a type. When \(n = \dim(\Delta)\) we will refer to the standard coherence as the \emph{standard composite}.
 \end{definition}
 
+Intuitively, the standard coherence \(\mathcal{C}_\Delta^n\) is the canonical composite in dimension \(n\) of the pasting diagram \(\Delta\). To give this a type is needed to form the coherence, for which the standard type \(\mathcal{U}_\Delta^n\) is used. The standard term \(\mathcal{T}_\Delta^n\) is used as a variant of the standard coherence which special cases disc contexts. This avoids the standard type containing unary composites and allows standard composites (of non disc-contexts) to be normal forms of the reduction schemes that will be described in \cref{cha:cattstrict}.
+
 It is immediate that the composite \(a *_0 b\) is given by \(\mathcal{C}_\Delta^1\sub{\langle a , b \rangle}\) and the identity on a term \(t\) of dimension \(n\) is given by \(\mathcal{C}_{D^n}^{n+1}\sub{\{t\}}\). This construction can be used to generate all the composites in the definition of a strict \(\infty\)-category. For example the vertical composite of \(2\)-cells is the standard composite over the context given by the diagram:
 \[
   \begin{tikzcd}
@@ -1326,7 +1295,61 @@ The remainder of the operations for a 2-category can be defined similarly, as ea
 
 \subsection{Suspension}
 \label{sec:suspension}
-\todo[inline]{Cite thesis}
+
+To end this section, we describe the meta-operation of \emph{suspension}, as described by \citeauthor{benjamin2020type}~\cite{benjamin2020type}. Suspension takes any piece of syntax as input and produces one with a dimension one higher. It can be used as an aid to defining operations in \Catt, but will also form a key part of the formal development of the constructions described in \cref{sec:operations-catt}.
+
+Suspension is inspired by the identically named operation on topological spaces. Given a topological space \(X\), its suspension \(\Sigma X\) is formed by quotienting the space \(X \times [0,1]\) by the relation that identifies all points of the form \((x,0)\) for \(x \in X\) and identifies points \((x,1)\) for \(x \in X\).
+
+The suspension on a space \(X\) can be alternatively viewed as the space containing two distinguished points \(N\) and \(S\), and a path from \(N\) to \(S\) for each point \(x \in X\). The names \(N\) and \(S\) stand for north and south, as the suspension of a circle can be visualised as a globe, with \(N\) and \(S\) being the north and south pole and each of the paths between them being a meridian.
+
+A similar operation can be applied to globular sets. Given a globular set \(G\), its suspension \(\Sigma G\) is obtained by shifting the dimension of every \(n\)-cell up by one (making it into an \((n+1)\)-cell), adding two new \(0\)-cells \(N\) and \(S\), and letting the source of every \(1\)-cell be \(N\) and the target be \(S\). The globularity conditions for this construction can be quickly verified.
+
+This construction extends to all computads\cite{benjamin2024duamity}, and can be defined in \Catt by mutually defining the operation on contexts, types, terms, and substitutions.
+
+\begin{definition}
+  For a contexts \(\Gamma \in \Ctx\), types \(A \in \Type_\Gamma\), terms \(t \in \Term_\Gamma\), and substitutions \(\sigma : \Delta \to \Gamma\), we define their \emph{suspensions} \(\Sigma(\Gamma) \in \Ctx\), \(\Sigma(A) \in \Type_{\Sigma(\Gamma)}\), \(\Sigma(t)\in \Term_{\Sigma(\Gamma)}\), and \(\Sigma(\sigma) : \Sigma(\Delta) \to \Sigma(\Gamma)\) by mutual recursion.
+  \begin{align*}
+    \Sigma (\emptyset) &= (N : \star), (S : \star)
+    &\Sigma (\Gamma, (x : A)) &= \Sigma \Gamma, (x : \Sigma A)\\
+    \Sigma (\star) &= \arr N \star S
+    &\Sigma (\arr s A t) &= \arr {\Sigma s} {\Sigma A} {\Sigma t}\\
+    \Sigma(\langle \rangle) &= \langle N, S \rangle
+    &\Sigma(\langle \sigma, x \rangle) &= \langle \Sigma(\sigma), \Sigma(t) \rangle\\
+    \Sigma (x) &= x
+    &\Sigma (\Coh \Delta A \sigma) &= \Coh {\Sigma(\Delta)} {\Sigma(A)} {\Sigma(\sigma)}
+  \end{align*}
+where \(x\) is a variable of \(\Gamma\).
+\end{definition}
+
+The dimension shift of suspension is driven by the cases for types, especially the case for the base type \(\star\), which returns a type of dimension \(1\), namely \(\arr N \star S\), using the two new variables \(N\) and \(S\). We note the suspension of any Ps-context is also a Ps-context, and in general the suspension of any piece of well-formed \Catt syntax can be well-typed. These results are given in \cite[Section~3.2]{benjamin2020type}, but will be proved in \cref{sec:properties-catt-with} in more generality.
+
+We can now investigate the action of suspension on the operations we have already defined. Take the context:
+\[ (x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \]
+used in \cref{sec:basic-constructions} to generate 1-composition. Applying suspension to this context gives:
+\[
+  \begin{tikzcd}
+    N && S
+    \arrow[""{name=0, anchor=center, inner sep=0}, "x"', curve={height=24pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "z", curve={height=-24pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "y"{description}, from=1-1, to=1-3]
+    \arrow["f", shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=2]
+    \arrow["g", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+  \end{tikzcd}
+\]
+the context used to generate vertical 2-composition. Furthermore, applying suspension directly to 1-composition operation forms the vertical 2-composition operation.
+
+The suspension of each disc context \(D^n\) is (up to \(\alpha\)-renaming) \(D^{n+1}\). It can be checked that applying suspension to the identity operation for \(n\)-dimensional terms returns the identity operation for \((n+1)\)-dimensional terms. Repeating this logic, all identity operations can be obtained as iterated suspensions of the identity for \(0\)-cells. The following more general result about standard coherences holds:
+
+\begin{proposition}
+  The following syntactic equalities hold:
+  \[\Sigma(\mathcal{C}_\Delta^n) = \mathcal{C}_{\Sigma(\Delta)}^{n+1}\qquad
+    \Sigma(\mathcal{T}_\Delta^n) = \mathcal{T}_{\Sigma(\Delta)}^{n+1}\qquad
+    \Sigma(\mathcal{U}_\Delta^n) = \mathcal{U}_{\Sigma(\Delta)}^{n+1}\]
+  for all Ps-contexts \(\Delta\) and \(n \in \mathbb{N}\).
+\end{proposition}
+
+The proof of these results is delayed to \cref{sec:operations-catt}, where we will have more tools for dealing with theses constructions.
+
 
 
 \chapter{A formalised presentation of \Catt with equality}
