@@ -2,6 +2,7 @@
 \def\Cattsua{\textsf{Catt}\textsubscript{\textsf{sua}}\xspace}
 \def\Cattsu{\textsf{Catt}\textsubscript{\textsf{su}}\xspace}
 \def\Cattsa{\textsf{Catt}\textsubscript{\textsf{sa}}\xspace}
+\def\Cattr{\textsf{Catt}\textsubscript{\(\mathcal{R}\)}\xspace}
 \newcommand\id{\ensuremath{\mathsf{id}}}
 
 \newcommand*{\Coh}[3]{\ensuremath\mathsf{coh}\;(#1:#2)[#3]}
@@ -9,13 +10,17 @@
 \newcommand*{\Sub}{\ensuremath{\mathsf{Sub}}}
 \newcommand*{\Type}{\ensuremath{\mathsf{Type}}}
 \newcommand*{\Term}{\ensuremath{\mathsf{Term}}}
-\newcommand*{\arr}[3]{\ensuremath{#1 \to_{#2} #3}}
+\newcommand*{\arr}[3]{\ensuremath{#1~\to_{#2}~#3}}
 \newcommand*{\sub}[1]{\ensuremath{\llbracket #1 \rrbracket}}
 \newcommand*{\supp}{\ensuremath{\mathsf{supp}}}
 \newcommand*{\bound}[2]{\ensuremath{\partial_{#1}({#2})}}
 \newcommand*{\inc}[3]{\ensuremath{\delta_{#1}^{#2}({#3})}}
+\newcommand*{\unrestrict}{\mathop\downarrow}
+\newcommand*{\unrestrictfull}{\mathop{\downarrow\downarrow}}
+\newcommand*{\restrict}{\mathop\uparrow}
 \DeclareMathOperator{\FV}{FV}
 \DeclareMathOperator{\DC}{DC}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\Supp}{Supp}
 \DeclareMathOperator{\replace}{replace}
+\DeclareMathOperator{\ty}{ty}

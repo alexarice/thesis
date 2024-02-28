@@ -1355,12 +1355,88 @@ The proof of these results is delayed to \cref{sec:operations-catt}, where we wi
 \chapter{A formalised presentation of \Catt with equality}
 \label{cha:gener-pres-catt}
 
-\todo[inline]{Should be able take this mainly from cattsua paper}
+The main purpose of this chapter will be to define the family of type theories \Cattr, which extend the base type theory \Catt with a specified set \(\mathcal{R}\) of equality rules. These equality rules equate various terms of the theory, which unifies the corresponding operations in the models of these theories, allowing us to generate type theories that model semistrict categories in \cref{cha:cattstrict}, categories where some but not all structure is strictified.
 
-\section{\Catt with equality}
+This chapter will also introduce the Agda\todo{citation} formalisation which accompanies this thesis. The formalisation implements the syntax and typing judgements of \Cattr, and contains proofs of most results in this chapter and \cref{sec:operations-catt}. By formalising \Cattr, instead of the more specific type theories \Cattsu and \Cattsua introduced in \cref{sec:cattsu,sec:cattsua}, the formalisation of many results can be applied to both type theories. This also allows these results to be applied to any future type theories that fit into this family.
+
+\section{Extended substitution}
+\label{sec:extend-subst}
+
+\Cattr uses the same syntax as \Catt with one exception. In \Cattr we make a natural generalisation to substitutions, which will allow more operations to be defined for working with the suspension operation introduced in \cref{sec:suspension}. Unfortunately, the full utility of this generalisation will not be realised until \cref{sec:structured-terms}, but we choose to introduce it here as it forms a core part of the syntax, and requires very little modification to the rules of the type theory.
+
+We recall that the suspension operation \(\Sigma\) acts on contexts, substitutions, types, and terms. Given a substitution \(\sigma : \Delta \to \Gamma\), its substitution \(\Sigma(\sigma)\) has domain \(\Sigma(\Delta)\) and codomain \(\Sigma(\Gamma)\). When we define trees and tree labellings in \cref{sec:operations-catt}, which will be used to define the insertion operation in \cref{sec:insertion}, we will need to be able to define substitutions from suspended contexts to arbitrary contexts. More generally, we would like to be able to describe substitutions of the form:
+\[ \Sigma^n(\Delta) \to \Gamma\]
+where \(\Sigma^n(\Delta)\) is the operation that applies suspension \(n\) times to \(\Delta\).
+
+Consider the data contained in a substitution \(\tau : \Sigma(\Delta) \to \Gamma\). There are two terms \(N \sub \tau\) and \(S \sub \tau\) of type \(\star\), and then a term for each variable of \(\Delta\). Temporarily ignoring the typing conditions for substitutions, we see that the data is equivalent to a substitution from \(\Delta\) to \(\Gamma\) and two additional terms.
+
+If we now consider a substitution \(\tau : \Sigma(\Sigma(\Delta)) \to \Gamma\), we notice that there is a term in \(\Gamma\) for each variable of \(\Delta\), as well as two terms \(s = N \sub \tau\) and \(t = S \sub \tau\) for the outer suspension and terms \(u = N' \sub \tau\) and \(v = S' \sub \tau\) for the inner suspension. As before, the terms \(s\) and \(t\) should have type \(\star\), but the terms \(u\) and \(v\) should have type \(\arr s \star t\). We note that this is the exact condition needed for \(\arr u {\arr s \star t} v\) to be a well-formed type. This motivates the notion of an \emph{extended substitution}, which is obtained by equipping a substitution with a type.
+
+We have not yet determined the typing conditions required on the substitution part of these extended substitutions. We return to the example of a substitution \(\tau : \Sigma^2(\Delta) \to \Gamma\), and suppose that \(\Delta\) has a variable \(x\) of type \(\star\). In \(\Sigma^2(\Delta)\), \(x\) has the type \(\arr {N'} {\arr N \star S} {S'}\), and so \(x\) should be sent to a term of type \(\arr u {\arr s \star t} v\), the type portion of the extended substitution. In a substitution \(\sigma : \Delta \to \Gamma\), \(x\) would be sent to a term of type \(\star \sub \sigma\), which suggests that \(\star \sub \sigma\) should be redefined to send \(\star\) to the type part of the extended substitution.
+
+This one change to the application of substitution to types is sufficient to form the generalisation to substitutions that was required. An extended substitutions \(\sigma : \Delta \to \Gamma\) then has the following intuition: The substitution part specifies where each variable in \(\Delta\) should be sent, and the type part specifies where the base type \(\star\) should be sent. The other cases for the application of substitution extend this to all terms, types, and (extended) substitutions as before. The extended substitution \(\sigma\) then represents a standard substitution \(\Sigma^n(\Delta)\) to \(\Gamma\), where \(n\) is the dimension of the type part of \(\sigma\). Hence, a regular substitution can be recovered as an extended substitution with type part \(\star\).
+
+We modify the syntax of \Catt as follows, and will refer to these extended substitutions simply as substitutions, as extended substitutions are a direct generalisation of substitutions, and the notion of substitution is still recoverable by setting the type part to \(\star\):
+\begin{itemize}
+\item Substitutions will now be fibred over a type of their codomain context, which we will write \(\sigma : \arr \Delta A \Gamma\) where \(A \in \Type_\Gamma\). We note that this allows us to specify that \(\sigma\) is a regular substitutions by writing \(\sigma : \arr \Delta \star \Gamma\).
+\item The constructor \(\langle\rangle\) is removed, and is replaced by the constructor \(\langle A \rangle : \arr \emptyset A \Gamma\), where \(A \in \Type_\Gamma\). Adding a term to a substitution preserves the type of the substiution. As before we may write a substitution \(\langle \langle \langle A \rangle, s \rangle, t \rangle\) as \(\langle A , s, t\rangle\), and may omit the type along with the terms corresponding to non-locally maximal variables when they are clear.
+\item An operation \(\ty(\sigma)\) is introduced that returns the type portion of a substitution. For \(\sigma : \arr \Delta A \Gamma\), we have \(\ty(\sigma) = A\).
+\item Coherences \(\Coh \Delta A \sigma \in \Term_\Gamma\) are restricted so that \(\sigma\) is a regular substitution. In other words \(\ty(\sigma)\) must be \(\star\) for \(\sigma\) to appear in a substitution. While this condition could be dropped, it is convenient to keep the same operations as \Catt.
+\end{itemize}
+
+To witness the equivalence of extended substitutions \(\Delta \to \Gamma\) and regular substitutions \(\Sigma^n(\Delta) \to \Gamma\), we introduce new operations.
+
+\begin{definition}
+  For a substitution \(\sigma : \arr {\Delta} {\arr s A t} \Gamma\), we define its \emph{unrestriction}:
+  \[\unrestrict\sigma : \arr {\Sigma(\Delta)} A \Gamma\]
+  by induction on the length of \(\Delta\):
+  \begin{align*}
+    \unrestrict \langle \arr s A t \rangle &= \langle A, s, t \rangle\\
+    \unrestrict \langle \sigma' , u \rangle &= \langle \unrestrict \sigma' , u \rangle
+  \end{align*}
+  The unrestrict operation simply moves two terms from the type part of the substitution into the main body of the substitution.
+\end{definition}
+
+To define the second operation, we need to first specify the changes to application of substitution:
+\begin{itemize}
+\item The composition of substitutions takes substitutions \(\sigma : \arr \Theta A \Delta\) and \(\tau : \arr \Delta B \Gamma\) to a substitution \(\sigma \bullet \tau : \arr \Theta {A \sub \tau} \Gamma\).
+\item For a substitution \(\sigma : \arr \Delta A \Gamma\), we define \(\star \sub{\sigma} = A\).
+\item As the substitution in a coherence must have type \(\star\), we define the application of an extended substitution \(\tau : \arr \Delta {\arr s A t} \Gamma\) to a coherence as:
+  \[ \Coh \Theta A \sigma \sub \tau = \Coh {\Sigma(\Theta)} {\Sigma(A)} {\Sigma(\sigma)} \sub {\unrestrict \tau}\]
+  The case for applying a regular substitution to a coherence remains unchanged.
+\end{itemize}
+
+We can now define an inverse to the unrestriction operation.
+
+\begin{definition}
+  For a substitution \(\sigma : \arr {\Sigma(\Delta)} A \Gamma\), its \emph{restriction}
+  \[ \restrict \sigma : \arr \Delta {\arr {N \sub \sigma} A {S \sub \sigma}} \Gamma \]
+  is defined by induction on the length of \(\Delta\):
+  \begin{align*}
+    \restrict \langle A, s, t \rangle &= \langle \arr s A t \rangle\\
+    \restrict \langle \sigma', u \rangle &= \langle \restrict \sigma', u \rangle
+  \end{align*}
+  Inversely to the unrestrict operation, the restrict operation moves two terms into the type part of the substitution.
+\end{definition}
+
+As restriction and unrestriction cancel eachother, the suspension of the substitution \(\sigma : \arr \Delta \star \Gamma\) can be factored into \((\unrestrict \circ (\restrict \circ \Sigma)) (\sigma)\). We observe that the second part of this composition, \(\restrict \circ \Sigma\), is the operation that simply applies the suspension to each term in the substitution as well as the type of the substitution. This motivates the final definition of this section.
+
+\begin{definition}
+  Let the \emph{restricted suspension} of a substitution \(\sigma : \arr \Delta A \Gamma\) be a substitution
+  \[\Sigma'(\sigma) : \arr \Delta {\Sigma(A)} {\Sigma(\Gamma)}\]
+  defined inductively by the equations:
+  \begin{align*}
+    \Sigma'(\langle A \rangle) &= \langle \Sigma(A)\rangle \\
+    \Sigma'(\langle \sigma' , t \rangle) &= \langle \Sigma'(\sigma'), \Sigma(t) \rangle
+  \end{align*}
+  The suspension of a substitution \(\tau : \arr \Delta \star \Gamma\) can be defined by \(\Sigma(\tau) = \unrestrict\Sigma'(\tau)\).
+\end{definition}
+For the rest of the thesis and the formalisation, the suspension on a substitution is defined as the composition of unrestriction and restricted suspension.
+
+\section{\Cattr: \Catt with equality}
 \label{sec:catt-with-equality}
 
-\section{Properties of \Catt with equality}
+\section{Properties of \Cattr}
 \label{sec:properties-catt-with}
 
 \section{Support conditions}
