@@ -982,8 +982,8 @@ In this section we give an overview of the dependent type theory \Catt~\cite{fin
     }
     & {
       \begin{prooftree}
-        \hypo{\sigma : \Delta \to \Gamma} \hypo{t : \Term_\Gamma}
-        \infer2{\langle \sigma , t \rangle : \Delta, (x : A) \to \Gamma}
+        \hypo{\sigma : \Delta \to \Gamma} \hypo{t : \Term_\Gamma} \hypo{A : \Type_\Delta}
+        \infer3{\langle \sigma , t \rangle : \Delta, (x : A) \to \Gamma}
       \end{prooftree}
       }
     \\
@@ -1001,7 +1001,7 @@ In this section we give an overview of the dependent type theory \Catt~\cite{fin
     \\
     {
     \begin{prooftree}
-      \hypo{x \in \Gamma\vphantom{\Type}} \infer1{x : \Term_\Gamma}
+      \hypo{x \in \Var(\Gamma)\vphantom{\Type}} \infer1{x : \Term_\Gamma}
     \end{prooftree}
     }
     & {
@@ -1096,16 +1096,16 @@ represents the same globular set but is not a Ps-context.
     \and
     \inferrule{\Gamma \vdash_{\mathsf{ps}} x : A}{\Gamma, (y : A), (f : \arr x A y)}{(\textsc{pse})}
     \and
-    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \arr s A t}{\Gamma \vdash_{\mathsf{ps}} t : A}{\textsc{psd}}
+    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \arr s A t}{\Gamma \vdash_{\mathsf{ps}} t : A}{(\textsc{psd})}
     \and
-    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \star}{\Gamma \vdash_{\mathsf{ps}}}(\textsc{ps})
+    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \star}{\Gamma \vdash_{\mathsf{ps}}}{(\textsc{ps})}
   \end{mathpar}
   \caption{Rules for Ps-contexts}
   \label{fig:ps-context}
 \end{figure}
 
 \begin{example}
-  \cref{judg:ps} is given by the following derivation:
+  \Cref{judg:ps} is given by the following derivation:
   \[\begin{prooftree}
     \hypo{ }
     \infer1[(\textsc{pss})]{(x : \star) \vdash_{\mathsf{ps}} x : \star}
@@ -1357,7 +1357,7 @@ The proof of these results is delayed to \cref{sec:operations-catt}, where we wi
 
 The main purpose of this chapter will be to define the family of type theories \Cattr, which extend the base type theory \Catt with a specified set \(\mathcal{R}\) of equality rules. These equality rules equate various terms of the theory, which unifies the corresponding operations in the models of these theories, allowing us to generate type theories that model semistrict categories in \cref{cha:cattstrict}, categories where some but not all structure is strictified.
 
-This chapter will also introduce the Agda\todo{citation} formalisation which accompanies this thesis. The formalisation implements the syntax and typing judgements of \Cattr, and contains proofs of most results in this chapter and \cref{sec:operations-catt}. By formalising \Cattr, instead of the more specific type theories \Cattsu and \Cattsua introduced in \cref{sec:cattsu,sec:cattsua}, the formalisation of many results can be applied to both type theories. This also allows these results to be applied to any future type theories that fit into this family.
+This chapter will also introduce the Agda\todo{citation} formalisation which accompanies this thesis, which compiles with Agda v2.6.4 and standard library v2.0. The formalisation implements the syntax and typing judgements of \Cattr, and contains proofs of most results in this chapter and \cref{sec:operations-catt}. By formalising \Cattr, instead of the more specific type theories \Cattsu and \Cattsua introduced in \cref{sec:cattsu,sec:cattsua}, the formalisation of many results can be applied to both type theories. This also allows these results to be applied to any future type theories that fit into this family.
 
 \section{Extended substitution}
 \label{sec:extend-subst}
@@ -1379,7 +1379,7 @@ This one change to the application of substitution to types is sufficient to for
 We modify the syntax of \Catt as follows, and will refer to these extended substitutions simply as substitutions, as extended substitutions are a direct generalisation of substitutions, and the notion of substitution is still recoverable by setting the type part to \(\star\):
 \begin{itemize}
 \item Substitutions will now be fibred over a type of their codomain context, which we will write \(\sigma : \arr \Delta A \Gamma\) where \(A \in \Type_\Gamma\). We note that this allows us to specify that \(\sigma\) is a regular substitutions by writing \(\sigma : \arr \Delta \star \Gamma\).
-\item The constructor \(\langle\rangle\) is removed, and is replaced by the constructor \(\langle A \rangle : \arr \emptyset A \Gamma\), where \(A \in \Type_\Gamma\). Adding a term to a substitution preserves the type of the substiution. As before we may write a substitution \(\langle \langle \langle A \rangle, s \rangle, t \rangle\) as \(\langle A , s, t\rangle\), and may omit the type along with the terms corresponding to non-locally maximal variables when they are clear.
+\item The constructor \(\langle\rangle\) is removed, and is replaced by the constructor \(\langle A \rangle : \arr \emptyset A \Gamma\), where \(A \in \Type_\Gamma\). Adding a term to a substitution preserves the type of the substiution. As before we may write a substitution \(\langle \langle \langle A \rangle, s \rangle, t \rangle\) as \(\langle A , s, t\rangle\). We let \(\FV(\langle A \rangle) = \FV(A)\).
 \item An operation \(\ty(\sigma)\) is introduced that returns the type portion of a substitution. For \(\sigma : \arr \Delta A \Gamma\), we have \(\ty(\sigma) = A\).
 \item Coherences \(\Coh \Delta A \sigma \in \Term_\Gamma\) are restricted so that \(\sigma\) is a regular substitution. In other words \(\ty(\sigma)\) must be \(\star\) for \(\sigma\) to appear in a substitution. While this condition could be dropped, it is convenient to keep the same operations as \Catt.
 \end{itemize}
@@ -1436,22 +1436,235 @@ For the rest of the thesis and the formalisation, the suspension on a substituti
 \section{\Cattr: \Catt with equality}
 \label{sec:catt-with-equality}
 
-\section{Properties of \Cattr}
-\label{sec:properties-catt-with}
+This section will define the type theory \Cattr, a variation of \Catt with specified equality rules. This section, in addition to the following sections in this chapter, will be used to motivate certain choices in the formalisation. All the preliminary definitions as well as syntax, typing, and equality rules are assembled in \cref{fig:cattr}.
 
-\section{Support conditions}
-\label{sec:support-conditions}
+\subsection{Syntax}\todo{Work out how to do links}
+\label{sec:syntax}
+
+The syntax of \Cattr will be identical to \Catt with the exceptions specified in \cref{sec:extend-subst}. This creates a dependence chain of needing to define the base syntax before suspension can be defined, and needing to define suspension before application of substitution can be defined. In the formalisation these are defined in the following files:
+\begin{itemize}
+\item The core syntax is defined in \texttt{Catt.Syntax.Base}.
+\item Suspension is defined in \texttt{Catt.Suspension}.
+\item Other syntactic operations are defined in \texttt{Catt.Syntax}, which re-exports the core syntax.
+\end{itemize}
+\todo[inline]{de Brujin indices}
+\todo[inline]{Fibred over natural instead of contexts}
+\todo[inline]{Weakening operation}
+\todo[inline]{Definition of identity substitution}
+\todo[inline]{Introduce syntactic equality - inductive}
+\todo[inline]{equality is defined inductively to avoid heterogeneous equality}
+\todo[inline]{Signpost syntactic equality in formalisation}
+\todo[inline]{Give basic properties about syntax, including associativity and unitality of substitutions}
+
+\subsection{Typing and equality}
+\label{sec:typing-equality}
+
+\todo[inline]{One change is conversion rule}
+
+\todo[inline]{Motivate the conversion rule, we want to be able to compose things that don't necessarily line up}
+
+\todo[inline]{Give important rule for equality, transtive symmetric reflexive closure}
+
+\todo[inline]{Introduce the set of rules R}
+
+\todo[inline]{Initial example: Disc removal}
+\todo[inline]{Explain why we need the typing condition}
+
+\begin{figure}[tb]
+  \centering
+  \fbox{\begin{subfigure}{0.45\textwidth}
+      \vspace{0.4pt}
+    \begin{mathpar}
+      \inferrule{ }{\star : \Type_\Gamma}
+      \and
+      \inferrule{x \in \Var(\Gamma)} {x : \Term_\Gamma}
+      \and
+      \inferrule{A : \Type_\Gamma}{\langle A \rangle : \emptyset \to \Gamma}
+      \and
+      \inferrule{ }{\emptyset : \Ctx}
+      \and
+      \inferrule{\Gamma : \Ctx \\ A : \Type_\Gamma}{\Gamma, (x : A) : \Ctx}
+      \and
+      \inferrule{\sigma : \arr \Delta A \Gamma \\ t : \Term_\Gamma \\ B : \Type_\Delta}{\langle \sigma , t \rangle : \arr {\Delta, (x : B)} A \Gamma}
+      \and
+      \inferrule{A : \Type_\Gamma \\ s : \Term_\Gamma \\ t : \Term_\Gamma} {\arr s A t : \Type_\Gamma}
+      \and
+      \inferrule{\\\\\Delta : \Ctx \\ A : \Type_\Delta \\ \sigma : \arr \Delta \star \Gamma}{\Coh \Delta A \sigma : \Term_\Gamma}
+    \end{mathpar}
+    \caption{Syntax}
+  \end{subfigure}}
+  \hfill
+  \fbox{\begin{subfigure}{0.50\textwidth}
+    \begin{mathpar}
+      \inferrule{ }{\emptyset \vdash}
+      \and
+      \inferrule{\Gamma \vdash\\ \Gamma \vdash A}{\Gamma, (x : A) \vdash}
+      \and
+      \inferrule{ }{\Gamma \vdash \star}
+      \and
+      \inferrule{\Gamma \vdash s : A \\ \Gamma \vdash A \\ \Gamma \vdash t : A}{\Gamma \vdash \arr s A t}
+      \and
+      \inferrule{\Gamma \vdash A}{\Gamma \vdash \langle A \rangle : \emptyset}
+      \and
+      \inferrule{\Gamma \vdash \sigma : \Delta\\ \Gamma \vdash t : A\sub\sigma}{\Gamma \vdash \langle \sigma , t \rangle : \Delta, (x : A)}
+      \and
+      \inferrule{(x : A) \in \Gamma}{\Gamma \vdash x : A}
+      \and
+      \inferrule{\Gamma \vdash t : A\\ \Gamma \vdash A = B}{\Gamma \vdash t : B}
+      \and
+      \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\(\Delta, \Supp(s), \Supp(t)) \in \mathcal{O}}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
+    \end{mathpar}
+    \caption{Typing}
+  \end{subfigure}}
+
+\vspace{7pt}
+  \fbox{\begin{subfigure}{0.9852\textwidth}
+    \begin{mathpar}
+      \inferrule{\Gamma \vdash s : A \\ (\Gamma, s, t) \in \mathcal{R}}{\Gamma \vdash s = t} \and
+      \inferrule{x \in \Var(\Gamma)}{\Gamma \vdash x = x} \and
+      \inferrule{\Gamma \vdash s = t}{\Gamma \vdash t = s} \and
+      \inferrule{\Gamma \vdash s = t \\ \Gamma \vdash t = u}{\Gamma \vdash s = u} \and
+      \inferrule{\Delta \vdash A = B \\ \Gamma \vdash \sigma = \tau}{\Gamma \vdash \Coh \Delta A \sigma = \Coh \Delta B \tau} \and
+      \inferrule{ }{\Gamma \vdash \star = \star} \and
+      \inferrule{\Gamma \vdash s = s' \\ \Gamma \vdash t = t' \\ \Gamma \vdash A = A'}{\Gamma \vdash \arr s A t = \arr {s'} {A'} {t'}}\and
+      \inferrule{\Gamma \vdash A = B}{\Gamma \vdash \langle A \rangle = \langle B \rangle}\and
+      \inferrule{\Gamma \vdash \sigma = \tau \\ \Gamma \vdash s = t}{\Gamma \vdash \langle \sigma, s \rangle = \langle \tau, t \rangle}
+    \end{mathpar}
+    \caption{Equality}
+  \end{subfigure}}
+
+\vspace{7pt}
+\fbox{\begin{subfigure}{0.45\textwidth}
+    \vspace{1pt}
+    \begin{mathpar}
+    \inferrule{ }{(x : \star) \vdash_{\mathsf{ps}} x : \star}
+    \and
+    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : A}{\Gamma, (y : A), (f : \arr x A y)}
+    \and
+    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \arr s A t}{\Gamma \vdash_{\mathsf{ps}} t : A}
+    \and
+    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \star}{\Gamma \vdash_{\mathsf{ps}}}
+  \end{mathpar}
+    \caption{Ps-contexts}
+  \end{subfigure}}
+  \hfill
+  \fbox{\begin{subfigure}{0.5\textwidth}
+      \vspace{6pt}
+    \begin{mathpar}
+      \FV(\star) = \{\}
+      \and
+      \FV(\langle A \rangle) = \FV(A)
+      \\
+      \FV(x) = \{x\} \text{ for }x \in \Var
+      \\
+      \FV(\Coh \Delta A \sigma) = \FV(\sigma)
+      \\
+      \FV(\arr s A t) = \FV(s) \cup \FV(A) \cup \FV(t)
+      \\
+      \FV(\langle \sigma , t \rangle) = \FV(\sigma) \cup \FV(t)
+    \end{mathpar}
+    \caption{Free variables}
+  \end{subfigure}}
+  \caption{\Cattr: syntax, typing, and operations (continued below)}
+  \label{fig:cattr}
+\end{figure}
+
+\begin{figure}
+  \ContinuedFloat
+  \fbox{\begin{subfigure}{1\textwidth}
+    \begin{align*}
+      \DC_\emptyset(\emptyset) &= \emptyset\\
+      \DC_{\Gamma, x : A}(V) &= \begin{cases*}
+        \DC_\Gamma(V)&if \(x \not\in V\)\\
+        \{x\} \cup \DC_\Gamma(V \cup \FV(A))&if \(x \in V\)\\
+      \end{cases*}\\
+      \Supp(t) &= \DC_\Gamma(\FV(t))\text{ for }t \in \Term_\Gamma\\
+      \Supp(A) &= \DC_\Gamma(\FV(A))\text{ for }A \in \Type_\Gamma\\
+      \Supp(\sigma) &= \DC_\Gamma(\FV(\sigma))\text{ for }\sigma : \arr {\Delta} A \Gamma
+    \end{align*}
+    \caption{Support}
+  \end{subfigure}}
+
+\vspace{7pt}
+  \fbox{\begin{subfigure}{\textwidth}
+    \begin{align*}
+      x \sub \sigma &= t\text{ if }(x \mapsto t) \in \sigma\\
+      \Coh \Theta A \tau \sub \sigma &=
+                                       \begin{cases*}
+                                         \Coh \Theta A {\tau \bullet \sigma}&if \(\dim(\ty(\sigma)) = 0\)\\
+                                         \Coh {\Sigma(\Theta)} {\Sigma(A)} {\Sigma(\tau)} \sub {\unrestrict\sigma}&otherwise
+                                       \end{cases*}
+      \\
+      \star \sub \sigma &= \ty(\sigma)\\
+      (\arr s A t) \sub \sigma &= \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}\\
+      \langle A \rangle \bullet \sigma &= \langle A \sub \sigma \rangle\\
+      \langle \tau , t \rangle \bullet \sigma &= \langle \tau \bullet \sigma , t \sub \sigma \rangle
+    \end{align*}
+    \caption{Substitution application}
+  \end{subfigure}}
+
+\vspace{7pt}
+\fbox{\begin{subfigure}{0.475\textwidth}
+      \begin{align*}
+        \Sigma (\emptyset) &= (N : \star), (S : \star)\\
+        \Sigma (\Gamma, (x : A)) &= \Sigma \Gamma, (x : \Sigma A)\\
+        \Sigma (\star) &= \arr N \star S\\
+        \Sigma (\arr s A t) &= \arr {\Sigma s} {\Sigma A} {\Sigma t}\\
+        \Sigma (x) &= x\\
+        \Sigma (\Coh \Delta A \sigma) &= \Coh {\Sigma(\Delta)} {\Sigma(A)} {\Sigma(\sigma)}\\
+        \Sigma(\sigma) &= \unrestrict(\Sigma'(\sigma))\\[7pt]
+        \Sigma'(\langle A \rangle) &= \langle \Sigma(A) \rangle\\
+        \Sigma'(\langle \sigma, x \rangle) &= \langle \Sigma'(\sigma), \Sigma(t) \rangle\\
+        \unrestrict\langle \arr s A t \rangle &= \langle A , s , t \rangle\\
+        \unrestrict\langle \sigma, t \rangle &= \langle \unrestrict \sigma, t \rangle
+      \end{align*}
+    \caption{Suspension}
+  \end{subfigure}}
+\hfill
+\begin{subfigure}{0.49\textwidth}
+  \fbox{\begin{subfigure}{1\textwidth}
+      \begin{align*}
+        \wk(\star) &= \star\\
+        \wk(\arr s A t) &= \arr {\wk(s)} {\wk(A)} {\wk(t)}\\
+        \wk(x) &= x\\
+        \wk(\Coh \Delta A \sigma) &= \Coh \Delta A {\wk(\sigma)}\\
+        \wk(\langle A \rangle) &= \langle \wk(A) \rangle\\
+        \wk(\langle \sigma, t \rangle) &= \langle \wk(\sigma), \wk(t) \rangle
+      \end{align*}
+      \caption{Weakening}
+    \end{subfigure}}
+
+  \vspace{7pt}
+  \fbox{\begin{subfigure}{1\textwidth}
+      \begin{align*}
+        \id_\emptyset &= \langle \star \rangle\\
+        \id_{\Gamma, (x : A)} &= \langle \wk(\id_\Gamma), x \rangle
+      \end{align*}
+      \caption{Identity substitution}
+    \end{subfigure}}
+\end{subfigure}
+\caption{\Cattr: syntax, typing, and operations}
+\end{figure}
+
+\section{The set of equality rules \(\mathcal{R}\)}
+\label{sec:ruleset}
+
+\section{The set of operations \(\mathcal{O}\)}
+\label{sec:support}
 
 \todo[inline]{Ideas about invertibility here?}
 
 \chapter{Constructions in \Catt}
 \label{sec:operations-catt}
 
-\section{Structured terms}
-\label{sec:structured-terms}
-
 \section{Pruning}
 \label{sec:pruning}
+
+\section{Trees}
+\label{sec:trees}
+
+\section{Structured terms}
+\label{sec:structured-terms}
 
 \section{Insertion}
 \label{sec:insertion}
