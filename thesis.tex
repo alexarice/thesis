@@ -1321,7 +1321,7 @@ This construction extends to all computads\cite{benjamin2024duamity}, and can be
 where \(x\) is a variable of \(\Gamma\).
 \end{definition}
 
-The dimension shift of suspension is driven by the cases for types, especially the case for the base type \(\star\), which returns a type of dimension \(1\), namely \(\arr N \star S\), using the two new variables \(N\) and \(S\). We note the suspension of any Ps-context is also a Ps-context, and in general the suspension of any piece of well-formed \Catt syntax can be well-typed. These results are given in \cite[Section~3.2]{benjamin2020type}, but will be proved in \cref{sec:properties-catt-with} in more generality.
+The dimension shift of suspension is driven by the cases for types, especially the case for the base type \(\star\), which returns a type of dimension \(1\), namely \(\arr N \star S\), using the two new variables \(N\) and \(S\). We note the suspension of any Ps-context is also a Ps-context, and in general the suspension of any piece of well-formed \Catt syntax can be well-typed. These results are given in \cite[Section~3.2]{benjamin2020type}, but will be proved in \cref{sec:ruleset} in more generality.
 
 We can now investigate the action of suspension on the operations we have already defined. Take the context:
 \[ (x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \]
@@ -1438,14 +1438,14 @@ For the rest of the thesis and the formalisation, the suspension on a substituti
 
 This section will define the type theory \Cattr, a variation of \Catt with specified equality rules. This section, in addition to the following sections in this chapter, will be used to motivate certain choices in the formalisation. All the preliminary definitions as well as syntax, typing, and equality rules are assembled in \cref{fig:cattr}.
 
-\subsection{Syntax}\todo{Work out how to do links}
+\subsection{Syntax}
 \label{sec:syntax}
 
 The syntax of \Cattr will be identical to \Catt with the exceptions specified in \cref{sec:extend-subst}. This creates a dependence chain of needing to define the base syntax before suspension can be defined, and needing to define suspension before application of substitution can be defined. In the formalisation these are defined in the following files:
 \begin{itemize}
-\item The core syntax is defined in \texttt{Catt.Syntax.Base}.
-\item Suspension is defined in \texttt{Catt.Suspension}.
-\item Other syntactic operations are defined in \texttt{Catt.Syntax}, which re-exports the core syntax.
+\item The core syntax is defined in \module{Catt.Syntax.Base}.
+\item Suspension is defined in \module{Catt.Suspension}.
+\item Other syntactic operations are defined in \module{Catt.Syntax}, which re-exports the core syntax.
 \end{itemize}
 \todo[inline]{de Brujin indices}
 \todo[inline]{Fibred over natural instead of contexts}
