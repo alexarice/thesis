@@ -1447,14 +1447,73 @@ The syntax of \Cattr will be identical to \Catt with the exceptions specified in
 \item Suspension is defined in \module{Catt.Suspension}.
 \item Other syntactic operations are defined in \module{Catt.Syntax}, which re-exports the core syntax.
 \end{itemize}
-\todo[inline]{de Brujin indices}
-\todo[inline]{Fibred over natural instead of contexts}
-\todo[inline]{Weakening operation}
-\todo[inline]{Definition of identity substitution}
-\todo[inline]{Introduce syntactic equality - inductive}
-\todo[inline]{equality is defined inductively to avoid heterogeneous equality}
-\todo[inline]{Signpost syntactic equality in formalisation}
-\todo[inline]{Give basic properties about syntax, including associativity and unitality of substitutions}
+To avoid any issues with alpha equivalence, especially as we have terms that contain contexts, we work with de Brujin indices throughout the formalisation. This means that a context is simply a vector of types, a fixed length list, which we give a nicer syntax to. Variables are then simply bounded natural numbers, represented by the sets \(\mathsf{Fin}_n\), where \(\mathsf{Fin}_n\) is the set \(\{0,\dots,n-1\}\). Given a context \(A , B , C\), the variables over this context are simply \(\mathsf{var\ 0}\), which has type \(C\), \(\mathsf{var\ 1}\), which has type \(B\), and \(\mathsf{var\ 2}\), with type \(A\). We note that \(3\) is not in \(\mathsf{Fin}_3\), and so \(\mathsf{var\ 3}\) is not a term of this context. Hence, we do not need to deal with unknown variables when applying substitutions. We will still make use of variable names in this text to aid readability, and will ignore any potential problems that could arise from this, knowing that the results are formalised in a setting where they do not appear.
+
+The formalisation also differs from the presentation in the texts by the way that the various notions of syntax are fibred. We fibre contexts by a natural number representing their length, and then fibre terms, types, and substitutions over these lengths instead of fibring them over the contexts. We then get the following 4 syntactic classes defined as mutually inductive families, where \(\mathcal{U}\) is a type universe:
+\[ \func{Catt.Syntax.Base}{94}{\Ctx} : \mathbb{N} \to \mathcal{U} \quad \func{Catt.Syntax.Base}{113}\Type : \mathbb{N} \to \mathcal{U} \quad \func{Catt.Syntax.Base}{131}\Term : \mathbb{N} \to \mathcal{U} \quad \func{Catt.Syntax.Base}{149}\Sub : (n\ m : \mathbb{N}) \to \Type_m \to \mathcal{U}\]
+This decision was made purely for convenience, by fibring over natural numbers instead of contexts, we sometimes avoid the need for providing more explicit arguments to syntactic constructions. It comes with drawback that the context must be provided for certain operations, such as the support of a piece of syntax, or the dimension of a term.
+
+One place an explicit argument can be avoided is when defining the weakening of a piece of syntax, an operation witnessing that for a piece of syntax living in a context \(\Gamma\), there is a copy living in \(\Gamma , A\) for any \(A\). These operations are defined in \module{Catt.Syntax} and take the following form, where we reuse the name \(\wk\) here as an abuse of notation:
+\[ \func{Catt.Syntax}{117}{\wk} : \Term_{\Gamma} \to \Term_{\Gamma, A}\quad\func{Catt.Syntax}{143}{\wk} : \Type_{\Gamma} \to \Type_{\Gamma, A}\quad \func{Catt.Syntax}{169}{\wk} : (\arr \Gamma B \Delta) \to (\arr {\Gamma} {\wk(B)} {\Delta, A}) \]
+If terms are fibred over contexts then this type \(A\) must often be specified, though with the fibring over context length this is no longer necessary. When using de Brujin indices, this operation is no longer the identity on terms, as each variable must be incremented due to the index in a variable counting from the end of the context. One might ask why de Brujin levels (which index from the start of the context) were not used instead, but this would not solve our problem as \(\mathsf{Fin}_n\) is not a sub type of \(\mathsf{Fin}_{n+1}\) in Agda. Furthermore, using de Brujin levels would cause the substitution application introduced in \cref{sec:syntax-catt} (and expanded in \cref{sec:extend-subst}) to compute poorly, due to the way substitutions are defined. The definition of weakening is given in \cref{fig:wk}.
+
+Weakening can be used to give a short inductive definition of the identity substitution, a substitution \(\id_\Gamma : \Gamma \to \Gamma\) which sends every variable to itself. On the inductive case \(\id_{\Gamma, (x : A)}\), it clear that the variable \(x\) should be sent to \(x\), but the constructor for substitutions also requires a substitution \(\Gamma \to \Gamma, (x : A)\). This can be obtained by weakening a recursive call to the identity on \(\Gamma\). Similarly, an inclusion \(\Gamma \to \Gamma, (x : A)\) can be defined as \(\wk(\id_\Gamma)\), and applying this substitution is the same operation as weakening.
+
+To begin proving syntactic properties of \Cattr, we need a notion of syntactic equality. This will be written \(\Gamma \equiv \Delta\) for contexts \(\Gamma\) and \(\Delta\), and similarly for terms \(s\) and \(t\), types \(A\) and \(B\), and substitutions \(\sigma\) and \(\tau\). It is given by alpha equivalence, and so we would hope that the formalisation could leverage the use of de Brujin indices to use the in-built equality type for syntactic equality. This is too restrictive however, there will be many times where we want to compare two terms of differing context length (in practice this context length will be propositionally equal, instead of definitionally equal).
+
+Therefore, four syntactic equality relations are defined mutually inductively on the constructors of each piece of syntax in \module{Catt.Syntax.Properties}. These definitions can easily be heterogeneous, allowing two terms \(s : \Term_n\) and \(t : \Term_m\) to be compared. Unfortunately, using these comes at the cost of large amounts of boilerplate, as these inductively defined equalities do not come equipped with the J-rule, and so it must be manually proved that each operation respects syntactic equality. An example of such a function is \func{Catt.Syntax.Properties}{6102}{\textsf{wk-tm-\(\simeq\)}}, which states that the weakenings of two syntactically equal terms are syntactically equal.
+
+\module{Catt.Syntax.Properties} contains many of the basic properties about the syntax of \Cattr, including:
+\begin{itemize}
+\item Syntactic equality is decidable.
+\item Syntactic equality is propositional, there is at most one proof of \(s \equiv t\).
+\item Functoriality of suspension.
+\item Interaction of weakening with substitution application.
+\end{itemize}\todo{Worth giving links?}
+It also contains the following proposition.
+
+\begin{proposition}
+  \label{prop:categorical}
+  Application of substitution is associative and unital with respect to the identity substitution. More precisely, given substitutions \(\sigma : \arr \Theta A \Delta\) and \(\tau : \arr \Delta B \Gamma\), the following equalities hold:
+  \begin{mathpar}
+    A \sub \sigma \sub \tau \equiv A \sub {\sigma \bullet \tau} \and A \sub \id_\Theta \equiv A\\
+    t \sub \sigma \sub \tau \equiv t \sub {\sigma \bullet \tau} \and t \sub \id_\Theta \equiv t\\
+    (\mu \bullet \sigma) \bullet \tau \equiv \mu \bullet (\sigma \bullet \tau) \and \mu \bullet \id_\Theta \equiv \mu \and \id_\Xi \bullet \mu \equiv \mu
+  \end{mathpar}
+  for types \(A \in \Type_\Theta\), terms \(t \in \Term_\Theta\), and substitutions \(\mu : \arr \Xi C \Theta\).
+\end{proposition}
+
+\begin{proof}
+  The last equation is a simple induction on \(\mu\) (and the context \(\Xi\)). Both the unitality equations and associativity equations, as with the vast majority of syntactic proofs, are given by mutual induction on types, terms, and substitutions. The only difficult case is:
+  \[ \Coh \Theta C \mu \sub \sigma \sub \tau \equiv t \sub {\sigma \bullet \tau} \]
+  where the type part of \(\sigma: \arr \Theta A \Delta\) or \(\tau : \arr \Delta B \Gamma\) is not \(\star\). First suppose \(B = \arr s {B'} t\) but \(A = \star\):
+  \begin{align*}
+    \Coh \Theta C \mu \sub \sigma \sub \tau
+    &\equiv \Coh \Theta C {\mu \bullet \sigma} \sub \tau\\
+    &\equiv \Coh {\Sigma(\Theta)} {\Sigma(C)} {\Sigma(\mu \bullet \sigma)} \sub {\unrestrict \tau}\\
+    &\equiv \Coh {\Sigma(\Theta)} {\Sigma(C)} {\Sigma(\mu) \bullet \Sigma(\sigma)} \sub {\unrestrict \tau}\\
+    &\equiv \Coh {\Sigma(\Theta)} {\Sigma(C)} {\Sigma(\mu)} \sub {\Sigma(\sigma) \bullet \unrestrict \tau}\\
+    &\equiv \Coh {\Sigma(\Theta)} {\Sigma(C)} {\Sigma(\mu)} \sub {\unrestrict (\sigma \bullet \tau)}\\
+    &\equiv \Coh {\Theta} {C} {\mu} \sub {\sigma \bullet \tau}
+  \end{align*}
+  where the second to last line is given by property
+  \[\unrestrict (\sigma \bullet \tau) \equiv \Sigma(\sigma) \bullet \unrestrict \tau\]
+  which holds for all \(\sigma : \arr \Theta \star \Delta\) and is proven in \func{Catt.Syntax.Properties}{17858}{\textsf{\(\downarrow\)-comp}}, and the line before is given by the inductive hypothesis.
+
+  If instead we had \(A = \arr s {A'} t\), then:
+  \begin{align*}
+    \Coh \Theta C \mu \sub \sigma \sub \tau
+    &\equiv \Coh {\Sigma(\Theta)} {\Sigma(C)} {\Sigma(\mu)} \sub {\unrestrict \sigma} \sub \tau\\
+    &\equiv \Coh {\Sigma(\Theta)} {\Sigma(C)} {\Sigma(\mu)} \sub {\unrestrict \sigma \bullet \tau}\\
+    &\equiv \Coh {\Sigma(\Theta)} {\Sigma(C)} {\Sigma(\mu)} \sub {\unrestrict (\sigma \bullet \tau)}\\
+    &\equiv \Coh \Theta C \mu \sub {\sigma \bullet \tau}
+  \end{align*}
+  where we use the inductive hypothesis after applying the equality
+  \[ \unrestrict (\sigma \bullet \tau) \equiv \unrestrict \sigma \bullet \tau \]
+  which holds for all \(\sigma : \arr \Theta {\arr s {A'} t} \Delta\) by \func{Catt.Syntax.Properties}{18741}{\textsf{\(\downarrow\)-comp-higher}}.
+\end{proof}
+
+This proposition proves that the syntax of \Cattr forms a category, which we will not name as we will work instead with the subcategory containing well-typed contexts and substitutions, introduced in the following sections.
 
 \subsection{Typing and equality}
 \label{sec:typing-equality}
@@ -1636,6 +1695,7 @@ The syntax of \Cattr will be identical to \Catt with the exceptions specified in
         \wk(\langle \sigma, t \rangle) &= \langle \wk(\sigma), \wk(t) \rangle
       \end{align*}
       \caption{Weakening}
+      \label{fig:wk}
     \end{subfigure}}
 
   \vspace{7pt}
