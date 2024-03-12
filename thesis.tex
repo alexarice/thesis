@@ -1515,6 +1515,56 @@ It also contains the following proposition.
 
 This proposition proves that the syntax of \Cattr forms a category, which we will not name as we will work instead with the subcategory containing well-typed contexts and substitutions, introduced in the following sections.
 
+\paragraph{Discs}
+We finish our discussion of the syntax of \Cattr by giving formal definitions of disc and sphere contexts, some constructions on these and their properties. This will allow these to be used as examples in following sections, and preempts the use of discs in the first two equality rules that we will introduce, disc removal and endo-coherence removal.
+
+We begin with the defintions of discs, spheres, and sphere types, which can be found in \module{Catt.Discs} as \func{Catt.Discs}{331}{Disc}, \func{Catt.Discs}{366}{Sphere}, and \func{Catt.Discs}{202}{sphere-type}. We write the sphere type as \(U^n\), which is intentionally close to the notation of the standard type \(\mathcal{U}_\Delta^n\), as it will turn out that these coincide.
+
+\begin{definition}
+  We mutually define the disc contexts \(D^n\), sphere contexts \(S^n\), and sphere type \(U^n \in \Type_{S^n}\).
+  \begin{mathpar}
+    D^n = S^n , (d_n^- : U^n) \and
+    S^0 = \emptyset \and
+    S^{n+1} = D^n , (d_n^+ : \wk(U^n)) \\
+    U^0 = \star \and
+    U^{n+1} = \arr {d_n^-} {\wk(\wk(U^{n+1}))} {d_n^+}
+  \end{mathpar}
+  We will sometimes refer to the last variable of \(D^n\) as \(d_n\) instead of \(d_n^-\), given that there is no \(d_n^+\) in the context.
+\end{definition}
+
+We also characterise the substitutions from a sphere or disc. These are given by \func{Catt.Discs}{586}{sub-from-sphere} and \func{Catt.Discs}{494}{sub-from-disc} in the formalisation.
+
+\begin{definition}
+  Let \(A : \Type_\Gamma\) be a type and suppose \(n = \dim(A)\). Define the substitution \(\{A\} : S^n \to \Gamma\) inductively by:
+  \[ \{\star\} = \langle \rangle \qquad \{\arr s A t\} = \langle \{ A \}, s, t \rangle\]
+  Further, given a term \(t : \Term_\Gamma\), define the substitution \(\{A,t\} : D^n \to \Gamma\) by \(\{A, t\} = \langle \{A\}, t \rangle\).
+\end{definition}
+
+In \module{Catt.Discs.Properties}, various facts about these constructions are proved which we list below.
+
+\begin{lemma}
+  \label{lem:disc-prop}
+  The following hold:
+  \begin{itemize}
+  \item \(\dim(D^n) = \dim(U^n) = n\) and \(\dim(S^n) = \max(n - 1, 0)\).
+  \item \(\Sigma(D^n) \equiv D^{n+1}\), \(\Sigma(S^n) \equiv S^{n+1}\), and \(\Sigma(U^n) \equiv U^{n+1}\).
+  \item \(\{\wk(A)\} \equiv \wk(\{A\})\) and \(\{\wk(A), \wk(t)\} \equiv \wk(\{A,t\})\).
+  \item \(\{\Sigma(A)\} \equiv \Sigma(\{A\})\) and \(\{\Sigma(A),\Sigma(t)\} \equiv \Sigma(\{A,t\})\).
+  \item \(\{A \sub \sigma\} \equiv \{A\} \bullet \sigma\) and \(\{A \sub \sigma,t \sub \sigma\} \equiv \{A,t\}\bullet \sigma\).
+  \item \(U^n \sub{\{A\}} \equiv A\) and hence \(\wk(U^n)\sub{\{A,t\}} \equiv A\).
+  \item For \(\tau : S^n \to \Gamma\), \(\tau \equiv \{U^n \sub \tau\}\).
+  \item For \(\tau : D^n \to \Gamma\), \(\tau \equiv \{\wk(U^n) \sub \tau, d_n \sub \tau\}\).
+  \end{itemize}
+  for all \(n \in \mathbb{N}\) and appropriate \(A\), \(t\), and \(\sigma\).
+\end{lemma}
+
+The last two statements finish the characterisation of substitutions from spheres and discs as all such substitutions are of the form \(\{A\}\) or \(\{A,t\}\) respectively.
+
+In \module{Catt.Discs.Pasting}, it is shown that \(D^n\) is a ps-context for each \(n\). Therefore, as in \cref{sec:basic-constructions}, the identity on a term \(t\) of type \(A\) can be defined as:
+\[ \id(A,t) = \Coh {D^n} {\arr {d_n} {\wk(U^n)} {d_n}} {\{A,t\}} \]
+Many properties of identity terms can be easily derived from \cref{lem:disc-prop}.
+
+
 \subsection{Typing and equality}
 \label{sec:typing-equality}
 
@@ -1566,11 +1616,11 @@ There is not much more that can be proved about the definitional equality at thi
 
 \paragraph{Disc removal}
 
-We now give our first example of an equality rule, \emph{disc removal}. Disc removal removes unary composites, replacing them with the underlying term. We recall from \cref{sec:basic-constructions} that for every \(n\), there exists the \(n\)-dimensional disc context \(D^n\), and that given a term \(t \in \Term_\Gamma\) and \(n\)-dimensional type \(A \in \Type_\Gamma\), there exists a substitution \(\{A,t\} : D^n \to \Gamma\). The unary composite of a term \(t\) of type \(A\) of dimension \(n > 0\) is then the coherence:
-\[\Coh {D^n} {d_{n-1}^- \to d_{n-1}^+} {\{A,t\}}\]
+We now give our first example of an equality rule, \emph{disc removal}. Disc removal removes unary composites, replacing them with the underlying term. We recall that for every \(n\), there exists the \(n\)-dimensional disc context \(D^n\), and that given a term \(t \in \Term_\Gamma\) and \(n\)-dimensional type \(A \in \Type_\Gamma\), there exists a substitution \(\{A,t\} : D^n \to \Gamma\). The unary composite of a term \(t\) of type \(A\) of dimension \(n\) is then the coherence:
+\[\Coh {D^n} {\wk(U^n)} {\{A,t\}}\]
 Disc removal equates this with the term \(t\), making the following rule inferable:
 \begin{mathpar}
-  \inferrule{\Gamma \vdash t : A}{\Gamma \vdash \Coh {D^n} {d_{n-1}^- \to d_{n-1}^+} {\{A,t\}} = t}\textsc{dr}
+  \inferrule{\Gamma \vdash t : A \\ \Gamma \vdash A}{\Gamma \vdash \Coh {D^n} {\wk(U^n)} {\{A,t\}} = t}\textsc{dr}
 \end{mathpar}
 with the removal of the disc coherence giving the name to this equality rule.
 
@@ -1578,13 +1628,13 @@ Assembling disc removal into a rule set \(\mathcal{R}\) is simple, as it is poss
 
 \begin{definition}
   The disc removal rule set, \dr, is the set consisting of the triples:
-  \[ (\Gamma, \Coh {D^{n+1}} {d_n^- \to d_n^+} {\sigma}, d_{n +1}\sub\sigma) \]
-  for each \(n \in \mathbb{N}\), context \(\Gamma\), and substitution \(\sigma : \arr {D^{n+1}} \star \Gamma\).
+  \[ (\Gamma, \Coh {D^n} {\wk(U^n)} {\{A,t\}}, t) \]
+  for each \(n \in \mathbb{N}\), context \(\Gamma\), type \(A : \Type_\Gamma\), and term \(t : \Term_\Gamma\).
 \end{definition}
 
-We note that the set \dr contains the unary composites written above as for an \(n\)-dimensional type \(A\), we have \(d_n\sub{\{A,t\}} \equiv t\). The inference rule \textsc{dr} follows the \textsc{rule} and typing properties about discs given in \cref{sec:ruleset}.
+The inference rule \textsc{dr} follows the \textsc{rule} and typing properties about discs which will be given in \cref{sec:ruleset}.
 
-We draw attention to the typing premise of \textsc{rule}. If we know that the unary composite of a term \(t\) is well typed, then it follows that \(t\) itself must have been well-typed, but we cannot infer that the term \(\Coh {D^n} {d_{n-1}^- \to d_{n-1}^+} \sigma\) is well-typed from \(d_n \sub \sigma\) being well-typed. In particular, the well-formedness of \(d_n \sub \sigma\) does not constrain the lower dimensional terms of \(\sigma\) at all. We must therefore including the typing premise if we want to avoid well-typed and untyped terms being equated.
+We draw attention to the typing premise of \textsc{rule}. If we know that the unary composite of a term \(t\) is well typed, then it follows that \(t\) itself must have been well-typed, but we cannot infer that the term \(\Coh {D^n} {\wk(U^n)} {\{A,t\}}\) is well-typed from \(t\) being well-typed. In particular, the well-formedness of \(t\) does not constrain \(A\) at all without knowing that the given type \(A\) is the type of \(t\). We must therefore include an additional typing premise if we want to avoid well-typed and untyped terms being equated.
 
 \begin{figure}[!t]
   \centering
@@ -1764,8 +1814,6 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
 \caption{\Cattr: syntax, typing, and operations}
 \end{figure}
 
-% allow space for figure
-\clearpage
 \section{The set of operations \texorpdfstring{\(\mathcal{O}\)}{O}}
 \label{sec:support}
 
