@@ -1630,6 +1630,8 @@ Assembling disc removal into a rule set \(\mathcal{R}\) is simple, as it is poss
   The disc removal rule set, \dr, is the set consisting of the triples:
   \[ (\Gamma, \Coh {D^n} {\wk(U^n)} {\{A,t\}}, t) \]
   for each \(n \in \mathbb{N}\), context \(\Gamma\), type \(A : \Type_\Gamma\), and term \(t : \Term_\Gamma\).
+
+  A set of rules \(\mathcal{R}\) \emph{contains disc removal} if \(\dr \subseteq \mathcal{R}\). Further we say that \(\mathcal{R}\) \emph{has disc removal} if the rule \textsc{dr} holds in the generated theory.
 \end{definition}
 
 The inference rule \textsc{dr} follows the \textsc{rule} and typing properties about discs which will be given in \cref{sec:ruleset}.
@@ -1817,24 +1819,100 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
 \section{The set of operations \texorpdfstring{\(\mathcal{O}\)}{O}}
 \label{sec:support}
 
-\todo[inline]{Main purpose is to manage groupoidal things}
+In \cref{sec:typing-equality}, we introduced a set of operations \(\mathcal{O}\), which allows us to vary the operations available in the theory, much like the set \(\mathcal{R}\) allows us to vary the equality rules of the theory. The set \(\mathcal{O}\) replaces the conditions on the support of the type contained in a coherence, and consists of a set of triples of a context \(\Delta\), along with two sets \(x,y \subseteq \Var(\Delta)\). A certain type \(\arr s A t : \Type_\Delta\) is permitted to appear in a coherence exactly when \((\Delta , \supp(s), \supp(t))\) is an element of \(\mathcal{O}\).
+
+There are two key advantages to setting up the theory this way.
+\begin{itemize}
+\item A clear separation is introduced in the metatheory and formalisation between properties that are specific to the support conditions in \Catt and those that are independent of the specific support conditions present.
+\item The results in the following sections can be proven generically for different variants of \Catt.
+\end{itemize}
+In particular, the main utility we extract in this thesis is the ability to define groupoidal versions of the various semistrict theories we define in \cref{cha:cattstrict}. By letting \(\mathcal{O}\) consists of all possible triples, the support condition is effectively removed, producing a version of \Catt closer to Grothendieck's definition of \(\infty\)-groupoid (see \cref{sec:weak}).
 
 \subsection{Operation sets}
 \label{sec:operation-sets}
 
-\todo[inline]{Explicitly give boundary sets}
+As previously mentioned, an operation set \(\mathcal{O}\) consists of a collection of triples of a context \(\Delta\) and two subsets of the variables of \(\Delta\).
 
-\todo[inline]{List of bools in formalisation}
+We call a subset of the variables of a context a \emph{variable set}. In the formalisation, these variable sets are given as a list of booleans, one boolean for each variable of the context. These are given in \module{Catt.Support}, which also contains many basic properties and constructions on them, including unions of these sets, subset relations, and the free variables of each piece of syntax. The variable sets of \(\Delta\) form a lattice with top element \(\Var(\Delta)\) and bottom element \(\emptyset\).
+
+We recall the function \(\DC\) on these variable sets, given by \func{Catt.Support}{2590}{DC} in the formalisation, which produces the downwards closure of a variable set. This admits the following properties:
+
+\begin{proposition}
+  \(\DC\) is an idempotent join-semilattice homomorphism. It preserves binary joins (unions), subset inclusions, and preserves the top and bottom element of the lattice.
+\end{proposition}
+
+We further define the application of a substitution to a variable set below.
+
+\begin{definition}
+  Given a variable set \(V\) of \(\Delta\) and (standard) substitution \(\sigma : \Delta \to \Gamma\), we define the application of \(\sigma\) to \(V\), written \(V \sub \sigma\) to be a variable set of \(\Gamma\) given by:
+  \begin{align*}
+    V \sub {\langle \rangle} &= \emptyset\\
+    V \sub {\langle \sigma , t \rangle} &=
+                                          \begin{cases}
+                                            (V \setminus \{x\}) \sub \sigma \cup \FV(t)&if \(x \in V\)\\
+                                            V \sub \sigma &otherwise
+                                          \end{cases}
+  \end{align*}
+  Where \(x\) is assumed to be the last variable of \(\Delta\) in the second case.
+\end{definition}
+
+We note that when representing variable sets as a list of booleans, these definitions are given by simple inductions on the length of the context. These constructions admit the following properties.
+
+\begin{proposition}
+  Let \(\Delta\) be a context. Then the function taking a variable set \(V\) of \(\Delta\) to \(V \sub \sigma\) is a join-semilattice homomorphism for any substitution \(\sigma : \Delta \to \Gamma\). Further, for a term \(t : \Term_\Delta\), a type \(A : \Type_\Delta\), or a substitution \(\tau : \arr \Theta A \Delta\), the following equalities hold:
+  \begin{align*}
+    \FV(t \sub \sigma) &= \FV(t) \sub \sigma \\
+    \FV(A \sub \sigma) &= \FV(A) \sub \sigma \\
+    \FV(\tau \bullet \sigma) &= \FV(\tau) \sub \sigma
+  \end{align*}
+  and hence \(\Var(\Delta) \sub \sigma = \FV(\id_\Delta) \sub \sigma = \FV(\id_\Delta \bullet \sigma) = \FV(\sigma)\). Finally, for any variable set \(V \subseteq \Var(\Theta)\) we have:
+  \[ V \sub {\id_\Theta} = V \qquad V \sub {\tau \bullet \sigma} = V \sub \tau \sub \sigma \]
+  for \(\tau : \Theta \to \Delta\) and \(\sigma : \Delta \to \Gamma\).
+\end{proposition}
+\begin{proof}
+  All proofs proceed by induction on the length of the context \(\Delta\) and are given in \module{Catt.Support.Properties}.
+\end{proof}
+
+An operation set is then an element of:
+\[ \Sigma_{\Delta : \Ctx} \mathcal{P}(\Var(\Delta)) \times \mathcal{P}(\Var(\Delta)) \]
+In the formalisation this is defined in \module{Catt.Ops} to be a function from a context and two variable sets of that context to a universe.
+
+\begin{remark}
+  The definition of an operation set in the formalisation deviates from the presentation given here, as the version in the formalisation is proof relevant. The proof relevant definition allows us to give any type as the type of witnesses that a certain triple appears in \(\mathcal{O}\), including a type containing many distinct witnesses.
+
+  If we wished to recover a definition closer to the classical set-based definition, we could enforce that this function has a universe of propositions as its codomain, instead of a universe of types, and use propositional truncations to define various versions of \(\mathcal{O}\). This is however unnecessary for any of the proofs appearing in this thesis, hence the choice of the proof relevant definition for simplicity. A similar observation will apply to the definition of equality rule sets introduced in \cref{sec:ruleset}.
+\end{remark}
+
+We can now introduce our first operation set, the operation set for groupoidal operations, which imposes no support conditions and allows all operations.
+
+\begin{definition}
+  We define the \emph{groupoidal operation set} \(\Group\) as:
+  \[ \Group = \{ (\Delta, U, V) \mid \Delta : \Ctx, U \subseteq \Var(\Delta), V \subseteq \Var(\Delta) \} \]
+  We will refer to \Cattr with the operation set \(\Group\) as \emph{groupoidal \Cattr} or \emph{groupoidal \Catt} (when \(\mathcal{R} = \emptyset\)).
+\end{definition}
+
+To recover the standard definition of \Catt, we must define the boundary sets of a pasting diagram. In \cref{sec:typing-catt}, these are given as the free variables of the boundary inclusion substitutions of pasting diagrams. Here we will instead give a direct definition of the variable sets corresponding to the free variables of the substitutions, delaying the definition of boundary inclusions of pasting diagrams until \cref{sec:trees}.
+
+\begin{definition}
+  Let \(\Delta\) be a ps-context. Define the \(n\)-boundary variable sets \(\bdry n -  \Delta\) and \(\bdry n + \Delta\) by induction on \(\Delta\):
+\begin{align*}
+  \bdry i \epsilon {(x : \star)} &= \{ x \}\\
+  \bdry i \epsilon {\Gamma, (y : A) , (f : \arr x A y)} &=
+                                                           \begin{cases*}
+                                                             \bdry i \epsilon \Gamma&if \(i < \dim(A)\)\\
+                                                             \bdry i - \Gamma&if \(i = \dim(A)\) and \(\epsilon = -\)\\
+                                                             (\bdry i + \Gamma \cup \{ y \}) \setminus \{x\}&if \(i = \dim(A)\) and \(\epsilon = +\)\\
+                                                             \bdry i \epsilon \Gamma \cup \{ y , f \}&otherwise
+                                                           \end{cases*}
+\end{align*}
+These boundary sets appear in the formalisation as \func{Catt.Support}{1257}{pd-bd-supp}.
+\end{definition}
+
+
 
 \todo[inline]{Boundary sets are downwards closed}
 
-\todo[inline]{Definition of operation set}
-
-\todo[inline]{Remark about proof relevance}
-
 \todo[inline]{Introduce regular operations}
-
-\todo[inline]{Introduce groupoidal Catt}
 
 \todo[inline]{Standard operation sets}
 \todo[inline]{Equivalence}
@@ -1931,8 +2009,50 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
 \chapter{Constructions in \Catt}
 \label{sec:operations-catt}
 
+\todo[inline]{Overview of chapter}
+\todo[inline]{Work in a tame theory}
+\todo[inline]{Formalisation is sometimes more specific}
+\todo[inline]{Introduce pruning and insertion}
+\todo[inline]{Pruning used for cattsu and removes identities}
+\todo[inline]{Pruning performs more radical modifications to the head term}
+\todo[inline]{Insertion flattens the structure of terms, moving data from locally maximal arguments into the head term}
+\todo[inline]{Compare this with associativity}
+\todo[inline]{Insertion can be viewed as a generalisation of pruning}
+\todo[inline]{Point to end of chapter}
+\todo[inline]{Insertion again more radically changes the head term}
+\todo[inline]{Is best understood as an operation on trees}
+\todo[inline]{Expression morphisms between these tree contexts is requires many constructions, we introduce structured terms to aid computations involving these}
+\todo[inline]{Finally we introduce the insertion construction, and give properties of this, including universal property}
+
 \section{Pruning}
 \label{sec:pruning}
+
+\todo[inline]{High level explanation of pruning}
+
+\todo[inline]{Recap locally maximal argument}
+
+\todo[inline]{Want to remove a locally maximal argument which is an identity}
+
+\todo[inline]{Introduce constituent parts}
+
+\paragraph{Dyck Words}
+
+\todo[inline]{Need to modify the structure of the pasting diagram}
+\todo[inline]{Easier to use a more explicit representation of pasting diagrams}
+\todo[inline]{Very similar to ps-contexts but allows easier induction}
+\todo[inline]{Properties of Dyck words}
+
+\paragraph{The pruning construction}
+
+\todo[inline]{Explicitly give constructions}
+
+\todo[inline]{Give pruning set}
+\todo[inline]{Give pruning property}
+
+\paragraph{Properties of pruning}
+
+\todo[inline]{Give main typing properties}
+\todo[inline]{Give any confluence properties here}
 
 \section{Trees}
 \label{sec:trees}
@@ -1959,17 +2079,6 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
 
 \todo[inline]{Explain implementation in depth}
 
-\section{Further theories}
-\label{sec:further-theories}
-
-\todo[inline]{Generalised insertion}
-
-\todo[inline]{Endo-coherence removal variation?}
-
-\todo[inline]{Missing equation from grey categories}
-
-\todo[inline]{Interchange and generalised pasting diagrams}
-
 \section{Rehydration}
 \label{sec:rehydration}
 
@@ -1985,19 +2094,16 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
 \subsection{Rehydration by cylinders}
 \label{sec:rehydr-cylind}
 
+\section{Further theories}
+\label{sec:further-theories}
 
+\todo[inline]{Generalised insertion}
 
+\todo[inline]{Endo-coherence removal variation?}
 
+\todo[inline]{Missing equation from grey categories}
 
-
-
-
-
-
-
-
-
-
+\todo[inline]{Interchange and generalised pasting diagrams}
 
 
 
