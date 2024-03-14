@@ -1848,10 +1848,10 @@ We further define the application of a substitution to a variable set below.
   \begin{align*}
     V \sub {\langle \rangle} &= \emptyset\\
     V \sub {\langle \sigma , t \rangle} &=
-                                          \begin{cases}
+                                          \begin{cases*}
                                             (V \setminus \{x\}) \sub \sigma \cup \FV(t)&if \(x \in V\)\\
                                             V \sub \sigma &otherwise
-                                          \end{cases}
+                                          \end{cases*}
   \end{align*}
   Where \(x\) is assumed to be the last variable of \(\Delta\) in the second case.
 \end{definition}
@@ -1908,18 +1908,46 @@ To recover the standard definition of \Catt, we must define the boundary sets of
 These boundary sets appear in the formalisation as \func{Catt.Support}{1257}{pd-bd-supp}.
 \end{definition}
 
+The following lemma is immediate:
 
+\begin{lemma}
+  \label{lem:bdry-full}
+  If \(n \geq \dim(\Delta)\), then \(\bdry n \epsilon \Delta = \Var(\Delta)\).
+\end{lemma}
+\begin{proof}
+  A simple induction on the definition. A formalised proof appears as \func{Catt.Support.Properties}{21113}{pd-bd-supp-full}.
+\end{proof}
 
-\todo[inline]{Boundary sets are downwards closed}
+With this definition we can introduce the regular operation set, which recovers the regular support conditions used in the definition of \Catt.
 
-\todo[inline]{Introduce regular operations}
+\begin{definition}
+  The \emph{regular operation set} \Reg is defined to be:
+  \[ \Reg = \{ (\Delta, \Var(\Delta), \Var(\Delta)) \mid \Delta : \Ctx \} \cup \{ (\Delta, \bdry {\dim(\Delta)-1} - \Delta, \bdry {\dim(\Delta)-1} + \Delta) \mid \Delta : \Ctx \} \]
+  The first component allows equivalences to be well-typed, and the second gives the support condition for composites.
+\end{definition}
 
-\todo[inline]{Standard operation sets}
-\todo[inline]{Equivalence}
+The regular operation set has more standard presentation.
 
-\todo[inline]{Remark about globular catt}
+\begin{proposition}
+  Define the set \Std of standard operations be defined as:
+  \[ \Std = \{ (\Delta, \bdry n - \Delta, \bdry n + \Delta) \mid \Delta : \Ctx, n \geq \dim(\Delta) - 1 \} \]
+  Then \(\Std = \Reg\).
+\end{proposition}
+\begin{proof}
+  Suppose \((\Delta, U, V) \in \Reg\). If \(U = \bdry {\dim(\Delta) - 1} - \Delta\) and \(V = \bdry {\dim(\Delta) - 1} + \Delta\), then \((\Delta , U ,V)\) is trivially in \Std by letting \(n = \dim(\Delta) - 1\). If instead \(U = V = \Var(\Delta)\), then \((\Delta, U , V) \in \Std\) by letting \(n = \dim(\Delta)\) and applying \cref{lem:bdry-full}.
 
-\todo[inline]{Mention things this does not contain}
+  Conversely, assume \((\Delta, U, V) \in \Std\). Then there is \(n \geq \dim(\Delta) - 1\) with \(U = \bdry n - \Delta\) and \(V = \bdry n + \Delta\). If \(n = \dim(\Delta) - 1\) then \((\Delta, U ,V)\) is trivially in \(\Reg\), and otherwise by \cref{lem:bdry-full} we have \(U = V = \Var(\Delta)\), and so \((\Delta,U,V)\) is again an element of \Reg. Hence \(\Reg = \Std\).
+\end{proof}
+
+This more uniform is sometimes easier to work with, and will be used to prove properties of \Reg in \cref{sec:operation-properties}.
+
+\begin{remark}
+  By letting \(\mathcal{O} = \emptyset\), we recover the type theory \textsf{GSeTT}~\cite{benjamin2021globular}, a type theory for globular sets.
+\end{remark}
+
+It would be possible to generalise the notion of operation set presented here by instead letting the set \(\mathcal{O}\) consist of triples \(\Delta, s,t\) where \(s\) and \(t\) are terms over \(\Delta\) instead of variable sets over \(\Delta\). This would allow more control over which operations were allowed in the theory. As an example, we would be able to restrict the class of composites to contain only the standard composites, or even further restrict it to binary composites.
+
+This is however unnecessary to present the regular and groupoidal versions of \Cattr. By only allowing the set of available operations to be specified up to the support of the contained terms, it is possible to show that a coherence being an operation is closed under equality by proving that equality preserves the support of a term.
 
 \subsection{Operation properties}
 \label{sec:operation-properties}
