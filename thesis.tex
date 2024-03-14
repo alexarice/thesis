@@ -1304,7 +1304,7 @@ The suspension on a space \(X\) can be alternatively viewed as the space contain
 
 A similar operation can be applied to globular sets. Given a globular set \(G\), its suspension \(\Sigma G\) is obtained by shifting the dimension of every \(n\)-cell up by one (making it into an \((n+1)\)-cell), adding two new \(0\)-cells \(N\) and \(S\), and letting the source of every \(1\)-cell be \(N\) and the target be \(S\). The globularity conditions for this construction can be quickly verified.
 
-This construction extends to all computads\cite{benjamin2024duamity}, and can be defined in \Catt by mutually defining the operation on contexts, types, terms, and substitutions.
+This construction extends to all computads~\cite{benjamin2024duamity}, and can be defined in \Catt by mutually defining the operation on contexts, types, terms, and substitutions.
 
 \begin{definition}
   For a contexts \(\Gamma \in \Ctx\), types \(A \in \Type_\Gamma\), terms \(t \in \Term_\Gamma\), and substitutions \(\sigma : \Delta \to \Gamma\), we define their \emph{suspensions} \(\Sigma(\Gamma) \in \Ctx\), \(\Sigma(A) \in \Type_{\Sigma(\Gamma)}\), \(\Sigma(t)\in \Term_{\Sigma(\Gamma)}\), and \(\Sigma(\sigma) : \Sigma(\Delta) \to \Sigma(\Gamma)\) by mutual recursion.
@@ -1922,15 +1922,16 @@ With this definition we can introduce the regular operation set, which recovers 
 
 \begin{definition}
   The \emph{regular operation set} \Reg is defined to be:
-  \[ \Reg = \{ (\Delta, \Var(\Delta), \Var(\Delta)) \mid \Delta : \Ctx \} \cup \{ (\Delta, \bdry {\dim(\Delta)-1} - \Delta, \bdry {\dim(\Delta)-1} + \Delta) \mid \Delta : \Ctx \} \]
+  \[ \Reg = \{ (\Delta, \Var(\Delta), \Var(\Delta)) \mid \Delta \vdash_{\mathsf{ps}} \} \cup \{ (\Delta, \bdry {\dim(\Delta)-1} - \Delta, \bdry {\dim(\Delta)-1} + \Delta) \mid \Delta \vdash_{\mathsf{ps}} \} \]
   The first component allows equivalences to be well-typed, and the second gives the support condition for composites.
 \end{definition}
 
 The regular operation set has more standard presentation.
 
 \begin{proposition}
+  \label{prop:std-op}
   Define the set \Std of standard operations be defined as:
-  \[ \Std = \{ (\Delta, \bdry n - \Delta, \bdry n + \Delta) \mid \Delta : \Ctx, n \geq \dim(\Delta) - 1 \} \]
+  \[ \Std = \{ (\Delta, \bdry n - \Delta, \bdry n + \Delta) \mid \Delta \vdash_{\mathsf{ps}} , n \geq \dim(\Delta) - 1 \} \]
   Then \(\Std = \Reg\).
 \end{proposition}
 \begin{proof}
@@ -1945,24 +1946,78 @@ This more uniform is sometimes easier to work with, and will be used to prove pr
   By letting \(\mathcal{O} = \emptyset\), we recover the type theory \textsf{GSeTT}~\cite{benjamin2021globular}, a type theory for globular sets.
 \end{remark}
 
-It would be possible to generalise the notion of operation set presented here by instead letting the set \(\mathcal{O}\) consist of triples \(\Delta, s,t\) where \(s\) and \(t\) are terms over \(\Delta\) instead of variable sets over \(\Delta\). This would allow more control over which operations were allowed in the theory. As an example, we would be able to restrict the class of composites to contain only the standard composites, or even further restrict it to binary composites.
+It would be possible to generalise the notion of operation set presented here by instead letting the set \(\mathcal{O}\) consist of triples \((\Delta, s,t)\) where \(s\) and \(t\) are terms over \(\Delta\) instead of variable sets over \(\Delta\). This would allow more control over which operations were allowed in the theory. As an example, we would be able to restrict the class of composites to contain only the standard composites, or even further restrict it to binary composites.
 
 This is however unnecessary to present the regular and groupoidal versions of \Cattr. By only allowing the set of available operations to be specified up to the support of the contained terms, it is possible to show that a coherence being an operation is closed under equality by proving that equality preserves the support of a term.
 
 \subsection{Operation properties}
 \label{sec:operation-properties}
 
-\todo[inline]{Explain need for some properties}
+Currently, our set of operations is completely unconstrained, and we will be limited in the constructions that can be made in \Cattr. We therefore constrain these sets in two ways. The first enforces that our set of operations is closed under suspension, for which we need to be able to suspend variable sets. This is defined in the formalisation as \func{Catt.Suspension.Support}{504}{susp-vs}.
 
-\paragraph{Suspension property}
+\begin{definition}
+  Let \(\Delta\) be a context. The suspension of a variable set \(V\) over \(\Delta\) is defined to be:
+  \[ \Sigma(V) = \{ N , S \} \cup V \]
+  where \(\Sigma(V)\), the suspension of \(V\) is a variable set over \(\Sigma(\Delta)\).
+\end{definition}
 
-\todo[inline]{Suspension}
-\todo[inline]{Prove for standard}
+We can then define our first property on operation sets.
 
-\paragraph{Standard operations}
-\todo[inline]{Standard operations}
+\begin{definition}
+  An operation set \(\mathcal{O}\) is \emph{suspendable} if:
+  \[ (\Delta, U, V) \in \mathcal{O} \implies (\Sigma(\Delta), \Sigma(U), \Sigma(V)) \in \mathcal{O} \]
+  For \(\Delta : \Ctx\) and \(U, V \subseteq \Var(\Delta)\).
+\end{definition}
 
-\todo[inline]{Trivial proof for standard}
+The groupoidal operation set is trivially suspendable. To show that the regular operation set is suspendable, we prove the following proposition.
+
+\begin{proposition}
+  Let \(\Delta\) be a ps-context. Then:
+  \[\Sigma(\bdry n \epsilon \Delta) = \bdry {n + 1} {\epsilon} {\Sigma(\Delta)}\]
+  for \(n \in \mathbb{N}\) and \(\epsilon \in \{-,+\}\).
+\end{proposition}
+\begin{proof}
+  We proceed by induction on \(\Delta\). First suppose \(\Delta = (x : \star)\). We then have:
+  \[ \Sigma(\bdry n \epsilon {(x : \star)}) = \Sigma(\{x\}) = \{N,S,x\} = \bdry {n + 1} {\epsilon} {\Sigma((x: \star))} \]
+  Now suppose that \(\Delta = \Delta', (y : A), (f : \arr x A y)\). We split into cases on \(n\), \(\dim(A)\), and \(\epsilon\):
+  \begin{itemize}
+  \item If \(n < \dim(A)\) then
+    \begin{align*}
+      \Sigma(\bdry n \epsilon \Delta) &= \Sigma(\bdry n \epsilon {\Delta'})\\
+                                      &=  \bdry {n + 1} {\epsilon} {\Sigma(\Delta')} &\text{by inductive hypothesis}\\
+                                      &= \bdry {n + 1} {\epsilon} {\Sigma(\Delta)} &\text{as }n + 1 < \dim(\Sigma(A))\\
+      \intertext{
+      \item If \(n = \dim(A)\) and \(\epsilon = -\) then the proof is similar to the preceding case.
+      \item If \(n = \dim(A)\) and \(\epsilon = +\) then:
+      }
+      \Sigma(\bdry n + \Delta) &= \Sigma((\bdry n + {\Delta'} \cup \{y\}) \setminus \{x\})\\
+                               &= (\Sigma(\bdry n + {\Delta'}) \cup \{y\}) \setminus \{x\} \\
+                               &= (\bdry {n+1} + {\Sigma(\Delta')} \cup \{y\}) \setminus \{x\} &\text{by inductive hypothesis}\\
+                               &= \bdry {n+1} + {\Sigma(\Delta)} &\text{as }n + 1 = \dim(\Sigma(A))\\
+      \intertext{\item If \(n > \dim(A)\) then}
+      \Sigma(\bdry n \epsilon \Delta) &= \Sigma((\bdry n \epsilon {\Delta'} \cup \{y,f\})\\
+                                      &= \Sigma(\bdry n + {\Delta'}) \cup \{y,f\} \\
+                                      &= \bdry {n+1} + {\Sigma(\Delta')} \cup \{y, f\} &\text{by inductive hypothesis}\\
+                                      &= \bdry {n+1} + {\Sigma(\Delta)} &\text{as }n + 1 > \dim(\Sigma(A))
+    \end{align*}
+  \end{itemize}
+  Hence, the desired equality holds in all cases.
+\end{proof}
+
+\begin{corollary}
+  The regular operation set is suspendable.
+\end{corollary}
+\begin{proof}
+  By \cref{prop:std-op}, it suffices to show that the standard operation set is suspendable, which is clear from the above proposition.
+\end{proof}
+
+The second restriction we put on operation sets is that there are enough operations to create the standard coherences presented in \cref{sec:basic-constructions}.
+
+\begin{definition}
+  An operation set \(\mathcal{O}\) \emph{contains the standard operations} if \(\Std \subseteq \mathcal{O}\).
+\end{definition}
+
+The groupoidal operation set clearly contains the standard operations, and the regular operation set does due to \cref{prop:std-op}. The empty operation set does not contain the standard operations.
 
 \subsection{Invertible generators}
 \label{sec:invertibility}
@@ -2033,6 +2088,9 @@ This is however unnecessary to present the regular and groupoidal versions of \C
 
 \todo[inline]{Highlight the need for the typing judgement}
 
+\subsection{Endo-coherence removal}
+\label{sec:ecr}
+
 
 \chapter{Constructions in \Catt}
 \label{sec:operations-catt}
@@ -2063,21 +2121,21 @@ This is however unnecessary to present the regular and groupoidal versions of \C
 
 \todo[inline]{Introduce constituent parts}
 
-\paragraph{Dyck Words}
+\subsection{Dyck Words}
 
 \todo[inline]{Need to modify the structure of the pasting diagram}
 \todo[inline]{Easier to use a more explicit representation of pasting diagrams}
 \todo[inline]{Very similar to ps-contexts but allows easier induction}
 \todo[inline]{Properties of Dyck words}
 
-\paragraph{The pruning construction}
+\subsection{The pruning construction}
 
 \todo[inline]{Explicitly give constructions}
 
 \todo[inline]{Give pruning set}
 \todo[inline]{Give pruning property}
 
-\paragraph{Properties of pruning}
+\subsection{Properties of pruning}
 
 \todo[inline]{Give main typing properties}
 \todo[inline]{Give any confluence properties here}
@@ -2085,11 +2143,122 @@ This is however unnecessary to present the regular and groupoidal versions of \C
 \section{Trees}
 \label{sec:trees}
 
+\subsection{Wedge sums}
+\label{sec:wedge-sums}
+
+\todo[inline]{Start with topological intuition}
+
+\todo[inline]{Universal property}
+
+\todo[inline]{Give Catt definition}
+
+\todo[inline]{Basic properties}
+
+\todo[inline]{Preserves pasting diagrams}
+
+\subsection{Tree contexts}
+\label{sec:tree-contexts}
+
+\todo[inline]{Singleton contexts, wedge sums, and suspensions preserve ps-context}
+
+\todo[inline]{Use this to interpret trees into ps-contexts}
+
+\todo[inline]{Give some examples}
+
+\todo[inline]{Mapping back from ps-context}
+
+\todo[inline]{Paths in trees}
+
+\todo[inline]{Tree support}
+
+\todo[inline]{Tree boundary}
+
+\todo[inline]{Introduce labellings}
+
+\todo[inline]{indexed by paths}
+
+\todo[inline]{Need for extended substitutions}
+
+\todo[inline]{Typing for labellings}
+
+\todo[inline]{Tree inclusions}
+
 \section{Structured terms}
 \label{sec:structured-terms}
 
+\todo[inline]{Labellings do not nicely compose}
+
+\todo[inline]{Example one: Paths}
+
+\todo[inline]{Example two: suspension}
+
+\todo[inline]{Introduce structured term}
+
+\todo[inline]{How to convert to terms}
+
+\todo[inline]{Preliminary lemmas}
+
+\subsection{Standard coherences}
+\label{sec:standard-coherences}
+
+\todo[inline]{Recall definition from start}
+
+\todo[inline]{Can now define these as a structured term}
+
+\todo[inline]{Use proposition to give an alternative definition}
+
+\todo[inline]{Discs as structured terms}
+
+\todo[inline]{Standard label}
+
+\subsection{Typing and equality}
+\label{sec:typing-struct-terms}
+
+\todo[inline]{Inherit typing from terms}
+
+\todo[inline]{point to alternative label typing}
+
+\todo[inline]{Support for structured terms}
+
+\todo[inline]{Disc removal and endocoherence removal for standard terms}
+
 \section{Insertion}
 \label{sec:insertion}
+
+\todo[inline]{Motivation for insertion}
+\todo[inline]{Wish to move inner composite into outer composite}
+
+\todo[inline]{Explore action on trees}
+
+\todo[inline]{Define branches}
+
+\todo[inline]{Insertion only possible when trunk height more than branch height}
+
+\todo[inline]{Give components of insertion}
+\todo[inline]{Use paper for a lot of this}
+
+\todo[inline]{Give insertion construction}
+
+\subsection{Universal property of insertion}
+\label{sec:univ-prop-insert}
+
+\todo[inline]{Build lemmas towards universal property}
+
+\todo[inline]{Give intuitive reasoning}
+
+\subsection{The insertion rule}
+\label{sec:insertion-rule}
+
+\todo[inline]{Give equality rule}
+\todo[inline]{Prove properties}
+
+\subsection{Further properties}
+\label{sec:further-properties}
+
+\todo[inline]{Confluence properties for insertion}
+\todo[inline]{End with standard coherences being preserved}
+
+
 
 \chapter{Semistrict versions of \Catt}
 \label{cha:cattstrict}
