@@ -8,6 +8,7 @@
 \def\Std{\textsf{Std}\xspace}
 \def\dr{\textsf{dr}\xspace}
 \newcommand\id{\ensuremath{\mathsf{id}}}
+\newcommand\proj{\ensuremath{\mathsf{proj}}}
 
 \newcommand*{\Coh}[3]{\ensuremath\mathsf{coh}_{(#1;#2)}[#3]}
 \newcommand*{\Ctx}{\ensuremath{\mathsf{Ctx}}}
@@ -34,3 +35,7 @@
 
 \newcommand*{\module}[1]{\href{https://alexarice.github.io/catt-agda/#1.html}{#1}}
 \newcommand*{\func}[3]{\href{https://alexarice.github.io/catt-agda/#1.html\##2}{#3}}
+
+\newlist{lemmaenum}{enumerate}{1} % should only occur inside lemma env.
+\setlist[lemmaenum]{label=(\roman*),ref=\thelemma(\roman*)}
+\crefalias{lemmaenumi}{lemma}

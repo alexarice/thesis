@@ -1,4 +1,4 @@
-\documentclass[techreport]{cam-thesis}
+\documentclass{cam-thesis}
 
 \usepackage{packages}
 \usepackage{macros}
@@ -1468,8 +1468,8 @@ Therefore, four syntactic equality relations are defined mutually inductively on
 \item Syntactic equality is decidable.
 \item Syntactic equality is propositional, there is at most one proof of \(s \equiv t\).
 \item Functoriality of suspension.
-\item Interaction of weakening with substitution application.
-\end{itemize}\todo{Worth giving links?}
+\item Interaction of weakening with substitution application. We have \(\wk(s) \sub \langle \sigma , t \rangle \equiv s \sub \sigma\) and \(s \sub {\wk(\sigma)} \equiv \wk(s \sub \sigma)\) and equivalent lemmas for the application of substitution to types and substitutions.
+\end{itemize}
 It also contains the following proposition.
 
 \begin{proposition}
@@ -1545,16 +1545,16 @@ In \module{Catt.Discs.Properties}, various facts about these constructions are p
 \begin{lemma}
   \label{lem:disc-prop}
   The following hold:
-  \begin{itemize}
-  \item \(\dim(D^n) = \dim(U^n) = n\) and \(\dim(S^n) = \max(n - 1, 0)\).
-  \item \(\Sigma(D^n) \equiv D^{n+1}\), \(\Sigma(S^n) \equiv S^{n+1}\), and \(\Sigma(U^n) \equiv U^{n+1}\).
-  \item \(\{\wk(A)\} \equiv \wk(\{A\})\) and \(\{\wk(A), \wk(t)\} \equiv \wk(\{A,t\})\).
-  \item \(\{\Sigma(A)\} \equiv \Sigma(\{A\})\) and \(\{\Sigma(A),\Sigma(t)\} \equiv \Sigma(\{A,t\})\).
-  \item \(\{A \sub \sigma\} \equiv \{A\} \bullet \sigma\) and \(\{A \sub \sigma,t \sub \sigma\} \equiv \{A,t\}\bullet \sigma\).
-  \item \(U^n \sub{\{A\}} \equiv A\) and hence \(\wk(U^n)\sub{\{A,t\}} \equiv A\).
+  \begin{lemmaenum}
+  \item \label{item:disc-prop-dim}\(\dim(D^n) = \dim(U^n) = n\) and \(\dim(S^n) = \max(n - 1, 0)\).
+  \item \label{item:disc-prop-susp} \(\Sigma(D^n) \equiv D^{n+1}\), \(\Sigma(S^n) \equiv S^{n+1}\), and \(\Sigma(U^n) \equiv U^{n+1}\).
+  \item \label{item:disc-prop-wk} \(\{\wk(A)\} \equiv \wk(\{A\})\) and \(\{\wk(A), \wk(t)\} \equiv \wk(\{A,t\})\).
+  \item \label{item:disc-prop-sub-susp} \(\{\Sigma(A)\} \equiv \Sigma(\{A\})\) and \(\{\Sigma(A),\Sigma(t)\} \equiv \Sigma(\{A,t\})\).
+  \item \label{item:disc-prop-sub-sub} \(\{A \sub \sigma\} \equiv \{A\} \bullet \sigma\) and \(\{A \sub \sigma,t \sub \sigma\} \equiv \{A,t\}\bullet \sigma\).
+  \item \label{item:disc-prop-sub-from} \(U^n \sub{\{A\}} \equiv A\) and hence \(\wk(U^n)\sub{\{A,t\}} \equiv A\).
   \item For \(\tau : S^n \to \Gamma\), \(\tau \equiv \{U^n \sub \tau\}\).
   \item For \(\tau : D^n \to \Gamma\), \(\tau \equiv \{\wk(U^n) \sub \tau, d_n \sub \tau\}\).
-  \end{itemize}
+  \end{lemmaenum}
   for all \(n \in \mathbb{N}\) and appropriate \(A\), \(t\), and \(\sigma\).
 \end{lemma}
 
@@ -1562,7 +1562,7 @@ The last two statements finish the characterisation of substitutions from sphere
 
 In \module{Catt.Discs.Pasting}, it is shown that \(D^n\) is a ps-context for each \(n\). Therefore, as in \cref{sec:basic-constructions}, the identity on a term \(t\) of type \(A\) can be defined as:
 \[ \id(A,t) = \Coh {D^n} {\arr {d_n} {\wk(U^n)} {d_n}} {\{A,t\}} \]
-Many properties of identity terms can be easily derived from \cref{lem:disc-prop}.
+where \(n = \dim(A)\). Many properties of identity terms can be easily derived from \cref{lem:disc-prop}.
 
 
 \subsection{Typing and equality}
@@ -1629,7 +1629,7 @@ Assembling disc removal into a rule set \(\mathcal{R}\) is simple, as it is poss
 \begin{definition}
   The disc removal rule set, \dr, is the set consisting of the triples:
   \[ (\Gamma, \Coh {D^n} {\wk(U^n)} {\{A,t\}}, t) \]
-  for each \(n \in \mathbb{N}\), context \(\Gamma\), type \(A : \Type_\Gamma\), and term \(t : \Term_\Gamma\).
+  for each context \(\Gamma\), type \(A : \Type_\Gamma\), and term \(t : \Term_\Gamma\) where \(n = \dim(A)\).
 
   A set of rules \(\mathcal{R}\) \emph{contains disc removal} if \(\dr \subseteq \mathcal{R}\). Further we say that \(\mathcal{R}\) \emph{has disc removal} if the rule \textsc{dr} holds in the generated theory.
 \end{definition}
@@ -1734,7 +1734,7 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
     \end{mathpar}
     \caption{Free variables}
   \end{subfigure}}
-  \caption{\Cattr: syntax, typing, and operations (continued below)}
+  \caption{\Cattr: syntax, typing, and operations}
   \label{fig:cattr}
 \end{figure}
 
@@ -1833,7 +1833,7 @@ In particular, the main utility we extract in this thesis is the ability to defi
 
 As previously mentioned, an operation set \(\mathcal{O}\) consists of a collection of triples of a context \(\Delta\) and two subsets of the variables of \(\Delta\).
 
-We call a subset of the variables of a context a \emph{variable set}. In the formalisation, these variable sets are given as a list of booleans, one boolean for each variable of the context. These are given in \module{Catt.Support}, which also contains many basic properties and constructions on them, including unions of these sets, subset relations, and the free variables of each piece of syntax. The variable sets of \(\Delta\) form a lattice with top element \(\Var(\Delta)\) and bottom element \(\emptyset\).
+We call a subset of the variables of a context a \emph{variable set}. In the formalisation, these variable sets are given as a list of booleans, one boolean for each variable of the context. These are given in \module{Catt.Support}, which also contains many constructions on them, including unions of these sets, subset relations, and the free variables of each piece of syntax. The variable sets of \(\Delta\) form a lattice with top element \(\Var(\Delta)\) and bottom element \(\emptyset\). The free variable constructions commute with weakening, as is proved in \module{Catt.Support.Properties} by mutual induction.
 
 We recall the function \(\DC\) on these variable sets, given by \func{Catt.Support}{2590}{DC} in the formalisation, which produces the downwards closure of a variable set. This admits the following properties:
 
@@ -2017,7 +2017,25 @@ The second restriction we put on operation sets is that there are enough operati
   An operation set \(\mathcal{O}\) \emph{contains the standard operations} if \(\Std \subseteq \mathcal{O}\).
 \end{definition}
 
-The groupoidal operation set clearly contains the standard operations, and the regular operation set does due to \cref{prop:std-op}. The empty operation set does not contain the standard operations.
+The groupoidal operation set clearly contains the standard operations, and the regular operation set does due to \cref{prop:std-op}. The empty operation set does not contain the standard operations. We end this section with the following proposition about the support of terms in a disc.
+
+\begin{proposition}
+  For \(n \in \mathbb{N}\) the following two equations hold:
+  \[ \bdry n - {D^{n+1}} = \Var(S^n) \cup \{d_n^-\} = \Var(D^n) \qquad \bdry n + {D^{n+1}} = \Var(S^n) \cup \{d_{n+1}^+\}\]
+  Further, the following equations hold:
+    \[\FV(U^n) = \Var(S^n) \qquad \Supp(d_n^-) = \Var(D^n) = \bdry n - {D^{n+1}} \qquad \Supp(d_n^+) = \bdry n + {D^{n+1}} \]
+  again for any \(n \in \mathbb{N}\).
+\end{proposition}
+\begin{proof}
+  The first equations follow by a simple case analysis, using that \(\bdry n - {D^n} = \Var(D^n)\) by \cref{lem:bdry-full,item:disc-prop-dim}. The free variables of \(U^n\) are easily calculated inductively, and the support of \(d_n^-\) and \(d_n^+\) are easy to compute using the first parts of the proposition, and that \(FV(U^n) \subseteq \Supp(d_n^-)\) and \(\FV(U^n) \subseteq \Supp(d_n^+)\) as the support of a term is downwards closed.
+
+  These proofs are formalised in \module{Catt.Discs.Support}.
+\end{proof}
+
+\begin{corollary}
+  \label{cor:disc-op}
+  Both \((D^{n+1}, d_n^-, d_n^+)\) and \((D^n, d_n, d_n)\) are in \(\Std\) for each \(n\).
+\end{corollary}
 
 \subsection{Invertible generators}
 \label{sec:invertibility}
@@ -2067,12 +2085,14 @@ Equality rule sets can also be subsets of eachother, leading to the following le
   Follows from a simple induction. Details are given in the formalisation in module \module{Catt.Typing.Rule.Properties}.
 \end{proof}
 \begin{corollary}
+  \label{cor:catt-to-r}
   Any context, term, type, or substitution that is well-typed in \Catt is also well-typed in \Cattr, for any equality set \(\mathcal{R}\).
 \end{corollary}
 
 Furthermore, we can immediately show that the application of a substitution to piece of syntax that is well-typed in \Catt is well-typed.
 
 \begin{lemma}
+  \label{lem:sub-catt}
   Let \(\mathcal{R}\) be any equality rule set. Then the following inference rules hold for \(\sigma : \arr \Delta \star \Gamma\):
   \begin{mathpar}
     \inferrule{\Delta \vdash_\emptyset A \\ \Gamma \vdash_{\mathcal{R}} \sigma : \Delta}{\Gamma \vdash_{\mathcal{R}} A \sub \sigma }\and
@@ -2117,7 +2137,7 @@ For the weakening operation to be well-typed, meaning that the weakening of a we
 The following proposition is immediately provable by mutual induction on typing and equality. Its proof is given in \module{Catt.Typing.Properties.Weakening}.
 
 \begin{proposition}
-  Let \(\mathcal{R}\) satisify the weakening condition. Then the following inference rules are derivable in \Cattr.
+  Let \(\mathcal{R}\) satisify the weakening condition. Then the following inference rules are admissible in \Cattr.
   \begin{mathpar}
     \inferrule{\Gamma \vdash B}{\Gamma, (x : A) \vdash \wk(A)} \and
     \inferrule{\Gamma \vdash s : B}{\Gamma, (x : A) \vdash \wk(s) : \wk(B)} \and
@@ -2129,9 +2149,10 @@ The following proposition is immediately provable by mutual induction on typing 
 Using only this proposition we can immediately prove typing properties for several constructions using discs.
 
 \begin{lemma}
+  \label{lem:disc-typing}
   Suppose the weakening condition holds. Then the following judgements hold:
   \[ S^n \vdash U^n \qquad S^n \vdash \qquad D^n \vdash \]
-  For all \(n \in \mathbb{N}\). Further, the following inference rules are derivable:
+  For all \(n \in \mathbb{N}\). Further, the following inference rules are admissible:
   \begin{mathpar}
     \inferrule{\Gamma \vdash A \\ n = \dim(A)} {\Gamma \vdash \{A\} : S^n} \and
     \inferrule{\Gamma \vdash A \\ n = \dim(A) \\ \Gamma \vdash s : A} { \Gamma \vdash \{A,s\} : D^n} \\
@@ -2142,19 +2163,186 @@ Using only this proposition we can immediately prove typing properties for sever
   For \(A : \Type_\Gamma\) and \(s : \Term_\Gamma\).
 \end{lemma}
 \begin{proof}
+  The first three typing judgements follow from a simple mutual induction, making use of the typing of weakening. We prove that \(\Gamma \vdash \{A\} : S^n\) by induction on \(n\) and \(A\). The base case is trivial. For the inductive step we assume that \(\Gamma \vdash \arr s A t\), with \(n = \dim(A)\), and want to show that:
+  \[ \Gamma \vdash \langle \{A\},s ,t \rangle : S^n, (d_{n+1}^- : U^n), (d_{n+1}^+ : \wk(U^n)) \]
+  The judgement \(\Gamma \vdash \{A\} : S^n\) holds by inductive hypothesis, and so it remains to show that the following two judgements hold:
+  \[ \Gamma \vdash s : U^n \sub {\{A\}} \qquad \Gamma \vdash t : \wk(U^n)\sub{\langle\{A\}, s\rangle} \]
+  As \(\Gamma \vdash \arr s A t\), we know (by case analysis on the typing derivation) that \(\Gamma \vdash s : A\) and \(\Gamma \vdash t : A\). These judgements are sufficient to finish the proof, since \(A \equiv U^n \sub {\{A\}} \equiv \wk(U^n) \sub {\langle \{A\}, s \rangle}\) by \cref{item:disc-prop-sub-from} and the interaction of weakening with substitution application.
 
+  To show that \(\Gamma \vdash A\) follows from \(\Gamma \vdash \{A\} : S^n\), we instead show that \(\Gamma \vdash U^n \sub {\{A\}}\), leveraging that typing is invariant under syntactic equality. The typing of \(U^n \sub {\{A\}}\) follows from \(U^n\) being well-typed in \Catt (as it is well-typed in any theory with the weakening property), and \cref{lem:sub-catt}. The second to last inference rule follows trivially from the preceding one. For the last rule, we get that \(\Gamma \vdash s : U^n\sub{\{A\}}\) by case analysis on \(\Gamma \vdash \{A,s\} : D^n\), and so we are finished by the invariance of typing rules under syntactic equality.
 \end{proof}
-\todo[inline]{Start here}
+
+If we further have that the set of operations includes the standard operations then we get the following corollary.
+
+\begin{corollary}
+  Suppose that \(\mathcal{O}\) contains the standard operations in addition to \(\mathcal{R}\) satisfying the weakening condition. Then the following are equivalent:
+  \begin{itemize}
+  \item \(\Gamma \vdash A\) and \(\Gamma \vdash s : A\),
+  \item There exists some \(B: \Type_\Gamma\) such that \(\Gamma \vdash \id(A,t) : B\),
+  \item \(\Gamma \vdash \id(A,t) : \arr t A t\).
+  \end{itemize}
+  If we further have that \(\dim(A) \neq 0\) then the following two conditions are also equivalent:
+  \begin{itemize}
+  \item There exists some \(B: \Type_\Gamma\) such that \(\Gamma \vdash \Coh {D^n} {U^n} {\{A,t\}} : B\),
+  \item \(\Gamma \vdash \Coh{D^n} {U^n} {\{A,t\}} : A\).
+  \end{itemize}
+  where \(n = \dim(A)\).
+\end{corollary}
+\begin{proof}
+  The proof follows from \cref{lem:disc-typing,item:disc-prop-sub-from,cor:disc-op}.
+\end{proof}
+
+We end this section with the following \lcnamecref{prop:dr-weak}.
+
+\begin{proposition}
+  \label{prop:dr-weak}
+  The set \dr satisfies the weakening condition.
+\end{proposition}
+\begin{proof}
+  It suffices to show that for all \(\Gamma : \Ctx\), \(A, B : \Type_\Gamma\), and \(t : \Term_\Gamma\) that:
+  \[ ((\Gamma, (x : B)), \Coh {D^n} {U^n} {\wk(\{A,t\})}, \wk(t)) \in \dr \]
+  when \(n = \dim(A)\). By \cref{item:disc-prop-wk}, \(\wk(\{A,t\}) \equiv \{ \wk(A), \wk(t)\}\) and so the triple above is clearly contained in \dr.
+\end{proof}
+
+The semistrict type theories \Cattsu and \Cattsua (which will be introduced in \cref{sec:cattsu,sec:cattsua}) will be generated by equality rule sets that are the union of multiple smaller rulesets (including disc removal). Since the weakening condition is clearly preserved under unions, we will be able to show that the rule sets generating \Cattsu and \Cattsua satisfy the weakening condition by showing that it is satisfied by each individual component.
 
 \paragraph{Suspension condition}
 
-\todo[inline]{Mention need for operation suspension}
+For suspension, we introduce the following condition, which is similar to the corresponding condition for weakening.
+
+\begin{definition}
+  A set of equality rules \(\mathcal{R}\) satisfies the \emph{suspension condition} if
+  \[ (\Sigma(\Gamma), \Sigma(s), \Sigma(t)) \in \mathcal{R} \]
+  for all \((\Gamma,s,t) \in \mathcal{R}\).
+\end{definition}
+
+If the set of operations \(\mathcal{O}\) is suspendable, then this condition is sufficient to show that the suspension of a well-typed piece of syntax is well-typed.
+
+\begin{proposition}
+  Suppose \(\mathcal{O}\) is suspendable and \(\mathcal{R}\) satisfies the suspension condition. Then the following inference rules are admissible for \(\Gamma, \Delta, \Delta' : \Ctx\), \(A,B,C,D : \Type_\Gamma\), \(s,t : \Term_\Gamma\), \(\sigma : \arr \Delta C \Gamma\), and \(\tau : \arr {\Delta'} D \Gamma\).
+  \begin{mathpar}
+    \inferrule{\Gamma \vdash}{\Sigma(\Gamma) \vdash}\and
+    \inferrule{\Gamma \vdash A}{\Sigma(\Gamma) \vdash \Sigma(A)}\and
+    \inferrule{\Gamma \vdash s : A}{\Sigma(\Gamma) \vdash \Sigma(s) : \Sigma(A)}\and
+    \inferrule{\Gamma \vdash \sigma : \Delta}{\Sigma(\Gamma) \vdash \Sigma'(\sigma) : \Delta}\\
+    \inferrule{\Gamma \vdash A = B}{\Sigma(\Gamma) \vdash \Sigma(A) = \Sigma(B)}\and
+    \inferrule{\Gamma \vdash s = t}{\Sigma(\Gamma) \vdash \Sigma(s) = \Sigma(t)}\and
+    \inferrule{\Gamma \vdash \sigma = \tau}{\Sigma'(\Gamma) \vdash \Sigma'(\sigma) = \Sigma(\tau)}
+  \end{mathpar}
+  For all \(\mu : \arr \Delta {\arr s A t} \Gamma\) and \(\mu' : \arr {\Delta'} {\arr {s'} {A'} {t'}} {\Gamma'}\) the following two rules are admissible:
+  \begin{mathpar}
+    \inferrule{\Gamma \vdash \mu : \Delta}{\Gamma \vdash \unrestrict \mu : \Sigma(\Delta)} \and
+    \inferrule{\Gamma \vdash \mu = \mu'}{\Gamma \vdash \unrestrict \mu = \unrestrict \mu'}
+  \end{mathpar}
+  and so the inference rules
+  \begin{mathpar}
+    \inferrule{\Gamma \vdash \sigma : \Delta}{\Sigma(\Gamma) \vdash \Sigma(\sigma) : \Sigma(\Delta)} \and
+    \inferrule{\Gamma \vdash \sigma = \tau} {\Sigma(\Gamma) \vdash \Sigma(\sigma) = \Sigma(\tau)}
+  \end{mathpar}
+  hold for \(\sigma : \arr \Delta \star \Gamma\) and \(\tau : \arr {\Delta'} \star \Gamma\).
+\end{proposition}
+\begin{proof}
+  The rules concerning the unrestriction operation follow by simple induction on the typing judgement or equality in the premise, and in fact do not need the suspension condition.
+
+  The remainder of the rules follow from a routine mutual induction on all typing and equality rules, which can be found in \module{Catt.Suspension.Typing}. The suspension condition and the suspendability of the operation set are used for the case involving the typing rule for coherences. In this case, the functoriality of suspension is used to show that the coherence has the correct type.
+\end{proof}
+
+Similarly to the weakening condition, the suspension condition is closed under unions of rule sets, and we can show it is satisfied by \dr, with a similar proof to the proof for weakening.
+
+\begin{proposition}
+  \label{prop:dr-susp}
+  The set \dr satisfies the suspension condition.
+\end{proposition}
+\begin{proof}
+  It is sufficient to prove that for all \(\Gamma : \Ctx\), \(A : \Type_\Gamma\), and \(t : \Term_\Gamma\) that:
+  \[(\Sigma(\Gamma), \Coh {\Sigma(D^n)} {\Sigma(U^n)} {\Sigma(\{A,t\})}, \Sigma(t)) \in \dr\]
+  when \(n = \dim(A)\). By \cref{item:disc-prop-susp}, we get that \(\Sigma(D^n) \equiv D^{n+1}\) and \(\Sigma(U^n) \equiv U^{n+1}\). By \cref{item:disc-prop-sub-susp}, \(\Sigma(\{A,t\}) \equiv \{\Sigma(A),\Sigma(t)\}\). Therefore, it is sufficient to show that:
+  \[(\Sigma(\Gamma), \Coh {D^{n+1}} {U^{n+1}} {\{\Sigma(A),\Sigma(t)\}}, \Sigma(t)) \in \dr\]
+  which is clear as \(\dim(\Sigma(A)) = \dim(A) + 1 = n+1\).
+\end{proof}
 
 \paragraph{Substitution condition}
 
-\todo[inline]{Combination of substitution and suspension}
+The substitution condition takes a slightly different form to the previous two conditions. Instead of requiring that the rule set is closed under application of any arbitrary substitution \(\sigma\), we instead only ensure it is closed under well-typed substitutions. This will not prevent us proving that typing is closed under the application of substitutions, but will be critical in proving that the supported rules construction, which will be given in \todo{reference} and is used for proving the support condition, satisfies the substitution condition.
 
-\todo[inline]{Substitution condition implies lifting}
+\begin{definition}
+  An equality rule set \(\mathcal{R}\) satisfies the \emph{\(\mathcal{R}'\)-substitution condition} if:
+  \[ (\Gamma, s \sub \sigma, t\sub \sigma) \in \mathcal{R} \]
+  whenever \((\Delta, s, t) \in \mathcal{R}\) and \(\sigma : \arr \Delta \star \Gamma\) with \(\Gamma \vdash_{\mathcal{R}'} \sigma : \Delta\). We say the set \(\mathcal{R}\) satisfies the \emph{substitution condition} if it satisfies the \(\mathcal{R}\)-substitution condition.
+\end{definition}
+
+We make two comments about this definition:
+\begin{itemize}
+\item We only close under substitutions with type part \(\star\). It will still be possible that typing is preserved by arbitrary (well-typed) substitutions when combined with the suspension condition.
+\item We introduce a second rule set \(\mathcal{R}'\) in the definition, which is only used for the typing premise of the substitution \(\sigma\). The reason for this is that the substitution condition is not closed under unions, and so we will instead prove that certain rule sets satisfy the \(\mathcal{R}'\)-substitution condition for an arbitrary \(\mathcal{R}'\), which is closed under unions.
+\end{itemize}
+The substitution condition allows us to give the next proposition.
+
+\begin{proposition}
+  Suppose \(\mathcal{R}\) satisfies the substitution condition. For any \(\sigma : \arr \Delta \star \Gamma\), the following rules are admissible:
+  \begin{mathpar}
+    \inferrule{\Delta \vdash A \\ \Gamma \vdash \sigma : \Delta}{\Gamma \vdash A \sub \sigma}\and
+    \inferrule{\Delta \vdash s : A \\ \Gamma \vdash \sigma : \Delta}{\Gamma \vdash s \sub \sigma : A \sub \sigma}\and
+    \inferrule{\Delta \vdash \tau : \Theta \\ \Gamma \vdash \sigma : \Delta}{\Gamma \vdash \tau \bullet \sigma : \Theta}\\
+    \inferrule{\Delta \vdash A = B\\ \Gamma \vdash \sigma : \Delta}{\Gamma \vdash A \sub \sigma = B \sub \sigma}\and
+    \inferrule{\Delta \vdash s = t \\ \Gamma \vdash \sigma : \Delta}{\Gamma \vdash s \sub \sigma = t \sub \sigma}\and
+    \inferrule{\Delta \vdash \tau = \mu \\ \Gamma \vdash \sigma : \Delta}{\Gamma \vdash \tau \bullet \sigma = \mu \bullet \sigma}
+  \end{mathpar}
+  If \(\mathcal{R}\) additionally satisfies the suspension conditions, then all the above rules are admissible for any substitution \(\sigma : \arr \Delta B \Gamma\).
+\end{proposition}
+\begin{proof}
+  The proof for a non-extended substitution is given by another routine mutual induction in \module{Catt.Typing.Properties.Substitution}. For an arbitrary substitution \(\sigma : \arr \Delta B \Gamma\), we also proceed by mutual induction, but for the application of the substitution to an equality of terms \(s\) and \(t\) we further split on \(B\). If \(B = \star\), then the proof for non-extended substitutions can be used. Otherwise, we have:
+  \begin{align*}
+    s \sub \sigma &\equiv \Sigma s \sub {\unrestrict \sigma}\\
+                  &= \Sigma t \sub {\unrestrict \sigma}\\
+                  &\equiv t \sub \sigma
+  \end{align*}
+  with the non-syntactic equality following from the preservation of equality by suspension and inductive hypothesis. These proofs that the extended versions of these rules are admissible is found in \module{Catt.Typing.Properties.Substitution.Suspended}.
+\end{proof}
+
+By taking the weakening of the identity substitution \(\id_\Gamma : \Gamma \to \Gamma\) we get a substitution:
+\[ \proj_{\Gamma} = \wk(\id_\Gamma) : \Gamma \to \Gamma, (x : A)\]
+which includes \(\Gamma\) into \(\Gamma, x : A\). It can be checked (and is given by \func{Catt.Syntax.Properties}{}{apply-project-is-wk-tm} in the formalisation) that applying this substitution to a term is the same operation as weakening the term. Using this, the following can be proved:
+
+\begin{lemma}
+  Suppose \(\mathcal{R}\) satisfies the substitution condition. Then it also satisfies the weakening condition.
+\end{lemma}
+\begin{proof}
+  For \((\Gamma,s ,t) \in \mathcal{R}\) and \(A : \Type_\Gamma\), we must prove that:
+  \[ ((\Gamma,(x:A)),\wk(s),\wk(t)) \equiv ((\Gamma, (x : A)), s \sub {\proj_{\Gamma}}, t \sub {\proj_{\Gamma}}) \in \mathcal{R} \]
+  which will follow from the substitution condition if it can be proved that
+  \[ \Gamma, x : A \vdash_{\mathcal{R}} \proj_\Gamma : \Gamma \]
+  holds. This judgement is easy to derive when \(\mathcal{R}\) satisfies the weakening condition, but this is what we are trying to prove. Instead, since \(\emptyset\) trivially satisfies the weakening condition, \(\proj_\Gamma\) is well-typed in \Catt, and so the derivation above follows from \cref{cor:catt-to-r}.
+\end{proof}
+
+We lastly show that \dr also satisfies the substitution condition.
+
+\begin{proposition}
+  The set \dr satisfies the \(\mathcal{R}\)-substitution condition for any equality set \(\mathcal{R}\).
+\end{proposition}
+\begin{proof}
+  The proof is similar to \cref{prop:dr-weak,prop:dr-susp}, except for this proof the equality \(\{A,t\} \bullet \sigma \equiv \{A \sub \sigma, t \sub \sigma\}\) from \cref{item:disc-prop-sub-sub} is crucial.
+\end{proof}
+
+\begin{remark}
+  The proof of the substitution condition for \dr makes no use of the typing of \(\sigma\). In fact this premise is only necessary for the supported rules construction which will be given in
+\end{remark}
+\todo[inline]{reference above}
+
+\paragraph{Tameness}
+
+We can finally define tameness.
+
+\begin{definition}
+  An equality rule set \(\mathcal{R}\) is tame if it satisfies the weakening, substitution, and suspension conditions. An operation set \(\mathcal{O}\) is tame if it is suspendable and contains the standard operations. A theory generated by \(\mathcal{R}\) and \(\mathcal{O}\) is tame if both \(\mathcal{R}\) and \(\mathcal{O}\) are.
+\end{definition}
+
+\begin{proposition}
+  The set \dr is tame.
+\end{proposition}
+
+\todo[inline]{Could have instead closed rules under substitution}
+\todo[inline]{Possibly not worth considering anything non-tame}
 
 \subsection{Further conditions}
 \label{sec:further-conditions}
