@@ -1614,13 +1614,29 @@ The remainder of the inference rules for equality simply close under each constr
   Proofs of these are found in \module{Catt.Typing.Properties.Base}.
 \end{proof}
 
+It is also possible to prove that each term has a canonical type.
+
+\begin{definition}
+  The \emph{canonical type} of a term \(t : \Term_\Gamma\), \(\mathsf{Can}_s\), is defined by a case split on \(t\). If \(t\) is a variable then the canonical type is the corresponding type in the context \(\Gamma\). Otherwise, if \(t \equiv \Coh \Delta A \sigma\) then the canonical type is \(A \sub \sigma\).
+\end{definition}
+
+This can be used to show that the type of a well-typed term is unique up to definitional equality, and is equal to this canonical type.
+
+\begin{lemma}
+  \label{lem:ty-unique}
+  If \(\Gamma \vdash s : A\), then \(\Gamma \vdash s : \mathsf{Can}_s\) and \(\Gamma \vdash A = \mathsf{Can}_s\). Further, if \(\Gamma \vdash s : A\) and \(\Gamma \vdash s : B\) then \(\Gamma \vdash A = B\).
+\end{lemma}
+\begin{proof}
+  We prove the first part by induction on the derivation \(\Gamma \vdash s : A\). If the derivation is derived from the conversion rule applied to \(\Gamma \vdash s : B\) and \(\Gamma \vdash A = B\), then by inductive hypothesis we have \(\Gamma \vdash s : \mathsf{Can}_s\) and \(\Gamma \vdash B = \mathsf{Can}_s\). By transitivity, we obtain \(\Gamma \vdash A = \mathsf{Can}_s\) as required. The second part follows directly from the applying the first part to both derivations.
+\end{proof}
+
 There is not much more that can be proved about the definitional equality at this point without knowing more about the rule set \(\mathcal{R}\). In \cref{sec:ruleset}, certain conditions will be imposed on the set of equality rules, that will allow further lemmas to be proved in large generality.
 
 \paragraph{Disc removal}
 
 We now give our first example of an equality rule, \emph{disc removal}. Disc removal removes unary composites, replacing them with the underlying term. We recall that for every \(n\), there exists the \(n\)-dimensional disc context \(D^n\), and that given a term \(t \in \Term_\Gamma\) and \(n\)-dimensional type \(A \in \Type_\Gamma\), there exists a substitution \(\{A,t\} : D^n \to \Gamma\). The unary composite of a term \(t\) of type \(A\) of dimension \(n\) is then the coherence:
 \[\Coh {D^n} {\wk(U^n)} {\{A,t\}}\]
-Disc removal equates this with the term \(t\), making the following rule inferable:
+Disc removal equates this with the term \(t\), making the following rule admissible:
 \begin{mathpar}
   \inferrule{\Gamma \vdash t : A \\ \Gamma \vdash A}{\Gamma \vdash \Coh {D^n} {\wk(U^n)} {\{A,t\}} = t}\textsc{dr}
 \end{mathpar}
@@ -1861,6 +1877,7 @@ We further define the application of a substitution to a variable set below.
 We note that when representing variable sets as a list of booleans, these definitions are given by simple inductions on the length of the context. These constructions admit the following properties.
 
 \begin{proposition}
+  \label{prop:vs-sub}
   Let \(\Delta\) be a context. Then the function taking a variable set \(V\) of \(\Delta\) to \(V \sub \sigma\) is a join-semilattice homomorphism for any substitution \(\sigma : \Delta \to \Gamma\). Further, for a term \(t : \Term_\Delta\), a type \(A : \Type_\Delta\), or a substitution \(\tau : \arr \Theta A \Delta\), the following equalities hold:
   \begin{align*}
     \FV(t \sub \sigma) &= \FV(t) \sub \sigma \\
@@ -2194,6 +2211,7 @@ Using only the above proposition we can immediately prove typing properties for 
 If we further have that the set of operations includes the standard operations then we get the following corollary.
 
 \begin{corollary}
+  \label{cor:id-typing}
   Suppose that \(\mathcal{O}\) contains the standard operations in addition to \(\mathcal{R}\) satisfying the weakening condition. Then the following are equivalent:
   \begin{itemize}
   \item \(\Gamma \vdash A\) and \(\Gamma \vdash s : A\),
@@ -2298,6 +2316,7 @@ We make two comments about this definition:
 The substitution condition allows us to give the next proposition.
 
 \begin{proposition}
+  \label{prop:sub-prop-1}
   Suppose \(\mathcal{R}\) satisfies the substitution condition. For any \(\sigma : \arr \Delta \star \Gamma\), the following rules are admissible:
   \begin{mathpar}
     \inferrule{\Delta \vdash A \\ \Gamma \vdash \sigma : \Delta}{\Gamma \vdash A \sub \sigma}\and
@@ -2322,6 +2341,7 @@ The substitution condition allows us to give the next proposition.
 We also prove that application of substitution respects equality in its second argument, which does in fact not need to substitution condition. This is also proved by a simple mutual induction in \module{Catt.Typing.Properties.Substitution}.
 
 \begin{proposition}
+  \label{prop:sub-prop-2}
   The following inference rules are admissible:
   \begin{mathpar}
     \inferrule{\Gamma \vdash \sigma = \tau}{\Gamma \vdash s \sub \sigma = s \sub \tau}\and
@@ -2434,7 +2454,7 @@ In traditional presentations of \Catt, \(\FV(t) \cup \FV(A)\) is used instead of
   The following hold when \(\mathcal{R}\) satisfies the support condition:
   \begin{lemmaenum}
   \item \(\Supp(A) = \FV(A)\) when \(\Gamma \vdash A\),
-  \item \(\Supp(\sigma) = \FV(\sigma)\) when \(\Gamma \vdash \sigma : \Delta\),
+  \item \label{item:supp-sub-char} \(\Supp(\sigma) = \FV(\sigma)\) when \(\Gamma \vdash \sigma : \Delta\),
   \item \label{item:supp-tm-char-1} \(\Supp(t) = \Supp(A) \cup \FV(t)\) when \(\Gamma \vdash t : A\),
   \item \label{item:supp-tm-char-2} \(\Supp(t) = \FV(A) \cup \FV(t) = \Supp(A) \cup \Supp(t)\) when \(\Gamma \vdash t : A\) and \(\Gamma \vdash A\).
   \end{lemmaenum}
@@ -2583,17 +2603,130 @@ We now prove the appropriate support condition for disc removal.
   By a simple induction, it can be shown that \(\Supp(\{A,t\}) = \Supp(A) \cup \Supp(t)\). By \cref{item:supp-tm-char-2} we have \(\Supp(t) = \Supp(A) \cup \Supp(t)\) as \(\mathcal{R}\) satisfies the support condition and so \(\Supp(\{A,t\}) = \Supp(t)\) as required.
 \end{proof}
 
-\todo[inline]{Iso between pasting diagrams}
-\todo[inline]{Cannot show yet that the iso is equal to the identity}
+To finish this section, the support condition also allows us to reprove a result from \Catt that any isomorphic ps-contexts are equal.
 
-\paragraph{Conversion condition}
+\paragraph{Preservation condition}
 
-\todo[inline]{Need conversion and support for full conversion}
+Our last allows us to prove preservation, the property that typing is preserved by equality.
 
-\todo[inline]{Highlight the need for the typing judgement}
+\begin{definition}
+  A set \(\mathcal{R}\) satisfies the \emph{\(\mathcal{R}'\)-preservation condition} for an equality set \(\mathcal{R}'\) when:
+  \[ \Gamma \vdash_{\mathcal{R}'} s : A \implies \Gamma \vdash_{\mathcal{R}'} t : A \]
+  for each \((\Gamma, s, t) \in \mathcal{R}\) and \(A : \Type_\Gamma\). The set \(\mathcal{R}\) satisfies the \emph{preservation condition} if it satisfies the \(\mathcal{R}\)-preservation condition.
+\end{definition}
+
+When a rule set \(\mathcal{R}\) has all the properties presented in this section, we are able to show preservation for the generated theory.
+
+\begin{proposition}
+  Let \(\mathcal{R}\) satisfy the support condition and preservation condition, as well as being tame. Then the following inference rules are admissible:
+  \begin{mathpar}
+    \inferrule{\Gamma \vdash A\\ \Gamma \vdash A = B}{\Gamma \vdash B}\and
+    \inferrule{\Gamma \vdash s : A\\ \Gamma \vdash s = t \\ \Gamma \vdash A = B}{\Gamma \vdash t : B}\and
+    \inferrule{\Gamma \vdash \sigma : \Delta\\ \Gamma \vdash \sigma = \tau}{\Gamma \vdash \tau : \Delta}
+  \end{mathpar}
+  for \(A, B : \Type_\Gamma\), \(s,t : \Term_\Gamma\), \(\sigma : \arr \Delta A \Gamma\), and \(\tau : \arr \Delta B \Gamma\).
+\end{proposition}
+\begin{proof}
+  We prove the following bidirectional versions of the inference rules by mutual induction on the equality derivation:
+  \begin{alignat*}{5}
+    &\Gamma \vdash A = B &&\implies (\Gamma \vdash A \iff \Gamma \vdash B)\\
+    &\Gamma \vdash s = t &&\implies (\forall A.\ \Gamma \vdash s : A \iff \Gamma \vdash t : A)\\
+    &\Gamma \vdash \sigma = \tau &&\implies (\Gamma \vdash \sigma : \Delta \iff \Gamma \vdash \tau : \Delta)
+  \end{alignat*}
+  which imply the inference rules of the proposition are admissible (using the conversion rule for the second rule).
+
+  The only non trivial cases are for the statement for terms. We split on the equality derivation \(\Gamma \vdash s = t\). The cases for reflexivity on variables and transitivity are also trivial. The case for symmetry follows from the symmetry of the ``if and only if'' relation.
+
+  Now suppose the equality is of the form \(\Coh \Delta A \sigma = \Coh \Delta B \tau\) and is derived from the equality rule for coherences from equalities \(\Delta \vdash A = B\) and \(\Gamma \vdash \sigma = \tau\). We prove the first direction, with the second following symmetrically. We therefore assume we have a typing derivation \(\Gamma \vdash \Coh \Delta A \sigma : C\), and will induct on this derivation to construction a derivation of \(\Gamma \vdash \Coh \Delta B \tau : C\).
+  \begin{itemize}
+  \item If the derivation is constructed with the conversion rule from \(\Gamma \vdash \Coh \Delta A \sigma : D\) and \(\Gamma \vdash D = C\), then we get a derivation \(\Gamma \vdash \Coh \Delta B \tau : D\) by inductive hypothesis and can apply the conversion rule to get a derivation \(\Gamma \vdash \Coh \Delta B \tau : C\).
+  \item If instead the derivation is constructed with the coherence rule then \(C \equiv A \sub \sigma\) and  \(A \equiv \arr s {A'} t\) and therefore \(B \equiv \arr {u} {B'} {v}\) with \(\Delta \vdash s = u\) and \(\Delta \vdash t = v\). We also have that \(\Delta \vdash_{\mathsf{ps}}\), \((\Delta, \Supp(s), \Supp(t)) \in \mathcal{O}\), \(\Delta \vdash A\), and \(\Gamma \vdash \sigma : \Delta\). By the inductive hypothesis on the equality, we have \(\Delta \vdash B\) and \(\Gamma \vdash \tau : \Delta\). By \cref{prop:supp-prop}, \(\Supp(s) = \Supp(u)\) and \(\Supp(t) = \Supp(v)\) and so \((\Delta, \Supp(u), \Supp(v)) \in \mathcal{O}\). Hence by the coherence rule we have \(\Gamma \vdash \Coh \Delta B \tau : B \sub \tau\). By \cref{prop:sub-prop-1,prop:sub-prop-2}, \(\Gamma \vdash A \sub \sigma = B \sub \tau\) and so by the conversion rule we obtain a derivation \(\Gamma \vdash \Coh \Delta B \tau : C\).
+  \end{itemize}
+
+  Finally suppose the equality is derived from \textsc{rule}, such that \((\Gamma, s,t) \in \mathcal{R}\) and \(\Gamma \vdash s : A\). If \(\Gamma \vdash s : B\), then the preservation condition gives a derivation \(\Gamma \vdash t : B\). Conversely, if \(\Gamma \vdash t : B\), then we need to show that \(\Gamma \vdash A = B\). By applying the preservation condition to the derivation \(\Gamma \vdash s : A\), we get a derivation \(\Gamma \vdash t : A\). Then by \cref{lem:ty-unique}, we have \(\Gamma \vdash A = B\) and so the proof is complete by applying the conversion rule to the derivation \(\Gamma \vdash s : A\).
+\end{proof}
+
+As with the other conditions, we end this section by showing that \dr satisfies the preservation condition.
+
+\begin{proposition}
+  Suppose \(\mathcal{R}\) satisfies the weakening condition, and the set of operations \(\mathcal{O}\) contains the standard operations. Then \dr satisfies the \(\mathcal{R}\)-preservation condition.
+\end{proposition}
+\begin{proof}
+  Take \((\Gamma, \Coh {D^n} {U^n} {\{A,t\}}, t) \in \dr\) and suppose \(\Gamma \vdash \Coh {D^n} {U^n} {\{A,t\}} : B\). Then by \cref{lem:ty-unique}:
+  \[\Gamma \vdash B = U^n \sub {\{A,t\}} \equiv A\]
+  By \cref{lem:disc-typing}, \(\Gamma \vdash t : A\) and so by the conversion rule \(\Gamma \vdash t : B\) as required.
+\end{proof}
+\todo[inline]{Check all discs for \(U^n\) instead of \(\wk(U^n)\)}
 
 \subsection{Endo-coherence removal}
 \label{sec:ecr}
+
+We conclude this chapter with a second example of a family of equality rules called \emph{endo-coherence removal}. As suggested by the name, these equalities simplify a class of terms known as a endo-coherences.
+
+\begin{definition}
+  An \emph{endo-coherence} is a coherence term \(\Coh \Delta {\arr s A s} \sigma\).
+\end{definition}
+
+If we consider the (ps-context):
+\[ \Delta = (x : \star) (y : \star) (f : \arr x \star y) (z : \star) (g : \arr y \star z) \]
+then we see that there are two distinct endo-coherences with source and target \(f * g\), the identity on \(f * g\) and the ``fake identity'' \(\Coh \Delta {f*g \to f*g} {\id_\Delta}\). In the type theories \Cattsu and \Cattsua introduced in \cref{sec:cattsu,sec:cattsua}, identities will be privileged, and these fake identities will be reduced to the true identity.
+
+More generally, for each term \(t\) there is a canonical endo-coherence with source and target \(t\), the identity on \(t\). Endo-coherence removal simplifies any other endo-coherence on that term to an identity. It makes the following rule admissible:
+\begin{mathpar}
+  \inferrule{\Delta \vdash_{\mathsf{ps}} \\ \Delta \vdash A \\ \Delta \vdash s : A \\ \Supp(s) = \Var(\Delta) \\ \Gamma \vdash \sigma : \Delta}{\Gamma \vdash \Coh \Delta {\arr s A s} \sigma = \id(A \sub \sigma,s \sub \sigma)}\textsc{ecr}
+\end{mathpar}
+Endo-coherence removal can be assembled into the following equality rule set.
+
+\begin{definition}
+  The endo-coherence removal set, \ecr, is the set consisting of the triples:
+  \[ \Gamma, \Coh \Delta {\arr s A s} \sigma, \id(A\sub \sigma, s \sub \sigma)) \]
+  for contexts \(\Gamma\) and \(\Delta\), \(A : \Type_\Delta\), \(s : \Term_\Delta\), and \(\sigma : \arr \Delta \star \Gamma\).
+
+  A set of rules \(\mathcal{R}\) \emph{contains endo-coherence removal} if \(\ecr \subseteq \mathcal{R}\). We say that \(\mathcal{R}\) \emph{has endo-coherence removal} if the rule \textsc{ecr} holds in the generated theory.
+\end{definition}
+
+The set \ecr satisfies all the conditions introduced in this chapter, as proven in the next proposition, which concludes this chapter.
+
+\begin{proposition}
+  Suppose the set of operations \(\mathcal{O}\) contains the standard operations. Then the set \ecr satisfies the following properties:
+  \begin{enumerate}[(i)]
+  \item The set \ecr satisfies the weakening condition.
+  \item The set \ecr satisfies the suspension condition.
+  \item The set \ecr satisfies the \(\mathcal{R}\)-substitution condition, for any equality set \(\mathcal{R}\).
+  \item The set \ecr satisfies the \(\mathcal{R}\)-support condition, for any equality set \(\mathcal{R}\) satisfying the support condition.
+  \item The set \ecr satisfies the \(\mathcal{R}\)-preservation condition, for any equality set \(\mathcal{R}\) satisfying the weakening and substitution conditions.
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+  Suppose \((\Gamma, \Coh \Delta {\arr s A s} \sigma, \id(A \sub \sigma, s \sub \sigma)) \in \ecr\). To show that the substitution holds, we suppose that \(\tau : \arr \Gamma \star \Theta\), and then must prove that:
+  \[ (\Theta, \Coh \Delta {\arr s A s} {\sigma \bullet \tau}, \id(A \sub \sigma, s \sub \sigma) \sub \tau) \in \ecr \]
+  It is immediate that:
+  \[ (\Theta, \Coh \Delta {\arr s A s} {\sigma \bullet \tau}, \id(A \sub {\sigma \bullet \tau}, s \sub {\sigma \bullet \tau})) \in \ecr \]
+  and so it suffices to prove that \(\id(A \sub \sigma, s \sub \sigma) \sub \tau \equiv \id(A \sub {\sigma \bullet \tau},s \sub {\sigma \bullet \tau})\), but this follows from \cref{item:disc-prop-sub-sub,prop:categorical}. The weakening condition then follows from the substitution condition.
+
+  For the suspension condition, it must be shown that:
+  \[ (\Sigma(\Gamma), \Coh {\Sigma(\Delta)} {\arr {\Sigma(s)} {\Sigma(A)} {\Sigma(s)}} {\Sigma(\sigma)}, \Sigma(\id(A\sub \sigma, s \sub \sigma))) \in \ecr \]
+  and so it suffices to show that \(\Supp(\Sigma(s)) = \Var(\Sigma(\Delta))\), which follows from \(\Supp(\Sigma(s)) = \Sigma(\Supp(s))\), and
+  \[ \Sigma(\id(A \sub \sigma, s \sub \sigma)) \equiv \id(\Sigma(A) \sub {\Sigma(\sigma)}, \Sigma(s) \sub {\Sigma(\sigma)}) \]
+  which follows from the functoriality of suspension and \cref{item:disc-prop-sub-susp,item:disc-prop-susp}.
+
+  For the support condition, assume that \(\Gamma \vdash_{\mathcal{R}} \Coh \Delta {\arr s A s} \sigma : B\) for some \(B : \Type_\Gamma\) and that \(\mathcal{R}\) satisfies the support condition. Then:
+  \begin{align*}
+    \Supp(\Coh \Delta {\arr s A s} \sigma) &= \Supp(\sigma)\\
+                                           &= \FV(\sigma)&\text{by \cref{item:supp-sub-char}}\\
+                                           &= \Var(\Delta) \sub \sigma \\
+                                           &= \Supp(s) \sub \sigma&\text{by assumption}\\
+                                           &= (\Supp(A) \cup \Supp(s)) \sub \sigma &\text{by \cref{item:supp-tm-char-2}}\\
+                                           &= \DC_\Delta(\FV(A) \cup \FV(s)) \sub \sigma\\
+                                           &= \DC_\Gamma(\FV(A) \sub \sigma \cup \FV(s) \sub \sigma)&\text{by \cref{cor:dc-sub}}\\
+    &= \DC_\Gamma(\FV(A \sub \sigma) \cup \FV(s \sub \sigma))&\text{by \cref{prop:vs-sub}}\\
+                                           &= \Supp(A \sub \sigma) \cup \Supp(s \sub \sigma)\\
+    &= \Supp(\id(A \sub \sigma, s \sub \sigma))
+  \end{align*}
+  as required.
+
+  Lastly for the preservation condition, let \(\mathcal{R}\) satisfy the weakening and substitution conditions, and assume \(\Gamma \vdash \Coh \Delta {\arr s A s} {\sigma} : B\). By deconstructing the typing derivation, we must have that \(\Delta \vdash A\), \(\Delta \vdash s : A\), and \(\Gamma \vdash \sigma : \Delta\). Therefore, by \cref{prop:sub-prop-1}, \(\Gamma \vdash A \sub \sigma\) and \(\Gamma \vdash s \sub \sigma : A \sub \sigma\). Hence, by \cref{cor:id-typing}, \(\Gamma \vdash \id(A \sub \sigma, s \sub \sigma) : (\arr s A s) \sub \sigma\). It remains to prove that \(\Gamma \vdash (\arr s A s) \sub \sigma = B\), but this is immediate from \cref{lem:ty-unique}, applied to the derivation \(\Gamma \vdash \Coh \Delta {\arr s A s} \sigma : B\).
+\end{proof}
 
 
 \chapter{Constructions in \Catt}
@@ -2764,13 +2897,14 @@ We now prove the appropriate support condition for disc removal.
 
 
 
-\chapter{Semistrict versions of \Catt}
+\chapter{Semistrict variants of \Catt}
 \label{cha:cattstrict}
 
 \section{\Cattsu}
 \label{sec:cattsu}
 
 \todo[inline]{Include disc trivialisation}
+\todo[inline]{Isos of ps contexts}
 
 \section{\Cattsua}
 \label{sec:cattsua}
