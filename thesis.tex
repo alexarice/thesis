@@ -1359,6 +1359,8 @@ The main purpose of this chapter will be to define the family of type theories \
 
 This chapter will also introduce the Agda\todo{citation} formalisation which accompanies this thesis, which compiles with Agda v2.6.4 and standard library v2.0. The formalisation implements the syntax and typing judgements of \Cattr, and contains proofs of most results in this chapter and \cref{sec:operations-catt}. By formalising \Cattr, instead of the more specific type theories \Cattsu and \Cattsua introduced in \cref{sec:cattsu,sec:cattsua}, the formalisation of many results can be applied to both type theories. This also allows these results to be applied to any future type theories that fit into this family.
 
+\todo[inline]{Dependency graph of formalisation}
+
 \section{Extended substitution}
 \label{sec:extend-subst}
 
@@ -1960,6 +1962,16 @@ Currently, our set of operations is completely unconstrained, and we will be lim
   \[ \Sigma(V) = \{ N , S \} \cup V \]
   where \(\Sigma(V)\), the suspension of \(V\) is a variable set over \(\Sigma(\Delta)\).
 \end{definition}
+The suspension of a variable set commutes with taking the support of a piece of syntax, as shown in the next lemma.
+\begin{lemma}
+  \label{lem:susp-vs-prop}
+  The following equalities hold:
+  \[ \Supp(\Sigma(s)) = \Sigma(\Supp(s)) \qquad \Supp(\Sigma(A)) = \Sigma(\Supp(A)) \qquad \Supp(\Sigma(\sigma)) = \Sigma(\Supp(\sigma)) \]
+  for term \(s : \Term_\Gamma\), type \(A : \Type_\Gamma\), and substitution \(\sigma : \arr \Delta \star \Gamma\).
+\end{lemma}
+\begin{proof}
+  All equalities hold by a mutual induction on terms, types, and substitutions, with a secondary induction on the context \(\Gamma\) for the case of the variables and the base type \(\star\). These calculations are given in \module{Catt.Suspension.Support}.
+\end{proof}
 
 We can then define our first property on operation sets.
 
@@ -2251,7 +2263,7 @@ If the set of operations \(\mathcal{O}\) is suspendable, then this condition is 
 \begin{proof}
   The rules concerning the unrestriction operation follow by simple induction on the typing judgement or equality in the premise, and in fact do not need the suspension condition.
 
-  The remainder of the rules follow from a routine mutual induction on all typing and equality rules, which can be found in \module{Catt.Suspension.Typing}. The suspension condition and the suspendability of the operation set are used for the case involving the typing rule for coherences. In this case, the functoriality of suspension is used to show that the coherence has the correct type.
+  The remainder of the rules follow from a routine mutual induction on all typing and equality rules, which can be found in \module{Catt.Suspension.Typing}. The suspension condition and the suspendability of the operation set are used for the case involving the typing rule for coherences, which also makes use of \cref{lem:susp-vs-prop}. In this case, the functoriality of suspension is used to show that the coherence has the correct type.
 \end{proof}
 
 Similarly to the weakening condition, the suspension condition is closed under unions of rule sets, and we can show it is satisfied by \dr, with a similar proof to the proof for weakening.
@@ -2270,7 +2282,7 @@ Similarly to the weakening condition, the suspension condition is closed under u
 
 \paragraph{Substitution condition}
 
-The substitution condition takes a slightly different form to the previous two conditions. Instead of requiring that the rule set is closed under application of any arbitrary substitution \(\sigma\), we instead only ensure it is closed under well-typed substitutions. This will not prevent us proving that typing is closed under the application of substitutions, but will be critical in proving that the supported rules construction, which will be given in \todo{reference} and is used for proving the support condition, satisfies the substitution condition.
+The substitution condition takes a slightly different form to the previous two conditions. Instead of requiring that the rule set is closed under application of any arbitrary substitution \(\sigma\), we instead only ensure it is closed under well-typed substitutions. This will not prevent us proving that typing is closed under the application of substitutions, but will be critical in proving that the supported rules construction, which will be given in \cref{def:rule-with-supp} and is used for proving the support condition, satisfies the substitution condition.
 
 \begin{definition}
   An equality rule set \(\mathcal{R}\) satisfies the \emph{\(\mathcal{R}'\)-substitution condition} if:
@@ -2357,9 +2369,8 @@ We lastly show that \dr also satisfies the substitution condition.
 \end{proof}
 
 \begin{remark}
-  The proof of the substitution condition for \dr makes no use of the typing of \(\sigma\). In fact this premise is only necessary for the supported rules construction which will be given in
+  The proof of the substitution condition for \dr makes no use of the typing of \(\sigma\). In fact this premise is only necessary for the supported rules construction which will be given in \cref{def:rule-with-supp}
 \end{remark}
-\todo[inline]{reference above}
 
 \paragraph{Tameness}
 
@@ -2424,8 +2435,8 @@ In traditional presentations of \Catt, \(\FV(t) \cup \FV(A)\) is used instead of
   \begin{lemmaenum}
   \item \(\Supp(A) = \FV(A)\) when \(\Gamma \vdash A\),
   \item \(\Supp(\sigma) = \FV(\sigma)\) when \(\Gamma \vdash \sigma : \Delta\),
-  \item \(\Supp(t) = \Supp(A) \cup \FV(t)\) when \(\Gamma \vdash t : A\),
-  \item \(\Supp(t) = \FV(A) \cup \FV(t) = \Supp(A) \cup \Supp(t)\) when \(\Gamma \vdash t : A\) and \(\Gamma \vdash A\).
+  \item \label{item:supp-tm-char-1} \(\Supp(t) = \Supp(A) \cup \FV(t)\) when \(\Gamma \vdash t : A\),
+  \item \label{item:supp-tm-char-2} \(\Supp(t) = \FV(A) \cup \FV(t) = \Supp(A) \cup \Supp(t)\) when \(\Gamma \vdash t : A\) and \(\Gamma \vdash A\).
   \end{lemmaenum}
 \end{lemma}
 \begin{proof}
@@ -2474,10 +2485,106 @@ In traditional presentations of \Catt, \(\FV(t) \cup \FV(A)\) is used instead of
   \end{enumerate}
   This proof is formalised in \module{Catt.Typing.Properties.Support}.
 \end{proof}
+\begin{corollary}
+  \label{cor:dc-sub}
+  Let \(\mathcal{R}\) satisfy the support condition and suppose \(\Gamma \vdash \sigma : \Delta\). Then the following equality holds:
+  \[ \DC_\Gamma(V \sub \sigma) = \DC_\Delta(V) \sub \sigma \]
+  for all \(V \subseteq \Var(\Delta)\); downwards closure commutes with the application of \(\sigma\) to variable sets.
+\end{corollary}
+\begin{proof}
+  Proceed by induction on \(\Delta\). If \(\Delta \equiv \emptyset\) then the equation is trivial. Therefore assume \(\Delta \equiv \Theta, (x : A)\) and so \(\sigma \equiv \langle \tau , t \rangle\) with \(\Gamma \vdash \tau : \Theta\) and \(\Gamma \vdash t : A \sub \tau\) by case analysis. We now split on whether \(x \in V\).
 
-\todo[inline]{Use disc removal to introduce problem}
+  If \(x \not\in V\) then \(\DC_\Gamma(V \sub \sigma) = \DC_\Gamma(V \sub \tau) = \DC_\Theta(V) \sub \tau = \DC_\Delta(V) \sub \tau\) with the second equality due to inductive hypothesis. Otherwise \(x \in V\) and so letting \(U = V \setminus \{x\}\) we get the equality:
+  \begin{align*}
+    \DC_\Gamma(V \sub \sigma) &= \DC_\Gamma(U \sub \tau \cup \FV(t))\\
+                              &= \DC_\Gamma(U \sub \tau) \cup \Supp(t)\\
+                              &= \DC_\Gamma(U \sub \tau) \cup \Supp(A \sub \tau) \cup \FV(t)&(\dagger)\\
+                              &= \DC_\Gamma(U \sub \tau) \cup \DC_\Gamma(\FV(A) \sub \tau) \cup \FV(t) \\
+                              &= \DC_\Gamma(U \sub \tau \cup \FV(A) \sub \tau)  \cup \FV(t)\\
+                              &= \DC_\Gamma((U \cup \FV(A)) \sub \tau) \cup \FV(t)\\
+                              &= \DC_\Theta(U \cup \FV(A)) \sub \tau \cup \FV(t)&(*)\\
+                              &= (\{x\} \cup \DC_\Theta(U \cup \FV(A))) \sub \sigma \\
+                              &= \DC_\Delta(V) \sub \sigma
+  \end{align*}
+  where equality \((*)\) is by inductive hypothesis and equality \((\dagger)\) is by \cref{item:supp-tm-char-1}.
+\end{proof}
 
-\todo[inline]{Give proof strategy}
+Unfortunately, proving that the support condition holds for most equality rule sets is not as trivial as the proofs for the tameness properties. Consider the case for disc removal, which gives rise to the equality
+\[ \Gamma \vdash \Coh {D^n} {U^n} {\{A,t\}} = t \]
+To prove the support condition for this case we need to show that:
+\[ \Supp(\{A,t\}) = t \]
+where we can assume that \(\Gamma \vdash t : A\). Intuitively this should hold, as the support of a substitution should be equal to the support of the locally maximal arguments, and if the derivation \(\Gamma \vdash t : A\) held in \Catt, we would be able to prove this. However, this proof (and intuition) relies on the derivation \(\Gamma \vdash_{\mathcal{R}} t : A\) holding in a theory generated by \(\mathcal{R}\) where \(\mathcal{R}\) already satisfies the support condition, without which the typing derivation offers little utility.
+
+We therefore introduce a proof strategy for showing that the support condition holds. The key insight of this strategy is to prove by induction that every equality and every typing derivation in the system is well-behaved with respect to support. Then, for the case of an equality \(\Gamma \vdash s = t\) arising from a rule \((\Gamma, s, t)\), we have \(\Gamma \vdash s : A\) as a premise and so by inductive hypothesis can assume that this typing derivation is well behaved with respect to support.
+
+We formalise this with the following definition, called the \emph{supported rules} construction:
+\begin{definition}
+  \label{def:rule-with-supp}
+  Let \(\mathcal{R}\) be some equality rule set. The \emph{supported rules} construction applied to \(\mathcal{R}\) produces the equality rule set \(\mathcal{R}_{\mathsf{S}}\), given by:
+  \[ \mathcal{R}_{\mathsf{S}} = \{ (\Gamma, s, t) \in \mathcal{R} \mid \Supp(s) = \Supp(t)\} \]
+  The rule set \(\mathcal{R}_{\mathsf{S}}\) satisfies the support condition by construction.
+\end{definition}
+
+The proof strategy then proceeds as follows: to prove that \(\mathcal{R}\) satisfies the support condition, we instead prove that \(\mathcal{R}\) satisfies the \(\mathcal{R}_{\mathsf{S}}\)-support condition, leveraging that \(\mathcal{R}_\mathsf{S}\) itself satisfies the support condition. The proof is then completed by the following lemma:
+\begin{lemma}
+  \label{lem:proof-strat-supp}
+  Let \(\mathcal{R}\) be an equality rule set that satisfies the \(\mathcal{R}_{\mathsf{S}}\)-support condition. Then the following inference rules are admissible:
+  \begin{mathpar}
+    \inferrule{\Gamma \vdash_\mathcal{R} A}{\Gamma \vdash_{\mathcal{R}_\mathsf{S}} A}\and
+    \inferrule{\Gamma \vdash_\mathcal{R} s : A}{\Gamma \vdash_{\mathcal{R}_\mathsf{S}} s : A}\and
+    \inferrule{\Gamma \vdash_\mathcal{R} \sigma : \Delta}{\Gamma \vdash_{\mathcal{R}_\mathsf{S}} \sigma : \Delta}\and
+    \inferrule{\Gamma \vdash_\mathcal{R} A = B}{\Gamma \vdash_{\mathcal{R}_\mathsf{S}} A = B}\and
+    \inferrule{\Gamma \vdash_\mathcal{R} s = t}{\Gamma \vdash_{\mathcal{R}_\mathsf{S}} s = t}\and
+    \inferrule{\Gamma \vdash_\mathcal{R} \sigma = \tau}{\Gamma \vdash_{\mathcal{R}_\mathsf{S}} \sigma = \tau}
+  \end{mathpar}
+  and hence \(\mathcal{R}\) satisfies the support condition.
+\end{lemma}
+\begin{proof}
+  The inference rules are all proven using a mutual induction on all typing and equality rules, using that \(\mathcal{R}\) satisfies the \(\mathcal{R}_\mathsf{S}\)-support condition in the case where the equality \(\Gamma \vdash s = t\) is derived from a rule \((\Gamma, s, t) \in \mathcal{R}\). This induction is formalised in \module{Catt.Support.Typing}.
+
+  The set \(\mathcal{R}\) then satisfies the support condition as if \((\Gamma,s,t) \in \mathcal{R}\) and \(\Gamma \vdash_{\mathcal{R}} s : A\), then \(\Gamma \vdash_{\mathcal{R}_{\mathsf{S}}} s : A\) holds by the first part of the lemma and so \(\Supp(s) = \Supp(t)\) as \(\mathcal{R}\) is already known to satisfy the \(\mathcal{R}_{\mathsf{S}}\)-support condition.
+\end{proof}
+
+\begin{remark}
+  The original motivation for parameterising \Catt by an arbitrary set of equality rules \(\mathcal{R}\) was not to share proofs between \Cattsu and \Cattsua but was to be able to state the supported rules construction.
+\end{remark}
+
+To be able to prove that \(\mathcal{R}\) satisfies the \(\mathcal{R}_{\mathsf{S}}\)-support condition, we will commonly need to know that \(\mathcal{R}_{\mathsf{S}}\) satisfies various tameness conditions, which are given by the next lemma.
+
+\begin{lemma}
+  Let \(\mathcal{R}\) be any equality set. Then \(\mathcal{R}_{\mathsf{S}}\) satisfies the weakening, suspension, and substitution conditions if \(\mathcal{R}\) respects the corresponding condition.
+\end{lemma}
+\begin{proof}
+  Let \((\Gamma, s, t) \in \mathcal{R}\) be an arbitrary rule. To show \(\mathcal{R}_{\mathsf{S}}\) satisfies the weakening condition we need to show that:
+  \[ (\Gamma, s, t) \in \mathcal{R}_{\mathsf{S}} \implies ((\Gamma, (x : A)), \wk(s), \wk(t)) \in \mathcal{R}_{\mathsf{S}} \]
+  By assumption, \((\Gamma, \wk(s), \wk(t)) \in \mathcal{R}\) and by the premise of the implication we have \(\Supp(s) = \Supp(t)\). From this it follows that \(\Supp(\wk(s)) = \Supp(\wk(t))\) and so the conclusion of the implication holds.
+
+  The case for suspension is similar except we need to use the equality:
+  \[ \Supp(\Sigma(s)) = \Sigma(\Supp(s)) = \Sigma(\Supp(t)) = \Supp(\Sigma(t)) \]
+  derived from \cref{lem:susp-vs-prop} and \(\Supp(s) = \Supp(t)\) from the premise of the implication.
+
+  For the substitution condition we need to show that:
+  \[ \Supp(s) = \Supp(t) \implies \Supp(s \sub \sigma) = \Supp(t \sub \sigma) \]
+  under the assumption that \(\Delta \vdash_{\mathcal{R}_\mathsf{S}} \sigma : \Gamma\). Since \(\mathcal{R}_\mathsf{S}\) satisfies the support rule, we can use \cref{cor:dc-sub} to get:
+  \[ \Supp(s \sub \sigma) = \DC_\Gamma(\FV(s) \sub \sigma) = \Supp(s) \sub \sigma = \Supp(t) \sub \sigma = \DC_\Gamma(\FV(t) \sub \sigma) = \Supp(t \sub \sigma) \]
+  as required.
+\end{proof}
+
+We now prove the appropriate support condition for disc removal.
+
+\begin{proposition}
+  Let \(\mathcal{R}\) satisfy the support and weakening conditions. Then the set \(\dr\) satisfies the \(\mathcal{R}\)-support condition.
+\end{proposition}
+\begin{proof}
+  It is sufficient to prove that given \(s : \Term_\Gamma\), \(A : \Type_\Gamma\), and \(n = \dim(A)\) that:
+  \[\Gamma \vdash_{\mathcal{R}} \Coh {D^n} {U^n} {\{A,t\}} : B \implies \Supp(\{A,t\}) = \Supp(t) \]
+  Assume the premise of the implication. Then \(\Gamma \vdash_{\mathcal{R}} \{A,t\} : D^n\) by case analysis on the typing derivation and so \(\Gamma \vdash_{\mathcal{R}} A\) and \(\Gamma \vdash_{\mathcal{R}} t : A\) by \cref{lem:disc-typing} as \(\mathcal{R}\) satisfies the weakening condition.
+
+  By a simple induction, it can be shown that \(\Supp(\{A,t\}) = \Supp(A) \cup \Supp(t)\). By \cref{item:supp-tm-char-2} we have \(\Supp(t) = \Supp(A) \cup \Supp(t)\) as \(\mathcal{R}\) satisfies the support condition and so \(\Supp(\{A,t\}) = \Supp(t)\) as required.
+\end{proof}
+
+\todo[inline]{Iso between pasting diagrams}
+\todo[inline]{Cannot show yet that the iso is equal to the identity}
 
 \paragraph{Conversion condition}
 
