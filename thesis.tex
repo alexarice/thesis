@@ -2146,7 +2146,14 @@ The following proposition is immediately provable by mutual induction on typing 
   for types \(A,B : \Type_\Gamma\), term \(s : \Term_\Gamma\) and substitution \(\sigma : \arr \Delta C \Gamma\).
 \end{proposition}
 
-Using only this proposition we can immediately prove typing properties for several constructions using discs.
+\begin{corollary}
+  \label{cor:id-sub-ty}
+  If \(\mathcal{R}\) satisfies the weakening condition then:
+  \[ \Gamma \vdash \id_\Gamma : \Gamma \]
+  for any \(\Gamma : \Ctx\).
+\end{corollary}
+
+Using only the above proposition we can immediately prove typing properties for several constructions using discs.
 
 \begin{lemma}
   \label{lem:disc-typing}
@@ -2300,6 +2307,31 @@ The substitution condition allows us to give the next proposition.
   with the non-syntactic equality following from the preservation of equality by suspension and inductive hypothesis. These proofs that the extended versions of these rules are admissible is found in \module{Catt.Typing.Properties.Substitution.Suspended}.
 \end{proof}
 
+We also prove that application of substitution respects equality in its second argument, which does in fact not need to substitution condition. This is also proved by a simple mutual induction in \module{Catt.Typing.Properties.Substitution}.
+
+\begin{proposition}
+  The following inference rules are admissible:
+  \begin{mathpar}
+    \inferrule{\Gamma \vdash \sigma = \tau}{\Gamma \vdash s \sub \sigma = s \sub \tau}\and
+    \inferrule{\Gamma \vdash \sigma = \tau}{\Gamma \vdash A \sub \sigma = A \sub \tau}\and
+    \inferrule{\Gamma \vdash \sigma = \tau}{\Gamma \vdash \mu \bullet \sigma = \mu \bullet \tau}
+  \end{mathpar}
+  for substitutions \(\sigma : \arr \Delta A \Gamma\), \(\tau : \arr \Delta B \Gamma\), and \(\mu : \arr \Theta C \Delta\), term \(s : \Term_\Delta\), and type \(A : \Type_\Delta\).
+\end{proposition}
+
+This allows us to finally define a category of well-typed syntax in \Cattr. which is well defined by the two preceding definitions.
+
+\begin{definition}
+  Suppose \(\mathcal{R}\) satisfies the substitution and weakening conditions. Then we can define the \emph{syntactic category} of \Cattr, which by an abuse of notation we also call \Cattr, to have:
+  \begin{itemize}
+  \item Objects given by contexts \(\Gamma\) where \(\Gamma \vdash\).
+  \item Morphisms \(\Delta \to \Gamma\) given by substitutions \(\sigma : \arr \Delta \star \Gamma\) where \(\Gamma \vdash \sigma : \Delta\) quotiented by the relation which equates substitutions \(\sigma\) and \(\tau\) when \(\Gamma \vdash \sigma = \tau\).
+  \item The identity morphism \(\Gamma \to \Gamma\) given by \(\id_\Gamma\).
+  \item Composition is given by \(\tau \circ \sigma = \sigma \bullet \tau\).
+  \end{itemize}
+  By \cref{cor:id-sub-ty}, the identity substitution is a well-defined morphism, and the above two propositions prove that compostition is well defined., Composition satisfies associativity and unitality by \cref{prop:categorical}.
+\end{definition}
+
 By taking the weakening of the identity substitution \(\id_\Gamma : \Gamma \to \Gamma\) we get a substitution:
 \[ \proj_{\Gamma} = \wk(\id_\Gamma) : \Gamma \to \Gamma, (x : A)\]
 which includes \(\Gamma\) into \(\Gamma, x : A\). It can be checked (and is given by \func{Catt.Syntax.Properties}{}{apply-project-is-wk-tm} in the formalisation) that applying this substitution to a term is the same operation as weakening the term. Using this, the following can be proved:
@@ -2341,21 +2373,107 @@ We can finally define tameness.
   The set \dr is tame.
 \end{proposition}
 
-\todo[inline]{Could have instead closed rules under substitution}
-\todo[inline]{Possibly not worth considering anything non-tame}
+In the formalisation, each module is parameterised by the various conditions that the module needs, and where possible we avoid using extra unnecessary conditions. Given that every theory we will consider in this thesis is tame, and that it is hard to imagine a sensible theory that isn't tame, the argument could be made that the effort put into making distinctions between these conditions is wasted or at least unnecessary.
+
+The case for including the weakening condition is especially unconvincing as it is implied by the substitution condition which likely holds in any theory of significant interest. It is however included here as it is used in the formalisation, where its introduction is an artefact of the natural progression of this research.
+
+To this end, from \cref{sec:operations-catt}, we will assume that the theory we are working over is tame, and build a library of constructions and results that work in any tame theory, even when some of the results may not need all the conditions above.
+
+Since we have limited use for proving properties about theories that do not satisfy the substitution condition, we could have instead enforced that all theories respect substitution by adding a constructor to the (term) equality relation that takes an equality \(\Delta \vdash s = t\) and typing relation \(\Gamma \vdash \sigma : \Delta\) to an equality \(\Gamma \vdash s \sub \sigma = t \sub \sigma\). This may remove some overhead of setting up the weakening and substitution conditions. It would also allow more minimal equality rule sets to be given, as a rule set such as disc removal could be given by
+\[ \{(D^n, \Coh {D^n} {U^n} {\id_{D^n}}, d_n) \mid n \in \mathbb{N}\} \]
+On the other hand, including the extra constructor would effectively add an extra case to each inductive proof, and it is less clear how to minimise some of the equality rules that will be introduced in \cref{sec:operations-catt}. Taking either approach would likely lead to a similar development of the theory.
 
 \subsection{Further conditions}
 \label{sec:further-conditions}
 
-\todo[inline]{Most constructions can be done in a tame theory}
-
-\todo[inline]{Introduce extra conditions to help prove metatheoretic properties}
+Knowing that the theory we are working in is tame will be sufficient for giving most of the constructions and proofs in \cref{sec:operations-catt}. Here we introduce some extra conditions that instead serve to aid in the proof of metatheoretic properties of the generated theory. These conditions take the form of predicates on each rule in the equality rule sets, rather than being closure properties as the conditions for tameness were.
 
 \paragraph{Support condition}
 
-\todo[inline]{Give definition}
+The support of a term plays a central role in classifying the operations of the theory (see \cref{sec:support}). Although it is known that support is respected by syntactic equality, we have not yet shown it is preserved by definitional equality. The following condition allows this to be proved.
 
-\todo[inline]{Pinpoint use for support/downwards closure}
+\begin{definition}
+  A set \(\mathcal{R}\) satisfies the \emph{\(\mathcal{R}'\)-support condition} for an equality set \(\mathcal{R}'\) when:
+  \[ \Gamma \vdash_{\mathcal{R}'} s : A \implies \Supp(s) = \Supp(t) \]
+  for each \((\Gamma,s,t) \in \mathcal{R}\) and \(A : \Type_\Gamma\). A set \(\mathcal{R}\) satisfies the \emph{support condition} if it satisfies the \(\mathcal{R}\)-support condition.
+\end{definition}
+
+The use of support instead of free variables in this definition is critical, as we do not expect the free variables of a piece of syntax to be preserved by equality in general. As an example, we would like to have the equality:
+\[ D^1 \vdash \Coh {D^1} {U^1} {\id_{D^1}} = d_1 \]
+given by disc removal, yet the free variables of each side are not equal (though the support of each side is).
+
+We also draw attention to typing premise. Without this, the left hand side of each equality rule is too unconstrained (at least with how the equality rules are currently presented), and this condition would fail to hold on the equality sets we introduce in this thesis. Having this typing premise come from a separate rule set \(\mathcal{R}'\) allows the support condition to be preserved by unions of equality sets, similar to the substitution condition.
+
+From the support condition, we immediately get the following proposition, proved by mutual induction.
+
+\begin{proposition}
+  \label{prop:supp-prop}
+  Let \(\mathcal{R}\) satisfy the support condition. Then the following rules are admissible:
+  \begin{mathpar}
+    \inferrule{\Gamma \vdash s = t}{\Supp(s) = \Supp(t)}\and
+    \inferrule{\Gamma \vdash A = B}{\Supp(A) = \Supp(B)}\and
+    \inferrule{\Gamma \vdash \sigma = \tau}{\Supp(\sigma) = \Supp(\tau)}
+  \end{mathpar}
+  For \(s,t: \Term_\Gamma\), \(A,B : \Type_\Gamma\) and substitutions \(\sigma : \arr \Delta A \Gamma\) and \(\tau : \arr \Theta B \Gamma\).
+\end{proposition}
+
+In traditional presentations of \Catt, \(\FV(t) \cup \FV(A)\) is used instead of \(\Supp(t)\) for a term \(t\) of type \(A\). Equipped with the support condition we can now show that these are the same.
+
+\begin{lemma}
+  The following hold when \(\mathcal{R}\) satisfies the support condition:
+  \begin{lemmaenum}
+  \item \(\Supp(A) = \FV(A)\) when \(\Gamma \vdash A\),
+  \item \(\Supp(\sigma) = \FV(\sigma)\) when \(\Gamma \vdash \sigma : \Delta\),
+  \item \(\Supp(t) = \Supp(A) \cup \FV(t)\) when \(\Gamma \vdash t : A\),
+  \item \(\Supp(t) = \FV(A) \cup \FV(t) = \Supp(A) \cup \Supp(t)\) when \(\Gamma \vdash t : A\) and \(\Gamma \vdash A\).
+  \end{lemmaenum}
+\end{lemma}
+\begin{proof}
+  All properties are proven by a single mutual induction on the typing derivations in the premises.
+  \begin{enumerate}[(i)]
+  \item Suppose \(\Gamma \vdash A\). If \(A \equiv \star\) then \(\Supp(A) = \FV(A) = \emptyset\). Instead suppose \(A \equiv \arr s B t\). Then we have that \(\Gamma \vdash B\), \(\Gamma \vdash s : B\), and \(\Gamma \vdash t : B\) and so:
+    \begin{align*}
+      \Supp(A) &= \Supp(B) \cup \Supp(s) \cup \Supp(t)\\
+               &= \FV(B) \cup (\FV(B) \cup \FV(s)) \cup (\FV(B) \cup \FV(t))&(*)\\
+               &= \FV(B) \cup \FV(s) \cup \FV(t)\\
+               &= \FV(A)
+    \end{align*}
+    where the equality \((*)\) is derived from the inductive hypothesis for (i) applied to \(B\) and the inductive hypothesis for (iv) applied to \(s\) and \(t\).
+  \item Suppose \(\Gamma \vdash \sigma : \Delta\). If \(\sigma \equiv \langle A \rangle\) then \(\Gamma \vdash A\) and so:
+    \[\Supp(\sigma) = \Supp(A) = \FV(A) = \FV(\sigma)\]
+    If instead \(\sigma \equiv \langle \tau, t \rangle\) and \(\Delta = \Theta, (x : A)\) then \(\Gamma \vdash \tau : \Theta\) and \(\Gamma \vdash t : A \sub \tau\) and so:
+    \begin{align*}
+      \Supp(\sigma) &= \Supp(\tau) \cup \Supp(t)\\
+                    &= \Supp(\tau) \cup (\Supp(A \sub \tau) \cup \FV(t))&(*)\\
+                    &= \DC_\Gamma(\FV(\tau) \cup \FV(A \sub \tau)) \cup \FV(t)\\
+                    &= \Supp(\tau) \cup \FV(t)&\text{as }\FV(A \sub \tau) \subseteq \FV(\tau)\\
+                    &= \FV(\tau) \cup \FV(t)&(\dagger)\\
+                    &= \FV(\sigma)
+    \end{align*}
+    where the equality \((*)\) is derived from the inductive hypothesis for (iii) applied to \(t\) and the equality \((\dagger)\) is derived from the inductive hypothesis for (ii) applied to \(\tau\).
+  \item Suppose \(\Gamma \vdash t : A\). We then split on the constructor used for the typing derivation:
+
+    If the derivation is the result of a conversion rule applied to \(\Gamma \vdash t : B\) and \(\Gamma \vdash A = B\), then inductive hypothesis gives \(\Supp(t) = \Supp(B) \cup \FV(t)\) and \cref{prop:supp-prop} gives \(\Supp(A) = \Supp(B)\) and so \(\Supp(t) = \Supp(A) \cup \FV(t)\) as required.
+
+    If the derivation is derived from the typing rule for variables, then a simple induction on the context \(\Gamma\), using that \(\Supp(\wk(A)) = \Supp(A)\), gives the required result.
+
+    If the derivation is given by the typing rule for coherences then \(t \equiv \Coh \Delta B \sigma\), \(\Gamma \vdash \sigma : \Delta\), and \(A \equiv B \sub \sigma\) . Therefore,
+    \begin{align*}
+      \Supp(t) &= \Supp(\sigma)\\
+               &= \DC_\Gamma(\FV(B \sub \sigma) \cup \FV(\sigma))&\text{as }\FV(B \sub \sigma) \subseteq \FV(\sigma)\\
+               &= \Supp(A) \cup \Supp(\sigma)\\
+               &= \Supp(A) \cup \FV(\sigma)&(*)\\
+               &= \Supp(A) \cup \FV(t)
+    \end{align*}
+    where the equality \((*)\) is the result of applying the inductive hypothesis for (ii) to \(\sigma\).
+  \item If \(\Gamma \vdash t : A\) and \(\Gamma \vdash A\) then:
+    \[ \Supp(t) = \Supp(A) \cup \FV(t) = \FV(A) \cup \FV(t) \]
+    trivially follows from (i) and (iii) and:
+    \[ \Supp(t) = \DC_\Gamma(\Supp(t)) = \DC_\Gamma(\FV(A) \cup \FV(t)) = \Supp(A) \cup \Supp(t) \]
+    with the first equality resulting from the idempotency of the downwards closure operator.
+  \end{enumerate}
+  This proof is formalised in \module{Catt.Typing.Properties.Support}.
+\end{proof}
 
 \todo[inline]{Use disc removal to introduce problem}
 
