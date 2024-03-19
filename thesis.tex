@@ -1020,7 +1020,7 @@ In this section we give an overview of the dependent type theory \Catt~\cite{fin
 
 The rules for constructing each piece of syntax are given in \cref{fig:syntax}. To simplify the notation, we may avoid writing substitutions in a fully nested fashion, writing \(\langle \sigma , s , t \rangle\) instead of \(\langle \langle \sigma, s \rangle, t \rangle\), or \(\langle s \rangle\) instead of \(\langle \langle \rangle, s \rangle\). We may also omit the subscript in the arrow type. As opposed to the original paper on \Catt, we fibre terms, types, and substitutions over contexts, allowing us to avoid any problems with substitution only extending to a partial operation on terms. We write \(\Ctx\) for the set of contexts, \(\Term_\Gamma\) for the set of terms in a context \(\Gamma\), \(\Type_\Gamma\) for the set of types in a context \(\Gamma\), and write \(\sigma : \Delta \to \Gamma\) when \(\sigma\) is a substitution taking variables of \(\Delta\) to terms of \(\Gamma\). In the literature, substitutions are often written as going in the opposite direction. We emphasise here that the direction of our substitution morphisms agrees with the direction of the function from variables to terms, the direction of the induced functor between the \(\infty\)-categories freely generated from the domain and codomain contexts, and the direction of arrows in a Grothendieck coherator.
 
-We write \(\equiv\) for \emph{syntactic equality}, up to renaming of variables and \(\alpha\)-equivalence. The various pieces of syntax will be considered as equal up to this relation, which can be achieved by using a de Brujin index representation of the syntax as we present in \cref{cha:gener-pres-catt} for the formalisation. However, we continue to use named variables in the prose of the thesis to aid readability, assuming that all variables in a context are always distinct. We contrast this with the equality symbol, \(=\), which will represent the equality derived from extra equality rules we have placed on \Catt in \cref{sec:catt-with-equality}, and will be referred to as \emph{definitional equality}.
+We write \(\equiv\) for \emph{syntactic equality}, up to renaming of variables and \(\alpha\)-equivalence. The various pieces of syntax will be considered as equal up to this relation, which can be achieved by using a de Bruijn index representation of the syntax as we present in \cref{cha:gener-pres-catt} for the formalisation. However, we continue to use named variables in the prose of the thesis to aid readability, assuming that all variables in a context are always distinct. We contrast this with the equality symbol, \(=\), which will represent the equality derived from extra equality rules we have placed on \Catt in \cref{sec:catt-with-equality}, and will be referred to as \emph{definitional equality}.
 
 The action of a substitution \(\sigma : \Delta \to \Gamma\) can be extended from variables to all terms \(t \in \Term_\Delta\), types \(A \in \Type_\Delta\), and substitutions \(\tau : \Theta \to \Delta\) by mutual recursion:
 \begin{align*}
@@ -1449,21 +1449,21 @@ The syntax of \Cattr will be identical to \Catt with the exceptions specified in
 \item Suspension is defined in \module{Catt.Suspension}.
 \item Other syntactic operations are defined in \module{Catt.Syntax}, which re-exports the core syntax.
 \end{itemize}
-To avoid any issues with alpha equivalence, especially as we have terms that contain contexts, we work with de Brujin indices throughout the formalisation. This means that a context is simply a vector of types, a fixed length list, which we give a nicer syntax to. Variables are then simply bounded natural numbers, represented by the sets \(\mathsf{Fin}_n\), where \(\mathsf{Fin}_n\) is the set \(\{0,\dots,n-1\}\). Given a context \(A , B , C\), the variables over this context are simply \(\mathsf{var\ 0}\), which has type \(C\), \(\mathsf{var\ 1}\), which has type \(B\), and \(\mathsf{var\ 2}\), with type \(A\). We note that \(3\) is not in \(\mathsf{Fin}_3\), and so \(\mathsf{var\ 3}\) is not a term of this context. Hence, we do not need to deal with unknown variables when applying substitutions. We will still make use of variable names in this text to aid readability, and will ignore any potential problems that could arise from this, knowing that the results are formalised in a setting where they do not appear.
+To avoid any issues with alpha equivalence, especially as we have terms that contain contexts, we work with de Bruijn indices throughout the formalisation. This means that a context is simply a vector of types, a fixed length list, which we give a nicer syntax to. Variables are then simply bounded natural numbers, represented by the sets \(\mathsf{Fin}_n\), where \(\mathsf{Fin}_n\) is the set \(\{0,\dots,n-1\}\). Given a context \(A , B , C\), the variables over this context are simply \(\mathsf{var\ 0}\), which has type \(C\), \(\mathsf{var\ 1}\), which has type \(B\), and \(\mathsf{var\ 2}\), with type \(A\). We note that \(3\) is not in \(\mathsf{Fin}_3\), and so \(\mathsf{var\ 3}\) is not a term of this context. Hence, we do not need to deal with unknown variables when applying substitutions. We will still make use of variable names in this text to aid readability, and will ignore any potential problems that could arise from this, knowing that the results are formalised in a setting where they do not appear.
 
 The formalisation also differs from the presentation in the texts by the way that the various notions of syntax are fibred. We fibre contexts by a natural number representing their length, and then fibre terms, types, and substitutions over these lengths instead of fibring them over the contexts. We then get the following 4 syntactic classes defined as mutually inductive families, where \(\mathcal{U}\) is a type universe:
-\[ \func{Catt.Syntax.Base}{94}{\Ctx} : \mathbb{N} \to \mathcal{U} \quad \func{Catt.Syntax.Base}{113}\Type : \mathbb{N} \to \mathcal{U} \quad \func{Catt.Syntax.Base}{131}\Term : \mathbb{N} \to \mathcal{U} \quad \func{Catt.Syntax.Base}{149}\Sub : (n\ m : \mathbb{N}) \to \Type_m \to \mathcal{U}\]
+\[ \funcn{Catt.Syntax.Base}{Ctx}{\Ctx} : \mathbb{N} \to \mathcal{U} \quad \funcn{Catt.Syntax.Base}{Ty}\Type : \mathbb{N} \to \mathcal{U} \quad \funcn{Catt.Syntax.Base}{Tm}\Term : \mathbb{N} \to \mathcal{U} \quad \funcn{Catt.Syntax.Base}{Sub}\Sub : (n\ m : \mathbb{N}) \to \Type_m \to \mathcal{U}\]
 This decision was made purely for convenience, by fibring over natural numbers instead of contexts, we sometimes avoid the need for providing more explicit arguments to syntactic constructions. It comes with drawback that the context must be provided for certain operations, such as the support of a piece of syntax, or the dimension of a term.
 
 One place an explicit argument can be avoided is when defining the weakening of a piece of syntax, an operation witnessing that for a piece of syntax living in a context \(\Gamma\), there is a copy living in \(\Gamma , A\) for any \(A\). These operations are defined in \module{Catt.Syntax} and take the following form, where we reuse the name \(\wk\) here as an abuse of notation:
-\[ \func{Catt.Syntax}{117}{\wk} : \Term_{\Gamma} \to \Term_{\Gamma, A}\quad\func{Catt.Syntax}{143}{\wk} : \Type_{\Gamma} \to \Type_{\Gamma, A}\quad \func{Catt.Syntax}{169}{\wk} : (\arr \Gamma B \Delta) \to (\arr {\Gamma} {\wk(B)} {\Delta, A}) \]
-If terms are fibred over contexts then this type \(A\) must often be specified, though with the fibring over context length this is no longer necessary. When using de Brujin indices, this operation is no longer the identity on terms, as each variable must be incremented due to the index in a variable counting from the end of the context. One might ask why de Brujin levels (which index from the start of the context) were not used instead, but this would not solve our problem as \(\mathsf{Fin}_n\) is not a sub type of \(\mathsf{Fin}_{n+1}\) in Agda. Furthermore, using de Brujin levels would cause the substitution application introduced in \cref{sec:syntax-catt} (and expanded in \cref{sec:extend-subst}) to compute poorly, due to the way substitutions are defined. The definition of weakening is given in \cref{fig:wk}.
+\[ \funcn{Catt.Syntax}{wk-tm}{\wk} : \Term_{\Gamma} \to \Term_{\Gamma, A}\quad\funcn{Catt.Syntax}{wk-ty}{\wk} : \Type_{\Gamma} \to \Type_{\Gamma, A}\quad \funcn{Catt.Syntax}{169}{wk-sub} : (\arr \Gamma B \Delta) \to (\arr {\Gamma} {\wk(B)} {\Delta, A}) \]
+If terms are fibred over contexts then this type \(A\) must often be specified, though with the fibring over context length this is no longer necessary. When using de Bruijn indices, this operation is no longer the identity on terms, as each variable must be incremented due to the index in a variable counting from the end of the context. One might ask why de Bruijn levels (which index from the start of the context) were not used instead, but this would not solve our problem as \(\mathsf{Fin}_n\) is not a sub type of \(\mathsf{Fin}_{n+1}\) in Agda. Furthermore, using de Bruijn levels would cause the substitution application introduced in \cref{sec:syntax-catt} (and expanded in \cref{sec:extend-subst}) to compute poorly, due to the way substitutions are defined. The definition of weakening is given in \cref{fig:wk}.
 
 Weakening can be used to give a short inductive definition of the identity substitution, a substitution \(\id_\Gamma : \Gamma \to \Gamma\) which sends every variable to itself. On the inductive case \(\id_{\Gamma, (x : A)}\), it clear that the variable \(x\) should be sent to \(x\), but the constructor for substitutions also requires a substitution \(\Gamma \to \Gamma, (x : A)\). This can be obtained by weakening a recursive call to the identity on \(\Gamma\). Similarly, an inclusion \(\Gamma \to \Gamma, (x : A)\) can be defined as \(\wk(\id_\Gamma)\), and applying this substitution is the same operation as weakening.
 
-To begin proving syntactic properties of \Cattr, we need a notion of syntactic equality. This will be written \(\Gamma \equiv \Delta\) for contexts \(\Gamma\) and \(\Delta\), and similarly for terms \(s\) and \(t\), types \(A\) and \(B\), and substitutions \(\sigma\) and \(\tau\). It is given by alpha equivalence, and so we would hope that the formalisation could leverage the use of de Brujin indices to use the in-built equality type for syntactic equality. This is too restrictive however, there will be many times where we want to compare two terms of differing context length (in practice this context length will be propositionally equal, instead of definitionally equal).
+To begin proving syntactic properties of \Cattr, we need a notion of syntactic equality. This will be written \(\Gamma \equiv \Delta\) for contexts \(\Gamma\) and \(\Delta\), and similarly for terms \(s\) and \(t\), types \(A\) and \(B\), and substitutions \(\sigma\) and \(\tau\). It is given by alpha equivalence, and so we would hope that the formalisation could leverage the use of de Bruijn indices to use the in-built equality type for syntactic equality. This is too restrictive however, there will be many times where we want to compare two terms of differing context length (in practice this context length will be propositionally equal, instead of definitionally equal).
 
-Therefore, four syntactic equality relations are defined mutually inductively on the constructors of each piece of syntax in \module{Catt.Syntax.Properties}. These definitions can easily be heterogeneous, allowing two terms \(s : \Term_n\) and \(t : \Term_m\) to be compared. Unfortunately, using these comes at the cost of large amounts of boilerplate, as these inductively defined equalities do not come equipped with the J-rule, and so it must be manually proved that each operation respects syntactic equality. An example of such a function is \func{Catt.Syntax.Properties}{6102}{\textsf{wk-tm-\(\simeq\)}}, which states that the weakenings of two syntactically equal terms are syntactically equal.
+Therefore, four syntactic equality relations are defined mutually inductively on the constructors of each piece of syntax in \module{Catt.Syntax.Properties}. These definitions can easily be heterogeneous, allowing two terms \(s : \Term_n\) and \(t : \Term_m\) to be compared. Unfortunately, using these comes at the cost of large amounts of boilerplate, as these inductively defined equalities do not come equipped with the J-rule, and so it must be manually proved that each operation respects syntactic equality. An example of such a function is \funcn{Catt.Syntax.Properties}{wk-tm-≃}{\textsf{wk-tm-\(\simeq\)}}, which states that the weakenings of two syntactically equal terms are syntactically equal.
 
 \module{Catt.Syntax.Properties} contains many of the basic properties about the syntax of \Cattr, including:
 \begin{itemize}
@@ -1500,7 +1500,7 @@ It also contains the following proposition.
   \end{align*}
   where the second to last line is given by property
   \[\unrestrict (\sigma \bullet \tau) \equiv \Sigma(\sigma) \bullet \unrestrict \tau\]
-  which holds for all \(\sigma : \arr \Theta \star \Delta\) and is proven in \func{Catt.Syntax.Properties}{17858}{\textsf{\(\downarrow\)-comp}}, and the line before is given by the inductive hypothesis.
+  which holds for all \(\sigma : \arr \Theta \star \Delta\) and is proven in \funcn{Catt.Syntax.Properties}{↓-comp}{\textsf{\(\downarrow\)-comp}}, and the line before is given by the inductive hypothesis.
 
   If instead we had \(A = \arr s {A'} t\), then:
   \begin{align*}
@@ -1512,7 +1512,7 @@ It also contains the following proposition.
   \end{align*}
   where we use the inductive hypothesis after applying the equality
   \[ \unrestrict (\sigma \bullet \tau) \equiv \unrestrict \sigma \bullet \tau \]
-  which holds for all \(\sigma : \arr \Theta {\arr s {A'} t} \Delta\) by \func{Catt.Syntax.Properties}{18741}{\textsf{\(\downarrow\)-comp-higher}}.
+  which holds for all \(\sigma : \arr \Theta {\arr s {A'} t} \Delta\) by \funcn{Catt.Syntax.Properties}{↓-comp-higher}{\textsf{\(\downarrow\)-comp-higher}}.
 \end{proof}
 
 This proposition proves that the syntax of \Cattr forms a category, which we will not name as we will work instead with the subcategory containing well-typed contexts and substitutions, introduced in the following sections.
@@ -1520,7 +1520,7 @@ This proposition proves that the syntax of \Cattr forms a category, which we wil
 \paragraph{Discs}
 We finish our discussion of the syntax of \Cattr by giving formal definitions of disc and sphere contexts, some constructions on these and their properties. This will allow these to be used as examples in following sections, and preempts the use of discs in the first two equality rules that we will introduce, disc removal and endo-coherence removal.
 
-We begin with the defintions of discs, spheres, and sphere types, which can be found in \module{Catt.Discs} as \func{Catt.Discs}{331}{Disc}, \func{Catt.Discs}{366}{Sphere}, and \func{Catt.Discs}{202}{sphere-type}. We write the sphere type as \(U^n\), which is intentionally close to the notation of the standard type \(\mathcal{U}_\Delta^n\), as it will turn out that these coincide.
+We begin with the defintions of discs, spheres, and sphere types, which can be found in \module{Catt.Discs} as \func{Catt.Discs}{Disc}, \func{Catt.Discs}{Sphere}, and \func{Catt.Discs}{sphere-type}. We write the sphere type as \(U^n\), which is intentionally close to the notation of the standard type \(\mathcal{U}_\Delta^n\), as it will turn out that these coincide.
 
 \begin{definition}
   We mutually define the disc contexts \(D^n\), sphere contexts \(S^n\), and sphere type \(U^n \in \Type_{S^n}\).
@@ -1534,7 +1534,7 @@ We begin with the defintions of discs, spheres, and sphere types, which can be f
   We will sometimes refer to the last variable of \(D^n\) as \(d_n\) instead of \(d_n^-\), given that there is no \(d_n^+\) in the context.
 \end{definition}
 
-We also characterise the substitutions from a sphere or disc. These are given by \func{Catt.Discs}{586}{sub-from-sphere} and \func{Catt.Discs}{494}{sub-from-disc} in the formalisation.
+We also characterise the substitutions from a sphere or disc. These are given by \func{Catt.Discs}{sub-from-sphere} and \func{Catt.Discs}{sub-from-disc} in the formalisation.
 
 \begin{definition}
   Let \(A : \Type_\Gamma\) be a type and suppose \(n = \dim(A)\). Define the substitution \(\{A\} : S^n \to \Gamma\) inductively by:
@@ -1656,183 +1656,192 @@ The inference rule \textsc{dr} follows the \textsc{rule} and typing properties a
 
 We draw attention to the typing premise of \textsc{rule}. If we know that the unary composite of a term \(t\) is well typed, then it follows that \(t\) itself must have been well-typed, but we cannot infer that the term \(\Coh {D^n} {\wk(U^n)} {\{A,t\}}\) is well-typed from \(t\) being well-typed. In particular, the well-formedness of \(t\) does not constrain \(A\) at all without knowing that the given type \(A\) is the type of \(t\). We must therefore include an additional typing premise if we want to avoid well-typed and untyped terms being equated.
 
-\begin{figure}[!t]
-  \centering
-  \fbox{\begin{subfigure}{0.45\textwidth}
-      \vspace{0.4pt}
-    \begin{mathpar}
-      \inferrule{ }{\star : \Type_\Gamma}
-      \and
-      \inferrule{x \in \Var(\Gamma)} {x : \Term_\Gamma}
-      \and
-      \inferrule{A : \Type_\Gamma}{\langle A \rangle : \emptyset \to \Gamma}
-      \and
-      \inferrule{ }{\emptyset : \Ctx}
-      \and
-      \inferrule{\Gamma : \Ctx \\ A : \Type_\Gamma}{\Gamma, (x : A) : \Ctx}
-      \and
-      \inferrule{\sigma : \arr \Delta A \Gamma \\ t : \Term_\Gamma \\ B : \Type_\Delta}{\langle \sigma , t \rangle : \arr {\Delta, (x : B)} A \Gamma}
-      \and
-      \inferrule{A : \Type_\Gamma \\ s : \Term_\Gamma \\ t : \Term_\Gamma} {\arr s A t : \Type_\Gamma}
-      \and
-      \inferrule{\\\\\Delta : \Ctx \\ A : \Type_\Delta \\ \sigma : \arr \Delta \star \Gamma}{\Coh \Delta A \sigma : \Term_\Gamma}
-    \end{mathpar}
-    \caption{Syntax}
-  \end{subfigure}}
-  \hfill
-  \fbox{\begin{subfigure}{0.50\textwidth}
-    \begin{mathpar}
-      \inferrule{ }{\emptyset \vdash}
-      \and
-      \inferrule{\Gamma \vdash\\ \Gamma \vdash A}{\Gamma, (x : A) \vdash}
-      \and
-      \inferrule{ }{\Gamma \vdash \star}
-      \and
-      \inferrule{\Gamma \vdash s : A \\ \Gamma \vdash A \\ \Gamma \vdash t : A}{\Gamma \vdash \arr s A t}
-      \and
-      \inferrule{\Gamma \vdash A}{\Gamma \vdash \langle A \rangle : \emptyset}
-      \and
-      \inferrule{\Gamma \vdash \sigma : \Delta\\ \Gamma \vdash t : A\sub\sigma}{\Gamma \vdash \langle \sigma , t \rangle : \Delta, (x : A)}
-      \and
-      \inferrule{(x : A) \in \Gamma}{\Gamma \vdash x : A}
-      \and
-      \inferrule{\Gamma \vdash t : A\\ \Gamma \vdash A = B}{\Gamma \vdash t : B}\textsc{conv}
-      \and
-      \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\(\Delta, \Supp(s), \Supp(t)) \in \mathcal{O}}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
-    \end{mathpar}
-    \caption{Typing}
-  \end{subfigure}}
+\afterpage{%
+    \clearpage% flush all other floats
+    \ifodd\value{page}
+    \else% uncomment this else to get odd/even instead of even/odd
+      \expandafter\afterpage% put it on the next page if this one is odd
+    \fi
+    {%
+      \begin{figure}[hbtp]
+        \centering
+        \fbox{\begin{subfigure}{0.45\textwidth}
+            \vspace{0.4pt}
+            \begin{mathpar}
+              \inferrule{ }{\star : \Type_\Gamma}
+              \and
+              \inferrule{x \in \Var(\Gamma)} {x : \Term_\Gamma}
+              \and
+              \inferrule{A : \Type_\Gamma}{\langle A \rangle : \emptyset \to \Gamma}
+              \and
+              \inferrule{ }{\emptyset : \Ctx}
+              \and
+              \inferrule{\Gamma : \Ctx \\ A : \Type_\Gamma}{\Gamma, (x : A) : \Ctx}
+              \and
+              \inferrule{\sigma : \arr \Delta A \Gamma \\ t : \Term_\Gamma \\ B : \Type_\Delta}{\langle \sigma , t \rangle : \arr {\Delta, (x : B)} A \Gamma}
+              \and
+              \inferrule{A : \Type_\Gamma \\ s : \Term_\Gamma \\ t : \Term_\Gamma} {\arr s A t : \Type_\Gamma}
+              \and
+              \inferrule{\\\\\Delta : \Ctx \\ A : \Type_\Delta \\ \sigma : \arr \Delta \star \Gamma}{\Coh \Delta A \sigma : \Term_\Gamma}
+            \end{mathpar}
+            \caption{Syntax}
+          \end{subfigure}}
+        \hfill
+        \fbox{\begin{subfigure}{0.50\textwidth}
+            \begin{mathpar}
+              \inferrule{ }{\emptyset \vdash}
+              \and
+              \inferrule{\Gamma \vdash\\ \Gamma \vdash A}{\Gamma, (x : A) \vdash}
+              \and
+              \inferrule{ }{\Gamma \vdash \star}
+              \and
+              \inferrule{\Gamma \vdash s : A \\ \Gamma \vdash A \\ \Gamma \vdash t : A}{\Gamma \vdash \arr s A t}
+              \and
+              \inferrule{\Gamma \vdash A}{\Gamma \vdash \langle A \rangle : \emptyset}
+              \and
+              \inferrule{\Gamma \vdash \sigma : \Delta\\ \Gamma \vdash t : A\sub\sigma}{\Gamma \vdash \langle \sigma , t \rangle : \Delta, (x : A)}
+              \and
+              \inferrule{(x : A) \in \Gamma}{\Gamma \vdash x : A}
+              \and
+              \inferrule{\Gamma \vdash t : A\\ \Gamma \vdash A = B}{\Gamma \vdash t : B}\textsc{conv}
+              \and
+              \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\(\Delta, \Supp(s), \Supp(t)) \in \mathcal{O}}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
+            \end{mathpar}
+            \caption{Typing}
+          \end{subfigure}}
 
-\vspace{7pt}
-  \fbox{\begin{subfigure}{0.9852\textwidth}
-    \begin{mathpar}
-      \inferrule{\Gamma \vdash s : A \\ (\Gamma, s, t) \in \mathcal{R}}{\Gamma \vdash s = t}\textsc{rule} \and
-      \inferrule{x \in \Var(\Gamma)}{\Gamma \vdash x = x} \and
-      \inferrule{\Gamma \vdash s = t}{\Gamma \vdash t = s} \and
-      \inferrule{\Gamma \vdash s = t \\ \Gamma \vdash t = u}{\Gamma \vdash s = u} \and
-      \inferrule{\Delta \vdash A = B \\ \Gamma \vdash \sigma = \tau}{\Gamma \vdash \Coh \Delta A \sigma = \Coh \Delta B \tau} \and
-      \inferrule{ }{\Gamma \vdash \star = \star} \and
-      \inferrule{\Gamma \vdash s = s' \\ \Gamma \vdash t = t' \\ \Gamma \vdash A = A'}{\Gamma \vdash \arr s A t = \arr {s'} {A'} {t'}}\and
-      \inferrule{\Gamma \vdash A = B}{\Gamma \vdash \langle A \rangle = \langle B \rangle}\and
-      \inferrule{\Gamma \vdash \sigma = \tau \\ \Gamma \vdash s = t}{\Gamma \vdash \langle \sigma, s \rangle = \langle \tau, t \rangle}
-    \end{mathpar}
-    \caption{Equality}
-    \label{fig:equality}
-  \end{subfigure}}
+        \vspace{7pt}
+        \fbox{\begin{subfigure}{0.9852\textwidth}
+            \begin{mathpar}
+              \inferrule{\Gamma \vdash s : A \\ (\Gamma, s, t) \in \mathcal{R}}{\Gamma \vdash s = t}\textsc{rule} \and
+              \inferrule{x \in \Var(\Gamma)}{\Gamma \vdash x = x} \and
+              \inferrule{\Gamma \vdash s = t}{\Gamma \vdash t = s} \and
+              \inferrule{\Gamma \vdash s = t \\ \Gamma \vdash t = u}{\Gamma \vdash s = u} \and
+              \inferrule{\Delta \vdash A = B \\ \Gamma \vdash \sigma = \tau}{\Gamma \vdash \Coh \Delta A \sigma = \Coh \Delta B \tau} \and
+              \inferrule{ }{\Gamma \vdash \star = \star} \and
+              \inferrule{\Gamma \vdash s = s' \\ \Gamma \vdash t = t' \\ \Gamma \vdash A = A'}{\Gamma \vdash \arr s A t = \arr {s'} {A'} {t'}}\and
+              \inferrule{\Gamma \vdash A = B}{\Gamma \vdash \langle A \rangle = \langle B \rangle}\and
+              \inferrule{\Gamma \vdash \sigma = \tau \\ \Gamma \vdash s = t}{\Gamma \vdash \langle \sigma, s \rangle = \langle \tau, t \rangle}
+            \end{mathpar}
+            \caption{Equality}
+            \label{fig:equality}
+          \end{subfigure}}
 
-\vspace{7pt}
-\fbox{\begin{subfigure}{0.45\textwidth}
-    \vspace{1pt}
-    \begin{mathpar}
-    \inferrule{ }{(x : \star) \vdash_{\mathsf{ps}} x : \star}
-    \and
-    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : A}{\Gamma, (y : A), (f : \arr x A y)}
-    \and
-    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \arr s A t}{\Gamma \vdash_{\mathsf{ps}} t : A}
-    \and
-    \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \star}{\Gamma \vdash_{\mathsf{ps}}}
-  \end{mathpar}
-    \caption{Ps-contexts}
-  \end{subfigure}}
-  \hfill
-  \fbox{\begin{subfigure}{0.5\textwidth}
-      \vspace{6pt}
-    \begin{mathpar}
-      \FV(\star) = \{\}
-      \and
-      \FV(\langle A \rangle) = \FV(A)
-      \\
-      \FV(x) = \{x\} \text{ for }x \in \Var
-      \\
-      \FV(\Coh \Delta A \sigma) = \FV(\sigma)
-      \\
-      \FV(\arr s A t) = \FV(s) \cup \FV(A) \cup \FV(t)
-      \\
-      \FV(\langle \sigma , t \rangle) = \FV(\sigma) \cup \FV(t)
-    \end{mathpar}
-    \caption{Free variables}
-  \end{subfigure}}
-  \caption{\Cattr: syntax, typing, and operations}
-  \label{fig:cattr}
-\end{figure}
+        \vspace{7pt}
+        \fbox{\begin{subfigure}{0.45\textwidth}
+            \vspace{1pt}
+            \begin{mathpar}
+              \inferrule{ }{(x : \star) \vdash_{\mathsf{ps}} x : \star}
+              \and
+              \inferrule{\Gamma \vdash_{\mathsf{ps}} x : A}{\Gamma, (y : A), (f : \arr x A y)}
+              \and
+              \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \arr s A t}{\Gamma \vdash_{\mathsf{ps}} t : A}
+              \and
+              \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \star}{\Gamma \vdash_{\mathsf{ps}}}
+            \end{mathpar}
+            \caption{Ps-contexts}
+          \end{subfigure}}
+        \hfill
+        \fbox{\begin{subfigure}{0.5\textwidth}
+            \vspace{6pt}
+            \begin{mathpar}
+              \FV(\star) = \{\}
+              \and
+              \FV(\langle A \rangle) = \FV(A)
+              \\
+              \FV(x) = \{x\} \text{ for }x \in \Var
+              \\
+              \FV(\Coh \Delta A \sigma) = \FV(\sigma)
+              \\
+              \FV(\arr s A t) = \FV(s) \cup \FV(A) \cup \FV(t)
+              \\
+              \FV(\langle \sigma , t \rangle) = \FV(\sigma) \cup \FV(t)
+            \end{mathpar}
+            \caption{Free variables}
+          \end{subfigure}}
+        \caption{\Cattr: syntax, typing, and operations}
+        \label{fig:cattr}
+      \end{figure}
 
-\begin{figure}
-  \ContinuedFloat
-  \fbox{\begin{subfigure}{1\textwidth}
-    \begin{align*}
-      \DC_\emptyset(\emptyset) &= \emptyset\\
-      \DC_{\Gamma, x : A}(V) &= \begin{cases*}
-        \DC_\Gamma(V)&if \(x \not\in V\)\\
-        \{x\} \cup \DC_\Gamma(V \setminus \{x\} \cup \FV(A))&if \(x \in V\)\\
-      \end{cases*}\\
-      \Supp(t) &= \DC_\Gamma(\FV(t))\text{ for }t \in \Term_\Gamma\\
-      \Supp(A) &= \DC_\Gamma(\FV(A))\text{ for }A \in \Type_\Gamma\\
-      \Supp(\sigma) &= \DC_\Gamma(\FV(\sigma))\text{ for }\sigma : \arr {\Delta} A \Gamma
-    \end{align*}
-    \caption{Support}
-  \end{subfigure}}
+      \begin{figure}
+        \ContinuedFloat
+        \fbox{\begin{subfigure}{1\textwidth}
+            \begin{align*}
+              \DC_\emptyset(\emptyset) &= \emptyset\\
+              \DC_{\Gamma, x : A}(V) &= \begin{cases*}
+                \DC_\Gamma(V)&if \(x \not\in V\)\\
+                \{x\} \cup \DC_\Gamma(V \setminus \{x\} \cup \FV(A))&if \(x \in V\)\\
+              \end{cases*}\\
+              \Supp(t) &= \DC_\Gamma(\FV(t))\text{ for }t \in \Term_\Gamma\\
+              \Supp(A) &= \DC_\Gamma(\FV(A))\text{ for }A \in \Type_\Gamma\\
+              \Supp(\sigma) &= \DC_\Gamma(\FV(\sigma))\text{ for }\sigma : \arr {\Delta} A \Gamma
+            \end{align*}
+            \caption{Support}
+          \end{subfigure}}
 
-\vspace{7pt}
-  \fbox{\begin{subfigure}{\textwidth}
-    \begin{align*}
-      x \sub \sigma &= t\text{ if }(x \mapsto t) \in \sigma\\
-      \Coh \Theta A \tau \sub \sigma &=
-                                       \begin{cases*}
-                                         \Coh \Theta A {\tau \bullet \sigma}&if \(\dim(\ty(\sigma)) = 0\)\\
-                                         \Coh {\Sigma(\Theta)} {\Sigma(A)} {\Sigma(\tau)} \sub {\unrestrict\sigma}&otherwise
-                                       \end{cases*}
-      \\
-      \star \sub \sigma &= \ty(\sigma)\\
-      (\arr s A t) \sub \sigma &= \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}\\
-      \langle A \rangle \bullet \sigma &= \langle A \sub \sigma \rangle\\
-      \langle \tau , t \rangle \bullet \sigma &= \langle \tau \bullet \sigma , t \sub \sigma \rangle
-    \end{align*}
-    \caption{Substitution application}
-  \end{subfigure}}
+        \vspace{7pt}
+        \fbox{\begin{subfigure}{\textwidth}
+            \begin{align*}
+              x \sub \sigma &= t\text{ if }(x \mapsto t) \in \sigma\\
+              \Coh \Theta A \tau \sub \sigma &=
+                                               \begin{cases*}
+                                                 \Coh \Theta A {\tau \bullet \sigma}&if \(\dim(\ty(\sigma)) = 0\)\\
+                                                 \Coh {\Sigma(\Theta)} {\Sigma(A)} {\Sigma(\tau)} \sub {\unrestrict\sigma}&otherwise
+                                               \end{cases*}
+              \\
+              \star \sub \sigma &= \ty(\sigma)\\
+              (\arr s A t) \sub \sigma &= \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}\\
+              \langle A \rangle \bullet \sigma &= \langle A \sub \sigma \rangle\\
+              \langle \tau , t \rangle \bullet \sigma &= \langle \tau \bullet \sigma , t \sub \sigma \rangle
+            \end{align*}
+            \caption{Substitution application}
+          \end{subfigure}}
 
-\vspace{7pt}
-\fbox{\begin{subfigure}{0.475\textwidth}
-      \begin{align*}
-        \Sigma (\emptyset) &= (N : \star), (S : \star)\\
-        \Sigma (\Gamma, (x : A)) &= \Sigma \Gamma, (x : \Sigma A)\\
-        \Sigma (\star) &= \arr N \star S\\
-        \Sigma (\arr s A t) &= \arr {\Sigma s} {\Sigma A} {\Sigma t}\\
-        \Sigma (x) &= x\\
-        \Sigma (\Coh \Delta A \sigma) &= \Coh {\Sigma(\Delta)} {\Sigma(A)} {\Sigma(\sigma)}\\
-        \Sigma(\sigma) &= \unrestrict(\Sigma'(\sigma))\\[7.25pt]
-        \Sigma'(\langle A \rangle) &= \langle \Sigma(A) \rangle\\
-        \Sigma'(\langle \sigma, x \rangle) &= \langle \Sigma'(\sigma), \Sigma(t) \rangle\\
-        \unrestrict\langle \arr s A t \rangle &= \langle A , s , t \rangle\\
-        \unrestrict\langle \sigma, t \rangle &= \langle \unrestrict \sigma, t \rangle
-      \end{align*}
-    \caption{Suspension}
-  \end{subfigure}}
-\hfill
-\begin{subfigure}{0.49\textwidth}
-  \fbox{\begin{subfigure}{1\textwidth}
-      \begin{align*}
-        \wk(\star) &= \star\\
-        \wk(\arr s A t) &= \arr {\wk(s)} {\wk(A)} {\wk(t)}\\
-        \wk(x) &= x\\
-        \wk(\Coh \Delta A \sigma) &= \Coh \Delta A {\wk(\sigma)}\\
-        \wk(\langle A \rangle) &= \langle \wk(A) \rangle\\
-        \wk(\langle \sigma, t \rangle) &= \langle \wk(\sigma), \wk(t) \rangle
-      \end{align*}
-      \caption{Weakening}
-      \label{fig:wk}
-    \end{subfigure}}
+        \vspace{7pt}
+        \fbox{\begin{subfigure}{0.475\textwidth}
+            \begin{align*}
+              \Sigma (\emptyset) &= (N : \star), (S : \star)\\
+              \Sigma (\Gamma, (x : A)) &= \Sigma \Gamma, (x : \Sigma A)\\
+              \Sigma (\star) &= \arr N \star S\\
+              \Sigma (\arr s A t) &= \arr {\Sigma s} {\Sigma A} {\Sigma t}\\
+              \Sigma (x) &= x\\
+              \Sigma (\Coh \Delta A \sigma) &= \Coh {\Sigma(\Delta)} {\Sigma(A)} {\Sigma(\sigma)}\\
+              \Sigma(\sigma) &= \unrestrict(\Sigma'(\sigma))\\[7.25pt]
+              \Sigma'(\langle A \rangle) &= \langle \Sigma(A) \rangle\\
+              \Sigma'(\langle \sigma, x \rangle) &= \langle \Sigma'(\sigma), \Sigma(t) \rangle\\
+              \unrestrict\langle \arr s A t \rangle &= \langle A , s , t \rangle\\
+              \unrestrict\langle \sigma, t \rangle &= \langle \unrestrict \sigma, t \rangle
+            \end{align*}
+            \caption{Suspension}
+          \end{subfigure}}
+        \hfill
+        \begin{subfigure}{0.49\textwidth}
+          \fbox{\begin{subfigure}{1\textwidth}
+              \begin{align*}
+                \wk(\star) &= \star\\
+                \wk(\arr s A t) &= \arr {\wk(s)} {\wk(A)} {\wk(t)}\\
+                \wk(x) &= x\\
+                \wk(\Coh \Delta A \sigma) &= \Coh \Delta A {\wk(\sigma)}\\
+                \wk(\langle A \rangle) &= \langle \wk(A) \rangle\\
+                \wk(\langle \sigma, t \rangle) &= \langle \wk(\sigma), \wk(t) \rangle
+              \end{align*}
+              \caption{Weakening}
+              \label{fig:wk}
+            \end{subfigure}}
 
-  \vspace{7pt}
-  \fbox{\begin{subfigure}{1\textwidth}
-      \begin{align*}
-        \id_\emptyset &= \langle \star \rangle\\
-        \id_{\Gamma, (x : A)} &= \langle \wk(\id_\Gamma), x \rangle
-      \end{align*}
-      \caption{Identity substitution}
-    \end{subfigure}}
-\end{subfigure}
-\caption{\Cattr: syntax, typing, and operations}
-\end{figure}
+          \vspace{7pt}
+          \fbox{\begin{subfigure}{1\textwidth}
+              \begin{align*}
+                \id_\emptyset &= \langle \star \rangle\\
+                \id_{\Gamma, (x : A)} &= \langle \wk(\id_\Gamma), x \rangle
+              \end{align*}
+              \caption{Identity substitution}
+            \end{subfigure}}
+        \end{subfigure}
+        \caption{\Cattr: syntax, typing, and operations}
+      \end{figure}
+    }%
+  }
 
 \section{The set of operations \texorpdfstring{\(\mathcal{O}\)}{O}}
 \label{sec:support}
@@ -1853,7 +1862,7 @@ As previously mentioned, an operation set \(\mathcal{O}\) consists of a collecti
 
 We call a subset of the variables of a context a \emph{variable set}. In the formalisation, these variable sets are given as a list of booleans, one boolean for each variable of the context. These are given in \module{Catt.Support}, which also contains many constructions on them, including unions of these sets, subset relations, and the free variables of each piece of syntax. The variable sets of \(\Delta\) form a lattice with top element \(\Var(\Delta)\) and bottom element \(\emptyset\). The free variable constructions commute with weakening, as is proved in \module{Catt.Support.Properties} by mutual induction.
 
-We recall the function \(\DC\) on these variable sets, given by \func{Catt.Support}{2590}{DC} in the formalisation, which produces the downwards closure of a variable set. This admits the following properties:
+We recall the function \(\DC\) on these variable sets, given by \func{Catt.Support}{DC} in the formalisation, which produces the downwards closure of a variable set. This admits the following properties:
 
 \begin{proposition}
   \(\DC\) is an idempotent join-semilattice homomorphism. It preserves binary joins (unions), subset inclusions, and preserves the top and bottom element of the lattice.
@@ -1924,7 +1933,7 @@ To recover the standard definition of \Catt, we must define the boundary sets of
                                                              \bdry i \epsilon \Gamma \cup \{ y , f \}&otherwise
                                                            \end{cases*}
 \end{align*}
-These boundary sets appear in the formalisation as \func{Catt.Support}{1257}{pd-bd-supp}.
+These boundary sets appear in the formalisation as \func{Catt.Support}{pd-bd-vs}.
 \end{definition}
 
 The following lemma is immediate:
@@ -1934,7 +1943,7 @@ The following lemma is immediate:
   If \(n \geq \dim(\Delta)\), then \(\bdry n \epsilon \Delta = \Var(\Delta)\).
 \end{lemma}
 \begin{proof}
-  A simple induction on the definition. A formalised proof appears as \func{Catt.Support.Properties}{21113}{pd-bd-supp-full}.
+  A simple induction on the definition. A formalised proof appears as \func{Catt.Support.Properties}{pd-bd-vs-full}.
 \end{proof}
 
 With this definition we can introduce the regular operation set, which recovers the regular support conditions used in the definition of \Catt.
@@ -1972,7 +1981,7 @@ This is however unnecessary to present the regular and groupoidal versions of \C
 \subsection{Operation properties}
 \label{sec:operation-properties}
 
-Currently, our set of operations is completely unconstrained, and we will be limited in the constructions that can be made in \Cattr. We therefore constrain these sets in two ways. The first enforces that our set of operations is closed under suspension, for which we need to be able to suspend variable sets. This is defined in the formalisation as \func{Catt.Suspension.Support}{504}{susp-vs}.
+Currently, our set of operations is completely unconstrained, and we will be limited in the constructions that can be made in \Cattr. We therefore constrain these sets in two ways. The first enforces that our set of operations is closed under suspension, for which we need to be able to suspend variable sets. This is defined in the formalisation as \func{Catt.Suspension.Support}{susp-vs}.
 
 \begin{definition}
   Let \(\Delta\) be a context. The suspension of a variable set \(V\) over \(\Delta\) is defined to be:
@@ -2220,8 +2229,8 @@ If we further have that the set of operations includes the standard operations t
   \end{itemize}
   If we further have that \(\dim(A) \neq 0\) then the following two conditions are also equivalent:
   \begin{itemize}
-  \item There exists some \(B: \Type_\Gamma\) such that \(\Gamma \vdash \Coh {D^n} {U^n} {\{A,t\}} : B\),
-  \item \(\Gamma \vdash \Coh{D^n} {U^n} {\{A,t\}} : A\).
+  \item There exists some \(B: \Type_\Gamma\) such that \(\Gamma \vdash \Coh {D^n} {\wk(U^n)} {\{A,t\}} : B\),
+  \item \(\Gamma \vdash \Coh{D^n} {\wk(U^n)} {\{A,t\}} : A\).
   \end{itemize}
   where \(n = \dim(A)\).
 \end{corollary}
@@ -2237,7 +2246,7 @@ We end this section with the following \lcnamecref{prop:dr-weak}.
 \end{proposition}
 \begin{proof}
   It suffices to show that for all \(\Gamma : \Ctx\), \(A, B : \Type_\Gamma\), and \(t : \Term_\Gamma\) that:
-  \[ ((\Gamma, (x : B)), \Coh {D^n} {U^n} {\wk(\{A,t\})}, \wk(t)) \in \dr \]
+  \[ ((\Gamma, (x : B)), \Coh {D^n} {\wk(U^n)} {\wk(\{A,t\})}, \wk(t)) \in \dr \]
   when \(n = \dim(A)\). By \cref{item:disc-prop-wk}, \(\wk(\{A,t\}) \equiv \{ \wk(A), \wk(t)\}\) and so the triple above is clearly contained in \dr.
 \end{proof}
 
@@ -2292,9 +2301,9 @@ Similarly to the weakening condition, the suspension condition is closed under u
 \end{proposition}
 \begin{proof}
   It is sufficient to prove that for all \(\Gamma : \Ctx\), \(A : \Type_\Gamma\), and \(t : \Term_\Gamma\) that:
-  \[(\Sigma(\Gamma), \Coh {\Sigma(D^n)} {\Sigma(U^n)} {\Sigma(\{A,t\})}, \Sigma(t)) \in \dr\]
-  when \(n = \dim(A)\). By \cref{item:disc-prop-susp}, we get that \(\Sigma(D^n) \equiv D^{n+1}\) and \(\Sigma(U^n) \equiv U^{n+1}\). By \cref{item:disc-prop-sub-susp}, \(\Sigma(\{A,t\}) \equiv \{\Sigma(A),\Sigma(t)\}\). Therefore, it is sufficient to show that:
-  \[(\Sigma(\Gamma), \Coh {D^{n+1}} {U^{n+1}} {\{\Sigma(A),\Sigma(t)\}}, \Sigma(t)) \in \dr\]
+  \[(\Sigma(\Gamma), \Coh {\Sigma(D^n)} {\Sigma(\wk(U^n))} {\Sigma(\{A,t\})}, \Sigma(t)) \in \dr\]
+  when \(n = \dim(A)\). By \cref{item:disc-prop-susp}, we get that \(\Sigma(D^n) \equiv D^{n+1}\) and \(\Sigma(\wk(U^n)) \equiv \wk(\Sigma(U^n) \equiv \wk(U^{n+1})\). By \cref{item:disc-prop-sub-susp}, \(\Sigma(\{A,t\}) \equiv \{\Sigma(A),\Sigma(t)\}\). Therefore, it is sufficient to show that:
+  \[(\Sigma(\Gamma), \Coh {D^{n+1}} {\wk(U^{n+1})} {\{\Sigma(A),\Sigma(t)\}}, \Sigma(t)) \in \dr\]
   which is clear as \(\dim(\Sigma(A)) = \dim(A) + 1 = n+1\).
 \end{proof}
 
@@ -2366,7 +2375,7 @@ This allows us to finally define a category of well-typed syntax in \Cattr. whic
 
 By taking the weakening of the identity substitution \(\id_\Gamma : \Gamma \to \Gamma\) we get a substitution:
 \[ \proj_{\Gamma} = \wk(\id_\Gamma) : \Gamma \to \Gamma, (x : A)\]
-which includes \(\Gamma\) into \(\Gamma, x : A\). It can be checked (and is given by \func{Catt.Syntax.Properties}{}{apply-project-is-wk-tm} in the formalisation) that applying this substitution to a term is the same operation as weakening the term. Using this, the following can be proved:
+which includes \(\Gamma\) into \(\Gamma, x : A\). It can be checked (and is given by \func{Catt.Syntax.Properties}{apply-project-is-wk-tm} in the formalisation) that applying this substitution to a term is the same operation as weakening the term. Using this, the following can be proved:
 
 \begin{lemma}
   Suppose \(\mathcal{R}\) satisfies the substitution condition. Then it also satisfies the weakening condition.
@@ -2385,7 +2394,7 @@ We lastly show that \dr also satisfies the substitution condition.
   The set \dr satisfies the \(\mathcal{R}\)-substitution condition for any equality set \(\mathcal{R}\).
 \end{proposition}
 \begin{proof}
-  The proof is similar to \cref{prop:dr-weak,prop:dr-susp}, except for this proof the equality \(\{A,t\} \bullet \sigma \equiv \{A \sub \sigma, t \sub \sigma\}\) from \cref{item:disc-prop-sub-sub} is crucial.
+  The proof is similar to \cref{prop:dr-weak,prop:dr-susp}, and follows from the equality \(\{A,t\} \bullet \sigma \equiv \{A \sub \sigma, t \sub \sigma\}\) which holds by \cref{item:disc-prop-sub-sub} .
 \end{proof}
 
 \begin{remark}
@@ -2411,7 +2420,7 @@ The case for including the weakening condition is especially unconvincing as it 
 To this end, from \cref{sec:operations-catt}, we will assume that the theory we are working over is tame, and build a library of constructions and results that work in any tame theory, even when some of the results may not need all the conditions above.
 
 Since we have limited use for proving properties about theories that do not satisfy the substitution condition, we could have instead enforced that all theories respect substitution by adding a constructor to the (term) equality relation that takes an equality \(\Delta \vdash s = t\) and typing relation \(\Gamma \vdash \sigma : \Delta\) to an equality \(\Gamma \vdash s \sub \sigma = t \sub \sigma\). This may remove some overhead of setting up the weakening and substitution conditions. It would also allow more minimal equality rule sets to be given, as a rule set such as disc removal could be given by
-\[ \{(D^n, \Coh {D^n} {U^n} {\id_{D^n}}, d_n) \mid n \in \mathbb{N}\} \]
+\[ \{(D^n, \Coh {D^n} {\wk(U^n)} {\id_{D^n}}, d_n) \mid n \in \mathbb{N}\} \]
 On the other hand, including the extra constructor would effectively add an extra case to each inductive proof, and it is less clear how to minimise some of the equality rules that will be introduced in \cref{sec:operations-catt}. Taking either approach would likely lead to a similar development of the theory.
 
 \subsection{Further conditions}
@@ -2530,7 +2539,7 @@ In traditional presentations of \Catt, \(\FV(t) \cup \FV(A)\) is used instead of
 \end{proof}
 
 Unfortunately, proving that the support condition holds for most equality rule sets is not as trivial as the proofs for the tameness properties. Consider the case for disc removal, which gives rise to the equality
-\[ \Gamma \vdash \Coh {D^n} {U^n} {\{A,t\}} = t \]
+\[ \Gamma \vdash \Coh {D^n} {\wk(U^n)} {\{A,t\}} = t \]
 To prove the support condition for this case we need to show that:
 \[ \Supp(\{A,t\}) = t \]
 where we can assume that \(\Gamma \vdash t : A\). Intuitively this should hold, as the support of a substitution should be equal to the support of the locally maximal arguments, and if the derivation \(\Gamma \vdash t : A\) held in \Catt, we would be able to prove this. However, this proof (and intuition) relies on the derivation \(\Gamma \vdash_{\mathcal{R}} t : A\) holding in a theory generated by \(\mathcal{R}\) where \(\mathcal{R}\) already satisfies the support condition, without which the typing derivation offers little utility.
@@ -2597,7 +2606,7 @@ We now prove the appropriate support condition for disc removal.
 \end{proposition}
 \begin{proof}
   It is sufficient to prove that given \(s : \Term_\Gamma\), \(A : \Type_\Gamma\), and \(n = \dim(A)\) that:
-  \[\Gamma \vdash_{\mathcal{R}} \Coh {D^n} {U^n} {\{A,t\}} : B \implies \Supp(\{A,t\}) = \Supp(t) \]
+  \[\Gamma \vdash_{\mathcal{R}} \Coh {D^n} {\wk(U^n)} {\{A,t\}} : B \implies \Supp(\{A,t\}) = \Supp(t) \]
   Assume the premise of the implication. Then \(\Gamma \vdash_{\mathcal{R}} \{A,t\} : D^n\) by case analysis on the typing derivation and so \(\Gamma \vdash_{\mathcal{R}} A\) and \(\Gamma \vdash_{\mathcal{R}} t : A\) by \cref{lem:disc-typing} as \(\mathcal{R}\) satisfies the weakening condition.
 
   By a simple induction, it can be shown that \(\Supp(\{A,t\}) = \Supp(A) \cup \Supp(t)\). By \cref{item:supp-tm-char-2} we have \(\Supp(t) = \Supp(A) \cup \Supp(t)\) as \(\mathcal{R}\) satisfies the support condition and so \(\Supp(\{A,t\}) = \Supp(t)\) as required.
@@ -2652,11 +2661,10 @@ As with the other conditions, we end this section by showing that \dr satisfies 
   Suppose \(\mathcal{R}\) satisfies the weakening condition, and the set of operations \(\mathcal{O}\) contains the standard operations. Then \dr satisfies the \(\mathcal{R}\)-preservation condition.
 \end{proposition}
 \begin{proof}
-  Take \((\Gamma, \Coh {D^n} {U^n} {\{A,t\}}, t) \in \dr\) and suppose \(\Gamma \vdash \Coh {D^n} {U^n} {\{A,t\}} : B\). Then by \cref{lem:ty-unique}:
-  \[\Gamma \vdash B = U^n \sub {\{A,t\}} \equiv A\]
+  Take \((\Gamma, \Coh {D^n} {\wk(U^n)} {\{A,t\}}, t) \in \dr\) and suppose \(\Gamma \vdash \Coh {D^n} {U^n} {\{A,t\}} : B\). Then by \cref{lem:ty-unique}:
+  \[\Gamma \vdash B = \wk(U^n) \sub {\{A,t\}} \equiv A\]
   By \cref{lem:disc-typing}, \(\Gamma \vdash t : A\) and so by the conversion rule \(\Gamma \vdash t : B\) as required.
 \end{proof}
-\todo[inline]{Check all discs for \(U^n\) instead of \(\wk(U^n)\)}
 
 \subsection{Endo-coherence removal}
 \label{sec:ecr}
@@ -2729,23 +2737,37 @@ The set \ecr satisfies all the conditions introduced in this chapter, as proven 
 \end{proof}
 
 
-\chapter{Constructions in \Catt}
+\chapter{Constructions in \Cattr}
 \label{sec:operations-catt}
 
-\todo[inline]{Overview of chapter}
-\todo[inline]{Work in a tame theory}
-\todo[inline]{Formalisation is sometimes more specific}
-\todo[inline]{Introduce pruning and insertion}
-\todo[inline]{Pruning used for cattsu and removes identities}
-\todo[inline]{Pruning performs more radical modifications to the head term}
-\todo[inline]{Insertion flattens the structure of terms, moving data from locally maximal arguments into the head term}
-\todo[inline]{Compare this with associativity}
-\todo[inline]{Insertion can be viewed as a generalisation of pruning}
-\todo[inline]{Point to end of chapter}
-\todo[inline]{Insertion again more radically changes the head term}
-\todo[inline]{Is best understood as an operation on trees}
-\todo[inline]{Expression morphisms between these tree contexts is requires many constructions, we introduce structured terms to aid computations involving these}
-\todo[inline]{Finally we introduce the insertion construction, and give properties of this, including universal property}
+This chapter will investigate some more involved constructions that can be given in the type theory \Cattr. These constructions will be central to defining the reductions that underpin the type theories \Cattsu and \Cattsua which appear in \cref{cha:cattstrict}. We will give a definition of each construction, describe under what conditions it is well-typed, and state various properties describing the behaviour of the construction and its interaction with other constructions.
+
+For this chapter we will assume that we are working in a tame theory, as described in \cref{sec:tame-theories}. This means that all proofs in this section will hold in any variant of \Cattr such that the equality set \(\mathcal{R}\) satisfies the weakening, substitution, and suspension conditions, and the set of operations \(\mathcal{O}\) is suspendable and contains the standard operations. We will also use all the relevant proofs from \cref{sec:catt-with-equality}, without explaining exactly what condition of the set \(\mathcal{R}\) is being
+used.
+
+The formalisation in commonly more specific when specifying which conditions are necessary for each module, for example omitting the suspension condition when it is not needed for a specific construction, but for the body of this text we ignore these distinctions and simply that every theory we work with will be tame, as will be case for all theories introduced in \cref{cha:cattstrict}.
+
+This chapter builds up to the following two constructions, that can be viewed as meta-operations on \Cattr.
+\begin{itemize}
+\item The \emph{pruning} operation will be introduced in \cref{sec:pruning} and is main component of the type theory \Cattsu, defined in \cref{sec:cattsu}, a type theory for strictly unital \(\infty\)-categories. Pruning removes unnecessary identities from a term, simplifying the resulting term in the process.
+\item The \emph{insertion} operation will be introduced in \cref{sec:insertion}. It powers the type theory \Cattsua, a type theory for strictly unital and associative \(\infty\)-categories. Insertion merges certain arguments to a coherence into the body of the coherence itself, effectively ``inserting'' the argument into the head term. It can be viewed as a generalisation of pruning, but is a far more complex construction.
+\end{itemize}
+
+Both pruning and insertion perform more radical modifications to the structure of a term that disc removal and endo-coherence removal, the equality rules we have seen so far. Both pruning and insertion modify the pasting diagram in the coherence at the head of the term they act on. In this chapter, more combinatorial descriptions of pasting diagrams will be introduced to enable the pasting diagrams involved in these constructions to be constructed by induction.
+
+The pruning construction identifies locally maximal arguments of a coherence that are syntactically identities, and removes these arguments from term, while also removing the component of the pasting diagram in the coherence for which corresponded to this argument. Pruning could be applied to the term \(f * g * \id\), a ternary composite, to remove the identity argument and convert the ternary composite to a binary composite, returning the term \(f*g\).
+
+Insertion does not just simply remove parts of a term, but flattens the structure of a term, moving data from a locally maximal argument into the head term. The motivating example for insertion is the term \(f * (g * h)\), a binary composite where one of the locally maximal arguments is itself a binary composite. Under insertion, the inner composite \(g * h\) is merged with the outer binary composite to form a single ternary composite \(f * g * h\).
+
+When a locally maximal argument is an identity, it will always be insertable, and the result of inserting the identity into the head term will be similar to pruning the same argument, motivating the viewpoint that insertion is a generalisation of pruning. At the end of this chapter, this relationship will be made precise.
+
+Insertion again performs more radical changes to the head coherence of the term than pruning, and needs to be able to merge two pasting diagrams into one along a locally maximal argument. The operation on pasting diagrams is best understood as an operation on \emph{trees}, an alternative characterisation of pasting diagrams which will be introduced in \cref{sec:trees}.
+
+Although the definition of these trees is simple, to be able to use them effectively we must be able to describe their relationship to the \Catt contexts they represent. It will also be necessary to describe the morphisms between these trees, which correspond to substitutions between the underlying contexts, and the composition of such morphisms.
+
+Certain constructions on trees will not compute nicely with the presentation of the syntax in \Catt. We therefore introduce a new notion of \emph{structured term}, an alternative syntax for \Catt which allows more complex representations of terms over contexts derived from trees. Structured terms effectively retain more information about how they are constructed, allowing constructions to compute on them in ways that is not possible on the raw syntax of \Catt. This representation of terms will be crucial in the formalisation, as it aids the proof assistant in simplifying various constructions. These structured terms are defined in \cref{sec:structured-terms}.
+
+Finally, \cref{sec:insertion} defines the constructions used in the insertion operation, using the structured syntax form the preceding section. In this section, many properties of insertion are stated, including a universal property that is satisfied by insertion.
 
 \section{Pruning}
 \label{sec:pruning}
