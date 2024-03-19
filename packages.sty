@@ -10,6 +10,8 @@
 \usepackage[libertine]{newtxmath}
 \usepackage{dsfont}
 
+\usepackage[parfill]{parskip}
+
 % Set nicer (= less bold, less vertical spacing) mathcal font
 \usepackage[cal=cm]{mathalpha}
 
@@ -53,7 +55,7 @@ backrefstyle=two]%
 % Enumerations and tables
 \usepackage{calc}
 \usepackage[shortlabels]{enumitem}
-\setlist{nosep}
+% \setlist{nosep}
 \setlist[description]{font={\textnormal},labelindent=\parindent}
 
 \usepackage{booktabs}
@@ -157,6 +159,8 @@ backrefstyle=two]%
 % value and passing it to tcbset.
 \newlength{\normalparindent}
 \AtBeginDocument{\setlength{\normalparindent}{\parindent}}
+\newlength{\normalparskip}
+\AtBeginDocument{\setlength{\normalparskip}{\parskip}}
 \tcbset{shadedenv/.style={
     colback={#1},
     frame hidden,
@@ -169,8 +173,8 @@ backrefstyle=two]%
     % \hbox" warnings, but optically it looks spot on.
     add to width=1.1mm,
     enlarge left by=-0.6mm,
-    before upper={\setlength{\parindent}{\normalparindent}}}
-}
+    before upper={\setlength{\parindent}{\normalparindent}\setlength{\parskip}{\normalparskip}}
+}}
 \newcommand{\setenvcolor}[2]{%
     \tcolorboxenvironment{#1}{shadedenv={#2}}
     \addtotheorempreheadhook[#1]{\tikzcdset{background color=#2}}

@@ -2612,8 +2612,6 @@ We now prove the appropriate support condition for disc removal.
   By a simple induction, it can be shown that \(\Supp(\{A,t\}) = \Supp(A) \cup \Supp(t)\). By \cref{item:supp-tm-char-2} we have \(\Supp(t) = \Supp(A) \cup \Supp(t)\) as \(\mathcal{R}\) satisfies the support condition and so \(\Supp(\{A,t\}) = \Supp(t)\) as required.
 \end{proof}
 
-To finish this section, the support condition also allows us to reprove a result from \Catt that any isomorphic ps-contexts are equal.
-
 \paragraph{Preservation condition}
 
 Our last allows us to prove preservation, the property that typing is preserved by equality.
@@ -2772,20 +2770,159 @@ Finally, \cref{sec:insertion} defines the constructions used in the insertion op
 \section{Pruning}
 \label{sec:pruning}
 
-\todo[inline]{High level explanation of pruning}
+Pruning drives the strictly unital behaviour of \Cattsu. Unitality in \(\infty\)-categories is the property that the identity acts as a unit with respect to composition, so that composing with the unit is equivalent to doing nothing at all. If an \(\infty\)-category is strictly unital, then it exhibits this behaviour up to equality rather than equivalence.
 
-\todo[inline]{Recap locally maximal argument}
+For \Catt, strict unitality means that a composition containing a identity as one of its arguments should be definitionally equal to the same composition but with this argument removed. Pruning is the operation that removes an argument from a composition, taking a term such as \(f * g * \id\) to \(f * g\), or \(\id * f\) to the unary composite on \(f\). In the presence of strict units, it is also desirable to simplify the higher dimensional data that witnessed the (weak) unitality in \Catt. For example, the left unitor on \(f\), given by the term:
+\[ \Coh {(x : \star), (y : \star), (f : \arr x \star y)} {\arr {\id(x) * f} {} {f}} {\id} \]
+which witnesses that composing on the left with an identity is equivalent to the original term, can be simplified to the identity on \(f\), and the triangle equations which govern the coherence laws for the unitors can also trivialise. For this reason, pruning is defined to be able to apply to any term which has identities as a locally maximal argument. We review the definition of a locally maximal argument below.
 
-\todo[inline]{Want to remove a locally maximal argument which is an identity}
+\begin{definition}
+  In a context \(\Gamma\), a \emph{locally maximal variable} is a variable \(x\) of \(\Gamma\) that does not appear in the source or target of any other variable of \(\Gamma\). Alternatively, \(x\) is locally maximal when:
+  \[ x \not\in \Supp(y) \]
+  for any \(y \neq x \in \Var(\Gamma)\). Given a substitution \(\sigma : \Delta \to \Gamma\), a \emph{locally maxixal argument} of \(\sigma\) is a term \(x \sub \sigma\) where \(x\) is a locally maximal variable of \(\Delta\).
+\end{definition}
 
-\todo[inline]{Introduce constituent parts}
+\begin{example}
+  \label{ex:lm}
+  Consider the pasting diagram given by the following diagram:
+  % https://q.uiver.app/#q=WzAsMyxbMCwwLCJ4Il0sWzIsMCwieSJdLFszLDAsInoiXSxbMCwxLCJmIiwwLHsiY3VydmUiOi01fV0sWzAsMSwiaCIsMix7ImN1cnZlIjo1fV0sWzAsMSwiZyIsMV0sWzEsMiwiaiJdLFszLDUsIlxcYWxwaGEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzUsNCwiXFxiZXRhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dXQ==
+  \[
+    \begin{tikzcd}
+      x && y & z
+      \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-30pt}, from=1-1, to=1-3]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "h"', curve={height=30pt}, from=1-1, to=1-3]
+      \arrow[""{name=2, anchor=center, inner sep=0}, "g"{description}, from=1-1, to=1-3]
+      \arrow["j", from=1-3, to=1-4]
+      \arrow["\alpha", shorten <=4pt, shorten >=4pt, Rightarrow, from=0, to=2]
+      \arrow["\beta", shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=1]
+    \end{tikzcd}
+  \]
+  which corresponds to the \Catt context (written to highlight the dimension of each term):
+  \begin{alignat*}{3}
+    \Theta ={} &(x : \star),\\
+    &(y : \star),{}&&(f : x \to y),\\
+    &&&(g : x \to y),{}&&(\alpha : f \to g),\\
+    &&&(h : x \to y),&&(\beta : g \to h),\\
+    &(z : \star),&&(j : y \to z)
+  \end{alignat*}
+  The locally maximal variables of \(\Theta\) are \(\alpha\), \(\beta\), and \(j\). Note that \(j\) is locally maximal, despite not being of maximal dimension in the context. Pruning the context \(\Theta\) along locally maximal variable \(\alpha\) removes the variables \(\alpha\) and \(g\) from the context, and must amend the type of \(\beta\) so that its source is \(f\).
+\end{example}
 
-\subsection{Dyck Words}
+To perform the pruning construction, we start with a coherence term \(\Coh \Delta A \sigma : \Term_\Gamma\), and assume that some locally maximal argument of \(\sigma\) is an identity, that is \(x \sub \sigma \equiv \id(B,t)\) for some locally maximal variable \(x\), type \(B : \Type_\Gamma\), and term \(t : \Term_\Gamma\). We then construct the following:
+\begin{itemize}
+\item A new pasting diagram \(\Delta \sslash x\), corresponding to \(\Delta\) with the variable \(x\) and its target removed.
+\item A new set of arguments \(\sigma \sslash x\), consisting of the same terms as \(\sigma\) except those corresponding to \(x\) and its target.
+\item A projection substitution \(\pi_x : \Delta \to \Delta \sslash x\), from which a type \(A \sub {\pi_x} : \Type_{\Delta \sslash x}\) can be obtained. This projection sends the source of \(x\) to the identity on its source, the target of \(x\) to the source of \(x\), and every other variable to itself.
+\end{itemize}
+We note that the source and target of the locally maximal variable \(x\) are well defined as \(x\) must be sent by \(\sigma\) to an identity, which cannot be zero dimensional.
 
-\todo[inline]{Need to modify the structure of the pasting diagram}
-\todo[inline]{Easier to use a more explicit representation of pasting diagrams}
-\todo[inline]{Very similar to ps-contexts but allows easier induction}
-\todo[inline]{Properties of Dyck words}
+\subsection{Dyck words}
+
+To be able to easily reason about the structures involved in pruning, we wish them by induction. To do this we introduce a different presentation of pasting diagrams called \emph{Dyck words}, which have a simpler inductive structure. Dyck words more directly encode the structure of the pasting diagram, and will allow us to give an inductive characterisation of the locally maximal variables of the associated context.
+
+\begin{definition}
+  The set of \emph{Dyck words}, \(\Dyck_d\) of trailing dimension \(d\) consists of lists of ``up'' and ``down'' moves according to the following rules.
+  \begin{mathpar}
+    \inferrule{ }{\circleddash : \Dyck_0} \and
+    \inferrule{d : \mathbb{N} \\\mathcal{D} : \Dyck_d}{\mathcal{D} \Uparrow : \Dyck_{d + 1}} \and
+    \inferrule{d : \mathbb{N} \\ \mathcal{D} : \Dyck_{d + 1}}{\mathcal{D} \Downarrow : \Dyck_d}
+  \end{mathpar}
+  In any suffix of a Dyck word \(D : \Dyck_d\), the number of ``up'' moves (given by constructor \(\Uparrow\)) must be greater than or equal to the number of ``down'' moves (given by constructor \(\Downarrow\)). The difference between the number of each move is given by the trailing dimension \(d\).
+\end{definition}
+
+Dyck words can be given a visual interpretation as a \emph{mountain diagram}. To obtain such a diagram we start on the left hand side, and draw a continuous line by drawing an upwards sloping segment for each \(\Uparrow\) in the word, and a downwards sloping line for each \(\Downarrow\) in the word. An example of such a diagram is given in \cref{fig:mountain}.
+
+\begin{figure}[h]
+  \centering
+  % https://q.uiver.app/#q=WzAsMixbMCwxLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+\[\begin{tikzcd}[column sep = small, cells={inner sep = 0}, arrows={no head}]
+	&& \bullet && \bullet \\
+	& \bullet && \bullet && \bullet && \bullet \\
+	\bullet &&&&&& \bullet && \bullet
+	\arrow[from=3-1, to=2-2]
+	\arrow[from=2-2, to=1-3]
+	\arrow[from=1-3, to=2-4]
+	\arrow[from=2-4, to=1-5]
+	\arrow[from=1-5, to=2-6]
+	\arrow[from=2-6, to=3-7]
+	\arrow[from=3-7, to=2-8]
+	\arrow[from=2-8, to=3-9]
+\end{tikzcd}\]
+  \caption[Mountain diagram]{Mountain diagram for \(\circleddash \Uparrow\, \Uparrow\, \Downarrow\, \Uparrow\, \Downarrow\, \Downarrow\, \Uparrow\, \Downarrow\, : \Dyck_0\)}
+  \label{fig:mountain}
+\end{figure}
+
+The rules \(\circleddash\), \(\Uparrow\), and \(\Downarrow\) directly correspond to the rules \textsc{pss}, \textsc{pse}, and \textsc{psd} that generate the typing judgement for ps-contexts. From a Dyck word, we can directly construct this context by induction.
+
+\begin{definition}
+  For a Dyck word \(\mathcal{D} : \Dyck_d\), its associated context \(\lfloor \mathcal{D} \rfloor\), associated type \(\ty_{\mathcal{D}} : \Type_{\lfloor \mathcal{D} \rfloor}\), and associated term \(\tm_{\mathcal{D}} : \Term_{\lfloor \mathcal{D} \rfloor}\) are defined by mutual induction on \(\mathcal{D}\):
+  \begin{align*}
+    \lfloor \circleddash \rfloor &= (x : \star)\\
+    \lfloor \mathcal{D} \Uparrow \rfloor &= \lfloor \mathcal{D} \rfloor, (y_{\mathcal{D}} : \ty_{\mathcal{D}}), (f_{\mathcal{D}} : \arr {\wk(\tm_{\mathcal{D}})} {\wk(\ty_{\mathcal{D}})} {y_{\mathcal{D}}})\\
+    \lfloor \mathcal{D} \Downarrow \rfloor &= \lfloor \mathcal{D} \rfloor\\[10pt]
+    \ty_{\circleddash} &= \star\\
+    \ty_{\mathcal{D}\Uparrow} &= \arr{\wk(\wk(\tm_{\mathcal{D}}))} {\wk(\wk(\ty_{\mathcal{D}}))} {y_{\mathcal{D}}}\\
+    \ty_{\mathcal{D} \Downarrow} &= \base(\ty_{\mathcal{D}})&\text{where }\base(\arr s A t) = A\\[10pt]
+    \tm_{\circleddash} &= x\\
+    \tm_{\mathcal{D}\Uparrow} &= f_{\mathcal{D}}\\
+    \tm_{\mathcal{D}\Downarrow} &= \tgt(\ty_{\mathcal{D}})&\text{where }\tgt(\arr s A t) = t
+  \end{align*}
+  The variable names given here are used to avoid ambiguity in the definition. As we consider contexts up to \(\alpha\)-equality, we may freely change these variable names. The \(\tgt\) and \(\base\) operations are well defined here as it may be checked by a simple induction that \(\dim(\ty_{\mathcal{D}}) = d\) for \(\mathcal{D} : \Dyck_d\), ensuring the we only apply \(\tgt\) and \(\base\) to types of strictly positive dimension.
+\end{definition}
+
+The tight correspondence between the rules used to construct Dyck words and ps-contexts allow an easy proof that the contexts associated to Dyck words are in fact pasting diagrams.
+
+\begin{lemma}
+  For a Dyck word \(\mathcal{D} : \Dyck_d\), its associated context, type, and term are all well-typed:
+  \[ \lfloor \mathcal{D} \rfloor \vdash \qquad \lfloor \mathcal{D} \rfloor \vdash \ty_{\mathcal{D}} \qquad \lfloor \mathcal{D} \rfloor \vdash \tm_{\mathcal{D}} : \ty_{\mathcal{D}} \]
+  In addition to being a well-typed context, the context associated to a Dyck word is a ps-context; the following judgement holds:
+  \[ \lfloor \mathcal{D} \rfloor \vdash_{\mathsf{ps}} \tm_{\mathcal{D}} : \ty_{\mathcal{D}} \]
+  and so if \(\mathcal{D} : \Dyck_0\), we have \(\lfloor \mathcal{D} \rfloor \vdash_{\mathsf{ps}}\). Further, all ps-contexts are the associated context of a Dyck word.
+\end{lemma}
+\begin{proof}
+  Due to the similarity of the rules for ps-contexts and Dyck words, this follows quickly from simple inductions, which are given in the formalisation. The proofs for the typing judgements appear in \module{Catt.Dyck.Typing} and the proofs for the ps-context judgements appear in \module{Catt.Dyck.Pasting}.
+\end{proof}
+
+The locally maximal variables in the context associated to a Dyck word correspond exactly to the points in the word where there is an upwards move followed immediately by a downwards move, creating a peak in the mountain diagram. These peaks can be given an inductive characterisation.
+
+\begin{definition}
+  Let \(\mathcal{D} : \Dyck_d\) be a Dyck word. A \emph{peak} of \(\mathcal{D}\), \(p : \Peak_{\mathcal{D}}\) is inductively defined by the following rules:
+  \begin{mathpar}
+    \inferrule{d \in \mathbb{N} \\ \mathcal{D} : \Dyck_d}{\mathcal{D} \UDPeak : \mathcal{D} \Uparrow\,\Downarrow}\and
+    \inferrule{d \in \mathbb{N} \\ \mathcal{D} : \Dyck_d \\ p : \Peak_{\mathcal{D}}}{p \UpPeak : \Peak_{\mathsf{D}} \Uparrow}\and
+    \inferrule{d \in \mathbb{N} \\ \mathcal{D} : \Dyck_{d+1} \\ p : \Peak_{\mathcal{D}}}{p \DownPeak : \Peak_{\mathcal{D} \Downarrow}}
+  \end{mathpar}
+  From each peak \(p : \Peak_{\mathcal{D}}\), a term \(\lfloor p \rfloor\) of \(\lfloor \mathcal{D} \rfloor\) can be inductively defined by:
+  \[ \lfloor \mathcal{D} \UDPeak \rfloor = f_\mathcal{D} \qquad \lfloor p \UpPeak \rfloor = \wk(\wk \lfloor p \rfloor) \qquad \lfloor p \DownPeak \rfloor = \lfloor p \rfloor\]
+  The term \(\lfloor p \rfloor\) is a locally maximal variable of \(\lfloor \mathcal{D} \rfloor\).
+\end{definition}
+
+\begin{example}
+  Recall the ps-context \(\Theta\) from \cref{ex:lm}. This context is the associated context of the Dyck word:
+  \[ \circleddash \Uparrow\, \Uparrow\, \Downarrow\, \Uparrow\, \Downarrow\, \Downarrow\, \Uparrow\, \Downarrow\]
+  for which the mountain diagram is given in \cref{fig:mountain}. The three locally maximal variables \(\alpha\), \(\beta\), and \(j\) correspond to the peaks:
+  \[ \circleddash \Uparrow\, \UDPeak\, \UpPeak\, \DownPeak\, \DownPeak\, \UpPeak\, \DownPeak \qquad \circleddash \Uparrow\, \Uparrow\, \Downarrow\, \UDPeak\, \DownPeak\, \UpPeak\, \DownPeak \qquad \circleddash \Uparrow\, \Uparrow\, \Downarrow\, \Uparrow\, \Downarrow\, \Downarrow\, \UDPeak \]
+  which themselves correspond to the three peaks of the mountain diagram, with the height of each peak corresponding to the dimension of each locally maximal variable.
+\end{example}
+
+We lastly show that a Dyck word can be suspended, which is expected as ps-contexts are closed under suspension. The various constructions associated to a suspended Dyck word are equal to the same constructions on the unsuspended Dyck word.
+
+\begin{lemma}
+  Dyck words are closed under suspension. We define the suspension of a Dyck word \(\mathcal{D} : \Dyck_d\) to be the Dyck word \(\Sigma(\mathcal{D}) : \Dyck_{d+1}\) which is obtained by inserting an additional up move to the start of the work, or can alternatively be inductively defined by:
+  \[ \Sigma(\circleddash) = \circleddash \Uparrow \qquad \Sigma(\mathcal{D}\Uparrow) = \Sigma(\mathcal{D})\Uparrow \qquad \Sigma(\mathcal{D}\Downarrow) = \Sigma(\mathcal{d})\Downarrow \]
+  The following equalities hold:
+  \[ \lfloor \Sigma(\mathcal{D}) \rfloor = \Sigma(\lfloor \mathcal{D} \rfloor) \qquad \ty_{\Sigma(\mathcal{D})} = \Sigma(\ty_{\mathcal{D}}) \qquad \tm_{\Sigma(\mathcal{D})} = \Sigma(\tm_{\mathcal{D}}) \]
+  for each Dyck word \(\mathcal{D}\). For each peak \(p : \Peak_{\mathcal{D}}\), there is an associated peak \(\Sigma(p) : \Peak_{\Sigma(\mathcal{D})}\) which is defined similarly.
+\end{lemma}
+\begin{proof}
+  These properties are all proved by straight forward induction on \(\mathcal{D}\). The formalised proofs appear in \module{Catt.Dyck.Properties}.
+\end{proof}
+
+The Dyck words presented in this section can be viewed as a more direct syntax for pasting contexts, which allow induction to be easily performed. For this reason, most of the properties of Dyck words follow from routine inductions, and hence are relegated to the formalisation. The key contribution of this (sub)section is the characterisation of locally maximal variables as peaks, which have an easy inductive definition due to the simplicity of Dyck words.
+
+\begin{remark}
+  All locally maximal variables of ps-contexts are identified with peaks, with the exception of the unique variable of the singleton context. This discrepancy will make no difference for pruning, as a \(0\)-dimensional variable could never have been sent to an identity and so would never have been a candidate for pruning.
+\end{remark}
 
 \subsection{The pruning construction}
 
