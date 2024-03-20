@@ -1581,7 +1581,7 @@ This will be further motivated and explained in \cref{sec:support}.
   &\Gamma \vdash s = t &&\text{\(s, t \in \Term_\Gamma\) are equal in context \(\Gamma\).}\\
   &\Gamma \vdash \tau = \sigma &&\text{\(\tau : \Theta \to \Gamma\) and \(\sigma : \Delta \to \Gamma\) are equal.}
   \end{alignat*}
-  These judgements are all mutually defined (and are in fact mutually defined with the typing judgements). By defining the equality generically over a list
+  These judgements are all mutually defined (and are in fact mutually defined with the typing judgements). We may sometimes abbreviate these judgements to \(A = B\), \(s = t\), and \(\tau = \sigma\) when the contexts of each piece of syntax is clear.
 \item The typing rules are adjusted to account for this definitional equality, via the addition of a conversion rule.
 \end{enumerate}
 
@@ -1645,7 +1645,7 @@ with the removal of the disc coherence giving the name to this equality rule.
 Assembling disc removal into a rule set \(\mathcal{R}\) is simple, as it is possible to simply give a syntactic condition with no need to refer to typing.
 
 \begin{definition}
-  The disc removal rule set, \dr, is the set consisting of the triples:
+  The \emph{disc removal rule set}, \dr, is the set consisting of the triples:
   \[ (\Gamma, \Coh {D^n} {\wk(U^n)} {\{A,t\}}, t) \]
   for each context \(\Gamma\), type \(A : \Type_\Gamma\), and term \(t : \Term_\Gamma\) where \(n = \dim(A)\).
 
@@ -2684,7 +2684,7 @@ More generally, for each term \(t\) there is a canonical endo-coherence with sou
 Endo-coherence removal can be assembled into the following equality rule set.
 
 \begin{definition}
-  The endo-coherence removal set, \ecr, is the set consisting of the triples:
+  The \emph{endo-coherence removal set}, \ecr, is the set consisting of the triples:
   \[ \Gamma, \Coh \Delta {\arr s A s} \sigma, \id(A\sub \sigma, s \sub \sigma)) \]
   for contexts \(\Gamma\) and \(\Delta\), \(A : \Type_\Delta\), \(s : \Term_\Delta\), and \(\sigma : \arr \Delta \star \Gamma\).
 
@@ -2834,7 +2834,6 @@ Dyck words can be given a visual interpretation as a \emph{mountain diagram}. To
 
 \begin{figure}[h]
   \centering
-  % https://q.uiver.app/#q=WzAsMixbMCwxLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
 \[\begin{tikzcd}[column sep = small, cells={inner sep = 0}, arrows={no head}]
 	&& \bullet && \bullet \\
 	& \bullet && \bullet && \bullet && \bullet \\
@@ -2873,6 +2872,7 @@ The rules \(\circleddash\), \(\Uparrow\), and \(\Downarrow\) directly correspond
 The tight correspondence between the rules used to construct Dyck words and ps-contexts allow an easy proof that the contexts associated to Dyck words are in fact pasting diagrams.
 
 \begin{lemma}
+  \label{lem:dyck-typing}
   For a Dyck word \(\mathcal{D} : \Dyck_d\), its associated context, type, and term are all well-typed:
   \[ \lfloor \mathcal{D} \rfloor \vdash \qquad \lfloor \mathcal{D} \rfloor \vdash \ty_{\mathcal{D}} \qquad \lfloor \mathcal{D} \rfloor \vdash \tm_{\mathcal{D}} : \ty_{\mathcal{D}} \]
   In addition to being a well-typed context, the context associated to a Dyck word is a ps-context; the following judgement holds:
@@ -2909,7 +2909,7 @@ We lastly show that a Dyck word can be suspended, which is expected as ps-contex
 
 \begin{lemma}
   Dyck words are closed under suspension. We define the suspension of a Dyck word \(\mathcal{D} : \Dyck_d\) to be the Dyck word \(\Sigma(\mathcal{D}) : \Dyck_{d+1}\) which is obtained by inserting an additional up move to the start of the work, or can alternatively be inductively defined by:
-  \[ \Sigma(\circleddash) = \circleddash \Uparrow \qquad \Sigma(\mathcal{D}\Uparrow) = \Sigma(\mathcal{D})\Uparrow \qquad \Sigma(\mathcal{D}\Downarrow) = \Sigma(\mathcal{d})\Downarrow \]
+  \[ \Sigma(\circleddash) = \circleddash \Uparrow \qquad \Sigma(\mathcal{D}\Uparrow) = \Sigma(\mathcal{D})\Uparrow \qquad \Sigma(\mathcal{D}\Downarrow) = \Sigma(\mathcal{D})\Downarrow \]
   The following equalities hold:
   \[ \lfloor \Sigma(\mathcal{D}) \rfloor = \Sigma(\lfloor \mathcal{D} \rfloor) \qquad \ty_{\Sigma(\mathcal{D})} = \Sigma(\ty_{\mathcal{D}}) \qquad \tm_{\Sigma(\mathcal{D})} = \Sigma(\tm_{\mathcal{D}}) \]
   for each Dyck word \(\mathcal{D}\). For each peak \(p : \Peak_{\mathcal{D}}\), there is an associated peak \(\Sigma(p) : \Peak_{\Sigma(\mathcal{D})}\) which is defined similarly.
@@ -2926,14 +2926,229 @@ The Dyck words presented in this section can be viewed as a more direct syntax f
 
 \subsection{The pruning construction}
 
-\todo[inline]{Explicitly give constructions}
+Equipped with Dyck words, and a classification of locally maximal variables as peaks, we are now able to define each of the constructions used in the pruning operation.
 
-\todo[inline]{Give pruning set}
-\todo[inline]{Give pruning property}
+\begin{definition}
+  Let \(\mathcal{D} : \Dyck_d\) be a dyck word, and \(p : \Peak_{\mathcal{D}}\) be a peak of \(\mathcal{D}\). The pruned Dyck word \(\mathcal{D} \sslash p : \Dyck_d\) and substitution \(\pi_p : \lfloor \mathcal{D}\rfloor \to \lfloor \mathcal{D} \sslash p \rfloor\) are then defined inductively on the peak \(p\) by the following equations:
+  \begin{align*}
+    \mathcal{D} \Uparrow\, \Downarrow \sslash \mathcal{D} \UDPeak &= \mathcal{D}\\
+    \mathcal{D} \Uparrow \sslash p \UpPeak &= (\mathcal{D} \sslash p) \Uparrow \\
+    \mathcal{D} \Downarrow \sslash p \DownPeak &= (\mathcal{D} \sslash p) \Downarrow \\[10pt]
+    \pi_{\mathcal{D}\UDPeak} &= \langle \id_{\lfloor \mathcal{D} \rfloor} , \tm_{\mathcal{D}}, \id(\ty_{\mathcal{D}}, \tm_{\mathcal{D}}) \rangle\\
+    \pi_{p \UpPeak} &= \langle \wk(\wk(\pi_p)) , y_{\mathcal{D}}, f_{\mathcal{D}} \rangle\\
+    \pi_{p \DownPeak} &= \pi_p\\
+  \intertext{If we further have a substitution \(\sigma : \arr {\lfloor \mathcal{D} \rfloor} \star \Gamma\) for some context \(\Gamma\), then the pruned substitution \(\sigma \sslash p : \arr {\lfloor \mathcal{D} \sslash p \rfloor} \star \Gamma\) can be formed:}
+    \langle \sigma, s, t \rangle \sslash \mathcal{D}\UDPeak &= \sigma \\
+    \langle \sigma, s, t \rangle \sslash p \UpPeak &= \langle \sigma \sslash p, s, t \rangle \\
+    \sigma \sslash p \DownPeak &= \sigma \sslash p
+  \end{align*}
+\end{definition}
+
+Each peak in a Dyck word corresponds to a consecutive upwards arrow and downwards arrow. Pruning this peak corresponds removing these two arrows, which does not change the trailing dimension of the Dyck word. The effect on the mountain diagram representation can be seen in \cref{fig:prune}.
+
+\begin{figure}[h]
+  \centering
+% https://q.uiver.app/#q=WzAsMTcsWzAsMiwiXFxidWxsZXQiXSxbMSwxLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzMsMSwiXFxidWxsZXQiXSxbNCwwLCJcXGJ1bGxldCJdLFs1LDEsIlxcYnVsbGV0Il0sWzYsMiwiXFxidWxsZXQiXSxbNywxLCJcXGJ1bGxldCJdLFs4LDIsIlxcYnVsbGV0Il0sWzksMSwiXFxyaWdodHNxdWlnYXJyb3ciXSxbMTAsMiwiXFxidWxsZXQiXSxbMTEsMSwiXFxidWxsZXQiXSxbMTIsMCwiXFxidWxsZXQiXSxbMTMsMSwiXFxidWxsZXQiXSxbMTQsMiwiXFxidWxsZXQiXSxbMTUsMSwiXFxidWxsZXQiXSxbMTYsMiwiXFxidWxsZXQiXSxbMCwxXSxbMSwyLCIiLDAseyJjb2xvdXIiOlswLDYwLDYwXX1dLFsyLDMsIiIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfV0sWzMsNF0sWzQsNV0sWzUsNl0sWzYsN10sWzcsOF0sWzEwLDExXSxbMTEsMTJdLFsxMiwxM10sWzEzLDE0XSxbMTQsMTVdLFsxNSwxNl1d
+\[\begin{tikzcd}[column sep = small, cells={inner sep = 0}, arrows={no head}]
+	&& {\color{red}\bullet} && \bullet &&&&&&&& \bullet \\
+	& \bullet && \bullet && \bullet && \bullet && \rightsquigarrow && \bullet && \bullet && \bullet \\
+	\bullet &&&&&& \bullet && \bullet && \bullet &&&& \bullet && \bullet
+	\arrow[from=3-1, to=2-2]
+	\arrow[color={rgb,255:red,204;green,0;blue,14}, from=2-2, to=1-3]
+	\arrow[color={rgb,255:red,204;green,0;blue,14}, from=1-3, to=2-4]
+	\arrow[from=2-4, to=1-5]
+	\arrow[from=1-5, to=2-6]
+	\arrow[from=2-6, to=3-7]
+	\arrow[from=3-7, to=2-8]
+	\arrow[from=2-8, to=3-9]
+	\arrow[from=3-11, to=2-12]
+	\arrow[from=2-12, to=1-13]
+	\arrow[from=1-13, to=2-14]
+	\arrow[from=2-14, to=3-15]
+	\arrow[from=3-15, to=2-16]
+	\arrow[from=2-16, to=3-17]
+\end{tikzcd}\]
+  \caption[Pruning]{Pruning of peak \(\circleddash \Uparrow\, \UDPeak\, \UpPeak\, \DownPeak\, \DownPeak\, \UpPeak\, \DownPeak\)}
+  \label{fig:prune}
+\end{figure}
+
+When a peak is pruned the locally maximal variable and its target are removed from the associated context. The substitution \(\pi_{\mathcal{D} \UDPeak}\) simply maps these two variables to \(\id(\ty_{\mathcal{D}},\tm_{\mathcal{D}})\) and \(\tm_{\mathcal{D}}\), where the Dyck term \(\tm_{\mathcal{D}}\) is the source of the locally maximal variable. Pruning a substitution simply removes the terms corresponding to the removed variables in the associated context.
+
+\begin{example}
+  Let \(\Gamma = (x : \star), (f : \arr x \star x)\) and consider the term \(f * \id(x)\), which is given by:
+  \[ \Coh {(a : \star), (b : \star), (c : a \to b), (d : \star), (e : b \to d)} {a \to d} {\langle x, x, f, x, \id(\star,x) \rangle} \]
+  The context in this coherence is the associated context of the Dyck word \(\circleddash \Uparrow\,\Downarrow\,\Uparrow\,\Downarrow\) which has a peak \(\circleddash \Uparrow\,\Downarrow\,\UDPeak\), which corresponds to the locally maximal variable \(e\). Since \(e\) is sent to an identity by the substitution, pruning can be applied to get:
+  \begin{align*}
+    \circleddash \Uparrow\,\Downarrow\,\Uparrow\,\Downarrow \sslash \circleddash \Uparrow\,\Downarrow\,\UDPeak &= \circleddash \Uparrow\, \Downarrow\\
+    \pi_{\circleddash \Uparrow\,\Downarrow\,\UDPeak} &= \langle a, b, c, b, \id(\star,b) \rangle\\
+    \langle x, x, f, x, \id(\star,x) \rangle \sslash \circleddash \Uparrow\,\Downarrow\,\UDPeak &= \langle x,x,f\rangle
+  \end{align*}
+  Which results in the term:
+  \[ \Coh {(a : \star), (b : \star), (c : a \to b)} {(a \to d) \sub {\langle a, b, c, b, \id(\star,b) \rangle} } {\langle x, x, f \rangle} \equiv \Coh {(a : \star), (b : \star), (c : a \to b)} {(a \to b)} {\langle x, x, f \rangle} \]
+  which is the unary composite on \(f\). In the presence of disc removal, this term could further simplify to the variable \(f\).
+\end{example}
+
+With these constructions, we can finally define the pruning rule.
+
+\begin{definition}
+  A term \(t\) \emph{is an identity} if \(t \equiv \id(A,s)\) for some type \(A\) and some term \(s\). The \emph{pruning rule set}, \prune, is the set consisting of the triples:
+  \[ (\Gamma, \Coh {\lfloor \mathcal{D} \rfloor} {A} \sigma, \Coh {\lfloor \mathcal{D} \sslash p \rfloor} {A \sub {\pi_p}} {\sigma \sslash p}) \]
+  for each Dyck word \(\mathcal{D} : \Dyck_0\), peak \(p : \Peak_{\mathcal{D}}\), type \(A : \Type_{\lfloor \mathcal{D} \rfloor}\), and substitution \(\sigma : \arr {\lfloor \mathcal{D} \rfloor} \star \Gamma\) where \(\lfloor p \rfloor \sub \sigma\) is an identity.
+
+  A set of rules \(\mathcal{R}\) \emph{contains pruning} if \(\prune \subseteq \mathcal{R}\). Pruning makes the following rule admissible:
+  \begin{mathpar}
+    \inferrule{\mathcal{D} : \Dyck_0 \\ p : \Peak_{\mathcal{D}} \\ \lfloor \mathcal{D} \rfloor \vdash A \\ \Gamma \vdash \sigma : \lfloor \mathcal{D} \rfloor \\\\ (\lfloor \mathcal{D} \rfloor, \Supp(\src(A)), \tgt(A)) \in \mathcal{O}\\ \lfloor p \rfloor \sub \sigma \text{ is an identity}}{\Gamma \vdash \Coh {\lfloor \mathcal{D} \rfloor} A \sigma = \Coh {\lfloor \mathcal{D} \sslash p} {A \sub {\pi_p}} {\sigma \sslash p}}\textsc{prune}
+  \end{mathpar}
+  The set \(\mathcal{R}\) \emph{has pruning} if the rule \textsc{prune} holds in the generated theory.
+\end{definition}
 
 \subsection{Properties of pruning}
 
-\todo[inline]{Give main typing properties}
+With start with the aim of proving that each construction involved in pruning satisfies the expected typing judgements. To do this the following lemma will be necessary, which describes the interaction of the Dyck word construction with pruning.
+
+\begin{lemma}
+  \label{lem:dyck-prune-prop}
+  Let \(\mathcal{D} : Dyck_d\) be a Dyck word. Then the following equations hold:
+  \begin{align*}
+    \ty_{\mathcal{D}} \sub{\pi_p} &\equiv \ty_{\mathcal{D} \sslash p}\\
+    \tm_{\mathcal{D}} \sub{\pi_p} &\equiv \tm_{\mathcal{D} \sslash p}
+  \end{align*}
+  for any peak \(p : \Peak_{\mathcal{D}}\) of \(\mathcal{D}\).
+\end{lemma}
+\begin{proof}
+  The proof proceeds by a induction on the peak \(p\), proving both equations simultaneously. Both equations hold by routine calculations given in \module{Catt.Dyck.Pruning.Properties} by the functions \func{Catt.Dyck.Pruning.Properties}{dyck-type-prune} and \func{Catt.Dyck.Pruning.Properties}{dyck-term-prune}.
+\end{proof}
+
+This allows the main typing properties of this section to be given.
+
+\begin{proposition}
+  \label{prop:prune-ty}
+  Let \(\mathcal{D} : \Dyck_d\) be a Dyck word and let \(p : \Peak_{\mathcal{D}}\) be a peak of this word. Then:
+  \[ \lfloor \mathcal{D} \sslash p \rfloor \vdash \pi_p : \lfloor \mathcal{D} \rfloor \]
+  Given a substitution \(\sigma\) with \(\Gamma \vdash \sigma : \lfloor \mathcal{D} \rfloor\), where \(\lfloor p \rfloor \sub \sigma\) is an identity, the equality and typing judgements:
+  \[ \Gamma \vdash \sigma = \pi_p \bullet (\sigma \sslash p) \qquad \Gamma \vdash \sigma : \lfloor \mathcal{D} \sslash p \rfloor \]
+  hold.
+\end{proposition}
+\begin{proof}
+  We prove each judgement holds in turn by induction on the peak \(p\). For the judgement:
+  \[ \lfloor \mathcal{D} \sslash p \rfloor \vdash \pi_p : \lfloor \mathcal{D} \rfloor \]
+  the case when the peak is of the form \(p\DownPeak\) is trivial. The case for when it is of the form \(\mathcal{D}\UDPeak\) easily follows from \cref{lem:dyck-typing,cor:id-typing}. For the case where the peak is of the form \(p\UpPeak\), it must be shown that:
+  \[ \Delta \vdash \langle \wk(\wk(\pi_p)), y, f \rangle : \lfloor \mathcal{D} \rfloor, (y : \ty_{\mathcal{D}}), (f : \arr {\wk(\tm_{\mathcal{D}})} {\wk(\ty_{\mathcal{D}})} y) \]
+  where \(\Delta = \lfloor \mathcal{D} \sslash p \rfloor, (y : \ty_{\mathcal{D} \sslash p}), (f : \arr{\wk(\tm_{\mathcal{D}\sslash p})} {\wk(\ty_{\mathcal{D}\sslash p})} {y})\). This requires proofs of:
+  \begin{align*}
+    \Delta &\vdash \wk(\wk(\pi_p)) : \lfloor \mathcal{D} \rfloor\\
+    \Delta &\vdash y : \ty_{\mathcal{D}} \sub {\pi_p}\\
+    \Delta &\vdash f : (\arr {\wk(\tm_{\mathcal{D}})} {\wk(\ty_{\mathcal{D}})} y) \sub {\langle \wk(\pi_p), y \rangle}
+  \end{align*}
+  The first part follows from inductive hypothesis (and typing of weakening). The other two judgements follow from some calculation and \cref{lem:dyck-prune-prop}.
+
+  For the second judgement:
+  \[ \Gamma \vdash \sigma = \pi_p \bullet (\sigma \sslash p)\]
+  The \(p \DownPeak\) case is again trivial. The \(p \UpPeak\) case follows easily from properties of weakening and the inductive hypothesis. For the \(\mathcal{D} \UDPeak\) case we suppose the substitution is of the form \(\langle \sigma, s, \id(A,t) \rangle\) and are required to show that:
+  \[ \Gamma \vdash \langle \id_{\mathcal{D}}, \tm_{\mathcal{D}}, \id(\ty_{\mathcal{D}}, \tm_{\mathcal{D}})\rangle \bullet \sigma = \langle \sigma, s, \id(A,t) \rangle \]
+  It is immediate that \(\id_{\mathcal{D}} \bullet \sigma \equiv \sigma\) and so it remains to show that \(\Gamma \vdash \tm_{\mathcal{D}} \sub \sigma = s\) and \(\Gamma \vdash \id(\ty_{\mathcal{D}},\tm_{\mathcal{D}}) \sub \sigma = \id(A,t)\). By deconstructing the typing derivation of \(\langle \sigma, s, \id(A,t) \rangle\), we have:
+  \[ \Gamma \vdash \id(A,t) : (\arr{\wk(\tm_{\mathcal{D}})} {\wk(\ty_{\mathcal{D}})} {y}) \sub {\langle \sigma ,s \rangle} \]
+  By \cref{cor:id-typing} and the uniqueness of typing, we must have:
+  \[ \Gamma \vdash \arr t A t = (\arr{\wk(\tm_{\mathcal{D}})} {\wk(\ty_{\mathcal{D}})} {y}) \sub {\langle \sigma ,s \rangle} \equiv \arr {\tm_{\mathcal{D}} \sub \sigma} {\ty_{\mathcal{D}} \sub \sigma} {s} \]
+  and so \(A = \ty_{\mathcal{D}} \sub \sigma\) and \(s = t = \tm_{\mathcal{D}} \sub \sigma\). The equality \(\id(\ty_{\mathcal{D}}, \tm_{\mathcal{D}}) = \id(A,t)\) follows as equality is respected by the identity construction, which can be proved by a simple induction.
+
+  Lastly, we consider the judgement:
+  \[ \Gamma \vdash \sigma \sslash p : \lfloor \mathcal{D} \sslash p \rfloor \]
+  The only difficult case is for the peak \(p \UpPeak\), where we can assume that the substitution is of the form \(\langle \sigma, s, t\rangle\), such that:
+  \[ \langle \sigma, s, t\rangle \sslash p \UpPeak \equiv \langle \sigma \sslash p, s, t\rangle\]
+  Typing for \(\sigma \sslash p\) follows from inductive hypothesis, and the typing for \(s\) and \(t\) follow from applying conversion rules to the corresponding parts of the typing derivation for \(\langle \sigma, s, t \rangle\). After some computation, the following equalities are needed for these conversion rules:
+  \begin{align*}
+    \Gamma &\vdash \tm_{\mathcal{D}} \sub \sigma = \tm_{\mathcal{D} \sslash p} \sub \sigma \sslash p\\
+    \Gamma &\vdash \ty_{\mathcal{D}} \sub \sigma = \ty_{\mathcal{D} \sslash p} \sub \sigma \sslash p
+  \end{align*}
+  The first is given by:
+  \begin{align*}
+    \tm_{\mathcal{D}} \sub \sigma &= \tm_{\mathcal{D}} \sub {\pi_p \bullet (\sigma \sslash p)}\\
+                                  &\equiv \tm_{\mathcal{D}} \sub {\pi_p} \sub {\sigma \sslash p}\\
+    &\equiv \tm_{\mathcal{D} \sslash p} \sub {\sigma \sslash p}
+  \end{align*}
+  and the second follows similarly, completing the proof.
+\end{proof}
+
+We now turn our attention to proving that the pruning equality set satisfies all the conditions from \cref{sec:ruleset}. We begin with the tameness conditions, omitting the weakening condition, as it follows from the substitution condition.
+
+\begin{proposition}
+  \label{prop:prune-tame}
+  For all \(\mathcal{D} : \Dyck_d\) and peaks \(p : \Peak_{\mathcal{D}}\), and substitutions \(\sigma : \lfloor \mathcal{D} \rfloor \to \Delta\) and \(\tau : \Delta \to \Gamma\) the following equality holds:
+  \[ (\sigma \sslash p) \bullet \tau \equiv (\sigma \bullet \tau) \sslash p \]
+  Hence, the set \prune satisfies the \(\mathcal{R}\)-substitution condition for any equality set \(\mathcal{R}\), and so also satisfies the weakenening condition.
+
+  Furthermore, the following equalities hold:
+  \[\Sigma(\mathcal{D}) \sslash \Sigma(p) = \Sigma(\mathcal{D} \sslash p) \qquad \pi_{\Sigma(p)} \equiv \Sigma(\pi_p) \qquad \Sigma(\sigma \sslash p) \equiv \Sigma(\sigma) \sslash \Sigma(p)\]
+  Therefore, the set \prune also satisfies the suspension condition, making the equality set \prune tame.
+\end{proposition}
+\begin{proof}
+  The proofs of each syntactic equality are easily proved by induction on the peak \(p\). Their proofs are given in the formalisation in \module{Catt.Dyck.Pruning.Properties} as \func{Catt.Dyck.Pruning.Properties}{//s-sub}, \func{Catt.Dyck.Pruning.Properties}{prune-susp-peak}, \funcn{Catt.Dyck.Pruning.Properties}{susp-π}{susp-\(\pi\)}, and \func{Catt.Dyck.Pruning.Properties}{susp-//s}.
+\end{proof}
+
+To show that the support property holds, we must prove that \(\Supp(\sigma) = \Supp(\sigma \sslash p)\). We aim to do this by observing that \(\Supp(\sigma) = \Supp(\pi_p \bullet (\sigma \sslash p))\) and that \(\Supp(\pi_p \bullet (\sigma \sslash p)) = \Supp(\sigma \sslash p)\). By employing the proof strategy for the support condition introduced in \cref{sec:further-conditions}, the first will follow form the equality \(\sigma = \pi_p \bullet (\sigma \sslash p)\), which we can assume holds in a theory which satisfies the support condition. For the second we need the following lemma.
+
+\begin{lemma}
+  \label{lem:pi-bdry}
+  For all \(n : \mathbb{N}\), \(\epsilon \in \{-,+\}\), \(\mathcal{D} : \Dyck_d\), and \(p : \Peak_{\mathcal{D}}\):
+  \[ \bdry n \epsilon {\lfloor \mathcal{D} \rfloor} \sub {\pi_p} = \Supp(\bdry n \epsilon {\lfloor \mathcal{D} \sslash p \rfloor}) \]
+  and so \(\Supp(\pi_p) = \Var(\lfloor \mathcal{D} \sslash p \rfloor)\).
+\end{lemma}
+\begin{proof}
+  The main equation in this lemma is given by a long and technical induction on the peak \(p\). The details of this induction appear in the formalisation in the function \funcn{Catt.Dyck.Pruning.Support}{π-boundary-vs}{\(\pi\)-boundary-vs} which appears in the module \module{Catt.Dyck.Pruning.Support}.
+
+  The equation \(\Supp(\pi_p) = \Var(\lfloor \mathcal{D} \sslash p \rfloor)\) follows from \cref{prop:vs-sub,lem:bdry-full}, by setting \(n = \dim(\lfloor \mathcal{D} \rfloor)\).
+\end{proof}
+
+We are now ready to prove that the support condition holds.
+
+\begin{proposition}
+  Let \(\mathcal{R}\) be a tame equality rule set that satisfies the support condition. Then the set \prune satisfies the \(\mathcal{R}\)-support condition.
+\end{proposition}
+\begin{proof}
+  It suffices to prove that:
+  \[ \Supp(\Coh {\lfloor \mathcal{D} \rfloor} {A} \sigma) = \Supp(\Coh {\lfloor \mathcal{D} \sslash p \rfloor} {A \sub {\pi_p}} {\sigma \sslash p}) \]
+  for \(\mathcal{D} : \Dyck_0\), \(p : \Peak_{\mathcal{D}}\), type \(A\), and substitution \(\sigma : \lfloor \mathcal{D} \rfloor \to \Gamma\), where \(\lfloor p \rfloor \sub \sigma\) is an identity and \(\Gamma \vdash_{\mathcal{R}} \Coh {\lfloor \mathcal{D} \rfloor} {A} \sigma : B\) for some \(B\). By inspection of the typing derivation we obtain an instance of the judgement \(\Gamma \vdash_{\mathcal{R}} \sigma : \lfloor \mathcal{D} \rfloor\), and so:
+  \begin{align*}
+    \Supp(\Coh {\lfloor \mathcal{D} \rfloor} {A} \sigma) &= \Supp(\sigma)\\
+                                                         &= \Supp(\pi_p \bullet (\sigma \sslash p))&(*)\\
+                                                         &= \Supp(\pi_p) \sub {\sigma \sslash p}\\
+                                                         &= \Var{\lfloor \mathcal{D} \sslash p \rfloor} \sub {\sigma \sslash p}&\text{by \cref{lem:pi-bdry}}\\
+                                                         &= \Supp(\sigma \sslash p) \\
+                                                         &= \Supp(\Coh {\lfloor \mathcal{D} \sslash p \rfloor} {A \sub {\pi_p}} {\sigma \sslash p})
+  \end{align*}
+  where equality \((*)\) is derived by applying \cref{prop:supp-prop} to the equality
+  \[\Gamma \vdash_{\mathcal{R}} \sigma = \pi_p \bullet (\sigma \sslash p)\]
+  from \cref{prop:prune-ty}.
+\end{proof}
+
+To prove that the preservation condition holds, it is necessary to show that the type \(A \sub{\pi_p}\) created by pruning is a valid operation. This cannot be deduced from any of the conditions that been imposed on the operation set \(\mathcal{O}\) so far. Therefore, we introduce the following additional condition.
+
+\begin{definition}
+  An operation set \(\mathcal{O}\) \emph{supports pruning} if for all \(\mathcal{D} : \Dyck_0\), \(p : \Peak_{\mathcal{D}}\), and variable sets \(U,V \subseteq \Var(\lfloor \mathcal{D} \rfloor)\) we have:
+  \[ (\lfloor \mathcal{D} \sslash p \rfloor, U \sub{\pi_p}, V \sub{\pi_p}) \in \mathcal{O} \]
+  whenever \((\lfloor \mathcal{D} \rfloor, U , V) \in \mathcal{O}\).
+\end{definition}
+
+The globular operation set trivially supports pruning. Using \cref{lem:pi-bdry,prop:std-op}, it can be proved that the regular operation set supports pruning. We can now prove that the preservation condition holds.
+
+\begin{proposition}
+  Let \(\mathcal{R}\) be a tame equality rule set and suppose the operation set \(\mathcal{O}\) supports pruning. Then the set \prune satisfies the preservation condition.
+\end{proposition}
+\begin{proof}
+  Let \(\mathcal{D} : \Dyck_d\) be a Dyck word and \(p : \Peak_{\mathcal{D}}\) be a peak of \(\mathcal{D}\). Further suppose \(\arr s A t : \Type_{\lfloor \mathcal{D} \rfloor}\), and \(\sigma : \lfloor \mathcal{D} \rfloor \to \Gamma\) such that \(\lfloor p \rfloor \sub \sigma\) is an identity and:
+  \[ \Gamma \vdash_{\mathcal{R}} \Coh {\lfloor \mathcal{D} \rfloor} {\arr s A t} \sigma : B\]
+  for some type \(B : \Type_\Gamma\). By inspection on this typing derivation we have:
+  \[ \lfloor \mathcal{D} \rfloor \vdash_{\mathcal{R}} A \qquad \Gamma \vdash_{\mathcal{R}} \sigma \lfloor \mathcal{D} \rfloor \qquad (\lfloor \mathcal{D} \rfloor, \Supp(s), \Supp(t)) \in \mathcal{O} \qquad \Gamma \vdash_{\mathcal{R}} B = (\arr s A t) \sub \sigma\]
+  and so by \cref{prop:prune-ty}, we have:
+  \[\lfloor \mathcal{D} \sslash p \rfloor \vdash_{\mathcal{R}} \pi_p : \lfloor \mathcal{D} \rfloor \qquad \Gamma \vdash_{\mathcal{R}} \sigma \sslash p \]
+  therefore, as \(\mathcal{O}\) supports pruning:
+  \[\Gamma \vdash_{\mathcal{R}} \Coh {\lfloor \mathcal{D} \sslash p \rfloor} {(\arr s A t) \sub {\pi_p}} {\sigma \sslash p} : (\arr s A t) \sub {\pi_p} {\sigma \sslash p}\]
+  and so by applying the conversion rule, it suffices to show that
+  \[ \Gamma \vdash_{\mathcal{R}} B = (\arr s A t) \sub {\pi_p} {\sigma \sslash p}\]
+  but this follows from the equality \(B = (\arr s A t) \sub \sigma\) and the equality \(\sigma = \pi_p \bullet (\sigma \sslash p)\) from \cref{prop:prune-ty}.
+\end{proof}
+
 \todo[inline]{Give any confluence properties here}
 
 \section{Trees}
@@ -3058,6 +3273,34 @@ The Dyck words presented in this section can be viewed as a more direct syntax f
 
 \chapter{Semistrict variants of \Catt}
 \label{cha:cattstrict}
+
+\todo[inline]{This section introduces cattsu and cattsua}
+\todo[inline]{cattsu from pruning, cattsua from insertion}
+\todo[inline]{Heavily build on the previous sections}
+\todo[inline]{Explore the theories more}
+\todo[inline]{The main contribution will be to give normalisation}
+\todo[inline]{Done by reduction}
+\todo[inline]{Gives decidability of type checking}
+\todo[inline]{Language can be implemented}
+\todo[inline]{Introduce rust implementation}
+\todo[inline]{Explain that this is nbe}
+\todo[inline]{Section on nbe}
+\todo[inline]{Build towards full nbe characterisation}
+
+\todo[inline]{Describe further sections}
+
+
+\section{Reduction}
+\label{sec:reduction}
+
+\todo[inline]{Basics of reduction}
+
+\todo[inline]{Give definitions of strong termination (local) confluence}
+
+\todo[inline]{Decidability of equality}
+
+\todo[inline]{Set up equality from rules}
+
 
 \section{\Cattsu}
 \label{sec:cattsu}
