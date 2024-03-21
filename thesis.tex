@@ -2898,6 +2898,7 @@ The locally maximal variables in the context associated to a Dyck word correspon
 \end{definition}
 
 \begin{example}
+  \label{ex:dyck-peaks}
   Recall the ps-context \(\Theta\) from \cref{ex:lm}. This context is the associated context of the Dyck word:
   \[ \circleddash \Uparrow\, \Uparrow\, \Downarrow\, \Uparrow\, \Downarrow\, \Downarrow\, \Uparrow\, \Downarrow\]
   for which the mountain diagram is given in \cref{fig:mountain}. The three locally maximal variables \(\alpha\), \(\beta\), and \(j\) correspond to the peaks:
@@ -2950,7 +2951,7 @@ Each peak in a Dyck word corresponds to a consecutive upwards arrow and downward
   \centering
 % https://q.uiver.app/#q=WzAsMTcsWzAsMiwiXFxidWxsZXQiXSxbMSwxLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzMsMSwiXFxidWxsZXQiXSxbNCwwLCJcXGJ1bGxldCJdLFs1LDEsIlxcYnVsbGV0Il0sWzYsMiwiXFxidWxsZXQiXSxbNywxLCJcXGJ1bGxldCJdLFs4LDIsIlxcYnVsbGV0Il0sWzksMSwiXFxyaWdodHNxdWlnYXJyb3ciXSxbMTAsMiwiXFxidWxsZXQiXSxbMTEsMSwiXFxidWxsZXQiXSxbMTIsMCwiXFxidWxsZXQiXSxbMTMsMSwiXFxidWxsZXQiXSxbMTQsMiwiXFxidWxsZXQiXSxbMTUsMSwiXFxidWxsZXQiXSxbMTYsMiwiXFxidWxsZXQiXSxbMCwxXSxbMSwyLCIiLDAseyJjb2xvdXIiOlswLDYwLDYwXX1dLFsyLDMsIiIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfV0sWzMsNF0sWzQsNV0sWzUsNl0sWzYsN10sWzcsOF0sWzEwLDExXSxbMTEsMTJdLFsxMiwxM10sWzEzLDE0XSxbMTQsMTVdLFsxNSwxNl1d
 \[\begin{tikzcd}[column sep = small, cells={inner sep = 0}, arrows={no head}]
-	&& {\color{red}\bullet} && \bullet &&&&&&&& \bullet \\
+	&& |[color={rgb,255:red,204;green,0;blue,14}]|\bullet && \bullet &&&&&&&& \bullet \\
 	& \bullet && \bullet && \bullet && \bullet && \rightsquigarrow && \bullet && \bullet && \bullet \\
 	\bullet &&&&&& \bullet && \bullet && \bullet &&&& \bullet && \bullet
 	\arrow[from=3-1, to=2-2]
@@ -3141,15 +3142,68 @@ The globular operation set trivially supports pruning. Using \cref{lem:pi-bdry,p
   for some type \(B : \Type_\Gamma\). By inspection on this typing derivation we have:
   \[ \lfloor \mathcal{D} \rfloor \vdash_{\mathcal{R}} A \qquad \Gamma \vdash_{\mathcal{R}} \sigma \lfloor \mathcal{D} \rfloor \qquad (\lfloor \mathcal{D} \rfloor, \Supp(s), \Supp(t)) \in \mathcal{O} \qquad \Gamma \vdash_{\mathcal{R}} B = (\arr s A t) \sub \sigma\]
   and so by \cref{prop:prune-ty}, we have:
-  \[\lfloor \mathcal{D} \sslash p \rfloor \vdash_{\mathcal{R}} \pi_p : \lfloor \mathcal{D} \rfloor \qquad \Gamma \vdash_{\mathcal{R}} \sigma \sslash p \]
-  therefore, as \(\mathcal{O}\) supports pruning:
-  \[\Gamma \vdash_{\mathcal{R}} \Coh {\lfloor \mathcal{D} \sslash p \rfloor} {(\arr s A t) \sub {\pi_p}} {\sigma \sslash p} : (\arr s A t) \sub {\pi_p} {\sigma \sslash p}\]
+  \[\lfloor \mathcal{D} \sslash p \rfloor \vdash_{\mathcal{R}} \pi_p : \lfloor \mathcal{D} \rfloor \qquad \Gamma \vdash_{\mathcal{R}} \sigma \sslash p : \lfloor \mathcal{D} \sslash p \rfloor\]
+  therefore, as \(\mathcal{O}\) supports pruning, the following judgement holds:
+  \[\Gamma \vdash_{\mathcal{R}} \Coh {\lfloor \mathcal{D} \sslash p \rfloor} {(\arr s A t) \sub {\pi_p}} {\sigma \sslash p} : (\arr s A t) \sub {\pi_p} \sub {\sigma \sslash p}\]
   and so by applying the conversion rule, it suffices to show that
-  \[ \Gamma \vdash_{\mathcal{R}} B = (\arr s A t) \sub {\pi_p} {\sigma \sslash p}\]
+  \[ \Gamma \vdash_{\mathcal{R}} B = (\arr s A t) \sub {\pi_p} \sub {\sigma \sslash p}\]
   but this follows from the equality \(B = (\arr s A t) \sub \sigma\) and the equality \(\sigma = \pi_p \bullet (\sigma \sslash p)\) from \cref{prop:prune-ty}.
 \end{proof}
 
-\todo[inline]{Give any confluence properties here}
+We end this section with a property of pruning that will be required to prove confluence. Suppose we have a Dyck word \(\mathcal{D}\) and two distinct peaks \(p, q : \Peak_{\mathcal{D}}\). Then both peaks can be pruned from \(\mathcal{D}\) in either order. Consider the example below on the Dyck word from \cref{ex:dyck-peaks}.
+\[
+  \begin{tikzcd}[column sep = 0.7em, row sep = scriptsize, cells={inner sep = 0,shape=circle,anchor=center}, arrows={no head}]
+	&&&&&&&&&&& \bullet \\
+	&&&&&&&&&& \bullet && \bullet && |[color=blue]|\bullet \\
+	&&&&&&&&& \bullet &&&& \bullet && \bullet \\
+	&& |[color=red]|\bullet && \bullet &&&& |[color=red, rotate=35]|\mathclap{\rightsquigarrow} &&&&&&&& |[color=blue, rotate=-35]|\mathclap{\rightsquigarrow} && \bullet \\
+	& \bullet && \bullet && \bullet && |[color=blue]|\bullet &&&&&&&&&& \bullet && \bullet \\
+	\bullet &&&&&& \bullet && \bullet &&&&&&&& \bullet &&&& \bullet \\
+	&&&&&&&& |[color=blue, rotate=-35]|\mathclap{\rightsquigarrow} &&& |[color=red]|\bullet && \bullet &&& |[color=red, rotate=35]|\mathclap{\rightsquigarrow} \\
+	&&&&&&&&&& \bullet && \bullet && \bullet \\
+	&&&&&&&&& \bullet &&&&&& \bullet
+	\arrow[from=6-1, to=5-2]
+	\arrow[color=red, from=5-2, to=4-3]
+	\arrow[color=red, from=4-3, to=5-4]
+	\arrow[from=5-4, to=4-5]
+	\arrow[from=4-5, to=5-6]
+	\arrow[from=5-6, to=6-7]
+	\arrow[color=blue, from=6-7, to=5-8]
+	\arrow[color=blue, from=5-8, to=6-9]
+	\arrow[from=3-10, to=2-11]
+	\arrow[from=2-11, to=1-12]
+	\arrow[from=1-12, to=2-13]
+	\arrow[from=2-13, to=3-14]
+	\arrow[color=blue, from=3-14, to=2-15]
+	\arrow[color=blue, from=2-15, to=3-16]
+	\arrow[from=6-17, to=5-18]
+	\arrow[from=5-18, to=4-19]
+	\arrow[from=4-19, to=5-20]
+	\arrow[from=5-20, to=6-21]
+	\arrow[from=9-10, to=8-11]
+	\arrow[color=red, from=8-11, to=7-12]
+	\arrow[color=red, from=7-12, to=8-13]
+	\arrow[from=8-13, to=7-14]
+	\arrow[from=7-14, to=8-15]
+	\arrow[from=8-15, to=9-16]
+  \end{tikzcd}
+\]
+The following proposition proves that both peaks of the Dyck word can be pruned, and that the order in which this is done does not matter.
+
+\begin{proposition}
+  Suppose \(\mathcal{D} : \Dyck_d\) is a Dyck word and let \(p\) and \(q\) be two distinct peaks of \(\mathcal{D}\). Then there is a peak \(q_{p}\) of \(\mathcal{D} \sslash p\) such that:
+  \[ \lfloor q_{p} \rfloor \equiv \lfloor q \rfloor \sub {\pi_{p}}\]
+  and a similar peak \(p_{q}\) of \(\mathcal{D} \sslash q\). Furthermore, the following equations hold syntactically:
+  \begin{mathpar}
+    (\mathcal{D} \sslash p) \sslash q_{p} = (\mathcal{D} \sslash q) \sslash p_{q} \and
+    \pi_p \bullet \pi_{q_p} \equiv \pi_q \bullet \pi_{p_q} \and
+    (\sigma \sslash p) \sslash q_{p} = (\sigma \sslash q) \sslash p_{q}
+  \end{mathpar}
+  where the last equation holds for any \(\sigma : \lfloor \mathcal{D} \rfloor \to \Gamma\).
+\end{proposition}
+\begin{proof}
+  All proofs proceed by a simultaneous induction on both the peaks \(p\) and \(q\), and are given in \module{Catt.Dyck.Pruning.Properties} in the formalisation. The construction of the peak \(q_p\) is given by the function \func{Catt.Dyck.Pruning.Properties}{prune-peak}, the equality \(\lfloor q_p \rfloor \equiv \lfloor q \rfloor \sub {\pi_p}\) is given by \func{Catt.Dyck.Pruning.Properties}{prune-peak-prop}, and the remaining three equations are given by \func{Catt.Dyck.Pruning.Properties}{prune-conf}, \funcn{Catt.Dyck.Pruning.Properties}{π-conf}{\(\pi\)-conf}, and \func{Catt.Dyck.Pruning.Properties}{prune-sub-conf}.
+\end{proof}
 
 \section{Trees}
 \label{sec:trees}
