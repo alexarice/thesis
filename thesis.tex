@@ -1360,7 +1360,7 @@ The main purpose of this chapter will be to define the family of type theories \
 
 This chapter will also introduce the Agda\todo{citation} formalisation which accompanies this thesis, which compiles with Agda v2.6.4 and standard library v2.0. The formalisation implements the syntax and typing judgements of \Cattr, and contains proofs of most results in this chapter and \cref{sec:operations-catt}. By formalising \Cattr, instead of the more specific type theories \Cattsu and \Cattsua introduced in \cref{sec:cattsu,sec:cattsua}, the formalisation of many results can be applied to both type theories. This also allows these results to be applied to any future type theories that fit into this family.
 
-\todo[inline]{Dependency graph of formalisation}
+A dependency graph of the formalisation is given in \cref{fig:dep-graph}, and an online version of this graph can be found at \todo{Put online} for which each node is a clickable link to an html version of the code.
 
 \section{Extended substitution}
 \label{sec:extend-subst}
@@ -2392,6 +2392,7 @@ which includes \(\Gamma\) into \(\Gamma, x : A\). It can be checked (and is give
 We lastly show that \dr also satisfies the substitution condition.
 
 \begin{proposition}
+  \label{prop:dr-sub}
   The set \dr satisfies the \(\mathcal{R}\)-substitution condition for any equality set \(\mathcal{R}\).
 \end{proposition}
 \begin{proof}
@@ -2582,6 +2583,7 @@ The proof strategy then proceeds as follows: to prove that \(\mathcal{R}\) satis
 To be able to prove that \(\mathcal{R}\) satisfies the \(\mathcal{R}_{\mathsf{S}}\)-support condition, we will commonly need to know that \(\mathcal{R}_{\mathsf{S}}\) satisfies various tameness conditions, which are given by the next lemma.
 
 \begin{lemma}
+  \label{lem:supp-sat-conds}
   Let \(\mathcal{R}\) be any equality set. Then \(\mathcal{R}_{\mathsf{S}}\) satisfies the weakening, suspension, and substitution conditions if \(\mathcal{R}\) respects the corresponding condition.
 \end{lemma}
 \begin{proof}
@@ -2603,6 +2605,7 @@ To be able to prove that \(\mathcal{R}\) satisfies the \(\mathcal{R}_{\mathsf{S}
 We now prove the appropriate support condition for disc removal.
 
 \begin{proposition}
+  \label{prop:dr-supp}
   Let \(\mathcal{R}\) satisfy the support and weakening conditions. Then the set \(\dr\) satisfies the \(\mathcal{R}\)-support condition.
 \end{proposition}
 \begin{proof}
@@ -2657,6 +2660,7 @@ When a rule set \(\mathcal{R}\) has all the properties presented in this section
 As with the other conditions, we end this section by showing that \dr satisfies the preservation condition.
 
 \begin{proposition}
+  \label{prop:dr-preserve}
   Suppose \(\mathcal{R}\) satisfies the weakening condition, and the set of operations \(\mathcal{O}\) contains the standard operations. Then \dr satisfies the \(\mathcal{R}\)-preservation condition.
 \end{proposition}
 \begin{proof}
@@ -2695,14 +2699,15 @@ Endo-coherence removal can be assembled into the following equality rule set.
 The set \ecr satisfies all the conditions introduced in this chapter, as proven in the next proposition, which concludes this chapter.
 
 \begin{proposition}
+  \label{prop:ecr-props}
   Suppose the set of operations \(\mathcal{O}\) contains the standard operations. Then the set \ecr satisfies the following properties:
-  \begin{enumerate}[(i)]
+  \begin{lemmaenum}
   \item The set \ecr satisfies the weakening condition.
   \item The set \ecr satisfies the suspension condition.
   \item The set \ecr satisfies the \(\mathcal{R}\)-substitution condition, for any equality set \(\mathcal{R}\).
-  \item The set \ecr satisfies the \(\mathcal{R}\)-support condition, for any equality set \(\mathcal{R}\) satisfying the support condition.
-  \item The set \ecr satisfies the \(\mathcal{R}\)-preservation condition, for any equality set \(\mathcal{R}\) satisfying the weakening and substitution conditions.
-  \end{enumerate}
+  \item \label{item:ecr-supp} The set \ecr satisfies the \(\mathcal{R}\)-support condition, for any equality set \(\mathcal{R}\) satisfying the support condition.
+  \item \label{item:ecr-preserve} The set \ecr satisfies the \(\mathcal{R}\)-preservation condition, for any equality set \(\mathcal{R}\) satisfying the weakening and substitution conditions.
+  \end{lemmaenum}
 \end{proposition}
 \begin{proof}
   Suppose \((\Gamma, \Coh \Delta {\arr s A s} \sigma, \id(A \sub \sigma, s \sub \sigma)) \in \ecr\). To show that the substitution holds, we suppose that \(\tau : \arr \Gamma \star \Theta\), and then must prove that:
@@ -2734,6 +2739,13 @@ The set \ecr satisfies all the conditions introduced in this chapter, as proven 
 
   Lastly for the preservation condition, let \(\mathcal{R}\) satisfy the weakening and substitution conditions, and assume \(\Gamma \vdash \Coh \Delta {\arr s A s} {\sigma} : B\). By deconstructing the typing derivation, we must have that \(\Delta \vdash A\), \(\Delta \vdash s : A\), and \(\Gamma \vdash \sigma : \Delta\). Therefore, by \cref{prop:sub-prop-1}, \(\Gamma \vdash A \sub \sigma\) and \(\Gamma \vdash s \sub \sigma : A \sub \sigma\). Hence, by \cref{cor:id-typing}, \(\Gamma \vdash \id(A \sub \sigma, s \sub \sigma) : (\arr s A s) \sub \sigma\). It remains to prove that \(\Gamma \vdash (\arr s A s) \sub \sigma = B\), but this is immediate from \cref{lem:ty-unique}, applied to the derivation \(\Gamma \vdash \Coh \Delta {\arr s A s} \sigma : B\).
 \end{proof}
+
+\begin{figure}[t]
+  \centering
+  \label{fig:dep-graph}
+  \includegraphics[height=\textheight - 25pt]{test.pdf}
+  \caption{Dependency graph of Agda formalisation}
+\end{figure}
 
 
 \chapter{Constructions in \Cattr}
@@ -3105,6 +3117,7 @@ To show that the support property holds, we must prove that \(\Supp(\sigma) = \S
 We are now ready to prove that the support condition holds.
 
 \begin{proposition}
+  \label{prop:prune-supp}
   Let \(\mathcal{R}\) be a tame equality rule set that satisfies the support condition. Then the set \prune satisfies the \(\mathcal{R}\)-support condition.
 \end{proposition}
 \begin{proof}
@@ -3135,7 +3148,8 @@ To prove that the preservation condition holds, it is necessary to show that the
 The globular operation set trivially supports pruning. Using \cref{lem:pi-bdry,prop:std-op}, it can be proved that the regular operation set supports pruning. We can now prove that the preservation condition holds.
 
 \begin{proposition}
-  Let \(\mathcal{R}\) be a tame equality rule set and suppose the operation set \(\mathcal{O}\) supports pruning. Then the set \prune satisfies the preservation condition.
+  \label{prop:prune-preserve}
+  Let \(\mathcal{R}\) be a tame equality rule set and suppose the operation set \(\mathcal{O}\) supports pruning. Then the set \prune satisfies the \(\mathcal{R}\)-preservation condition.
 \end{proposition}
 \begin{proof}
   Let \(\mathcal{D} : \Dyck_d\) be a Dyck word and \(p : \Peak_{\mathcal{D}}\) be a peak of \(\mathcal{D}\). Further suppose \(\arr s A t : \Type_{\lfloor \mathcal{D} \rfloor}\), and \(\sigma : \lfloor \mathcal{D} \rfloor \to \Gamma\) such that \(\lfloor p \rfloor \sub \sigma\) is an identity and:
@@ -3647,6 +3661,50 @@ We note that for an arbitrary rule set \(\mathcal{R}\), it may not be decidable 
 \section{\Cattsu}
 \label{sec:cattsu}
 
+We are finally ready to define \Cattsu, the type theory for strictly unital \(\infty\)-categories. \Cattsu is a variant of \Cattr for which the equality is built from three classes of equalities:
+\begin{itemize}
+\item Pruning: The pruning operation was introduced in \cref{sec:pruning}. Pruning is the key operation in \Cattsu and drives the strict unitality of the theory. The operation ``prunes'' identity that appear as locally maximal arguments to other terms, simplifying the overall structure of a term by removing unnecessary units.
+\item Endo-coherence removal: This operation was introduced in \cref{sec:ecr}. Endo-coherence removal converts ``fake identities'', terms which are morally identities yet have the wrong syntactic form, into true identities. These converted identities can then be further removed from terms by pruning.
+\item Disc removal: Disc removal was the running example from \cref{sec:catt-with-equality}, and removes unary composites from the theory. Commonly after pruning, a composite is reduced to a unary composite, for which disc removal is necessary to complete the simplification of the term.
+\end{itemize}
+In this section we will prove that \Cattsu is a type theory satisfying many standard meta-theoretic properties by combining results from previous chapters. We also give a reduction scheme for \Cattsu and show that this is strongly terminating and confluent.
+
+\begin{example}
+  Suppose we have terms \(f : \arr x \star y\), \(g : \arr y \star z\), \(h : \arr x \star z\), and \(\alpha : f * g \to h\) in some context \(\Gamma\). We can then consider the term:
+  \[ \Coh {(x : *), (y : *), (f : \arr x \star y), (z : \star), (g : \arr y \star z)} {f * g \to f * g} {\langle x,y,f,z, g \rangle} * \alpha\]
+  which consists of an endo-coherence composed with the variable \(\alpha\). This then reduces as follows:
+  \begin{align*}
+    &\phantom{{}\red{}}\Coh {(x : *), (y : *), (f : \arr x \star y), (z : \star), (g : \arr y \star z)} {f * g \to f * g} {\langle f, g \rangle} * \alpha\\
+    &\red \id(\arr x \star z, f * g) * \alpha&\text{by endo-coherence removal}\\
+    &\red \Coh {D^2} {\wk(U^2)} {\langle x,z,f*g,h,\alpha \rangle}&\text{by pruning}\\
+    &\red \alpha &\text{by disc removal}
+  \end{align*}
+  and so uses all three reductions to fully simplify to a variable.
+\end{example}
+
+We define \Cattsu by the following equality rule set.
+
+\begin{definition}
+  Define the equality rule set \su for \Cattsu by:
+  \[ \su = \dr \cup \prune \cup \ecr\]
+  \Cattsu is then the variant of \Cattr where \(\mathcal{R} = \su\).
+\end{definition}
+
+When it is not specified, we will assume that the operation set \(\mathcal{O}\) is given by the regular operation set \(\Reg\).
+
+\begin{theorem}
+  The rule set \su is tame and satisfies the support and preservation conditions.
+\end{theorem}
+\begin{proof}
+  By \cref{prop:dr-weak,prop:dr-susp,prop:dr-sub}, disc removal satisfies the weakening, suspension, and \(\su\)-substitution conditions. Endo-coherence removal and pruning satisfy the same conditions by \cref{prop:ecr-props,prop:prune-tame}. As these conditions are closed under unions, the set \su must also satisfy the weakening, suspension, and substitution conditions, and hence is tame.
+
+  We now use the proof strategy introduced in \cref{sec:further-theories} to prove that \su satisfies the support condition. Firstly, by \cref{lem:supp-sat-conds} we know that \(\su_{\mathsf{s}}\) is also tame. Disc removal then satisfies the \(\su_{\mathsf{s}}\)-support condition by \cref{prop:dr-supp}. The same condition is satisfied by endo-coherence removal (\cref{item:ecr-supp}) and pruning (\cref{prop:prune-supp}) and so \(\su\) satisfies the \(\su_{\mathsf{s}}\)-support condition. By \cref{lem:proof-strat-supp}, \su satisfies the support condition.
+
+  Lastly, \su satisfies the \su-preservation condition as it is satisfied by disc removal (\cref{prop:dr-preserve}), endo-coherence removal (\cref{item:ecr-preserve}), and pruning (\cref{prop:prune-preserve}) and is closed under unions of rule sets.
+\end{proof}
+
+From this theorem it can be deduced that weakening, suspension, and applications of substitution are well-typed. Furthermore, equality in \Cattsu preserves the support of a term and preserves typing judgements. Such results are found in \cref{sec:ruleset}.
+
 \todo[inline]{Include disc trivialisation}
 \todo[inline]{Isos of ps contexts}
 
@@ -3684,11 +3742,7 @@ We note that for an arbitrary rule set \(\mathcal{R}\), it may not be decidable 
 
 \todo[inline]{Interchange and generalised pasting diagrams}
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[height=\textheight]{test.pdf}
-  \caption{Dependency graph}
-\end{figure}
+
 
 
 
