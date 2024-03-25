@@ -1618,17 +1618,17 @@ The remainder of the inference rules for equality simply close under each constr
 It is also possible to prove that each term has a canonical type.
 
 \begin{definition}
-  The \emph{canonical type} of a term \(t : \Term_\Gamma\), \(\mathsf{Can}_s\), is defined by a case split on \(t\). If \(t\) is a variable then the canonical type is the corresponding type in the context \(\Gamma\). Otherwise, if \(t \equiv \Coh \Delta A \sigma\) then the canonical type is \(A \sub \sigma\).
+  The \emph{canonical type} of a term \(t : \Term_\Gamma\), \(\ty(t)\), is defined by a case split on \(t\). If \(t\) is a variable then the canonical type is the corresponding type in the context \(\Gamma\). Otherwise, if \(t \equiv \Coh \Delta A \sigma\) then the canonical type is \(A \sub \sigma\).
 \end{definition}
 
 This can be used to show that the type of a well-typed term is unique up to definitional equality, and is equal to this canonical type.
 
 \begin{lemma}
   \label{lem:ty-unique}
-  If \(\Gamma \vdash s : A\), then \(\Gamma \vdash s : \mathsf{Can}_s\) and \(\Gamma \vdash A = \mathsf{Can}_s\). Further, if \(\Gamma \vdash s : A\) and \(\Gamma \vdash s : B\) then \(\Gamma \vdash A = B\).
+  If \(\Gamma \vdash s : A\), then \(\Gamma \vdash s : ty(s)\) and \(\Gamma \vdash A = \ty(s)\). Further, if \(\Gamma \vdash s : A\) and \(\Gamma \vdash s : B\) then \(\Gamma \vdash A = B\).
 \end{lemma}
 \begin{proof}
-  We prove the first part by induction on the derivation \(\Gamma \vdash s : A\). If the derivation is derived from the conversion rule applied to \(\Gamma \vdash s : B\) and \(\Gamma \vdash A = B\), then by inductive hypothesis we have \(\Gamma \vdash s : \mathsf{Can}_s\) and \(\Gamma \vdash B = \mathsf{Can}_s\). By transitivity, we obtain \(\Gamma \vdash A = \mathsf{Can}_s\) as required. The second part follows directly from the applying the first part to both derivations.
+  We prove the first part by induction on the derivation \(\Gamma \vdash s : A\). If the derivation is derived from the conversion rule applied to \(\Gamma \vdash s : B\) and \(\Gamma \vdash A = B\), then by inductive hypothesis we have \(\Gamma \vdash s : \ty(s)\) and \(\Gamma \vdash B = \ty(s)\). By transitivity, we obtain \(\Gamma \vdash A = \ty(s)\) as required. The second part follows directly from the applying the first part to both derivations.
 \end{proof}
 
 There is not much more that can be proved about the definitional equality at this point without knowing more about the rule set \(\mathcal{R}\). In \cref{sec:ruleset}, certain conditions will be imposed on the set of equality rules, that will allow further lemmas to be proved in large generality.
@@ -3742,6 +3742,10 @@ When it is not specified, we will assume that the operation set \(\mathcal{O}\) 
 
 From this theorem it can be deduced that weakening, suspension, and applications of substitution are well-typed. Furthermore, equality in \Cattsu preserves the support of a term and preserves typing judgements. Such results are found in \cref{sec:ruleset}.
 
+\todo[inline]{EH example}
+
+\todo[inline]{Mention syllepsis will be done in implementation section}
+
 \subsection{Normalisation for \Cattsu}
 \label{sec:reduction-cattsu}
 
@@ -3879,12 +3883,44 @@ We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and onl
   Any remaining cases follow by symmetry, completing the proof.
 \end{proof}
 
-\todo[inline]{Include disc trivialisation}
+\subsection{Disc trivalisation}
+\label{sec:properties-cattsu}
+
+We take a brief moment to explore the theory \Cattsu in its entirety. For this section we will further assume that we take the set of operations \(\mathcal{O}\) to be the regular operations.
+
+We begin by proving a property of terms over disc contexts, which we call \emph{disc trivialisation}. This is the following structure theorem: in a disc context \(D^n\), every term is either a variable, or the iterated identity on a variable, up to definitional equality. Restricting to those terms \(t : \Term_{D^n}\) that are full, that is \(\supp(t) = \Var{D^n}\), then there is exactly one term (up to definitional equality) at each dimension \(k \geq n\). Hence, the type theory \Cattsu trivialises disc contexts.
+
+\todo[inline]{Link to other paper}
+
+We begin by defining the notion of canonical identity.
+
+\begin{definition}
+  Given a term \(t : \Term_\Gamma\), let its \emph{canonical identity} be given by:
+  \[ \id(t) \equiv \id(\ty(t), t)\]
+  This construction can be iterated, and we say that a term is an \emph{iterated canonical identity} if it is on the form \(\id^k(t)\) for some \(k\).
+\end{definition}
+
+This allows us to now state and prove disc trivialisation.
+
+\begin{theorem}[Disc trivialisation]
+  Suppose \(\D^n \vdash t : A\) in \Cattsu. Then \(t\) is equal to an iterated canonical identity on a variable, that is \(t = \id^k(x)\) for some variable \(x \in \Var(D^n)\) and \(k \in \mathbb{N}\).
+\end{theorem}
+\begin{proof}
+  Without loss of generality, we may assume that \(t\) is in \Cattsu normal form, and proceed to prove that \(t\) is an iterated canonical identity. We proceed by induction on subterms of the term \(t\). If \(t\) is a variable then we are done. Otherwise, we assume \(t\) is a coherence term \(\Coh \Delta U \sigma\).
+
+  We now show that \(\Delta\) must be a disc context by contradiction. We therefore assume that \(\Delta\) is not a disc, and hence \(t\) is not an identity. By induction on subterms, we must have that each term in \(\sigma\) is an iterated canonical identity on a variable. No locally maximal argument of can be an identity, as otherwise pruning could be performed and \(t\) would not be in normal form, and so every locally maximal argument is a variable. Suppose there is some variable \(x\) such that \(x \sub\sigma\) is an identity, and let \(x\) be be a variable of maximal dimension with this property. As \(x\) cannot be locally maximal, there must either be the source or target of a variable \(y\), but this variable \(y\) must be sent to a variable of \(D^n\), which cannot have an identity as its source or target. Therefore the substitution \(\sigma\) is variable to variable.
+
+  We now let \(\Gamma\) be the smallest ps-context prefix of \(\Delta\) such that \(\Gamma\) is not a disc. We must have:
+  \[ \Gamma \equiv D^k, (y : A), (f : \arr x A y)\]
+  where \(D^k \vdash_{\mathsf{ps}} x : A\). Furthermore, the last rule used in this derivation must be \textsc{psd}, as if it were \textsc{pse} or \textsc{pss} then \(k = \dim(A)\) and \(\Gamma \equiv D^{k+1}\), breaking the assumption that \(\Gamma\) is not a disc. Therefore \(D^k \vdash_{\mathsf{ps}} g : \arr w A x\) for some variables \(g\) and \(x\). However, now \(g \sub \sigma\), \(x \sub \sigma\), and \(f \sub \sigma\) are variables of \(D^n\) such that \(\tgt(g \sub \sigma) \equiv x \sub \sigma \equiv \src(f \sub \sigma)\). No such variables exist in \(D^n\) and so we reach a contradiction. We therefore deduce that \(\Delta\) is a disc \(D^n\) for some \(n\).
+
+  Now \(t \equiv \Coh {D^n} {\arr u A v} \sigma\) and so by induction on subterms, \(u\) and \(v\) are equal to iterated canonical identities. We now split on whether \(t\) is a composition or equivalence. If it is a composition then \(\Supp(u) = \bdry {n-1} - {D^n}\) and \(\Supp(v) = \bdry {n-1} + {D^n}\) and therefore neither \(u\) or \(v\) are identities (as then \(A\) would have the same support as \(u\) or \(v\) respectively) and so \(u = d_{n-1}^-\) and \(v = d_{n-1}^*\), but this makes \(t\) a disc removal redex, and so \(t\) is not in normal form.
+
+  We therefore assume that \(t\) is an equivalence and \(u\) and \(v\) are full. Then \(u\) and \(v\) must be iterated identities on \(d_n\), and must have the same dimension and so are syntactically equal. To avoid \(t\) being an endo-coherence removal redex, it must be an identity \(\id(B,s)\). Now, \(s \equiv \id^k(x)\) for some variable \(x\) (as \(s\) is a subterm of \(t\)), and so if \(k = 0\) then \(\ty(s) \equiv d_{n-1}^- \to d_{n-1}^+\) and if \(k > 0\) then \(\ty(s) \equiv \id^{k-1}(x) \to \id^{k-1}(x)\). In either case, \(\ty(s)\) is in normal form, and so since \(B\) is also a normal form and \(\Gamma \vdash s : B\) (by the well-typing of \(t\) and \cref{cor:id-typing}), we have \(B \equiv \ty(s)\) and so \(t \equiv \id(s) \equiv \id^{k+1}(x)\) as required.
+\end{proof}
+
 \todo[inline]{Isos of ps contexts}
 
-\todo[inline]{EH example}
-
-\todo[inline]{Mention syllepsis will be done in implementation section}
 
 \section{\Cattsua}
 \label{sec:cattsua}
