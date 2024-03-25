@@ -1065,7 +1065,7 @@ The free variables of a term is often the wrong notion to use for testing algebr
   for terms \(t \in \Term_\Gamma\), types \(A \in \Type_\Gamma\), and substitutions \(\sigma : \Delta \to \Gamma\).
 \end{definition}
 
-We will see later\todo{Cross ref} that for well-typed terms \(t\) of typed \(A\) that the support of \(t\) is equal to \(\FV(t) \cup \FV(A)\) and that \(\Supp(A) = \FV(A)\) for well-formed types. Modifying \Catt to use support therefore does not change the theory.
+We will see later (\cref{item:supp-tm-char-2}) that for well-typed terms \(t\) of typed \(A\) that the support of \(t\) is equal to \(\FV(t) \cup \FV(A)\) and that \(\Supp(A) = \FV(A)\) for well-formed types. Modifying \Catt to use support therefore does not change the theory.
 
 We lastly define the \emph{dimension} of types, contexts, and terms. For types this is defined recursively:
 \[ \dim(\star) = 0 \qquad \dim(\arr s A t) = 1 + \dim(A) \]
@@ -2922,6 +2922,12 @@ The locally maximal variables in the context associated to a Dyck word correspon
   which themselves correspond to the three peaks of the mountain diagram, with the height of each peak corresponding to the dimension of each locally maximal variable.
 \end{example}
 
+As all disc contexts are pasting diagrams, and hence are the associated context of a Dyck word.
+
+\begin{definition}
+  Let \(\mathcal{D}^n\) be the Dyck word with \(n\) upwards moves followed by \(n\) downwards moves. The equality \( \lfloor \mathcal{D}^n \rfloor \equiv D^n\) follows from a trivial induction. If \(n > 0\), There is a unique peak of \(\mathcal{D}^n\) with associated term \(d_n\).
+\end{definition}
+
 We lastly show that a Dyck word can be suspended, which is expected as ps-contexts are closed under suspension. The various constructions associated to a suspended Dyck word are equal to the same constructions on the unsuspended Dyck word.
 
 \begin{lemma}
@@ -3087,6 +3093,18 @@ This allows the main typing properties of this section to be given.
   and the second follows similarly, completing the proof.
 \end{proof}
 
+We next show that pruning has the expected properties on the the Dyck words \(\mathcal{D}^n\), which correspond to disc contexts.
+
+\begin{proposition}
+  \label{prop:prune-disc}
+  Let \(n > 0\), and \(p\) be the unique peak of \(\mathcal{D}^n\). Then:
+  \[ \mathcal{D}^n \sslash p \equiv \mathcal{D} \qquad \{\arr s A t,u\} \sslash p \equiv \{A,s\}\]
+  for all \(A,s,t,u\) where \(\dim(A) = n - 1\).
+\end{proposition}
+\begin{proof}
+  Both properties are immediate.
+\end{proof}
+
 We now turn our attention to proving that the pruning equality set satisfies all the conditions from \cref{sec:ruleset}. We begin with the tameness conditions, omitting the weakening condition, as it follows from the substitution condition.
 
 \begin{proposition}
@@ -3209,6 +3227,7 @@ We end this section with a property of pruning that will be required to prove co
 The following proposition proves that both peaks of the Dyck word can be pruned, and that the order in which this is done does not matter.
 
 \begin{proposition}
+  \label{prop:prune-conf}
   Suppose \(\mathcal{D} : \Dyck_d\) is a Dyck word and let \(p\) and \(q\) be two distinct peaks of \(\mathcal{D}\). Then there is a peak \(q_{p}\) of \(\mathcal{D} \sslash p\) such that:
   \[ \lfloor q_{p} \rfloor \equiv \lfloor q \rfloor \sub {\pi_{p}}\]
   and a similar peak \(p_{q}\) of \(\mathcal{D} \sslash q\). Furthermore, the following equations hold syntactically:
@@ -3425,6 +3444,7 @@ We highlight that our reduction scheme \(\redr\) is only defined between well-ty
 Just as the preservation condition on a rule set \(\mathcal{R}\) allows us to deduce that the reduction preserves typing, the substitution condition can be used to prove that the reduction in preserved by application of substitution.
 
 \begin{proposition}
+  \label{prop:red-sub}
   Suppose \(\mathcal{R}\) satisfies the substitution condition and let \(\sigma : \Delta \to \Gamma\) be a well-typed substitution. Then:
   \begin{align*}
     s \redr t &\implies s \sub \sigma \redr t \sub \sigma \\
@@ -3524,7 +3544,20 @@ We can immediately prove that disc removal reduces syntactic complexity.
 
 We note that as stated so far the reduction:
 \[ \id(A,s) \red \id(A,s)\]
-is a valid instance of endo-coherence removal for type \(A\) and term \(s\), which will break termination. We therefore let \(\ecr'\) be the equality rule set obtained by removing all triples \((\Gamma,s,t)\) from \(\ecr\) where \(s\) is already an identity. It can then be proven that the reductions in this set reduce syntactic complexity.
+is a valid instance of endo-coherence removal for type \(A\) and term \(s\), which will break termination. We therefore let \(\ecr'\) be the equality rule set obtained by removing all triples \((\Gamma,s,t)\) from \(\ecr\) where \(s\) is already an identity. We justify replacing \ecr by \ecr' with the following lemma.
+
+\begin{lemma}
+  \label{lem:always-ecr}
+  The following reduction holds, even when the left-hand side is an identity:
+  \[\Coh \Delta {\arr s A s} \sigma \red_{\ecr'}^* \id(A\sub \sigma,s\sub\sigma)\]
+\end{lemma}
+\begin{proof}
+  If \(\Coh \Delta {\arr s A s} \sigma\) is not an identity then it can reduced by endo-coherence removal. Otherwise we have \(\Delta = D^n\) for some \(n\), \(s \equiv d_n\), \(A \equiv \wk(U^n)\), and \(\sigma \equiv \{B,t\}\) for some \(B\) and \(t\) and so:
+  \[\id(A\sub \sigma,s \sub \sigma) \equiv \id(\wk(U^n)\sub{\{B,t\}}, d_n \sub {\{B,t\}}) \equiv \id(B,t) \]
+It follows that the reduction is trivial.
+\end{proof}
+
+It can then be proven that the reductions in this set reduce syntactic complexity.
 
 \begin{proposition}
   \label{prop:ecr-sc}
@@ -3599,6 +3632,7 @@ Local confluence for the reduction schemes of the type theories \Cattsu and \Cat
 This is used to prove the following lemma, which implies that for a critical pair \(t \leftsquigarrow s \rightsquigarrow u\) it is not necessary to find a common reduct of \(t\) and \(u\), but simply find reducts \(t'\) and \(u'\) of \(t\) and \(u\) such that \(t' =_{\dim(s)} u'\).
 
 \begin{lemma}
+  \label{lem:conf-strat}
   Let \(\mathcal{R}\) be a tame equality rule set which satisfies the preservation and support conditions, and further assume that \(\redr\) is strongly terminating. Suppose the following diagram can be formed:
   % https://q.uiver.app/#q=WzAsNixbMiwwLCJzIl0sWzAsMSwidCJdLFs0LDEsInUiXSxbMSwyLCJ0JyJdLFszLDIsInUnIl0sWzIsMiwiPV97XFxkaW0ocyl9Il0sWzAsMiwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMCwxLCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFsxLDMsIioiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFsyLDQsIioiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dXQ==
   \[
@@ -3723,7 +3757,7 @@ where \(n = \dim(A)\), the first reduction is by pruning, and the second reducti
   where \ecr' is the endo-coherence removal set without identity to identity equalities and \prune' is the pruning set restricted to the triples where the left hand side term is not an identity.
 \end{definition}
 
-The reduction \(\red_{\su'}\) applies equality rules from \Cattsu when the redex is not identity, effectively forcing identities to be normal forms of the theory. Strong termination for \(\red_{\su'}\) can now be proven using \cref{cor:strong-term}, by showing that all rules reduce the syntactic complexity of terms.
+The reduction \(\red_{\su'}\) applies equality rules from \Cattsu when the redex is not identity, effectively forcing identities to be normal forms of the theory. As applying a substitution to or suspending a non-identity term cannot result in an identity, it is clear that \su' is tame. Strong termination for \(\red_{\su'}\) can now be proven using \cref{cor:strong-term}, by showing that all rules reduce the syntactic complexity of terms.
 
 \begin{proposition}
   Let \(s \red t\) be an instance of pruning. If \(s\) is not an identity then \(\sc(s) > \sc(t)\).
@@ -3740,11 +3774,117 @@ The reduction \(\red_{\su'}\) applies equality rules from \Cattsu when the redex
   By \cref{cor:strong-term}, it suffices to show that each rule of \(\su'\) reduces syntactic complexity, which follows from the preceding proposition and \cref{prop:ecr-sc,prop:disc-rem-sc}.
 \end{proof}
 
-\todo[inline]{Show equivalence}
-\todo[inline]{Confluence}
+By \cref{prop:red-is-eq}, we know that the reflexive symmetric transitive closure of \(\red_{\su'}\) is the equality relation generated by \su'. We therefore prove that this agrees with the equality relation from \Cattsu.
+
+\begin{proposition}
+  The type theories generated from \su and \su' are equivalent. Terms are equal or well-typed in one theory exactly when they are equal or well-typed in the other, and similar properties hold for types and substitutions.
+\end{proposition}
+\begin{proof}
+  We use \cref{lem:subset-lem} for both directions. Since \(\su' \subseteq \su\), we are only required to show that if \((\Gamma, s, t) \in \su\) with \(\Gamma \vdash_\su s : A\) for some \(A : \Type_\Gamma\) then
+  \[ \Gamma \vdash_{\su'} s = t\]
+  If \((\Gamma,s,t) \in \su'\), then the equality follows from the \textsc{rule} constructor. Otherwise, \(s\) must be an identity and the rule is an instance of endo-coherence removal or pruning. Suppose \(s\) reduces to \(t\) by endo-coherence removal. Then \(s \equiv \id(A,u)\) and
+  \[t \equiv \id(\wk(U^n) \sub {\{A,u\}}, d_n \sub \{A,u\}) \equiv \id(A,u) \equiv s\]
+  and so the equality holds by reflexivity.
+
+  Now assume \(s\) reduces by pruning to \(t\). Letting \(s \equiv \id(A,u)\) and \(n = \dim(A)\), we get:
+  \begin{align*}
+    t &\equiv \Coh {\lfloor \mathcal{D}^n \sslash p^n \rfloor} {\arr {d_n} {\wk(U^n)} {d_n} \sub {\pi_{p^n}}} {\{A,u\} \sslash p} \\
+      &= \id(\wk(U^n) \sub {\pi_{p^n}} \sub {\{A,u\} \sslash p^n}, d_n \sub {\pi_{p^n}} {\{A,u\} \sslash p^n})&\text{by endo-coherence removal}\\
+      &\equiv \id(\wk(U^n),d_n) \sub {\pi_{p^n} \bullet \{A,u\} \sslash p^n}\\
+      &= \id(\wk(U^n),d_n) \sub {\{A,u\}}&\text{by \cref{prop:prune-ty}}\\
+      &\equiv \id(\wk(U^n) \sub {\{A,u\}}, d_n \sub {\{A,u\}})\\
+    &\equiv \id(A,u)
+  \end{align*}
+  and so the equality holds as required.
+\end{proof}
+
+We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and only if \(s \red_{\su'}^{\mathsf{rts}} t\). To demonstrate normalisation, it therefore remains to show that the reduction scheme is confluent, for which we employ the strategy introduced in \cref{lem:conf-strat}.
+
+\begin{theorem}
+  The reduction \(\red_{\su'}\) is confluent.
+\end{theorem}
+\begin{proof}
+  By \cref{lem:conf-strat} it is sufficient to show that for all \(t \leftsquigarrow s \rightsquigarrow u\) with \(s \rightsquigarrow t\) being a reduction derived from \textsc{rule}, that the following diagram can be formed:
+    \[
+    \begin{tikzcd}[column sep=tiny]
+      && s \\
+      t &&&& u \\
+      & {t'} & {\mathclap{=_{\dim(s)}}} & {u'}
+      \arrow[squiggly, from=1-3, to=2-5]
+      \arrow[squiggly, from=1-3, to=2-1]
+      \arrow["{*}"', squiggly, from=2-1, to=3-2]
+      \arrow["{*}", squiggly, from=2-5, to=3-4]
+    \end{tikzcd}
+  \]
+  We therefore begin by case splitting on the reduction \(s \red t\), ignoring cases where both reductions are identical and ignoring cases which follow by symmetry of other cases.
+
+  \textbf{Disc removal:} Suppose \(s \red t\) is a disc removal reduction. Then \(s \equiv \Coh {D^n} {\wk(U^n)} {\{A,t\}}\). We now split on the reduction \(s \red u\). We immediately know that \(s \red u\) cannot be an endo-coherence removal reduction, as \(s\) is not an endo-coherence. It also cannot be a cell reduction as \(wk(U^n)\) only contains variables and so is in normal form.
+
+  Let \(s \red u\) be an argument reduction. It must therefore be generated by a reduction on \(\{A,t\}\). If it is a reduction generated by \(A \red A'\) then \(u \red t\) by endo-coherence removal and so we are done. Otherwise it is generated by \(t \red t'\) and so \(t\) and \(u\) both reduce by disc removal to \(t'\).
+
+  The only remaining case is where \(s \red u\) is an instance of pruning, which forces \(t \equiv \id(B,a)\) for some \(B\) and \(a\). By validity of \(s\), we must have \(n > 0\) and so \(A \equiv \arr b {A'} c\). Therefore:
+  \begin{align*}
+    u &\equiv \Coh {\lfloor \mathcal{D}^{n} \sslash p \rfloor} {\wk(U^n) \sub {\pi_{p}}} {\{A,\id(B,a)\} \sslash p}\\
+      &\equiv \Coh {D^{n-1}} {\wk(U^n) \sub {\{\arr {d_{n-1}} {\wk(U^{n-1})} {d_{n-1}}, \id(\wk(U^{n-1}), d_{n-1})\} \}}} {\{A',b\}}&\text{by \cref{prop:prune-disc}}\\
+      &\equiv \Coh {D^{n-1}} {\arr {d_{n-1}} {\wk(U^{n-1})} {d_{n-1}}} {\{A',b\}}\\
+    &\equiv \id(A',b)
+  \end{align*}
+  Now by the validity of \(s\) we have \(\Gamma \vdash \{A,\id(B,a)\} : D^n\) and so by \cref{lem:disc-typing}, \(\Gamma \vdash \id(B,a) : A\) and hence by \cref{cor:id-typing} and uniqueness of typing:
+  \[ \arr a {B} a = A \equiv \arr b {A'} c\]
+  and so \(a = b\) and \(B = A'\) and hence \(s \equiv \id(A', b) = \id(B,a) \equiv t\). Finally, since \(\dim(a) = \dim(B) < \dim(s)\), we get \(t =_{\dim(s)} u\) as required.
+
+  \textbf{Endo coherence removal:} Suppose \(s \red t\) is an endo-coherence removal reduction. Then:
+  \[ s \equiv \Coh {\Delta} {\arr a A a} {\sigma} \red \id(A \sub \sigma, a \sub \sigma) \equiv t\]
+  with \(s\) not being an identity.
+  We now split on the reduction \(s \red u\). First consider when it is an argument reduction generated by \(\sigma \red \tau\). Then by \cref{prop:red-sub} \(t \equiv \id(A \sub \sigma, a \sub \sigma) \red^* \id(A \sub \tau, a \sub \tau)\). By endo-coherence removal \(u \red \id(A \sub \tau, a \sub \tau)\), completing this case.
+
+  Now suppose the reduction \(s \red u\) is an instance of cell reduction. If it is generated from a reduction \(A \red B\) then by \cref{prop:red-sub}, \(t \red \id(B \sub \sigma, a \sub \sigma)\) and by endo-coherence removal:
+  \[u \equiv \Coh \Delta {\arr a B a} \sigma \red \id(B \sub \sigma, a \sub \sigma)\]
+  We now consider when the reduction is generated by \(\arr a A a \red \arr b A a\), with the case where it is generated by \(\arr a A a \red \arr a A b\) following symmetrically. We consider the reductions sequence  from \(u\):
+  \begin{align*}
+    u &\equiv \Coh \Delta {\arr b A a} {\sigma} \\
+      &\red \Coh \Delta {\arr b A b} \sigma &\text{by cell reduction}\\
+    &\red \id(A\sub \sigma,b\sub \sigma) &\text{by endo-coherence removal}
+  \end{align*}
+  Again by \cref{prop:red-sub}, \(t \equiv \id(A\sub\sigma,a\sub\sigma) \red \id(A\sub\sigma,b\sub\sigma)\), completing the case.
+
+  Lastly, we consider when \(s \red u\) is a pruning reduction. We suppose \(\Delta = \lfloor \mathcal{D} \rfloor\) and that the pruning is generated from peak \(p : \mathcal{D}\). Then:
+  \[ u \equiv \Coh {\lfloor \mathcal{D} \sslash p \rfloor} {(\arr a A a) \sub {\pi_p}} {\sigma \sslash p}\]
+  Then:
+  \begin{align*}
+    u &\red \id(A \sub {\pi_p} \sub {\sigma\sslash p},a \sub {\pi_p} \sub {\sigma\sslash p})&\text{by \cref{lem:always-ecr}}\\
+      &\equiv \id(A,a) \sub {\pi_p \bullet \sigma \sslash p} \\
+    &=_{\dim(s)} \id(A,a) \sub \sigma
+  \end{align*}
+  where the last (bounded) equality is by \cref{prop:prune-ty} and by noting that \(\dim(A) = \dim(a) < \dim(s)\).
+
+  \textbf{Pruning:} Let \(s \red t\) be a reduction by pruning with
+  \[ s \equiv \Coh {\lfloor \mathcal{D} \rfloor} A \sigma\]
+  for some \(\mathcal{D} : \Dyck_0\) with peak \(p : \Peak_{\mathcal{D}}\) such that \(\lfloor p \rfloor \sub \sigma\) is an identity. Then:
+  \[ t \equiv \Coh {\lfloor \mathcal{D} \sslash p \rfloor} {A \sub {\pi_p}} {\sigma \sslash p}\]
+  We now split on the reduction \(s \red u\). First suppose it is given by an argument reduction \(\sigma \red \tau\). Identities do not admit head reductions, meaning \(\lfloor p \rfloor \sub \tau\) is still an identity. Therefore pruning can be applied to \(u\) to get:
+  \[ u \red \Coh {\lfloor \mathcal{D} \sslash p \rfloor} {A \sub {\pi_p}} {\tau \sslash p}\]
+  Now \(\sigma \sslash p\) is simply \(\sigma\) with two terms removed, and so \(\sigma \sslash p \red^* \tau \sslash p\), meaning \(t\) reduces to the same term as \(u\).
+
+  If \(s \red u\) is a cell reduction \(A \red B\), then pruning can be applied to \(u\) immediately to get the term:
+  \[\Coh {\lfloor \mathcal{D} \sslash p \rfloor} {B \sub {\pi_p}} {\sigma \sslash p}\]
+  but \(t\) also reduces to this term by \cref{prop:red-sub}.
+
+  Finally, let \(s \red u\) be a second pruning reduction, at a different peak \(q : \Peak_{\mathcal{D}}\). By \cref{prop:prune-conf}, there is a common reduct:
+  \[ \Coh {\lfloor (\mathcal{D} \sslash p) \sslash q_p \rfloor} {A \sub {\pi_p} \sub{\pi_{q_p}}} {(\sigma \sslash p) \sslash q_p} \]
+  which both reduce to by pruning if \(\lfloor q_p \rfloor\) and \(\lfloor p_q \rfloor\) are identities. However:
+  \[\lfloor q_p \rfloor \equiv \lfloor q \rfloor \sub {\pi_p}\]
+  and \(\lfloor q \rfloor\) must be an identity for \(s \red u\) to be a valid instance of pruning. Therefore, as identities are preserved by application of substitution, \(\lfloor  q_p \rfloor\) is an identity. Similarly \(\lfloor p_q \rfloor\) is an identity, and so both \(t\) and \(u\) reduce to the term above.
+
+  Any remaining cases follow by symmetry, completing the proof.
+\end{proof}
 
 \todo[inline]{Include disc trivialisation}
 \todo[inline]{Isos of ps contexts}
+
+\todo[inline]{EH example}
+
+\todo[inline]{Mention syllepsis will be done in implementation section}
 
 \section{\Cattsua}
 \label{sec:cattsua}
