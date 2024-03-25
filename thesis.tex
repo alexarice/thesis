@@ -1065,7 +1065,7 @@ The free variables of a term is often the wrong notion to use for testing algebr
   for terms \(t \in \Term_\Gamma\), types \(A \in \Type_\Gamma\), and substitutions \(\sigma : \Delta \to \Gamma\).
 \end{definition}
 
-We will see later (\cref{item:supp-tm-char-2}) that for well-typed terms \(t\) of typed \(A\) that the support of \(t\) is equal to \(\FV(t) \cup \FV(A)\) and that \(\Supp(A) = \FV(A)\) for well-formed types. Modifying \Catt to use support therefore does not change the theory.
+We will see later (\cref{item:supp-tm-char-2}) that for well-formed terms \(t\) of typed \(A\) that the support of \(t\) is equal to \(\FV(t) \cup \FV(A)\) and that \(\Supp(A) = \FV(A)\) for well-formed types. Modifying \Catt to use support therefore does not change the theory.
 
 We lastly define the \emph{dimension} of types, contexts, and terms. For types this is defined recursively:
 \[ \dim(\star) = 0 \qquad \dim(\arr s A t) = 1 + \dim(A) \]
@@ -1194,7 +1194,7 @@ The typing rules for these judgements are then given in \cref{fig:catt-typing}. 
 
 There are two rules given for typing coherence, corresponding to the two guiding principles for categories from \cref{sec:weak}. The first rule allows composites to be typed and the second allows equivalences to be typed. In both, the Ps-context \(\Delta\) corresponds to the pasting diagram \(P\), the terms \(s\) and \(t\) correspond to the operations \(f\) and \(g\) over \(P\) (with the judgement \(\Delta \vdash \arr s A t\) enforcing that they are parallel), and the conditions involving support give the remaining side conditions.
 
-By a straightforward mutual induction we can prove that application of substitution to terms, types, and other substitutions preserves typing. Therefore, the \emph{syntactic category} of \Catt can be formed, which contains well-formed contexts as objects and well-typed substitutions between these contexts as morphisms, which by abuse of notation we also call \Catt. There is a full subcategory \(\Catt^{\mathsf{ps}}\), which only contains the contexts which are Ps-contexts.
+By a straightforward mutual induction we can prove that application of substitution to terms, types, and other substitutions preserves typing. Therefore, the \emph{syntactic category} of \Catt can be formed, which contains well-formed contexts as objects and well-formed substitutions between these contexts as morphisms, which by abuse of notation we also call \Catt. There is a full subcategory \(\Catt^{\mathsf{ps}}\), which only contains the contexts which are Ps-contexts.
 
 \begin{theorem}
   The category \(\Catt^{\mathsf{ps}}\) is a coherator for \(\infty\)-categories.
@@ -1322,7 +1322,7 @@ This construction extends to all computads~\cite{benjamin2024duamity}, and can b
 where \(x\) is a variable of \(\Gamma\).
 \end{definition}
 
-The dimension shift of suspension is driven by the cases for types, especially the case for the base type \(\star\), which returns a type of dimension \(1\), namely \(\arr N \star S\), using the two new variables \(N\) and \(S\). We note the suspension of any Ps-context is also a Ps-context, and in general the suspension of any piece of well-formed \Catt syntax can be well-typed. These results are given in \cite[Section~3.2]{benjamin2020type}, but will be proved in \cref{sec:ruleset} in more generality.
+The dimension shift of suspension is driven by the cases for types, especially the case for the base type \(\star\), which returns a type of dimension \(1\), namely \(\arr N \star S\), using the two new variables \(N\) and \(S\). We note the suspension of any Ps-context is also a Ps-context, and in general the suspension of any piece of well-formed \Catt syntax can be well-formed. These results are given in \cite[Section~3.2]{benjamin2020type}, but will be proved in \cref{sec:ruleset} in more generality.
 
 We can now investigate the action of suspension on the operations we have already defined. Take the context:
 \[ (x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \]
@@ -1516,7 +1516,7 @@ It also contains the following proposition.
   which holds for all \(\sigma : \arr \Theta {\arr s {A'} t} \Delta\) by \funcn{Catt.Syntax.Properties}{↓-comp-higher}{\textsf{\(\downarrow\)-comp-higher}}.
 \end{proof}
 
-This proposition proves that the syntax of \Cattr forms a category, which we will not name as we will work instead with the subcategory containing well-typed contexts and substitutions, introduced in the following sections.
+This proposition proves that the syntax of \Cattr forms a category, which we will not name as we will work instead with the subcategory containing well-formed contexts and substitutions, introduced in the following sections.
 
 \paragraph{Discs}
 We finish our discussion of the syntax of \Cattr by giving formal definitions of disc and sphere contexts, some constructions on these and their properties. This will allow these to be used as examples in following sections, and preempts the use of discs in the first two equality rules that we will introduce, disc removal and endo-coherence removal.
@@ -1573,7 +1573,7 @@ where \(n = \dim(A)\). Many properties of identity terms can be easily derived f
 
 The typing rules for \Cattr differ from those from \Catt in three key ways:
 \begin{enumerate}
-\item The fixed conditions on the support of the types in a coherence have been replaced by a set of operations \(\mathcal{O}\). Instead of having two typing rules for coherences, one for equivalences and one for composites, we simply have one typing rule and specify that a coherence \(\Coh \Delta {\arr s A t} \sigma\) can be well-typed when:
+\item The fixed conditions on the support of the types in a coherence have been replaced by a set of operations \(\mathcal{O}\). Instead of having two typing rules for coherences, one for equivalences and one for composites, we simply have one typing rule and specify that a coherence \(\Coh \Delta {\arr s A t} \sigma\) can be well-formed when:
   \[ (\Delta, \supp(s), \supp(t)) \in \mathcal{O} \]
 This will be further motivated and explained in \cref{sec:support}.
 \item A definitional equality is added to the system, generated by a set of equality rules \(\mathcal{R}\) which specifies pairs of terms which should be equated. The equality take the form of three new judgements:
@@ -1596,15 +1596,15 @@ By adding this rule, and allowing the type of a term to vary up to definitional 
 \begin{mathpar}
   \inferrule{\inferrule*{\Gamma \vdash f : x \to y \and \inferrule*{\Gamma \vdash y = y'}{\Gamma \vdash x \to y = x \to y'}}{\Gamma \vdash f : x \to y'} \and \Gamma \vdash g : y' \to z}{\Gamma \vdash f * g : x \to z}
 \end{mathpar}
-We remark that adding definitional equality does not simply quotient the terms of the theory, but also allows new terms to be well-typed as above.
+We remark that adding definitional equality does not simply quotient the terms of the theory, but also allows new terms to be well-formed as above.
 
 The definitional equality judgements are given by the rules in \cref{fig:equality} and appear in the formalisation along side the typing rules in \module{Catt.Typing}. These are generated by the set of \emph{equality rules} \(\mathcal{R}\), which is a set of triples of the form \((\Gamma, s, t)\) where \(\Gamma\) is a context and \(s,t \in \Term_\Gamma\). The key inference rule for equality is then:
 \begin{mathpar}
   \inferrule{\Gamma \vdash s : A \and (\Gamma,s,t) \in \mathcal{R}}{\Gamma \vdash s = t}\textsc{rule}
 \end{mathpar}
-which says that if a triple \((\Gamma, s, t)\) is in \(\mathcal{R}\), then \(\Gamma \vdash s = t\) if \(s\) is well-typed in \(\Gamma\). The typing prerequisite forces the definitions of equality and typing to be mutually defined, and ensures that we only apply our equality rules to well-behaved terms.
+which says that if a triple \((\Gamma, s, t)\) is in \(\mathcal{R}\), then \(\Gamma \vdash s = t\) if \(s\) is well-formed in \(\Gamma\). The typing prerequisite forces the definitions of equality and typing to be mutually defined, and ensures that we only apply our equality rules to well-behaved terms.
 
-We note the asymmetry of this rule, in that only the left hand side is required to be well-typed. Every rule introduced in this thesis will take the form of some reduction from the left hand side to the right hand side, and we will be able to prove that typing for the right hand side follows from typing for the left hand side for every equality we consider. The converse may not hold in general, necessitating the condition on the left hand side. This is similar to \(\beta\)-reduction in the \(\lambda\)-calculus, where an untyped term can reduce to a simply typed term.
+We note the asymmetry of this rule, in that only the left hand side is required to be well-formed. Every rule introduced in this thesis will take the form of some reduction from the left hand side to the right hand side, and we will be able to prove that typing for the right hand side follows from typing for the left hand side for every equality we consider. The converse may not hold in general, necessitating the condition on the left hand side. This is similar to \(\beta\)-reduction in the \(\lambda\)-calculus, where an untyped term can reduce to a simply typed term.
 
 The remainder of the inference rules for equality simply close under each constructor, reflexivity, symmetry, and transitivity. It is only necessary to give symmetry and transitivity rules for terms, and a reflexivity rule for variables, with these properties following for the other judgements by simple induction.
 
@@ -1621,7 +1621,7 @@ It is also possible to prove that each term has a canonical type.
   The \emph{canonical type} of a term \(t : \Term_\Gamma\), \(\ty(t)\), is defined by a case split on \(t\). If \(t\) is a variable then the canonical type is the corresponding type in the context \(\Gamma\). Otherwise, if \(t \equiv \Coh \Delta A \sigma\) then the canonical type is \(A \sub \sigma\).
 \end{definition}
 
-This can be used to show that the type of a well-typed term is unique up to definitional equality, and is equal to this canonical type.
+This can be used to show that the type of a well-formed term is unique up to definitional equality, and is equal to this canonical type.
 
 \begin{lemma}
   \label{lem:ty-unique}
@@ -1655,7 +1655,7 @@ Assembling disc removal into a rule set \(\mathcal{R}\) is simple, as it is poss
 
 The inference rule \textsc{dr} follows the \textsc{rule} and typing properties about discs which will be given in \cref{sec:ruleset}.
 
-We draw attention to the typing premise of \textsc{rule}. If we know that the unary composite of a term \(t\) is well typed, then it follows that \(t\) itself must have been well-typed, but we cannot infer that the term \(\Coh {D^n} {\wk(U^n)} {\{A,t\}}\) is well-typed from \(t\) being well-typed. In particular, the well-formedness of \(t\) does not constrain \(A\) at all without knowing that the given type \(A\) is the type of \(t\). We must therefore include an additional typing premise if we want to avoid well-typed and untyped terms being equated.
+We draw attention to the typing premise of \textsc{rule}. If we know that the unary composite of a term \(t\) is well typed, then it follows that \(t\) itself must have been well-formed, but we cannot infer that the term \(\Coh {D^n} {\wk(U^n)} {\{A,t\}}\) is well-formed from \(t\) being well-formed. In particular, knowing that \(t\) is well-formed does not constrain \(A\) at all without knowing that the given type \(A\) is the type of \(t\). We must therefore include an additional typing premise if we want to avoid well-formed and non-well-formed terms being equated.
 
 \afterpage{%
     \clearpage% flush all other floats
@@ -1952,7 +1952,7 @@ With this definition we can introduce the regular operation set, which recovers 
 \begin{definition}
   The \emph{regular operation set} \Reg is defined to be:
   \[ \Reg = \{ (\Delta, \Var(\Delta), \Var(\Delta)) \mid \Delta \vdash_{\mathsf{ps}} \} \cup \{ (\Delta, \bdry {\dim(\Delta)-1} - \Delta, \bdry {\dim(\Delta)-1} + \Delta) \mid \Delta \vdash_{\mathsf{ps}} \} \]
-  The first component allows equivalences to be well-typed, and the second gives the support condition for composites.
+  The first component allows equivalences to be well-formed, and the second gives the support condition for composites.
 \end{definition}
 
 The regular operation set has more standard presentation.
@@ -2128,10 +2128,10 @@ Equality rule sets can also be subsets of eachother, leading to the following le
 \end{proof}
 \begin{corollary}
   \label{cor:catt-to-r}
-  Any context, term, type, or substitution that is well-typed in \Catt is also well-typed in \Cattr, for any equality set \(\mathcal{R}\).
+  Any context, term, type, or substitution that is well-formed in \Catt is also well-formed in \Cattr, for any equality set \(\mathcal{R}\).
 \end{corollary}
 
-Furthermore, we can immediately show that the application of a substitution to piece of syntax that is well-typed in \Catt is well-typed.
+Furthermore, we can immediately show that the application of a substitution to piece of syntax that is well-formed in \Catt is well-formed.
 
 \begin{lemma}
   \label{lem:sub-catt}
@@ -2147,7 +2147,7 @@ Furthermore, we can immediately show that the application of a substitution to p
   Follows immediately from a mutual induction, using that any equality in \Catt is syntactic. The proof is formalised in \module{Catt.Typing.Properties.Base}.
 \end{proof}
 
-An arbitrary set \(\mathcal{R}\) has very few restrictions on the equality relation it generates, and the terms that are well-typed because of it. A rule set \(\mathcal{R}\) could identify terms of different types, or identify two different variables (or even identify all variables or terms). This makes it difficult to prove much about the theory generated by an arbitrary set \(\mathcal{R}\).
+An arbitrary set \(\mathcal{R}\) has very few restrictions on the equality relation it generates, and the terms that are well-formed because of it. A rule set \(\mathcal{R}\) could identify terms of different types, or identify two different variables (or even identify all variables or terms). This makes it difficult to prove much about the theory generated by an arbitrary set \(\mathcal{R}\).
 
 To this end, we introduce certain conditions that these equality rule sets can satisfy. The first three of these conditions put certain closure properties on the set of rules \(\mathcal{R}\), and each allow various constructions to be well typed. We call theories that satisfy these three properties \emph{tame theories} and introduce these in \cref{sec:tame-theories}. In \cref{sec:further-conditions}, we introduce two more conditions which take the form of a property that the generated equality must satisfy.
 
@@ -2160,15 +2160,15 @@ In the following subsections, we will also show that the rule set for disc remov
 
 Here we introduce the three core conditions on the equality rule set \(\mathcal{R}\) which we expect hold for any reasonable choice of rule set:
 \begin{itemize}
-\item The \emph{weakening condition}, which allows weakening to be well-typed.
-\item The \emph{suspension condition}, which allows suspension to be well-typed.
+\item The \emph{weakening condition}, which allows weakening to be well-formed.
+\item The \emph{suspension condition}, which allows suspension to be well-formed.
 \item The \emph{substitution condition}, which implies that the application of substitution to terms, types, and other substitutions (as substitution composition) preserves typing and equality.
 \end{itemize}
 We call an equality rule set \emph{tame} if it satisfies all three of these theories, and call the corresponding theory \Cattr a \emph{tame theory}.
 
 \paragraph{Weakening condition}
 
-For the weakening operation to be well-typed, meaning that the weakening of a well-typed piece of syntax is itself well-typed, the following closure property must hold on the set of rules \(\mathcal{R}\).
+For the weakening operation to be well-formed, meaning that the weakening of a well-formed piece of syntax is itself well-formed, the following closure property must hold on the set of rules \(\mathcal{R}\).
 
 \begin{definition}
   A set of rules \(\mathcal{R}\) satisfies the \emph{weakening condition} if for all \((\Gamma,s,t) \in \mathcal{R}\) we have:
@@ -2218,7 +2218,7 @@ Using only the above proposition we can immediately prove typing properties for 
   \[ \Gamma \vdash s : U^n \sub {\{A\}} \qquad \Gamma \vdash t : \wk(U^n)\sub{\langle\{A\}, s\rangle} \]
   As \(\Gamma \vdash \arr s A t\), we know (by case analysis on the typing derivation) that \(\Gamma \vdash s : A\) and \(\Gamma \vdash t : A\). These judgements are sufficient to finish the proof, since \(A \equiv U^n \sub {\{A\}} \equiv \wk(U^n) \sub {\langle \{A\}, s \rangle}\) by \cref{item:disc-prop-sub-from} and the interaction of weakening with substitution application.
 
-  To show that \(\Gamma \vdash A\) follows from \(\Gamma \vdash \{A\} : S^n\), we instead show that \(\Gamma \vdash U^n \sub {\{A\}}\), leveraging that typing is invariant under syntactic equality. The typing of \(U^n \sub {\{A\}}\) follows from \(U^n\) being well-typed in \Catt (as it is well-typed in any theory with the weakening property), and \cref{lem:sub-catt}. The second to last inference rule follows trivially from the preceding one. For the last rule, we get that \(\Gamma \vdash s : U^n\sub{\{A\}}\) by case analysis on \(\Gamma \vdash \{A,s\} : D^n\), and so we are finished by the invariance of typing rules under syntactic equality.
+  To show that \(\Gamma \vdash A\) follows from \(\Gamma \vdash \{A\} : S^n\), we instead show that \(\Gamma \vdash U^n \sub {\{A\}}\), leveraging that typing is invariant under syntactic equality. The typing of \(U^n \sub {\{A\}}\) follows from \(U^n\) being well-formed in \Catt (as it is well-formed in any theory with the weakening property), and \cref{lem:sub-catt}. The second to last inference rule follows trivially from the preceding one. For the last rule, we get that \(\Gamma \vdash s : U^n\sub{\{A\}}\) by case analysis on \(\Gamma \vdash \{A,s\} : D^n\), and so we are finished by the invariance of typing rules under syntactic equality.
 \end{proof}
 
 If we further have that the set of operations includes the standard operations then we get the following corollary.
@@ -2266,7 +2266,7 @@ For suspension, we introduce the following condition, which is similar to the co
   for all \((\Gamma,s,t) \in \mathcal{R}\).
 \end{definition}
 
-If the set of operations \(\mathcal{O}\) is suspendable, then this condition is sufficient to show that the suspension of a well-typed piece of syntax is well-typed.
+If the set of operations \(\mathcal{O}\) is suspendable, then this condition is sufficient to show that the suspension of a well-formed piece of syntax is well-formed.
 
 \begin{proposition}
   Suppose \(\mathcal{O}\) is suspendable and \(\mathcal{R}\) satisfies the suspension condition. Then the following inference rules are admissible for \(\Gamma, \Delta, \Delta' : \Ctx\), \(A,B,C,D : \Type_\Gamma\), \(s,t : \Term_\Gamma\), \(\sigma : \arr \Delta C \Gamma\), and \(\tau : \arr {\Delta'} D \Gamma\).
@@ -2313,7 +2313,7 @@ Similarly to the weakening condition, the suspension condition is closed under u
 
 \paragraph{Substitution condition}
 
-The substitution condition takes a slightly different form to the previous two conditions. Instead of requiring that the rule set is closed under application of any arbitrary substitution \(\sigma\), we instead only ensure it is closed under well-typed substitutions. This will not prevent us proving that typing is closed under the application of substitutions, but will be critical in proving that the supported rules construction, which will be given in \cref{def:rule-with-supp} and is used for proving the support condition, satisfies the substitution condition.
+The substitution condition takes a slightly different form to the previous two conditions. Instead of requiring that the rule set is closed under application of any arbitrary substitution \(\sigma\), we instead only ensure it is closed under well-formed substitutions. This will not prevent us proving that typing is closed under the application of substitutions, but will be critical in proving that the supported rules construction, which will be given in \cref{def:rule-with-supp} and is used for proving the support condition, satisfies the substitution condition.
 
 \begin{definition}
   An equality rule set \(\mathcal{R}\) satisfies the \emph{\(\mathcal{R}'\)-substitution condition} if:
@@ -2323,7 +2323,7 @@ The substitution condition takes a slightly different form to the previous two c
 
 We make two comments about this definition:
 \begin{itemize}
-\item We only close under substitutions with type part \(\star\). It will still be possible that typing is preserved by arbitrary (well-typed) substitutions when combined with the suspension condition.
+\item We only close under substitutions with type part \(\star\). It will still be possible that typing is preserved by arbitrary (well-formed) substitutions when combined with the suspension condition.
 \item We introduce a second rule set \(\mathcal{R}'\) in the definition, which is only used for the typing premise of the substitution \(\sigma\). The reason for this is that the substitution condition is not closed under unions, and so we will instead prove that certain rule sets satisfy the \(\mathcal{R}'\)-substitution condition for an arbitrary \(\mathcal{R}'\), which is closed under unions.
 \end{itemize}
 The substitution condition allows us to give the next proposition.
@@ -2364,7 +2364,7 @@ We also prove that application of substitution respects equality in its second a
   for substitutions \(\sigma : \arr \Delta A \Gamma\), \(\tau : \arr \Delta B \Gamma\), and \(\mu : \arr \Theta C \Delta\), term \(s : \Term_\Delta\), and type \(A : \Type_\Delta\).
 \end{proposition}
 
-This allows us to finally define a category of well-typed syntax in \Cattr. which is well defined by the two preceding definitions.
+This allows us to finally define a category of well-formed syntax in \Cattr. which is well defined by the two preceding definitions.
 
 \begin{definition}
   Suppose \(\mathcal{R}\) satisfies the substitution and weakening conditions. Then we can define the \emph{syntactic category} of \Cattr, which by an abuse of notation we also call \Cattr, to have:
@@ -2389,7 +2389,7 @@ which includes \(\Gamma\) into \(\Gamma, x : A\). It can be checked (and is give
   \[ ((\Gamma,(x:A)),\wk(s),\wk(t)) \equiv ((\Gamma, (x : A)), s \sub {\proj_{\Gamma}}, t \sub {\proj_{\Gamma}}) \in \mathcal{R} \]
   which will follow from the substitution condition if it can be proved that
   \[ \Gamma, x : A \vdash_{\mathcal{R}} \proj_\Gamma : \Gamma \]
-  holds. This judgement is easy to derive when \(\mathcal{R}\) satisfies the weakening condition, but this is what we are trying to prove. Instead, since \(\emptyset\) trivially satisfies the weakening condition, \(\proj_\Gamma\) is well-typed in \Catt, and so the derivation above follows from \cref{cor:catt-to-r}.
+  holds. This judgement is easy to derive when \(\mathcal{R}\) satisfies the weakening condition, but this is what we are trying to prove. Instead, since \(\emptyset\) trivially satisfies the weakening condition, \(\proj_\Gamma\) is well-formed in \Catt, and so the derivation above follows from \cref{cor:catt-to-r}.
 \end{proof}
 
 We lastly show that \dr also satisfies the substitution condition.
@@ -2754,7 +2754,7 @@ The set \ecr satisfies all the conditions introduced in this chapter, as proven 
 \chapter{Constructions in \Cattr}
 \label{sec:operations-catt}
 
-This chapter will investigate some more involved constructions that can be given in the type theory \Cattr. These constructions will be central to defining the reductions that underpin the type theories \Cattsu and \Cattsua which appear in \cref{cha:cattstrict}. We will give a definition of each construction, describe under what conditions it is well-typed, and state various properties describing the behaviour of the construction and its interaction with other constructions.
+This chapter will investigate some more involved constructions that can be given in the type theory \Cattr. These constructions will be central to defining the reductions that underpin the type theories \Cattsu and \Cattsua which appear in \cref{cha:cattstrict}. We will give a definition of each construction, describe under what conditions it is well-formed, and state various properties describing the behaviour of the construction and its interaction with other constructions.
 
 For this chapter we will assume that we are working in a tame theory, as described in \cref{sec:tame-theories}. This means that all proofs in this section will hold in any variant of \Cattr such that the equality set \(\mathcal{R}\) satisfies the weakening, substitution, and suspension conditions, and the set of operations \(\mathcal{O}\) is suspendable and contains the standard operations. We will also use all the relevant proofs from \cref{sec:catt-with-equality}, without explaining exactly what condition of the set \(\mathcal{R}\) is being
 used.
@@ -2889,9 +2889,9 @@ The tight correspondence between the rules used to construct Dyck words and ps-c
 
 \begin{lemma}
   \label{lem:dyck-typing}
-  For a Dyck word \(\mathcal{D} : \Dyck_d\), its associated context, type, and term are all well-typed:
+  For a Dyck word \(\mathcal{D} : \Dyck_d\), its associated context, type, and term are all well-formed:
   \[ \lfloor \mathcal{D} \rfloor \vdash \qquad \lfloor \mathcal{D} \rfloor \vdash \ty_{\mathcal{D}} \qquad \lfloor \mathcal{D} \rfloor \vdash \tm_{\mathcal{D}} : \ty_{\mathcal{D}} \]
-  In addition to being a well-typed context, the context associated to a Dyck word is a ps-context; the following judgement holds:
+  In addition to being a well-formed context, the context associated to a Dyck word is a ps-context; the following judgement holds:
   \[ \lfloor \mathcal{D} \rfloor \vdash_{\mathsf{ps}} \tm_{\mathcal{D}} : \ty_{\mathcal{D}} \]
   and so if \(\mathcal{D} : \Dyck_0\), we have \(\lfloor \mathcal{D} \rfloor \vdash_{\mathsf{ps}}\). Further, all ps-contexts are the associated context of a Dyck word.
 \end{lemma}
@@ -3378,7 +3378,7 @@ The term \(\N(t)\) is called the \emph{normal form} of \(t\). Such an algorithm 
 
 In \cref{sec:cattsu,sec:cattsua}, the normalisation algorithm is defined by giving a reduction relation on syntax of the type theory, which we show to be terminating, meaning that there is no infinite reduction sequence and confluent, meaning that any two reduction paths converge to a common reduct. The normal form of a term can then be obtained by reducing it until there are no further reductions possible. In \cref{sec:reduction}, these notions are recalled, and we demonstrate that the resulting normalisation algorthm satisfies the two properties stated above. This section also introduces a method for obtaining a reduction scheme from an arbitrary equality rule set \(\mathcal{R}\).
 
-Such a normalisation procedure allows a type checking algorithm can be implemented, creating an interpreter for the language. This allows us to write larger terms, and have their validity automatically verified. In \cref{sec:towards-nbe}, we introduce our implementation of \Catt, \Cattsu, and \Cattsua, written in rust. This implementation supports features such as implicit arguments to terms, implicit suspension, and native support for trees and tree labellings. We will explain how the tool can be used, and use it to give larger examples of \Cattsua terms, including proofs of Eckmann-Hilton (see \cref{fig:eh}) and its higher dimensional coherence condition, the Syllepsis.
+Such a normalisation procedure allows a type checking algorithm can be implemented, creating an interpreter for the language. This allows us to write larger terms, and it can be automatically verified whether they are well-formed. In \cref{sec:towards-nbe}, we introduce our implementation of \Catt, \Cattsu, and \Cattsua, written in rust. This implementation supports features such as implicit arguments to terms, implicit suspension, and native support for trees and tree labellings. We will explain how the tool can be used, and use it to give larger examples of \Cattsua terms, including proofs of Eckmann-Hilton (see \cref{fig:eh}) and its higher dimensional coherence condition, the Syllepsis.
 
 The implementation uses an approach closer to normalisation by evaluation for type-checking terms in the theory. \cref{sec:towards-nbe} explores this algorithm and presents some perspectives on applying normalisation by evaluation to semistrict versions of \Catt. The correctness of the tool is still dependent on the metatheoretic results derived using reduction schemes.
 
@@ -3402,7 +3402,7 @@ Reduction is a method for defining computation for a type theory. For each term,
 If we have an equality rule set \(\mathcal{R}\) (see \cref{sec:ruleset}) that generates \Cattr, a reduction scheme can be defined on \(\mathcal{R}\) modifying the rules for equality to remove the reflexivity, symmetry, and transitivity constructors and ensure that reductions do not happen ``in parallel''.
 
 \begin{definition}
-  Let \(\mathcal{R}\) be an equality rule set. Define the reduction scheme \(\redr\) on well-typed terms, well-typed substitutions, and well-formed types to be generated by the rules in \cref{fig:reduction}. When it is clear which equality rule set is being used, we may simply write \(s \red t\) instead of \(s \redr t\).
+  Let \(\mathcal{R}\) be an equality rule set. Define the reduction scheme \(\redr\) on well-formed terms, well-formed substitutions, and well-formed types to be generated by the rules in \cref{fig:reduction}. When it is clear which equality rule set is being used, we may simply write \(s \red t\) instead of \(s \redr t\).
 \end{definition}
 
 \begin{figure}[h]
@@ -3423,7 +3423,7 @@ If we have an equality rule set \(\mathcal{R}\) (see \cref{sec:ruleset}) that ge
 
 The rules for reduction are set up so that each reduction \(s \redr t\) corresponds to the application of exactly one rule from \(\mathcal{R}\) at a single point in the term. Given a coherence \(\Coh \Delta A \sigma\), we call reductions generated by the \textsc{cell} rule \emph{cell reductions} and reductions generated by the \textsc{arg} rule \emph{argument reductions}. Reductions generated by \textsc{rule} will be named by the rule in \(\mathcal{R}\) that was used. For example a reduction generated by \textsc{rule} applied with an instance of pruning will be called a pruning reduction.
 
-We highlight that our reduction scheme \(\redr\) is only defined between well-typed pieces of syntax. As this reduction will be used with rule sets \(\mathcal{R}\) which satisfy the preservation condition, there will be no additional burden of checking that typing is preserved while applying reductions. Therefore, we can prove that the reflexive symmetric transitive closure of reduction, \(\redrts\), is the same relation as equality on well-typed terms, given the similarity between the rules for reduction and the rules for equality.
+We highlight that our reduction scheme \(\redr\) is only defined between well-formed pieces of syntax. As this reduction will be used with rule sets \(\mathcal{R}\) which satisfy the preservation condition, there will be no additional burden of checking that typing is preserved while applying reductions. Therefore, we can prove that the reflexive symmetric transitive closure of reduction, \(\redrts\), is the same relation as equality on well-formed terms, given the similarity between the rules for reduction and the rules for equality.
 
 \begin{proposition}
   \label{prop:red-is-eq}
@@ -3445,13 +3445,13 @@ Just as the preservation condition on a rule set \(\mathcal{R}\) allows us to de
 
 \begin{proposition}
   \label{prop:red-sub}
-  Suppose \(\mathcal{R}\) satisfies the substitution condition and let \(\sigma : \Delta \to \Gamma\) be a well-typed substitution. Then:
+  Suppose \(\mathcal{R}\) satisfies the substitution condition and let \(\sigma : \Delta \to \Gamma\) be a well-formed substitution. Then:
   \begin{align*}
     s \redr t &\implies s \sub \sigma \redr t \sub \sigma \\
     A \redr B &\implies A \sub \sigma \redr B \sub \sigma \\
     \tau \redr \mu &\implies \tau \bullet \sigma \redr \mu \bullet \sigma
   \end{align*}
-  for well-typed terms \(s,t\), well-formed types \(A,B\), and well-typed substitutions \(\tau\) and \(\mu\). Furthermore, if \(\sigma \redr \tau\), then:
+  for well-formed terms \(s,t\), well-formed types \(A,B\), and well-formed substitutions \(\tau\) and \(\mu\). Furthermore, if \(\sigma \redr \tau\), then:
   \[ s \sub \sigma \redr^* s \sub \tau \qquad A \sub \sigma \redr^* A \sub \tau \qquad \mu \bullet \sigma \redr^* \mu \bullet \tau\]
   for term \(s\), type \(A\), and substitution \(\mu\).
 \end{proposition}
@@ -3740,7 +3740,7 @@ When it is not specified, we will assume that the operation set \(\mathcal{O}\) 
   Lastly, \su satisfies the \su-preservation condition as it is satisfied by disc removal (\cref{prop:dr-preserve}), endo-coherence removal (\cref{item:ecr-preserve}), and pruning (\cref{prop:prune-preserve}) and is closed under unions of rule sets.
 \end{proof}
 
-From this theorem it can be deduced that weakening, suspension, and applications of substitution are well-typed. Furthermore, equality in \Cattsu preserves the support of a term and preserves typing judgements. Such results are found in \cref{sec:ruleset}.
+From this theorem it can be deduced that weakening, suspension, and applications of substitution are well-formed. Furthermore, equality in \Cattsu preserves the support of a term and preserves typing judgements. Such results are found in \cref{sec:ruleset}.
 
 \todo[inline]{EH example}
 
@@ -3781,7 +3781,7 @@ The reduction \(\red_{\su'}\) applies equality rules from \Cattsu when the redex
 By \cref{prop:red-is-eq}, we know that the reflexive symmetric transitive closure of \(\red_{\su'}\) is the equality relation generated by \su'. We therefore prove that this agrees with the equality relation from \Cattsu.
 
 \begin{proposition}
-  The type theories generated from \su and \su' are equivalent. Terms are equal or well-typed in one theory exactly when they are equal or well-typed in the other, and similar properties hold for types and substitutions.
+  The type theories generated from \su and \su' are equivalent. Terms are equal or well-formed in one theory exactly when they are equal or well-formed in the other, and similar properties hold for types and substitutions.
 \end{proposition}
 \begin{proof}
   We use \cref{lem:subset-lem} for both directions. Since \(\su' \subseteq \su\), we are only required to show that if \((\Gamma, s, t) \in \su\) with \(\Gamma \vdash_\su s : A\) for some \(A : \Type_\Gamma\) then
@@ -3826,14 +3826,14 @@ We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and onl
 
   Let \(s \red u\) be an argument reduction. It must therefore be generated by a reduction on \(\{A,t\}\). If it is a reduction generated by \(A \red A'\) then \(u \red t\) by endo-coherence removal and so we are done. Otherwise it is generated by \(t \red t'\) and so \(t\) and \(u\) both reduce by disc removal to \(t'\).
 
-  The only remaining case is where \(s \red u\) is an instance of pruning, which forces \(t \equiv \id(B,a)\) for some \(B\) and \(a\). By validity of \(s\), we must have \(n > 0\) and so \(A \equiv \arr b {A'} c\). Therefore:
+  The only remaining case is where \(s \red u\) is an instance of pruning, which forces \(t \equiv \id(B,a)\) for some \(B\) and \(a\). As \(s\) is well-formed, we must have \(n > 0\) and so \(A \equiv \arr b {A'} c\). Therefore:
   \begin{align*}
     u &\equiv \Coh {\lfloor \mathcal{D}^{n} \sslash p \rfloor} {\wk(U^n) \sub {\pi_{p}}} {\{A,\id(B,a)\} \sslash p}\\
       &\equiv \Coh {D^{n-1}} {\wk(U^n) \sub {\{\arr {d_{n-1}} {\wk(U^{n-1})} {d_{n-1}}, \id(\wk(U^{n-1}), d_{n-1})\} \}}} {\{A',b\}}&\text{by \cref{prop:prune-disc}}\\
       &\equiv \Coh {D^{n-1}} {\arr {d_{n-1}} {\wk(U^{n-1})} {d_{n-1}}} {\{A',b\}}\\
     &\equiv \id(A',b)
   \end{align*}
-  Now by the validity of \(s\) we have \(\Gamma \vdash \{A,\id(B,a)\} : D^n\) and so by \cref{lem:disc-typing}, \(\Gamma \vdash \id(B,a) : A\) and hence by \cref{cor:id-typing} and uniqueness of typing:
+  Now as \(s\) is well-formed we have \(\Gamma \vdash \{A,\id(B,a)\} : D^n\) and so by \cref{lem:disc-typing}, \(\Gamma \vdash \id(B,a) : A\) and hence by \cref{cor:id-typing} and uniqueness of typing:
   \[ \arr a {B} a = A \equiv \arr b {A'} c\]
   and so \(a = b\) and \(B = A'\) and hence \(s \equiv \id(A', b) = \id(B,a) \equiv t\). Finally, since \(\dim(a) = \dim(B) < \dim(s)\), we get \(t =_{\dim(s)} u\) as required.
 
