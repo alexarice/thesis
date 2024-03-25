@@ -1631,6 +1631,15 @@ This can be used to show that the type of a well-formed term is unique up to def
   We prove the first part by induction on the derivation \(\Gamma \vdash s : A\). If the derivation is derived from the conversion rule applied to \(\Gamma \vdash s : B\) and \(\Gamma \vdash A = B\), then by inductive hypothesis we have \(\Gamma \vdash s : \ty(s)\) and \(\Gamma \vdash B = \ty(s)\). By transitivity, we obtain \(\Gamma \vdash A = \ty(s)\) as required. The second part follows directly from the applying the first part to both derivations.
 \end{proof}
 
+Using the canonical type, we can define the canonical identity on a term.
+
+\begin{definition}
+  \label{def:canonical-id}
+  Given a term \(t : \Term_\Gamma\), let its \emph{canonical identity} be given by:
+  \[ \id(t) \equiv \id(\ty(t), t)\]
+  This construction can be iterated, and we say that a term is an \emph{iterated canonical identity} if it is on the form \(\id^k(t)\) for some \(k\).
+\end{definition}
+
 There is not much more that can be proved about the definitional equality at this point without knowing more about the rule set \(\mathcal{R}\). In \cref{sec:ruleset}, certain conditions will be imposed on the set of equality rules, that will allow further lemmas to be proved in large generality.
 
 \paragraph{Disc removal}
@@ -3742,9 +3751,41 @@ When it is not specified, we will assume that the operation set \(\mathcal{O}\) 
 
 From this theorem it can be deduced that weakening, suspension, and applications of substitution are well-formed. Furthermore, equality in \Cattsu preserves the support of a term and preserves typing judgements. Such results are found in \cref{sec:ruleset}.
 
-\todo[inline]{EH example}
+Before giving normalisation results for \Cattsu, we recall the Eckmann-Hilton argument (\cref{fig:eh}) and give the definition of the term giving this equivalence. First let \(\Delta\) be the ps-context given by:
+\begin{alignat*}{2}
+  \Delta = D^2 \wedge D^2 = &(x : *),\\
+                            &(y : *),&\ &(f : x \to y),\\
+                            &&&(g : x \to y),(a : f \to g),\\
+                            &(z : *),&&(h : x \to y),\\
+                            &&&(j : x \to y),(b : h \to j)
+\end{alignat*}
+which is given by the diagram:
+\[
+  \begin{tikzcd}
+    \bullet & \bullet & \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "h"', curve={height=18pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "i", curve={height=-18pt}, from=1-2, to=1-3]
+    \arrow["a"', shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow["b"', shorten <=5pt, shorten >=5pt, Rightarrow, from=2, to=3]
+  \end{tikzcd}
+\]
+The following term can be formed, which is similar to an interchange move, and changes the order in which two whiskered terms are composed:
+\[ \mathsf{swap} = \Coh {\Delta} {(a *_0 j) *_1 (g *_0 b) \to (f *_0 b) *_1 (a *_0 h)} {\id_\Delta}\]
+Then given a context \(\Gamma\) with terms \(x : *\) and \(\alpha,\beta : \id(x) \to \id(x)\), the following term, the Eckmann-Hilton term, can be formed:
+\[ \mathsf{EH}_{\alpha,\beta} = \mathsf{swap} \sub{\langle x,x,\id(x),\id(x),\alpha, x,\id(x),\id(x),\beta \rangle}\]
+In \Cattsu, this term can be typed as follows:
+\[ \Gamma \vdash \mathsf{EH}_{\alpha,beta} : \alpha *_1 \beta \to \beta *_1 \alpha\]
+and so witnesses the Eckmann-Hilton argument.
 
-\todo[inline]{Mention syllepsis will be done in implementation section}
+We note that there is a clear inverse of the Eckmann Hilton term, which immediately gives rise to two morphisms \(\alpha *_1 \beta \to \beta *_1 \alpha\): the original term \(\mathsf{EH}_{\alpha,\beta}\) and the term \(\mathsf{EH}_{\beta,\alpha}^{-1}\). These two terms manoeuvre  \(\alpha\) and \(\beta\) round eachother in opposite directions, and are not in general equivalent.
+
+However, we can instead apply Eckmann-Hilton to terms \(\phi\) and \(\psi\) of type \(\id^2(x) \to \id^(x)\), which is done by suspending the Eckmann-Hilton term. By an abuse of notation we define this term to be (only giving the locally maximal arguments of the substitution):
+\[\mathsf{EH}_{\phi,\psi} = \Sigma(\mathsf{swap}) \sub{\langle \phi, \psi \rangle}\]
+In this case, the extra dimension gives enough freedom to give an equivalence between the resulting two terms \(\phi *_2 \psi \to \psi *_2 \phi\) which is called the \emph{syllepsis} and has the type:
+\[ \mathsf{Syl}_{\phi,\psi} : \mathsf{EH}_{\phi,\psi} \to \mathsf{EH}^{-1}_{\psi,\phi}\]
+To define this term, a similar approach to the approach used for Eckmann-Hilton of giving a single coherence containing a more complex type and a substitution containing multiple identity terms, and letting the \Cattsu reduction simplify the type to the required one. We delay defining this term until \cref{sec:towards-nbe}, where the implementation presented in this section can be used to check that the resulting term is well-formed.
 
 \subsection{Normalisation for \Cattsu}
 \label{sec:reduction-cattsu}
@@ -3892,15 +3933,7 @@ We begin by proving a property of terms over disc contexts, which we call \emph{
 
 \todo[inline]{Link to other paper}
 
-We begin by defining the notion of canonical identity.
-
-\begin{definition}
-  Given a term \(t : \Term_\Gamma\), let its \emph{canonical identity} be given by:
-  \[ \id(t) \equiv \id(\ty(t), t)\]
-  This construction can be iterated, and we say that a term is an \emph{iterated canonical identity} if it is on the form \(\id^k(t)\) for some \(k\).
-\end{definition}
-
-This allows us to now state and prove disc trivialisation.
+We now state and prove disc trivialisation, recalling the definition of an iterated canonical identity from \cref{def:canonical-id}.
 
 \begin{theorem}[Disc trivialisation]
   Suppose \(D^n \vdash t : A\) in \Cattsu. Then \(t\) is equal to an iterated canonical identity on a variable, that is \(t = \id^k(x)\) for some variable \(x \in \Var(D^n)\) and \(k \in \mathbb{N}\).
