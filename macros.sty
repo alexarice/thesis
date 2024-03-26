@@ -26,19 +26,21 @@
 \newcommand*{\supp}{\ensuremath{\mathsf{supp}}}
 \newcommand*{\bound}[2]{\ensuremath{\partial_{#1}({#2})}}
 \newcommand*{\bdry}[3]{\ensuremath{\partial_{#1}^{#2}({#3})}}
-\newcommand*{\inc}[3]{\ensuremath{\delta_{#1}^{#2}({#3})}}
+\newcommand*{\incbd}[3]{\ensuremath{\delta_{#1}^{#2}({#3})}}
 \newcommand*{\unrestrict}{\mathop\downarrow}
 \newcommand*{\unrestrictfull}{\mathop{\downarrow\downarrow}}
 \newcommand*{\restrict}{\mathop\uparrow}
 \newcommand*{\Dyck}{\mathsf{Dyck}}
 \newcommand*{\Peak}{\mathsf{Peak}}
+\newcommand*{\Path}{\mathsf{Path}}
 \newcommand*{\UDPeak}{\Updownarrow_{\mathsf{pk}}}
 \newcommand*{\UpPeak}{\Uparrow_{\mathsf{pk}}}
 \newcommand*{\DownPeak}{\Downarrow_{\mathsf{pk}}}
 \newcommand*{\red}{\rightsquigarrow}
 \newcommand*{\redr}{\rightsquigarrow_{\mathcal{R}}}
 \newcommand*{\redrts}{\rightsquigarrow_{\mathcal{R}}^{\mathsf{rts}}}
-\newcommand\doubleplus{+\kern-1.3ex+\kern0.8ex}
+\newcommand\doubleplus{+\kern-1ex+\kern0.5ex}
+\newcommand\emp{[\kern1.5pt]}
 \newcommand*{\insertion}[3]{\ensuremath{#1\mathop{\mathord{\ll}_{#2}}#3}}
 \newcommand*{\insertionprime}[3]{\ensuremath{#1\mathop{\mathord{\ll'}_{#2}}#3}}
 \renewcommand*{\th}{\ensuremath{\mathsf{th}}}
@@ -60,6 +62,12 @@
 \DeclareMathOperator{\tgt}{tgt}
 \DeclareMathOperator{\base}{base}
 \DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\inc}{inc}
+\DeclareMathOperator{\fst}{fst}
+\DeclareMathOperator{\snd}{snd}
+\DeclareMathOperator{\dep}{dep}
+\DeclareMathOperator{\len}{len}
+
 
 \newcommand*{\module}[1]{\href{https://alexarice.github.io/catt-agda/#1.html}{#1}}
 \newcommand*{\funcn}[3]{\href{https://alexarice.github.io/catt-agda/#1.html\##2}{#3}}

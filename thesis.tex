@@ -1127,8 +1127,8 @@ We now state the following theorem, which follows immediately from \cite[Theorem
 
 In order to use Ps-contexts as our notion of pasting diagram, we need to be able to identify the source and target variables of each Ps-context. This will be done by specifying the dimension \(i\) source and target of each pasting context.
 
-More precisely, for each Ps-context \(\Gamma\) and \(i \in \mathbb{N}\), we define a Ps-context we define subcontexts:
-\[ \inc i - \Gamma : \bound i \Gamma \to \Gamma \qquad \text{and}\qquad \inc i + \Gamma : \bound i \Gamma \to \Gamma\]
+More precisely, for each Ps-context \(\Gamma\) and \(i \in \mathbb{N}\), we define a Ps-context \(\bound i \Gamma\) and subcontext inclusions:
+\[ \incbd i - \Gamma : \bound i \Gamma \to \Gamma \qquad \text{and}\qquad \incbd i + \Gamma : \bound i \Gamma \to \Gamma\]
 Intuitively, the context \(\bound i \Gamma\) can be constructed by removing any variables of dimension greater than \(i\) from \(\Gamma\), and quotienting the dimension \(i\) variables by the (symmetric transitive closure of the) relation \(x \sim y\) if there exists an \(f : x \to y\). The inclusions then send this quotiented variable to the variable appearing first in the equivalence class for the source inclusion, and the variable appearing last in the class for the target inclusion.
 
 These contexts and substitutions can be defined by recursion on the context \(\Gamma\):
@@ -1139,17 +1139,17 @@ These contexts and substitutions can be defined by recursion on the context \(\G
                                                     \bound i \Gamma&if \(i \leq \dim(A)\)\\
                                                     \bound i \Gamma, (y : A), (f : \arr x A y)&otherwise
                                                   \end{cases*}\\
-  \inc i \epsilon {(x : \star)} &= \langle x \rangle\\
-  \inc i \epsilon {\Gamma, (y : A) , (f : \arr x A y)} &=
+  \incbd i \epsilon {(x : \star)} &= \langle x \rangle\\
+  \incbd i \epsilon {\Gamma, (y : A) , (f : \arr x A y)} &=
                                                            \begin{cases*}
-                                                             \mathrlap{\inc i \epsilon \Gamma}{\phantom{\bound i \Gamma, (y : A), (f : \arr x A y)}}&if \(i < \dim(A)\)\\
-                                                             \inc i - \Gamma&if \(i = \dim(A)\) and \(\epsilon = -\)\\
-                                                             \replace(\inc i + \Gamma, y)&if \(i = \dim(A)\) and \(\epsilon = +\)\\
-                                                             \langle \inc i \epsilon \Gamma, y, f \rangle &otherwise
+                                                             \mathrlap{\incbd i \epsilon \Gamma}{\phantom{\bound i \Gamma, (y : A), (f : \arr x A y)}}&if \(i < \dim(A)\)\\
+                                                             \incbd i - \Gamma&if \(i = \dim(A)\) and \(\epsilon = -\)\\
+                                                             \replace(\incbd i + \Gamma, y)&if \(i = \dim(A)\) and \(\epsilon = +\)\\
+                                                             \langle \incbd i \epsilon \Gamma, y, f \rangle &otherwise
                                                            \end{cases*}
 \end{align*}
 where \(\epsilon \in \{-,+\}\) and \(\replace(\langle \sigma, s \rangle, t) = \langle \sigma, t \rangle\). As it will be common to take the boundary of \(\Gamma\) at the dimension below the dimension of \(\Gamma\) itself, we write
-\[\inc {} \epsilon \Gamma = \inc {\dim(\Gamma) - 1} \epsilon \Gamma\]
+\[\incbd {} \epsilon \Gamma = \incbd {\dim(\Gamma) - 1} \epsilon \Gamma\]
 when \(\dim(\Gamma)\) is not zero.
 
 In the original \Catt paper, these inclusion substitutions are not given and instead the source and target variables are given directly as subcontexts. It can be easily checked that the free variables of the inclusions are equal to the subcontexts, and that the free variable sets of these inclusions are downwards closed. It is known, e.g. from \cite[Lemma~55]{benjamin2021globular}, that these constructions agree with the constructions of the source and target pasting diagrams in \cref{sec:pasting-diagrams}.
@@ -1184,7 +1184,7 @@ The typing rules for these judgements are then given in \cref{fig:catt-typing}. 
     \and
     \inferrule{(x : A) \in \Gamma}{\Gamma \vdash x : A}
     \and
-    \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\\dim(\Delta) \neq 0\\\supp(s) = \supp(\inc {} - \Delta)\\\supp(t) = \supp(\inc {} + \Delta)}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
+    \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\\dim(\Delta) \neq 0\\\supp(s) = \supp(\incbd {} - \Delta)\\\supp(t) = \supp(\incbd {} + \Delta)}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
     \and
     \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\\supp(s) = \supp(t) = \Var(\Delta)}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
   \end{mathpar}
@@ -1234,7 +1234,7 @@ The composite and identity above form part of a more general collection of coher
                              \mathcal{C}_\Delta^n &\text{otherwise}
                            \end{cases}\\
     &\mathcal{U}_\Delta^0 &&= \star\\
-    &\mathcal{U}_\Delta^{n+1} &&= \arr {\mathcal{T}_{\bound n \Delta}^n \sub {\inc n - \Delta}} {\mathcal{U}_\Delta^n} {\mathcal{T}_{\bound n \Delta}^n \sub {\inc n + \Delta}}
+    &\mathcal{U}_\Delta^{n+1} &&= \arr {\mathcal{T}_{\bound n \Delta}^n \sub {\incbd n - \Delta}} {\mathcal{U}_\Delta^n} {\mathcal{T}_{\bound n \Delta}^n \sub {\incbd n + \Delta}}
   \end{alignat*}
   The standard type takes the standard term over each boundary of \(\Delta\), includes these all back into \(\Delta\) and assembles them into a type. When \(n = \dim(\Delta)\) we will refer to the standard coherence as the \emph{standard composite}.
 \end{definition}
@@ -3254,35 +3254,219 @@ The following proposition proves that both peaks of the Dyck word can be pruned,
 \section{Trees}
 \label{sec:trees}
 
+During the next sections we build up to defining the insertion operation. This operation performs larger modifications to pasting diagrams than the pruning operation, and we will again want to represent pasting diagrams in a different way to make the definition in \cref{sec:insertion} as natural as possible. It is well known that pasting diagrams correspond to planar rooted trees \cite{Weber2004,leinster2004higher,batanin1998monoidal}, which we will simply refer to as \emph{trees} and can be defined as follows.
+
+\begin{definition}
+  A \emph{tree} is inductively defined to be a (possibly empty) list of trees.
+\end{definition}
+
+Throughout this section we will make use of standard operations and notations for lists. A list that contains the elements \(x_i\) for \(i\) from \(0\) to \(n\) will be written in square bracket notation as \([x_0,x_1,x_2,\dots,x_n]\). Further, we use the notation \(\emp\) for the empty list and \(\doubleplus\) for the concatenation of lists, which is associative and has the empty list as its unit. We will use the Agda-like notation of writing \(n :: ns\) for a list for which the first element (the head) is \(n\) and the rest of the list (the tail) is \(ns\). The length of a list will be given by the operation \(\len\).
+
+We will use the notation \(\Sigma(T) = [T]\), and call \(\Sigma(T)\) the suspension of \(T\), for reasons that will become immediate once the context generated by a tree has been defined in \cref{sec:tree-contexts}.
+
+We note that it will be common to see expressions of the form \(S :: T\) where \(S\) and \(T\) are both trees. It may seem as if this was an error, and that a concatenation operation should have been given instead, but in this case we are exploiting the identification of trees and lists of trees to treat \(S\) as a tree (as an element of the list) and \(T\) as a list of trees.
+
+We now define some common operations on trees.
+
+\begin{definition}
+\label{def:treetrunk}
+The \emph{depth} of a tree \(\dep(T)\) is \(0\) if \(T\) is empty or \(1 + \max_k{\dep(T_k)}\) if \(T = [T_0,\dots,T_n]\). For a tree \(T\), its \emph{trunk height}, \(\th(T)\), is \(1 + \th(T_0)\) if \(T = [T_0]\) and \(0\) otherwise. A tree is \emph{linear} if its trunk height equals its depth.
+
+Subtrees of a tree can be indexed by a list of natural numbers \(P\), giving a subtree \(T^P\) by letting \(T^{\emp} = T\) and \(T^{k::P} = {(T_k)}^P\) if \(T = [T_0, \dots, T_n]\).
+\end{definition}
+
+
+
+As these trees represent pasting diagrams, a context can be associated to each one. To be able to make effective use of trees we will need to understand this mapping to contexts, and the associated constructions used in this mapping. One of these constructions is suspension, which we have already seen. The second is an operation known as the wedge sum, which will be introduced in \cref{sec:wedge-sums}. Both these operations are mappings from contexts to contexts which preserve ps-context derivations. We will see in \cref{sec:tree-contexts} that a further result holds, that these two operations (along with the singleton context) are sufficient to generate all ps-contexts.
+
+\begin{remark}
+  In the formalisation, trees are defined in \module{Catt.Tree} and take a slightly different form to the trees defined above, and are actually defined to be a binary tree. This exploits an isomorphism between binary trees and trees with arbitrary (finite) branching. The constructors for the trees in the formalisation are called \(\mathsf{Sing}\), which stands for ``singleton'' and takes no arguments, and \(\mathsf{Join}\), which takes two trees as arguments. The isomorphism is generated from the following rules:
+  \begin{mathpar}
+    \inferrule{}{\mathsf{Sing} \simeq \emp}\and
+    \inferrule{S \simeq S' \\ T \simeq T'}{\mathsf{Join}(S,T) \simeq S' :: T'}
+  \end{mathpar}
+  Presenting trees in this way in the formalisation allows any induction to be done as a single induction over the constructors of a tree, instead of simultaneously inducting on the depth of the tree and on lists. The retain the standard notation of trees for this text for simplicity of notation. Under the above isomorphism, this makes no difference to the formal development.
+\end{remark}
+
 \subsection{Wedge sums}
 \label{sec:wedge-sums}
 
-\todo[inline]{Start with topological intuition}
+The wedge sum, just like suspension, is an operation inspired by a similar operation on topological spaces. Given two spaces \(X\) and \(Y\) and points \(x\) of \(X\) and \(y\) of \(Y\), the space \(X \vee Y\) can be formed, by taking the disjoint union of \(X\) and \(Y\), and identifying the points \(x\) and \(y\).
 
-\todo[inline]{Universal property}
+This construction satisfies a universal property: it is the colimit of the following diagram:
+\begin{equation}
+  \label[diagram]{diag:wedge-colimit}
+  \begin{tikzcd}
+    X && Y \\
+    & {\{*\}}
+    \arrow["x", from=2-2, to=1-1]
+    \arrow["y"', from=2-2, to=1-3]
+  \end{tikzcd}
+\end{equation}
+where the arrows labelled \(x\) and \(y\) send the unique point \(*\) to \(x\) and \(y\) respectively. Such a universal construction gives rise to two inclusions \(\inc_X : X \to X \vee Y\) and \(\inc_Y : Y \to X \vee Y\).
 
-\todo[inline]{Give Catt definition}
+A similar colimit can be formed in the syntactic category of \Cattr. Leveraging that the variables of a context are ordered, every (non-empty) context in \Catt is naturally bipointed. For a context \(\Gamma\), the first point is given by the first variable of the context (which must have type \(\star\)), which we name \(\fst(\Gamma)\), and the second point is given by the last \(0\)-dimensional variable in the context, which we name \(\snd(\Gamma)\). We therefore restrict the construction above to when the chosen point for the left context \(\Gamma\) is \(\fst(\Gamma)\) and the chosen point for the second context is \(\snd(\Delta)\). This simplifies the construction, and will be the only case we need for forming trees. We note that \(\fst(\Sigma(\Gamma)) \equiv N\) and \(\snd(\Sigma(\Gamma)) \equiv S\), as we will commonly take the wedge sums of suspended contexts.
 
-\todo[inline]{Basic properties}
+\begin{definition}
+  Let \(\Gamma\) and \(\Delta\) be non-empty contexts. We then mutually define the \emph{wedge sum} \(\Gamma \vee \Delta\) and inclusions \(\inc_\Gamma : \arr \Gamma \star {\Gamma \vee_t \Delta}\) and \(\inc_\Delta : \arr \Delta \star {\Gamma \vee \Delta}\) on the context \(\Delta\), noting that the base case is \(\Delta = (x : A)\) as \(\Delta\) is non-empty.
+  \begin{align*}
+    \Gamma \vee (x : A) &= \Gamma \\
+    \Gamma \vee \Delta, (x : A) &= \Gamma \vee \Delta, (x : A \sub {\inc_\Delta})\\[10pt]
+    \inc_\Gamma &= \wk^{n - 1}(\id_\Gamma) &\text{when \(\Delta\) has length \(n\)}\\[10pt]
+    \inc_{(x : A)} &= \langle t \rangle\\
+    \inc_{\Delta, (x : A)} &= \langle \wk(\inc_\Delta), x \rangle
+  \end{align*}
+  If we further have substitutions \(\sigma : \arr \Gamma A \Theta\) and \(\tau : \arr \Delta A \Theta\), then we can define the substitution \( \sigma \sqcup \tau : \arr {\Gamma \vee \Delta} A \Theta\) again by induction on \(\Delta\):
+  \begin{align*}
+    \sigma \vee \langle A, s \rangle &= \sigma\\
+    \sigma \vee \langle \tau, s \rangle &= \langle \sigma, s \rangle
+  \end{align*}
+  We note that no extra property is needed to define this universal map, though to show it it well-formed we will need that \(\snd(\Gamma) \sub \sigma = \fst(\Delta) \sub \tau\).
+\end{definition}
 
-\todo[inline]{Preserves pasting diagrams}
+We firstly prove some basic properties required for \(\Gamma \vee \Delta\) to be the colimit of \cref{diag:wedge-colimit}.
+
+\begin{lemma}
+  Let \(\Gamma\) and \(\Delta\) be non-empty contexts. Then:
+  \[ \inc_{\Gamma} \vee \inc_{\Delta} \equiv \id_{\Gamma \vee \Delta} \]
+  Further, the following equations hold:
+  \[ \inc_{\Gamma} \bullet (\sigma \vee \tau) \equiv \sigma \qquad \inc_{\Delta} \bullet (\sigma \vee \tau) \equiv \tau \]
+  for substitutions \(\sigma : \arr \Gamma A \Theta\) and \(\tau : \arr \Delta A \Theta\) where the second equality requires that \(\snd(\Gamma) \sub \sigma \equiv \fst(\Delta) \sub \tau\). Lastly:
+  \[ (\sigma \vee \tau) \bullet \mu \equiv (\sigma \bullet \mu) \vee (\tau \bullet \mu) \]
+  where \(\mu : \arr \Theta B {\Theta'}\) is another substitution.
+\end{lemma}
+\begin{proof}
+  Proofs appear as \func{Catt.Wedge.Properties}{sub-from-wedge-prop}, \func{Catt.Wedge.Properties}{sub-from-wedge-inc-left},  \func{Catt.Wedge.Properties}{sub-from-wedge-inc-right}, and \func{Catt.Wedge.Properties}{sub-from-wedge-sub} in \module{Catt.Wedge.Properties}.
+\end{proof}
+
+To simplify definitions of substitutions between wedge sums of contexts, we will write substitutions diagrammatically by specifying the individual components. Consider the following diagram:
+% https://q.uiver.app/?q=WzAsNixbMCwyLCJcXFNpZ21hXFxHYW1tYSJdLFsxLDIsIlxcdmVlIl0sWzIsMiwiXFxTaWdtYSBcXERlbHRhIl0sWzAsMCwiXFxTaWdtYSBcXEdhbW1hJyJdLFsyLDAsIlxcU2lnbWFcXERlbHRhJyJdLFsxLDAsIlxcdmVlIl0sWzAsMywiXFxTaWdtYSBcXHNpZ21hIl0sWzIsNCwiXFxTaWdtYSBcXHRhdSJdXQ==
+\[\begin{tikzcd}[column sep=tiny, row sep=10pt]
+    {\Gamma'} & \vee & {\Delta'} &\vee &{\Theta'} \\
+    \\
+    \Gamma & \vee & \Delta &
+    \arrow["{\sigma}", from=3-1, to=1-1, pos=.4]
+    \arrow["{\tau}", from=3-3, to=1-3, pos=.4]
+  \end{tikzcd}
+\]
+which is generated from substitutions \(\sigma : \Gamma \to \Gamma'\) and \(\tau : \Delta \to \Delta'\). A substitution \(\Gamma \vee \Delta \to \Gamma' \vee \Delta' \vee \Theta'\) can be generated by composing each arrow in the diagram with suitable inclusions so that its target is \(\Gamma' \vee \Delta' \vee \Theta'\), and then using the universal property of the wedge to map out of the source context. In the diagram above the generated substitution is:
+\[ ((\sigma \bullet \inc_{\Gamma'}) \vee (\tau \bullet \inc_{\Delta'})) \bullet \inc_{\Gamma' \vee \Delta'} \]
+To ensure these definitions are unique, the following proposition is needed:
+\begin{proposition}
+  The wedge sum \(\vee\) is associative and has the singleton context \((x : \star)\) as its left and right unit. Given a context \(\Gamma\), the inclusions satisfy the following unitality properties:
+  \[ \inc_{\Gamma} : \Gamma \to \Gamma \vee (x : \star) \equiv \id_\Gamma \qquad \inc_{\Gamma} : \Gamma \to (x : \star) \vee \Gamma \equiv \id_\Gamma \]
+  If we suppose we have three contexts \(\Gamma\), \(\Delta\), and \(\Theta\) then there is a unique way of including each context into \(\Gamma \vee \Delta \vee \Theta\), that is there is a unique substitution \(\Gamma \to \Gamma \vee \Delta \vee \Theta\) which is built from a composite of inclusions and similarly for \(\Delta\) and \(\Theta\).
+\end{proposition}
+\begin{proof}
+  The proofs of these are given in \module{Catt.Wedge.Properties}, and are all given by inducting on the right most context. The proof for the right unitality of \(\vee\) is omitted from the formalisation as it is immediate from the definitions.
+
+  The uniqueness of inclusions substitutions is given by
+  \begin{itemize}
+  \item \func{Catt.Wedge.Properties}{wedge-inc-left-assoc}, which says:
+    \begin{align*}
+      \inc_{\Gamma} \bullet \inc_{\Gamma \vee \Delta} : \Gamma \to (\Gamma \vee \Delta) \vee \Theta &\equiv \inc_{\Gamma} : \Gamma \to \Gamma \vee (\Delta \vee \Theta)\\
+      \intertext{\item \func{Catt.Wedge.Properties}{wedge-incs-assoc}, which says:}
+      \inc_{\Delta} \bullet \inc_{\Gamma \vee \Delta} : \Delta \to (\Gamma \vee \Delta) \vee \Theta &\equiv \inc_{\Delta} \bullet \inc_{\Delta \vee \Theta} : \Delta \to \Gamma \vee (\Delta \vee \Theta)\\
+      \intertext{\item \func{Catt.Wedge.Properties}{wedge-inc-right-assoc}, which says:}
+      \inc_{\Theta} : \Theta \to (\Gamma \vee \Delta) \vee \Theta &\equiv \inc_{\Theta} \bullet \inc_{\Delta \vee \Theta} : \Theta \to \Gamma \vee (\Delta \vee \Theta)
+    \end{align*}
+  \end{itemize}
+  We note that the definition of the wedge sum differs slightly in the formalisation, specifying a term \(t\) in \(\Gamma\) which takes the role of \(\snd(\Gamma)\), in order to give more computational control. By replacing the terms \(t\) in the formalisation by \(\snd(\Gamma)\) for the appropriate context \(\Gamma\), and noting that \(\snd(\Delta) \sub{\inc_{\Delta}} \equiv \snd(\Gamma \vee \Delta)\) (which can be proved by an easy induction), the results written here can be recovered.
+\end{proof}
+
+The previous proposition ensures that the diagrammatic notation for substitutions between wedge sums uniquely defines a substitution. We next show that all the constructions in this section have the expected typing properties.
+
+\begin{lemma}
+  The following inference rules are admissible in \Cattr:
+  \begin{mathpar}
+    \inferrule{\Gamma \vdash \\ \Delta \vdash}{\Gamma \vee \Delta \vdash}\and
+    \inferrule{ }{\Gamma \vee \Delta \vdash \inc_{\Gamma} : \Gamma}\and
+    \inferrule{ }{\Gamma \vee \Delta \vdash \inc_{\Delta} : \Delta}\and
+    \inferrule{\Theta \vdash \snd(\Gamma) \sub \sigma = \fst(\Delta) \sub \tau}{\Theta \vdash \inc_{\Delta} \bullet (\sigma \vee \tau) = \tau}\and
+    \inferrule{\Theta \vdash \sigma : \Gamma \\ \Theta \vdash \tau : \Gamma \\ \Theta \vdash \snd(\Gamma) \sub \sigma = \fst(\Delta) \sub \tau}{\Theta \vdash \sigma \vee \tau : \Gamma \vee \Delta}\and
+    \inferrule{\Theta \vdash \sigma = \sigma'\\ \Theta \vdash \tau = \tau'}{\Theta \vdash \sigma \vee \tau = \sigma' \vee \tau'}
+  \end{mathpar}
+\end{lemma}
+\begin{proof}
+  All proofs are given in \module{Catt.Wedge.Typing}.
+\end{proof}
+
+We finally show that the wedge sum preserves pasting diagrams, the property that wedge sums were initially introduced for.
+
+\begin{proposition}
+  \label{prop:wedge-ps}
+  The wedge sum of two ps-contexts is a ps-context: If \(\Gamma \vdash_{\mathsf{ps}}\) and \(\Delta \vdash_{\mathsf{ps}}\), then \(\Gamma \vee \Delta \vdash_{\mathsf{ps}}\)
+\end{proposition}
+\begin{proof}
+  It can first be proven that if the derivation \(\Gamma \vdash_{\mathsf{ps}}\) is generated by \(\Gamma \vdash_{\mathsf{ps}} x : \star\), then \(x \equiv \snd(\Gamma)\), by showing for all derivations \(\Gamma \vdash_{\mathsf{ps}} x : A \), where \(\dim(A) > 0\) that the \(0\)-target of the type \(A\) is \(\snd(\Gamma)\) by induction, and then case splitting on the original derivation. Then \(\Gamma \vdash_{\mathsf{ps}}\) implies that \(\Gamma \vdash_{\mathsf{ps}} \snd(\Gamma) : \star\).
+
+  The statement of the proposition is then proven by induction on the following statement: If \(\Gamma \vdash_{\mathsf{ps}}\) and \(\Delta \vdash_{\mathsf{ps}} x : A\), then:
+  \[ \Gamma \vee \Delta \vdash_{\mathsf{ps}} x \sub {\inc_{\Delta}} : A \sub {\inc_{\Delta}}\]
+  The base case is given by the preceding paragraph, and the other cases follow from routine calculation.
+
+  These proofs are given in \module{Catt.Wedge.Pasting}.
+\end{proof}
 
 \subsection{Tree contexts}
 \label{sec:tree-contexts}
 
-\todo[inline]{Singleton contexts, wedge sums, and suspensions preserve ps-context}
+We have now defined suspensions and wedge sums, and shown that both operations preserve ps-contexts. This allows us to finally define the context generated by a tree.
 
-\todo[inline]{Use this to interpret trees into ps-contexts}
+\begin{definition}
+  For a tree \(T\), the context $\lfloor T \rfloor$ generated from it is defined recursively by:
+    \[\lfloor \emp \rfloor = D^0 \qquad
+    \lfloor [T_1,\dots,T_n] \rfloor = \bigvee\limits_{i = 1}^n \Sigma\lfloor T_i \rfloor\]
+  It is immediate from this definition that \(\lfloor \Sigma(T) \rfloor \equiv \Sigma(\lfloor T \rfloor)\), \(\lfloor S \doubleplus T \rfloor \equiv \lfloor S \rfloor \vee \lfloor T \rfloor\), and that \(\dim(\lfloor T \rfloor) = \dep(T)\). We will commonly abuse notation and omit the \(\lfloor \_ \rfloor\) operator and use trees as contexts when it will not cause confusion.
+\end{definition}
 
-\todo[inline]{Give some examples}
+We can immediately give some examples of trees and their associated contexts. The context \(D^0\) is defined to be the context associated to \(\emp\),
+and so as \(D^{n+1} \equiv \Sigma(D^n)\), all the disc contexts can easily be recovered from trees as \(D^n \equiv \lfloor \Sigma^n(\emp) \rfloor\). Each tree \(\Sigma^n(\emp)\) is linear and has depth \(n\).
 
-\todo[inline]{Mapping back from ps-context}
+Trees can also be drawn graphically as follows: For a tree \([T_1,\dots,T_n]\), first recursively draw the trees \(T_i\) and lay these out in a horizontal line. Then a single point is drawn underneath these subtrees which we call the root of the tree, and a line is and drawn between the root of the tree and the root of each subtree. An example is given in \cref{fig:tree-example}.
 
-\todo[inline]{Paths in trees}
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}[every node/.style={scale=0.6},baseline=(x11.base)]
+    \node [on grid](x01) {$\bullet$};
+    \node [above left=0.5 and 0.3 of x01, on grid] (x11) {$\bullet$};
+    \node [above left=0.5 and 0.25 of x11, on grid] (x21) {$\bullet$};
+    \node [above right=0.5 and 0.25 of x11, on grid] (x22) {$\bullet$};
+    \node [above right=0.5 and 0.3 of x01, on grid](x12) {$\bullet$};
+    \draw (x01.center) to (x11.center);
+    \draw (x01.center) to (x12.center);
+    \draw (x11.center) to (x21.center);
+    \draw (x11.center) to (x22.center);
+  \end{tikzpicture}
+  \qquad
+  \begin{tikzcd}
+    \bullet & \bullet & \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-2]
+    \arrow[from=1-2, to=1-3]
+    \arrow[shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
+    \arrow[shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+  \end{tikzcd}
+  \caption{The tree \([[\emp,\emp],\emp]\) and generated context}
+  \label{fig:tree-example}
+\end{figure}
 
-\todo[inline]{Tree support}
+The context associated to a tree is clearly a pasting diagram, as the context is built only using the singleton context, wedge sums, and suspension. In fact, the set of contexts generated by trees is exactly the set containing the singleton context, and closed under wedge sums and suspensions. To see this define an \(S\)-monoid to be a monoid with an extra unary operation \(S\) with no other conditions on this operation. Then, the set of trees is the free \(S\)-monoid with the monoid structure given by concatenation and the \(S\) given by suspension. Similarly, the set of contexts is an \(S\)-monoid with the \(S\) again given by suspension and the monoid structure given by wedge sums. The map \(T \mapsto \lfloor T \rfloor\) is then an \(S\)-monoid homomorphism.
 
-\todo[inline]{Tree boundary}
+We will further see in \cref{sec:equiv-trees-dyck} that all pasting diagrams are generated by some tree, though this will not be needed for any formal development of our type theories.
+
+We next introduces \emph{paths}, which can be thought of as the variables in a tree.
+
+\begin{definition}
+  Let \(T\) be a tree. \emph{Paths} \((p,n) : \Path_T\) are a pair of a list of natural numbers \(p\) and a natural number \(n\) such that \(p\) indexes a subtree of \(T^p\) of \(T\) and \(0 \leq n \leq \len(T^p) \).
+
+  For path \((p, n) : \Path_T\), we obtain a variable of \(\lfloor T \rfloor\) by recursion on \(p\) as follows:
+  \begin{itemize}
+  \item Let \(T = [T_0,\dots,T_k]\). It is clear that \(\lfloor T \rfloor\) has exactly \(k+2\) variables of dimension \(0\), corresponding to (inclusion of) the first variable of each context \(\Sigma(\lfloor T_i \rfloor)\) as well as the variable corresponding to the inclusion of \(\snd(\Sigma(T_i))\). We then define \(\lfloor (\emp,n) \rfloor\) to be the \(n\)\textsuperscript{th} such variable, indexing from 0.
+  \item Let \((k :: p, n)\) be a path, and \(T = [T_0,\dots,T_k,\dots]\). Then by recursion we have a variable \(\lfloor (p,n) \rfloor\) of \(\lfloor T_k \rfloor\). This gives a variable \(\Sigma(\lfloor (p,n) \rfloor)\) of \(\Sigma(\lfloor T_k \rfloor)\) which can be included into \(\lfloor T \rfloor\) by the appropriate inclusion to get \(\lfloor (k :: p,n) \rfloor\).
+  \end{itemize}
+  We lastly define a \emph{maximal} path of \(T\) to be a path \((p,0)\) such that \(T^p = \emp\). Such paths correspond to locally maximal variables of \(\lfloor T \rfloor\).
+\end{definition}
 
 \todo[inline]{Introduce labellings}
 
@@ -3292,7 +3476,14 @@ The following proposition proves that both peaks of the Dyck word can be pruned,
 
 \todo[inline]{Typing for labellings}
 
+\todo[inline]{Tree boundary}
+
 \todo[inline]{Tree inclusions}
+
+\subsection{Equivalence of trees and Dyck words}
+\label{sec:equiv-trees-dyck}
+
+\todo[inline]{Mapping back from ps-context}
 
 \section{Structured terms}
 \label{sec:structured-terms}
