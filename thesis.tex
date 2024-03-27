@@ -3407,6 +3407,14 @@ We finally show that the wedge sum preserves pasting diagrams, the property that
   These proofs are given in \module{Catt.Wedge.Pasting}.
 \end{proof}
 
+We lastly give a version of the wedge sum construction for variable sets.
+
+\begin{definition}
+  Let \(\Gamma\) and \(\Delta\) be two non-empty contexts, and let \(U \subseteq \Var(\Gamma)\) and \(V \subseteq \Var(\Delta)\) be variable sets. Then define:
+  \[U \vee V = U \sub {\inc_\Gamma} \cup V \sub {\inc_\Delta}\]
+  to be a variable set of \(\Gamma \vee \Delta\).
+\end{definition}
+
 \subsection{Tree contexts}
 \label{sec:tree-contexts}
 
