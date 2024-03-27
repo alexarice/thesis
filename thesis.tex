@@ -3257,7 +3257,7 @@ The following proposition proves that both peaks of the Dyck word can be pruned,
 During the next sections we build up to defining the insertion operation. This operation performs larger modifications to pasting diagrams than the pruning operation, and we will again want to represent pasting diagrams in a different way to make the definition in \cref{sec:insertion} as natural as possible. It is well known that pasting diagrams correspond to planar rooted trees \cite{Weber2004,leinster2004higher,batanin1998monoidal}, which we will simply refer to as \emph{trees} and can be defined as follows.
 
 \begin{definition}
-  A \emph{tree} is inductively defined to be a (possibly empty) list of trees.
+  A \emph{tree} \(T : \Tree\) is inductively defined to be a (possibly empty) list of trees.
 \end{definition}
 
 Throughout this section we will make use of standard operations and notations for lists. A list that contains the elements \(x_i\) for \(i\) from \(0\) to \(n\) will be written in square bracket notation as \([x_0,x_1,x_2,\dots,x_n]\). Further, we use the notation \(\emp\) for the empty list and \(\doubleplus\) for the concatenation of lists, which is associative and has the empty list as its unit. We will use the Agda-like notation of writing \(n :: ns\) for a list for which the first element (the head) is \(n\) and the rest of the list (the tail) is \(ns\). The length of a list will be given by the operation \(\len\).
@@ -3355,7 +3355,9 @@ To ensure these definitions are unique, the following proposition is needed:
 \begin{proposition}
   The wedge sum \(\vee\) is associative and has the singleton context \((x : \star)\) as its left and right unit. Given a context \(\Gamma\), the inclusions satisfy the following unitality properties:
   \[ \inc_{\Gamma} : \Gamma \to \Gamma \vee (x : \star) \equiv \id_\Gamma \qquad \inc_{\Gamma} : \Gamma \to (x : \star) \vee \Gamma \equiv \id_\Gamma \]
-  If we suppose we have three contexts \(\Gamma\), \(\Delta\), and \(\Theta\) then there is a unique way of including each context into \(\Gamma \vee \Delta \vee \Theta\), that is there is a unique substitution \(\Gamma \to \Gamma \vee \Delta \vee \Theta\) which is built from a composite of inclusions and similarly for \(\Delta\) and \(\Theta\).
+  and given substitutions \(\sigma : \arr \Gamma A \Xi\), \(\tau : \arr \Delta A \Xi\), and \(\mu : \arr \Theta A \Xi\) we have:
+  \[ (\sigma \vee \tau) \vee \mu \equiv \sigma \vee (\tau \vee \mu)\]
+  There is a unique way of including each of the contexts \(\Gamma\), \(\Delta\), and \(\Theta\) into \(\Gamma \vee \Delta \vee \Theta\), that is there is a unique substitution \(\Gamma \to \Gamma \vee \Delta \vee \Theta\) which is built from a composite of inclusions and similarly for \(\Delta\) and \(\Theta\).
 \end{proposition}
 \begin{proof}
   The proofs of these are given in \module{Catt.Wedge.Properties}, and are all given by inducting on the right most context. The proof for the right unitality of \(\vee\) is omitted from the formalisation as it is immediate from the definitions.
@@ -3466,47 +3468,141 @@ We will further see in \cref{sec:equiv-trees-dyck} that all pasting diagrams are
 We next introduces \emph{paths}, which can be thought of as the variables in a tree.
 
 \begin{definition}
-  Let \(T\) be a tree. \emph{Paths} \((p,n) : \Path_T\) are a pair of a list of natural numbers \(p\) and a natural number \(n\) such that \(p\) indexes a subtree of \(T^p\) of \(T\) and \(0 \leq n \leq \len(T^p) \).
+  Let \(T\) be a tree. \emph{Paths} \(p : \Path_T\) are non-empty lists of natural numbers of the form \(q \doubleplus [n]\) such that \(q\) indexes a subtree \(T^q\) of \(T\) and \(0 \leq n \leq \len(T^q) \).
 
-  For path \((p, n) : \Path_T\), we obtain a variable of \(\lfloor T \rfloor\) by recursion on \(p\) as follows:
+  For path \(p : \Path_T\), we obtain a variable of \(\lfloor T \rfloor\) by recursion on \(p\) as follows:
   \begin{itemize}
-  \item Let \(T = [T_0,\dots,T_k]\). It is clear that \(\lfloor T \rfloor\) has exactly \(k+2\) variables of dimension \(0\), corresponding to (inclusion of) the first variable of each context \(\Sigma(\lfloor T_i \rfloor)\) as well as the variable corresponding to the inclusion of \(\snd(\Sigma(T_i))\). We then define \(\lfloor (\emp,n) \rfloor\) to be the \(n\)\textsuperscript{th} such variable, indexing from 0.
-  \item Let \((k :: p, n)\) be a path, and \(T = [T_0,\dots,T_k,\dots]\). Then by recursion we have a variable \(\lfloor (p,n) \rfloor\) of \(\lfloor T_k \rfloor\). This gives a variable \(\Sigma(\lfloor (p,n) \rfloor)\) of \(\Sigma(\lfloor T_k \rfloor)\) which can be included into \(\lfloor T \rfloor\) by the appropriate inclusion to get \(\lfloor (k :: p,n) \rfloor\).
+  \item Suppose \(p = [n]\). Let \(T = [T_0,\dots,T_k]\). It is clear that \(\lfloor T \rfloor\) has exactly \(k+2\) variables of dimension \(0\), corresponding to (inclusion of) the first variable of each context \(\Sigma(\lfloor T_i \rfloor)\) as well as the variable corresponding to the inclusion of \(\snd(\Sigma(T_i))\). We then define \(\lfloor [n] \rfloor\) to be the \(n\)\textsuperscript{th} such variable, indexing from 0.
+  \item Let \(p = k :: q\) and \(T = [T_0,\dots,T_k,\dots]\), where \(q\) is a path of \(T_k\). Then by recursion we have a variable \(\lfloor q \rfloor\) of \(\lfloor T_k \rfloor\). This gives a variable \(\Sigma(\lfloor q \rfloor)\) of \(\Sigma(\lfloor T_k \rfloor)\) which can be included into \(\lfloor T \rfloor\) by the appropriate inclusion to get \(\lfloor p \rfloor\).
   \end{itemize}
   We lastly define a \emph{maximal} path of \(T\) to be a path \((p,0)\) such that \(T^p = \emp\). Such paths correspond to locally maximal variables of \(\lfloor T \rfloor\).
 \end{definition}
 
-\todo[inline]{Introduce labellings}
+We now turn our attention to substitutions from a tree context \(\sigma : \lfloor T \rfloor \to \Gamma\). A substitution can be viewed as a function from the variables of its source context to terms of the target context. Therefore a substitution \(\sigma : \lfloor T \rfloor \to \Gamma\) acts on variables of \(\lfloor T \rfloor\). However, we have seen that the more natural notion of a variable in a tree context is a path. This motivates the following definition.
 
-\todo[inline]{indexed by paths}
+\begin{definition}
+  A term-labelling \(L : \arr T A \Gamma\) from a tree \(T\) to context \(\Gamma\) with type \(A : \Type_\Gamma\) is a function \(\Path_T \to \Term_\Gamma\). If \(T = [T_0,\dots,T_n]\), then there are natural projections:
+  \[ L_i : \arr {T_i} {\arr {L[i]} {A} {L[i+1]}} {\Gamma} \]
+  given by \(L_i(p) = L(i :: p)\) for each \(i \in \{0,\dots,n\}\).
+\end{definition}
 
-\todo[inline]{Need for extended substitutions}
+For labellings to play the role of substitutions, a substitution \(\lfloor L \rfloor : \arr {\lfloor T \rfloor} A \Gamma\) will be defined for each term-labelling \(L : \arr T A \Gamma\). A natural way to define this substitution is by induction on the tree \(T\), which finally motivates the use of extended substitutions. Suppose we start with a labelling \(L : \arr {[T_0,\dots,T_n]} \star \Gamma\). To proceed, we will apply the inductive hypothesis to obtain a substitutions:
+\[ \lfloor L_i \rfloor : \arr {\lfloor T_i \rfloor} {\arr {L[i]} {A} {L[i+1]}} {\Gamma} \]
+These substitutions are not regular (non-extended) substitutions, even though \(L\) has associated type \(\star\), and hence corresponds to a regular substitution.
 
-\todo[inline]{Typing for labellings}
+\begin{definition}
+  Let \(L : \arr T A \Gamma\) be a term-labelling. We define the substitution:
+  \[\lfloor L \rfloor : \arr {\lfloor T \rfloor} A \Gamma\]
+  by induction on the tree \(T\) as \(\langle A, L[0] \rangle\) if \(T = \emp\) and:
+  \[ \unrestrict \lfloor L_0 \rfloor \vee \unrestrict \lfloor L_1 \rfloor \vee \cdots \vee \unrestrict \lfloor L_n \rfloor \]
+  if \(T = [T_0, \dots, T_n]\). Although it looks like the \(0\)-dimensional terms in the labelling are not used to generate the substitution, they appear in the types of the labellings \(L_i\), and so appear in the unrestricted substitutions.
+\end{definition}
+
+There are many ways of giving a more syntactic presentation of labellings. Given a tree \(T = [T_0,\dots,T_n]\), a labelling \(L : T \to \Gamma\) can be written as:
+\[ t_0\{L_0\}t_1\{L_1\}t_2\cdots t_n\{L_n\}t_{n+1} \]
+where each \(t_i\) is the term \(L[i]\) and the sublabellings \(L_i\) have been recursively put in this syntactic bracketing format. The syntactic presentation contains all the information of the original labelling, which can be recovered by letting \(L[i] = t_i\) for each \(i\), \(L[i :: p] = L_i(p)\).
+
+As an example, take the tree \(T = [[\emp,\emp], \emp]\) from \cref{fig:tree-example}, and let \(\Gamma = (x : \star), (f : x \to x), (\alpha : f*f \to f)\). Then we can define the labelling \(L : \arr T \star \Gamma\) by:
+\[ L = x\bigl\{f*f\{\alpha\}f\{\id(f)\}f\bigr\}x\{f\}x \]
+which sends the (maximal) paths \([0,0,0]\) to \(\alpha\), \([0,1,0]\) to \(\id(f)\), and \([1,0]\) to \(f\) and has associated substitution:
+\[ \lfloor L \rfloor = \langle x,x,f*f,f,\alpha,f,\id(f),x,f \rangle\]
+The curly brackets notation for labellings is used instead of a typical round bracket notation to avoid clashes with notations that already use round brackets, such as \(\id(f)\).
 
 \todo[inline]{Tree boundary}
 
-\todo[inline]{Tree inclusions}
+\todo[inline]{Wedge sum of trees}
 
 \subsection{Equivalence of trees and Dyck words}
 \label{sec:equiv-trees-dyck}
 
 \todo[inline]{Mapping back from ps-context}
 
-\section{Structured terms}
+\section{Structured syntax}
 \label{sec:structured-terms}
 
-\todo[inline]{Labellings do not nicely compose}
+We now introduce a new class of syntax named \emph{structured syntax}. Terms over tree contexts are commonly built using several of the standard constructions we have seen so far, such as paths, labellings, suspensions, and inclusions. By recording which of these constructions was used in the formation of a term, these terms can compute more usefully, which we will exploit to prove more involved lemmas about insertion in \cref{sec:insertion}. Structured syntax will be our variation on the base syntax of \Catt which records these constructions.
 
-\todo[inline]{Example one: Paths}
+The key problem with the base syntax for \Catt is that term-labellings are difficult to compose. We have so far considered term-labellings of the form \(L : T \to \Gamma\), where \(\Gamma\) is any arbitrary context, but there is no reason a labelling couldn't be of the form \(M : S \to \lfloor T \rfloor\) for trees \(S\) and \(T\). We would then hope to be able to compose these labellings to get a labelling of the form:
+\[ M \bullet L : S \to \Gamma \]
+Such a labelling would need to send a path \(p: \Path_S\) to a term of \(\Gamma\). The only reasonable way forward is to apply \(M\) to \(p\) to get a term of \(\lfloor T \rfloor\), and then applying \(\lfloor L \rfloor\) to this term to get a term of \(\Gamma\). Unfortunately, for an arbitrary term \(t : \Term_{\lfloor T \rfloor}\) and labelling \(L : T \to \Gamma\), the term:
+\[ t \sub {\lfloor L \rfloor}\]
+does not have nice computational properties. We look at two examples:
+\begin{itemize}
+\item Suppose \(t\) was of the form \(\lfloor p \rfloor\) for some path \(p\). We then have:
+  \[ \lfloor p \rfloor \sub {\lfloor L \rfloor} \equiv L(p)\]
+  and would hope that this syntactic equality would fall out immediately, and that the left hand side would reduce to the right hand side in the formalisation. This is not the case however, and proving that such a syntactic equality holds is non trivial.
+\item Suppose \(t \equiv \Sigma(s)\) and \(L = a\{L_1\}b\). Similar to the above case we would hope that the syntactic equality:
+  \[ \Sigma(s) \sub {\lfloor a\{L_1\}b \rfloor} \equiv s \sub {\lfloor L_1 \rfloor}\]
+  holds ``on the nose''. This however is not the case.
+\end{itemize}
 
-\todo[inline]{Example two: suspension}
+Structured terms alleviates these problems by recording that such a term \(t\) was generated from a path or generated using suspension. This allows the application of a labelling to a structured term to use this information, letting, for example, the two syntactic equalities above to hold by definition. If a labelling is the ``correct'' notion of substitution from a tree, then a structured term is the ``correct'' notion of term in a tree.
 
-\todo[inline]{Introduce structured term}
+\begin{definition}
+  Let \(X\) be a member of \(\Ctx \uplus \Tree\), either some context \(\Gamma\) or some tree \(T\). We then define the \emph{structured syntax} classes \(\STerm_X\) of \emph{structured terms}, \(\SType_X\) of \emph{structured types}, and \emph{(\(\STerm\)-)labellings} \(\arr S A X\) for some tree \(S\) and structured type \(A\). These syntax classes for structured terms and types are generated by the following rules:
+  \begin{mathpar}
+    \inferrule{p : \Path_T}{\SPath(p) : \STerm_T}\and
+    \inferrule{s : \STerm_{T_i}\\ 0 \leq i \leq n}{\Inc_i(s) : \STerm_{[T_0,\dots,T_n]}} \and
+    \inferrule{S : \Tree\\ A : \SType_S \\ L : \arr S B X}{\SCoh S A L : \STerm_X}\and
+    \inferrule{t : \Term_\Gamma}{\SOther(t) : \STerm_\Gamma} \\
+    \inferrule{ }{\star : \SType_X}\and
+    \inferrule{s : \STerm_X \\ A : \SType_X \\ t: \STerm_X}{\arr s A t : \SType_X}
+  \end{mathpar}
+  Labellings \(L : \arr S A X\) are defined as functions \(\Path_S \to \STerm_X\), similarly to term-labellings in \cref{sec:tree-contexts}. We note that the syntax for structured types is shared with the syntax for \Catt types, and will be careful to make it clear which syntax we are using.
+\end{definition}
 
-\todo[inline]{How to convert to terms}
+Each piece of structured syntax can be converted back into the base syntax of \Catt, using many of the constructions already introduced.
 
-\todo[inline]{Preliminary lemmas}
+\begin{definition}
+  Suppose \(X : \Ctx \uplus \Tree\). Define \(\lfloor X \rfloor\) to be \(\Gamma\) if \(X = \Gamma\) for some context \(\Gamma\) or \(\lfloor T \rfloor\) if \(X = T\) for some tree \(T\). Now, for a structured term \(s : \STerm_X\), a structured type \(A : \SType_X\), or a labelling \(L : \arr S B X\), we define:
+  \[ \lfloor s \rfloor : \Term_{\lfloor X \rfloor} \qquad \lfloor A \rfloor : \Type_{\lfloor X \rfloor} \qquad \lfloor L \rfloor : \arr {\lfloor S \rfloor} {\lfloor B \rfloor} {\lfloor X \rfloor} \]
+  by the equations:
+  \begin{align*}
+    \lfloor \SPath(p) \rfloor &= \lfloor p \rfloor\\
+    \lfloor \Inc_i(s) \rfloor &= \Sigma(\lfloor s \rfloor) \sub {\inc_{\lfloor T_i \rfloor}}&\text{if }s : \STerm_{[T_0,\dots,T_n]}\\
+    \lfloor \SCoh S A L \rfloor &= \Coh {\lfloor S \rfloor} {\lfloor A \rfloor} {\id_{\lfloor S \rfloor}} \sub {\lfloor L \rfloor}\\
+    \lfloor \SOther(t) \rfloor &= t\\[10pt]
+    \lfloor \star \rfloor &= \star\\
+    \lfloor \arr s A t \rfloor &= \arr {\lfloor s \rfloor} {\lfloor A \rfloor} {\lfloor t \rfloor}
+  \end{align*}
+  and by defining \(\lfloor L \rfloor\) similarly to term labellings except \(\lfloor L \rfloor = \langle \lfloor A \rfloor, \lfloor L[0] \rfloor \rangle\) for labellings \(L : \arr {\emp} {A} {X}\) from the singleton tree.
+\end{definition}
+
+For any tree \(T\), there is an \emph{identity labelling} \(\id_T\) given by:
+\[ \id_T(p) = \SPath(p)\]
+The function \func{Catt.Tree.Structured.Properties}{id-label-to-sub} in the formalisation (see \module{Catt.Tree.Structured.Properties}) shows that:
+\[\lfloor \id_T \rfloor = \id_{\lfloor T \rfloor}\]
+The main motivation for introducing structured syntax was to be able to define a composition of labellings, which we do now by defining the application of a labelling to a structured term, structured type, or another labelling.
+
+\begin{definition}
+  Let \(L : \arr T B X\) be a labelling (with \(X : \Ctx \uplus \Tree\)). We define the application of \(L\) to a structured term \(s : \STerm_{T}\), a structured type \(A : \SType_T\), and a labelling \(M : \arr S A T\) to give:
+  \[ s \sub L : \STerm_X \qquad A \sub L : \SType_X \qquad M \bullet L : \arr S {A \sub L} X\]
+  These definitions are given by mutual recursion:
+  \begin{align*}
+    \SPath(p) \sub L &= L(p)\\
+    \Inc_i(s) \sub L &= s \sub {L_i}\\
+    \SCoh S A M \sub L &= \SCoh S A {M \bullet L}\\
+    \SOther(t) \sub L &= t \sub {\lfloor L \rfloor}\\[10pt]
+    \star \sub L &= B\\
+    (\arr s A t) \sub L &= \arr {s \sub L} {A \sub L} {t \sub L}\\[10pt]
+    (M \bullet L)(p) &= M(p) \sub L
+  \end{align*}
+  and thus satisfy the computational properties given at the start of the section.
+\end{definition}
+
+\todo[inline]{Main lemma (label application is sub application)}
+\todo[inline]{Preliminary lemmas (assoc, unitality) follows from main theorem}
+
+\subsection{Typing and equality}
+\label{sec:typing-struct-terms}
+
+\todo[inline]{Inherit typing from terms}
+
+\todo[inline]{point to alternative label typing}
+
+\todo[inline]{Support for structured terms}
+
+\todo[inline]{Disc removal and endocoherence removal for standard terms}
 
 \subsection{Standard coherences}
 \label{sec:standard-coherences}
@@ -3520,17 +3616,6 @@ We next introduces \emph{paths}, which can be thought of as the variables in a t
 \todo[inline]{Discs as structured terms}
 
 \todo[inline]{Standard label}
-
-\subsection{Typing and equality}
-\label{sec:typing-struct-terms}
-
-\todo[inline]{Inherit typing from terms}
-
-\todo[inline]{point to alternative label typing}
-
-\todo[inline]{Support for structured terms}
-
-\todo[inline]{Disc removal and endocoherence removal for standard terms}
 
 \section{Insertion}
 \label{sec:insertion}
