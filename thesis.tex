@@ -1471,7 +1471,7 @@ Therefore, four syntactic equality relations are defined mutually inductively on
 \item Syntactic equality is decidable.
 \item Syntactic equality is propositional, there is at most one proof of \(s \equiv t\).
 \item Functoriality of suspension.
-\item Interaction of weakening with substitution application. We have \(\wk(s) \sub \langle \sigma , t \rangle \equiv s \sub \sigma\) and \(s \sub {\wk(\sigma)} \equiv \wk(s \sub \sigma)\) and equivalent lemmas for the application of substitution to types and substitutions.
+\item Interaction of weakening with substitution application. We have \(\wk(s) \sub {\langle \sigma , t \rangle} \equiv s \sub \sigma\) and \(s \sub {\wk(\sigma)} \equiv \wk(s \sub \sigma)\) and equivalent lemmas for the application of substitution to types and substitutions.
 \end{itemize}
 It also contains the following proposition.
 
@@ -3327,6 +3327,7 @@ A similar colimit can be formed in the syntactic category of \Cattr. Leveraging 
 We firstly prove some basic properties required for \(\Gamma \vee \Delta\) to be the colimit of \cref{diag:wedge-colimit}.
 
 \begin{lemma}
+  \label{lem:wedge-sum-prop}
   Let \(\Gamma\) and \(\Delta\) be non-empty contexts. Then:
   \[ \inc_{\Gamma} \vee \inc_{\Delta} \equiv \id_{\Gamma \vee \Delta} \]
   Further, the following equations hold:
@@ -3589,6 +3590,46 @@ The main motivation for introducing structured syntax was to be able to define a
   \end{align*}
   and thus satisfy the computational properties given at the start of the section.
 \end{definition}
+
+The main theorem of this section is that the application of a labelling to a structured term is compatible with the map from structured syntax to \Catt syntax. We begin its proof with the following lemma:
+
+\begin{theorem}
+  For any labelling \(L : \arr T B X\) and structured term \(s : \STerm_T\), structured type \(A : \SType_T\), or labelling \(M : \arr S A T\), we have:
+  \[ \lfloor s \sub L \rfloor \equiv \lfloor s \rfloor \sub {\lfloor L \rfloor} \qquad \lfloor A \sub L \rfloor \equiv \lfloor A \rfloor \sub {\lfloor L \rfloor} \qquad \lfloor M \bullet L \rfloor \equiv \lfloor M \rfloor \bullet \lfloor L \rfloor\]
+\end{theorem}
+\begin{proof}
+  We proceed by proving all statements by mutual induction. Suppose \(s : \STerm_T\) is a structured term. We split on the form of \(s\):
+  \begin{itemize}
+  \item Suppose \(s\) is of the form \(\SCoh S A M\). Then \(s \sub L\) is \(\SCoh S A {M \bullet L}\) and so the required statement follows from the inductive hypothesis for labellings.
+  \item Suppose \(s\) is of the form \(\SOther(t)\). Then \(\lfloor s \sub L \rfloor \equiv \lfloor \SOther (t \sub {\lfloor L \rfloor}) \rfloor \equiv t \sub {\lfloor L \rfloor} \equiv \lfloor s \rfloor \sub {\lfloor L \rfloor}\).
+  \item Suppose \(T = [T_0,\dots, T_n]\) and \(s\) is of the form \(\Inc_i(t)\). Then:
+    \begin{align*}
+      \lfloor \Inc_i(t) \rfloor \sub {\lfloor L \rfloor} &\equiv \Sigma(t)\sub {\inc_{\lfloor T_i \rfloor}} \sub {\unrestrict \lfloor L_0 \rfloor \vee \cdots \vee \unrestrict \lfloor L_n \rfloor}\\
+                                                         &\equiv \Sigma(t)\sub {\inc_{\lfloor T_i \rfloor} \bullet (\unrestrict \lfloor L_0 \rfloor \vee \cdots \vee \unrestrict \lfloor L_n \rfloor)}\\
+                                                         &\equiv \Sigma(t) \sub {\unrestrict \lfloor L_i \rfloor} &\text{by \cref{lem:wedge-sum-prop}}\\
+                                                         &\equiv \lfloor t \rfloor \sub {\lfloor L_i \rfloor}\\
+                                                         &\equiv \lfloor t \sub {L_i} \rfloor &\text{by inductive hypothesis}\\
+                                                         &\equiv \lfloor \Inc_i(t) \sub L \rfloor
+    \end{align*}
+  \item Suppose \(s\) is of the form \(\SPath(p)\). Then if \(\lfloor p \rfloor\) is not a \(0\)-dimensional variable, then an argument similar to the preceding case can be made. If instead \(\lfloor p \rfloor\) is of the form \([k]\) and \(T = [T_0,\dots,T_n]\) then first suppose that \(k < n + 1\) such that \(\lfloor [k] \rfloor \equiv \fst(\lfloor T_k \rfloor) \sub {\inc_{\lfloor T_k \rfloor}}\). Then:
+    \begin{align*}
+      \lfloor [k] \rfloor \lfloor L \rfloor &\equiv \fst(\lfloor T_k \rfloor) \sub {\inc_{\lfloor T_k \rfloor}} \sub {\lfloor \unrestrict \lfloor L_0 \rfloor \vee \cdots \vee \unrestrict \lfloor L_n \rfloor \rfloor}\\
+                                            &\equiv \fst(\lfloor T_k \rfloor) \sub {\unrestrict \lfloor L_k \rfloor}\\
+      &= \lfloor L[k] \rfloor
+    \end{align*}
+    where the last equality follows from the labelling \(L_k\) having type \(\arr {T_i} {\arr {\lfloor L[k] \rfloor} {B} {\lfloor L[k+1] \rfloor}} X\). The case where \(k = n+1\) is similar to above using \(\snd(T_n)\) instead of \(\fst(T_k)\) (as there is no tree \(T_k\) in this case).
+  \end{itemize}
+
+  The case for structured types follows by a simple induction using the case for terms. We now consider the case for a label \(M : \arr S A T\). Suppose \(S = [S_0,\dots,S_n]\). Then:
+  \begin{align*}
+    \lfloor M \rfloor \bullet \lfloor L \rfloor &\equiv \left( \bigvee_i \unrestrict \lfloor M_i \rfloor  \right) \bullet \lfloor L \rfloor\\
+                                                &\equiv \bigvee_i \unrestrict \lfloor M_i \rfloor \bullet \lfloor L \rfloor&\text{by \cref{lem:wedge-sum-prop}}\\
+    &\equiv \bigvee_i \unrestrict \lfloor M_i \rfloor \bullet \lfloor L \rfloor\\
+                                                &\equiv \bigvee_i \unrestrict \lfloor M_i \bullet L \rfloor&\text{by inductive hypothesis}\\
+    &\equiv \lfloor M \bullet L \rfloor
+  \end{align*}
+  with the last line following from \((M \bullet L)_i\) and \(M_i \bullet L\) being the same labelling. This concludes all cases.
+\end{proof}
 
 \todo[inline]{Main lemma (label application is sub application)}
 \todo[inline]{Preliminary lemmas (assoc, unitality) follows from main theorem}
