@@ -3760,9 +3760,10 @@ From this typing judgement for labellings, one can obtain a derivation of the ty
 It can be shown that the reverse implication also holds: if \(\lfloor \U \rfloor \vdash \lfloor L \rfloor : \lfloor T \rfloor\) then \(\U \vdash L : T\). This is done in the formalisation module \module{Catt.Tree.Structured.Typing.Properties} by function \func{Catt.Tree.Structured.Typing.Properties}{Label-Ty}. By these results, many of the properties enjoyed by the typing judgements in \Cattr with a tame rule set \(\mathcal{R}\) also apply to the typing judgements for structured terms.
 
 The module \module{Catt.Tree.Structured.Typing.Properties} also introduces many functions for constructing the typing judgements for structured syntax. One such function is \func{Catt.Tree.Structured.Typing.Properties}{TySCoh}, which represents the admissibility of the following rule:
-\begin{mathpar}
+\begin{equation}
+  \label[rule]{rule:scoh}
   \inferrule{S \vdash \arr s A t \\ \U \vdash L : S \\ \U \vdash \ty(L) \\ (\lfloor S \rfloor, \Supp(s), \Supp(t)) \in \mathcal{O}}{\U \vdash \SCoh S {\arr s A t} L}
-\end{mathpar}
+\end{equation}
 In keeping with the theme of this section, one could define \(\Supp(s)\) as \(\Supp(\lfloor s \rfloor)\) for a structured term \(s : \STerm_\U\). However, we choose not to do this, instead giving a definition of support for structured syntax that leverages the extra information available in the syntax.
 
 \begin{definition}
@@ -3857,10 +3858,11 @@ In \cref{sec:background}, the source and target variable sets were defined to be
 This definition also allows simple inductive proofs that the boundary inclusions satisfy the globularity conditions, which we state in the following proposition. These proofs are given in the formalisation module \module{Catt.Tree.Boundary.Properties}.
 
 \begin{proposition}
-  Let \(m \leq n\) and let \(T\) be a tree. Then:
-  \[ \bound m {\bound n T} \equiv \bound m T\]
+  \label{prop:bdry-glob}
+  Let \(n \leq m\) and let \(T\) be a tree. Then:
+  \[ \bound n {\bound m T} \equiv \bound n T\]
   Further, for \(\epsilon, \omega \in \{-,+\}\) we have:
-  \[ \incbd m \epsilon {\bound n T} \bullet \incbd n \omega T \equiv \incbd m \epsilon T \]
+  \[ \incbd n \epsilon {\bound m T} \bullet \incbd m \omega T \equiv \incbd n \epsilon T \]
   If instead \(n \geq \dep(T)\), then \(\bound n T \equiv T\) and \(\incbd n \epsilon T \equiv \id_T\).
 \end{proposition}
 
@@ -3884,7 +3886,7 @@ At the end of \cref{sec:background} it was stated that \(\Sigma(\stdtm T n) \equ
     \stdtm T n &=
                  \begin{cases*}
                    \SPath([0])&if \(T = \emp\) and \(n = 0\)\\
-                   \Inc_0(\stdtm {T_1} {n-1})&if \(n \neq 0\) and \(T = [T_1]\)\\
+                   \Inc_0(\stdtm {T_0} {n-1})&if \(n \neq 0\) and \(T = [T_0]\)\\
                    \stdcoh T n&\text{otherwise}
                  \end{cases*}
   \end{align*}
@@ -3894,18 +3896,19 @@ At the end of \cref{sec:background} it was stated that \(\Sigma(\stdtm T n) \equ
 We can immediately show that these standard construct commute with suspension.
 
 \begin{lemma}
+  \label{lem:std-susp}
   For tree \(T\) and \(n \in \mathbb{N}\), \(\Sigma(\stdty T n) \equiv \stdty {\Sigma(T)} {n+1}\) and \(\Sigma(\stdcoh T n) \equiv \stdcoh {\Sigma(T)} {n+1}\).
 \end{lemma}
 \begin{proof}
   We first consider the standard type. The case for \(n = 0\) follows immediately, so we let \(n > 0\). We then get for \(\epsilon \in \{-,+\}\):
   \begin{align*}
-    \Sigma(\stdtm {\bound {n-1} T} {n-1} \sub {\incbd {n-1} \epsilon T}) &\equiv \Sigma(\stdtm {\bound {n-1} T} {n-1}) \sub {\Sigma(\incbd{n-1} \epsilon T)}&\text{by functoriality of suspension}\\
+    \Sigma\left(\stdtm {\bound {n-1} T} {n-1} \sub {\incbd {n-1} \epsilon T}\right) &\equiv \Sigma(\stdtm {\bound {n-1} T} {n-1}) \sub {\Sigma(\incbd{n-1} \epsilon T)}&\text{by functoriality of suspension}\\
                                                                          &\equiv \stdtm {\Sigma(\bound {n-1} T)} {n} \sub {\Sigma(\incbd{n-1} \epsilon T)}\\
     &\equiv \stdtm {\bound n {\Sigma(T)}} n \sub {\incbd n \epsilon {\Sigma(T)}}
   \end{align*}
   By inductive hypothesis \(\Sigma(\stdty T {n-1}) \equiv \stdty {\Sigma(T)} n\) and so
   \begin{align*}
-    \Sigma(\stdty T n) &\equiv \arr {\Sigma(\stdtm {\bound {n-1} T} {n-1} \sub {\incbd {n-1} - T})} {\Sigma(\stdty T {n-1})} {\Sigma(\stdtm {\bound {n-1} T} {n-1} \sub {\incbd {n-1} + T})}\\
+    \Sigma(\stdty T n) &\equiv \arr {\Sigma\left(\stdtm {\bound {n-1} T} {n-1} \sub {\incbd {n-1} - T}\right)} {\Sigma(\stdty T {n-1})} {\Sigma\left(\stdtm {\bound {n-1} T} {n-1} \sub {\incbd {n-1} + T}\right)}\\
                        &\equiv \arr {\stdtm {\bound n {\Sigma(T)}} {n} \sub {\incbd n - {\Sigma(T)}}} {\stdty {\Sigma(T)} {n}} {\stdtm {\bound n {\Sigma(T)}} {n} \sub {\incbd n + {\Sigma(T)}}}\\
     &\equiv \stdty {\Sigma(T)} {n + 1}
   \end{align*}
@@ -3916,19 +3919,145 @@ We can immediately show that these standard construct commute with suspension.
   following from the case for types.
 \end{proof}
 
-\todo[inline]{Standard type globularity lem}
+To prove that the standard constructions are well typed, we give a couple of lemmas. The first concerns the support of the standard term and standard coherence.
 
-\todo[inline]{Support for standard}
+\begin{lemma}
+  \label{lem:std-supp}
+  For a tree \(T\), dimension \(n \in \mathbb{N}\), and \(\epsilon \in \{-,+\}\), we have:
+  \[ \Supp\left(\stdtm {\bound n T} n \sub {\incbd n \epsilon T}\right) = \bdry n \epsilon T \qquad \Supp\left(\stdcoh {\bound n T} n \sub {\incbd n \epsilon T}\right) = \bdry n \epsilon T\]
+\end{lemma}
+\begin{proof}
+  The case for coherences follows from the definition and the equality
+  \[\Supp(\incbd n \epsilon T) = \bdry n \epsilon T\]
+  For the standard term, it suffices to consider cases where the standard term and standard coherence are not equal. If \(n = 0\), then \(\bound n T \equiv \emp\), and it suffices to prove that \(\Supp([m]) = \FV(\lfloor [m] \rfloor)\), but this is immediate because \(\Supp([m]) = \Supp(\lfloor [m] \rfloor)\) and \(\lfloor [m] \rfloor\) is a variable of type \(\star\) so its support is equal to its free variables.
 
-\todo[inline]{Typing for standard}
+  We therefore consider the case where \(n > 0\) and \(\len(\bound n T) = 1\). The only case where this happens is if \(\len(T) = 1\) too, so assume \(T \equiv [T_0]\)
+  \begin{align*}
+    \Supp\left(\stdtm {\bound n T} n \sub {\incbd n \epsilon T} \right) &= \Supp\left(\stdtm {\Sigma(\bound {n-1} {T_0})} n \sub {\Sigma\left(\incbd {n-1} \epsilon {T_0}\right)}  \right)\\
+                                                                        &= \Supp\left(\Sigma\left( \stdtm {\bound {n-1} {T_0}} {n - 1} \right) \sub {\Sigma\left(\incbd {n-1} \epsilon {T_0}\right)}  \right)\\
+                                                                        &= \Supp\left(\Sigma\left( \stdtm {\bound {n-1} {T_0}} {n - 1} \sub {\incbd {n-1} \epsilon {T_0}} \right) \right)\\
+                                                                        &= \Sigma\left(\Supp\left( \stdtm {\bound {n-1} {T_0}} {n - 1} \sub {\incbd {n-1} \epsilon {T_0}} \right) \right)\\
+                                                                        &= \Sigma\left( \bdry {n-1} \epsilon {T_0} \right)\\
+                       &= \bdry n \epsilon T
+  \end{align*}
+  as required.
+\end{proof}
 
-\todo[inline]{Discs as structured terms}
+The second lemma gives a globularity condition for the standard type.
 
-\todo[inline]{Standard label}
+\begin{lemma}
+  \label{lem:std-type-glob}
+  Let \(T\) be a tree. Then:
+  \[ \stdty T n \equiv \stdty {\bound m T} n \sub {\incbd m \epsilon T}\]
+  for \(n \leq m\) and \(\epsilon \in \{-,+\}\).
+\end{lemma}
+\begin{proof}
+  We induct on \(n\). If \(n = 0\) then both sides of the equation are the type \(\star\). We therefore consider the case for \(n + 1\) and so we must prove:
+  \begin{align*}
+    \stdty T {n+1} &\equiv \arr {\stdtm {\bound n T} n \sub {\incbd n - T}} {\stdty T k} {\stdtm {\bound n T} n \sub {\incbd n + T}}\\
+               &\equiv  \arr {\stdtm {\bound n {\bound m T}} n \sub {\incbd n - {\bound m T}} \sub {\incbd m \epsilon T}} {\stdty {\bound m T} n \sub {\incbd m \epsilon T}} {\stdtm {\bound n {\bound m T}} n \sub {\incbd n + {\bound m T}} \sub {\incbd m \epsilon T}}\\
+    &\equiv \stdty {\bound m T} {n+1} \sub {\incbd m \epsilon T}
+  \end{align*}
+  The equality \({\stdty T n} \equiv {\stdty {\bound m T} n \sub {\incbd m \epsilon T}}\) follows by inductive hypothesis. Further, for \(\omega \in \{-,+\}\) we have by \cref{prop:bdry-glob}:
+  \begin{align*}
+    \stdtm {\bound n {\bound m T}} n \sub {\incbd n \omega {\bound m T}} \sub {\incbd n \epsilon T} &\equiv \stdtm {\bound n {\bound m T}} n \sub {\incbd n \omega {\bound m T} \bullet \incbd m \epsilon T} \\
+    &\equiv \stdtm {\bound n T} n \sub {\incbd n - T}
+  \end{align*}
+  which completes the proof.
+\end{proof}
 
-\todo[inline]{Disc removal and endocoherence removal for standard terms}
+We can now finally state and prove the typing properties of standard constructions.
 
-\todo[inline]{Term is coherence under disc removal}
+\begin{proposition}
+  Suppose that \(\mathcal{O}\) contains the standard operations. Then the following rules are admissible:
+  \begin{mathpar}
+    \inferrule{T : \Tree\\ n \in \mathbb{N}}{T \vdash \stdty T n}\and
+    \inferrule{T : \Tree \\ n \neq 0\\ n \geq \dep(T)}{T \vdash \stdcoh T n : \stdty T n}\and
+    \inferrule{T : \Tree \\ n \geq \dep(T)}{T \vdash \stdtm T n : \stdty T n}
+  \end{mathpar}
+\end{proposition}
+\begin{proof}
+  We prove that all three rules are admissible by mutual induction. First consider the cases for types. The case when \(n = 0\) is trivial, so we consider the case for \(n + 1\). We need to show that:
+  \[ T \vdash \arr {\stdtm {\bound n T} n \sub {\incbd n - T}} {\stdty n T} {\stdtm {\bound n T} n \sub {\incbd n + T}}\]
+  The inductive hypothesis on types gives that \(T \vdash \stdty n T\) and so we must show that:
+  \[ T \vdash {\stdtm {\bound n T} n \sub {\incbd n \epsilon T}} : \stdty n T\]
+  for \(\epsilon \in \{-,+\}\). By inductive hypothesis for terms, we have \(\bound n T \vdash \stdtm {\bound n T} n : \stdty {\bound n T} n\) as we have \(\dep(\bound n T) \leq n\). As \(T \vdash \incbd n \epsilon T : \bound n T\) we have that:
+  \[ T \vdash {\stdtm {\bound n T} n \sub {\incbd n \epsilon T}} : \stdty {\bound n T} n \sub {\incbd n \epsilon T} \]
+  and so by \cref{lem:std-type-glob}, this case is complete.
+
+  For the standard coherence, we apply \cref{rule:scoh}, using the inductive hypothesis for types. To show that \((T, \src(\stdty T n), \tgt(\stdty T n)) \in \mathcal{O}\), we apply \cref{lem:std-supp}.
+
+  For the standard term, like previous proofs it is sufficient to consider the cases where it is defined differently to the standard coherence. For \(n = 0\) we must have \(T = \emp\) by the condition on the depth of \(T\). Hence \(\stdtm T n \equiv [0]\) which is well-formed as has type \(\star \equiv \stdty T n\) as required.
+
+  We now consider \(\stdtm {\Sigma(T)} {n+1} \equiv \Sigma (\stdtm T n)\). By inductive hypothesis on dimension, \(T \vdash \stdtm T n : \stdty T n\) and so we immediately have that:
+  \[ \Sigma(T) \vdash \stdtm {\Sigma(T)} {n + 1} : \Sigma(\stdty T n)\]
+  and so the proof is complete by \cref{lem:std-supp}.
+\end{proof}
+
+The equality relations we have seen so far make heavy use of disc contexts and associated terms and types. We therefore pause to consider the form of these as structured syntax and to relate them to the standard constructions presented in this section.
+
+All disc contexts are the result of applying iterated suspensions to the singleton context, and so it follows that disc contexts correspond exactly to linear trees. By an abuse of notation we write:
+\[ D^n = \Sigma^n(\emp)\]
+As we further have that \(\Sigma(U^n) \equiv U^{n+1}\) for the sphere type \(U^n\), it can be proved for a simple induction that:
+\[U^n \equiv \lfloor \stdty {D^n} n \rfloor\]
+As we have already noted, the maximal dimension term \(d_n : \Term_{D^n}\) is given by \(\lfloor \stdtm {D^n} n \rfloor\). It is also equal to the unique maximal path, \(p^n = \Sigma^n[0]\), which is the list containing \(n+1\) zeros.
+
+The only missing construction is an equivalent for the substitution from a disc context. From a structured term \(s : \STerm_\U\) of type \(A : \SType_\U\), there should be a labelling \(\{A,s\}\) from \(D^n\) to \(\U\). This however proves more challenging to define as trees and types have opposite inductive structure. For a labelling, it is natural to specify the lowest dimensional terms first and fill in higher dimensional terms by induction, though when deconstruction a type, we first receive the highest dimensional terms, only receiving the lower dimensional terms by further deconstructing the type.
+
+To define the labelling \(\{A,t\}\), we define the extension of labelling from a linear tree, which allows us to add higher dimensional terms to the labelling, and use this to define the labelling from a linear tree.
+
+\begin{definition}
+  Let \(L : D^n \to \U\) be a labelling from a linear tree, and let \(s,t : \STerm_\U\) be structured terms. The \emph{extension} of \(L\) by \(s\) and \(t\), \(\ext(L,s,t)\), is defined inductively on \(n\) by:
+  \begin{equation*}
+    \ext(L,s,t) =
+    \begin{cases*}
+      L[0]\,\{t\}\,s &if \(n = 0\)\\
+      L[0]\,\{\ext(L_0,s,t)\}\,L[1]&otherwise
+    \end{cases*}
+  \end{equation*}
+  We then define the labelling \(\{A,t\}\) by induction on \(A\):
+  \[ \{\star,t\} = (p \mapsto t) \qquad \{\arr s A t, u\} = \ext(\{A,s\},t,u)\]
+  Finally, given a tree \(T\), we define the \emph{standard labelling} \(\stdlbl T n : D^n \to T\) by \(\stdlbl T n = \{\stdty T n, \stdcoh T n\}\).
+\end{definition}
+
+These constructions all satisfy the expected typing judgements. More precisely the following inference rules are admissible:
+\begin{mathpar}
+  \inferrule{\U \vdash L : D^n\\ \U \vdash s : \stdty {D^n} n \sub L\\ \U \vdash t : \arr {p^n \sub L} {\stdty {D^n} n \sub L} {s}}{\U \vdash \ext(L,s,t) : D^{n+1}}\\
+  \inferrule{\U \vdash A \\ \U \vdash t : A}{\U \vdash \{A,t\} : D^{\dim(A)}}\and
+  \inferrule{T : \Tree \\ n \geq \dep(T)}{T \vdash \stdlbl T n : D^n}
+\end{mathpar}
+The admissibility of the above rules is routine to verify.
+
+Using these construction, we can recover structured term definitions of the unary composite of a (structured) term \(t\) of type \(A\) of dimension \(n\) as \( \stdcoh {D^n} n \sub {\{A,t\}}\) and can define the identity of the same term \(t\) as \(\stdcoh {D^{n-1}} n \sub {\{A,t\}}\). Therefore, the rules for disc removal and endo-coherence removal can be rephrased in terms of structured syntax to get the following rules:
+\begin{mathpar}
+  \inferrule{\U : \Ctx \uplus \Tree\\ \U \vdash A \\ \U \vdash t : A \\ \dim(A) = n > 0}{ \U \vdash \stdcoh {D^n} n \sub {\{A,t\}} = t}\textsc{dr'}\\
+  \inferrule{\U : \Ctx \uplus \Tree\\ T : \Tree \\ L : \arr S \star \U\\ n = \dim(A)\\\\ T \vdash A \\ T \vdash s : A \\ \Supp(s) = \Var(T) \\ \U \vdash L : T}{\U \vdash \SCoh T {\arr s A s} L = \stdcoh {D^n} n \sub { \{A, s\} \bullet L}}\textsc{ecr'}
+\end{mathpar}
+which are admissible if the equality rule set \(\mathcal{R}\) has disc removal or endo-coherence removal respectively.
+
+We end this section with two further results that can be proven in the presence of disc removal and endo-coherence removal. The first states that disc removal is sufficient (and necessary) to unify standard coherences and standard terms.
+
+\begin{theorem}
+  The tame equality rule set \(\mathcal{R}\) has disc removal if and only if the rule:
+  \begin{mathpar}
+    \inferrule{T : \Tree \\ n \in \mathbb{N}\\ n \geq \dep(T) > 0}{T \vdash \stdcoh T n = \stdtm T n}
+  \end{mathpar}
+  is admissible.
+ \end{theorem}
+\begin{proof}
+  We note that \(\stdcoh T n\) and \(\stdtm T n\) only differ when \(T = D^n\). If \(\mathcal{R}\) has disc removal, then for each \(n \neq 0\) we have \(\stdcoh {D^n} n = \SPath(p^n) \equiv \stdtm {D^n} n\). Conversely, if \(\stdcoh T n = \stdtm T n\) when \(n > 0\) or \(\dep(T) > 0\), then \(\stdcoh {D^n} n = \stdtm {D^n} n\) for any \(n > 0\). Then as \(\mathcal{R}\) is tame, we can apply the substitution \(\{A,t\}\) to both sides of the equation to get the statement of disc removal.
+\end{proof}
+
+Lastly, under the presence of both disc removal and endo-coherence removal, the standard terms \(\stdtm T n\) for which \(n > \dep(T)\) can be shown to be equal to identities.
+
+\begin{theorem}
+  Suppose the equality rule set \(\mathcal{R}\) has both endo-coherence removal and disc removal. Let \(T\) be a tree and suppose \(n > \dep(T)\). Then:
+  \[ T \vdash \stdtm T n = \stdcoh {D^n} {n+1} \sub {\{\stdty T n, \stdtm T n\}} \]
+\end{theorem}
+\todo[inline]{Proof of this}
+\todo[inline]{remove standard label maybe}
+
+Due to these two theorems, every standard term \(\std T n\) with \(n \geq \dep(T)\) is equal to either the unique variable of the singleton context (when \(n = \dep(T) = 0\)), a standard composite (when \(n = \dep(T) > 0\)) or an identity (when \(n > \dep(T)\)), and hence completely classifying the well-formed standard terms.
 
 \section{Insertion}
 \label{sec:insertion}
