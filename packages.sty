@@ -175,10 +175,12 @@ backrefstyle=two]%
     add to width=1.1mm,
     enlarge left by=-0.6mm,
     before upper={\setlength{\parindent}{\normalparindent}\setlength{\parskip}{\normalparskip}}
-}}
+  }}
+% Xelatex seems to add more space for some reason
+\usepackage{ifxetex}
 \newcommand{\setenvcolor}[2]{%
     \tcolorboxenvironment{#1}{shadedenv={#2}}
-    \addtotheorempreheadhook[#1]{\tikzcdset{background color=#2}}
+    \addtotheorempreheadhook[#1]{\tikzcdset{background color=#2}\ifxetex{\vspace{-2.5mm}}\fi}
 }
 %
 \setenvcolor{theorem}{ShadeOfPurple}

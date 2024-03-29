@@ -1225,23 +1225,23 @@ can be inferred, and so we may write \(\id(t)\) or \(\{t\}\) when the type \(A\)
 The composite and identity above form part of a more general collection of coherences, which we call \emph{standard coherences}.
 
 \begin{definition}
-  Given a pasting diagram \(\Delta\), we mutually define for all \(n\) the \emph{standard coherence} \(\mathcal{C}_\Delta^n\), the \emph{standard term} \(\mathcal{T}_\Delta^n\), and the \emph{standard type} \(\mathcal{U}_\Delta^n\):
+  Given a pasting diagram \(\Delta\), we mutually define for all \(n\) the \emph{standard coherence} \(\stdcoh\Delta n\), the \emph{standard term} \(\stdtm \Delta n\), and the \emph{standard type} \(\stdty \Delta n\):
   \begin{alignat*}{2}
-    &\mathcal{C}_\Delta^n &&= \Coh \Delta {\mathcal{U}_\Delta^n} {\id_\Delta}\\
-    &\mathcal{T}_\Delta^n &&=
+    &\stdcoh \Delta n &&= \Coh \Delta {\stdty \Delta n} {\id_\Delta}\\
+    &\stdtm \Delta n &&=
                            \begin{cases}
                              d^n &\text{when \(\Delta\) is the disc \(D^n\)}\\
-                             \mathcal{C}_\Delta^n &\text{otherwise}
+                             \stdcoh \Delta n &\text{otherwise}
                            \end{cases}\\
-    &\mathcal{U}_\Delta^0 &&= \star\\
-    &\mathcal{U}_\Delta^{n+1} &&= \arr {\mathcal{T}_{\bound n \Delta}^n \sub {\incbd n - \Delta}} {\mathcal{U}_\Delta^n} {\mathcal{T}_{\bound n \Delta}^n \sub {\incbd n + \Delta}}
+    &\stdty \Delta 0 &&= \star\\
+    &\stdty \Delta {n+1} &&= \arr {\stdtm {\bound n \Delta} n \sub {\incbd n - \Delta}} {\stdty \Delta n} {\stdtm {\bound n \Delta} n \sub {\incbd n + \Delta}}
   \end{alignat*}
   The standard type takes the standard term over each boundary of \(\Delta\), includes these all back into \(\Delta\) and assembles them into a type. When \(n = \dim(\Delta)\) we will refer to the standard coherence as the \emph{standard composite}.
 \end{definition}
 
-Intuitively, the standard coherence \(\mathcal{C}_\Delta^n\) is the canonical composite in dimension \(n\) of the pasting diagram \(\Delta\). To give this a type is needed to form the coherence, for which the standard type \(\mathcal{U}_\Delta^n\) is used. The standard term \(\mathcal{T}_\Delta^n\) is used as a variant of the standard coherence which special cases disc contexts. This avoids the standard type containing unary composites and allows standard composites (of non disc-contexts) to be normal forms of the reduction schemes that will be described in \cref{cha:cattstrict}.
+Intuitively, the standard coherence \(\stdcoh \Delta n\) is the canonical composite in dimension \(n\) of the pasting diagram \(\Delta\). To give this a type is needed to form the coherence, for which the standard type \(\stdty \Delta n\) is used. The standard term \(\stdtm \Delta n\) is used as a variant of the standard coherence which special cases disc contexts. This avoids the standard type containing unary composites and allows standard composites (of non disc-contexts) to be normal forms of the reduction schemes that will be described in \cref{cha:cattstrict}.
 
-It is immediate that the composite \(a *_0 b\) is given by \(\mathcal{C}_\Delta^1\sub{\langle a , b \rangle}\) and the identity on a term \(t\) of dimension \(n\) is given by \(\mathcal{C}_{D^n}^{n+1}\sub{\{t\}}\). This construction can be used to generate all the composites in the definition of a strict \(\infty\)-category. For example the vertical composite of \(2\)-cells is the standard composite over the context given by the diagram:
+It is immediate that the composite \(a *_0 b\) is given by \(\stdcoh \Delta 1\sub{\langle a , b \rangle}\) and the identity on a term \(t\) of dimension \(n\) is given by \(\stdcoh {D^n} {n+1}\sub{\{t\}}\). This construction can be used to generate all the composites in the definition of a strict \(\infty\)-category. For example the vertical composite of \(2\)-cells is the standard composite over the context given by the diagram:
 \[
   \begin{tikzcd}
     x && y
@@ -1280,10 +1280,10 @@ The substitution component of a coherence allows operations to be combined into 
     \arrow["c", from=1-3, to=1-4]
   \end{tikzcd}
 \]
-There are (at least) 3 ways to compose together the elements of this context. We could take the unbiased ternary composite \(a * b * c = \mathcal{C}_\Gamma^1\sub{\langle a, b, c\rangle}\), but could also construct either biased composite:
+There are (at least) 3 ways to compose together the elements of this context. We could take the unbiased ternary composite \(a * b * c = \stdcoh \Gamma 1\sub{\langle a, b, c\rangle}\), but could also construct either biased composite:
 \begin{align*}
-  (a * b) * c &= \mathcal{C}_\Delta^1\sub{\langle \mathcal{C}_\Delta^1\sub{\langle a,b\rangle}, c\rangle}\\
-  a * (b * c) &= \mathcal{C}_\Delta^1\sub{\langle a, \mathcal{C}_\Delta^1\sub{\langle b, c\rangle}\rangle}\\
+  (a * b) * c &= \stdcoh \Delta 1\sub{\langle \stdcoh \Delta 1\sub{\langle a,b\rangle}, c\rangle}\\
+  a * (b * c) &= \stdcoh \Delta 1\sub{\langle a, \stdcoh \Delta 1\sub{\langle b, c\rangle}\rangle}\\
 \end{align*}
 Using the equivalence typing rule, we can relate these biased composite with the following term:
 \[ \alpha_{a,b,c} = \Coh \Gamma {\arr {(a * b) * c} {} {a * (b * c)}} {\id_\Gamma}\]
@@ -1343,9 +1343,9 @@ The suspension of each disc context \(D^n\) is (up to \(\alpha\)-renaming) \(D^{
 
 \begin{proposition}
   The following syntactic equalities hold:
-  \[\Sigma(\mathcal{C}_\Delta^n) = \mathcal{C}_{\Sigma(\Delta)}^{n+1}\qquad
-    \Sigma(\mathcal{T}_\Delta^n) = \mathcal{T}_{\Sigma(\Delta)}^{n+1}\qquad
-    \Sigma(\mathcal{U}_\Delta^n) = \mathcal{U}_{\Sigma(\Delta)}^{n+1}\]
+  \[\Sigma(\stdcoh \Delta n) = \stdcoh {\Sigma(\Delta)} {n+1}\qquad
+    \Sigma(\stdtm \Delta n) = \stdtm {\Sigma(\Delta)} {n+1}\qquad
+    \Sigma(\stdty \Delta n) = \stdty {\Sigma(\Delta)} {n+1}\]
   for all Ps-contexts \(\Delta\) and \(n \in \mathbb{N}\).
 \end{proposition}
 
@@ -1675,7 +1675,7 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
     {%
       \begin{figure}[hbtp]
         \centering
-        \fbox{\begin{subfigure}{0.45\textwidth}
+        \fbox{\begin{subfigure}{0.46\textwidth}
             \vspace{0.4pt}
             \begin{mathpar}
               \inferrule{ }{\star : \Type_\Gamma}
@@ -1697,7 +1697,7 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
             \caption{Syntax}
           \end{subfigure}}
         \hfill
-        \fbox{\begin{subfigure}{0.50\textwidth}
+        \fbox{\begin{subfigure}{0.49\textwidth}
             \begin{mathpar}
               \inferrule{ }{\emptyset \vdash}
               \and
@@ -1738,7 +1738,7 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
           \end{subfigure}}
 
         \vspace{7pt}
-        \fbox{\begin{subfigure}{0.45\textwidth}
+        \fbox{\begin{subfigure}{0.46\textwidth}
             \vspace{1pt}
             \begin{mathpar}
               \inferrule{ }{(x : \star) \vdash_{\mathsf{ps}} x : \star}
@@ -1752,7 +1752,7 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
             \caption{Ps-contexts}
           \end{subfigure}}
         \hfill
-        \fbox{\begin{subfigure}{0.5\textwidth}
+        \fbox{\begin{subfigure}{0.49\textwidth}
             \vspace{6pt}
             \begin{mathpar}
               \FV(\star) = \{\}
@@ -3814,24 +3814,121 @@ and define two labels to be equal exactly when their action on maximal paths is 
   \[ \U \vdash L = M\]
   which witnesses the admissibility of the first rule.
 \end{proof}
-\todo[inline]{Formalise this}
 
 \subsection{Standard coherences}
 \label{sec:standard-coherences}
 
-\todo[inline]{Define boundaries}
+In \cref{sec:background}, we gave a preliminary definition of standard coherences, a definition of a canonical coherence over a given pasting diagram. This diagram relies on inclusion substitutions from the boundary of a pasting diagram into its source and target variables, whose definition for ps-contexts can be unpleasant to work with.
 
-\todo[inline]{Recall definition from start}
+In contrast, the \(n\)-boundary of a tree and its associated source and target inclusions have a natural definition by induction on the tree, where the source and target inclusions are given by labellings. We give this definition below.
 
-\todo[inline]{Can now define these as a structured term}
+\begin{definition}
+  Given dimension \(n \in \mathbb{N}\) and \(T : \Tree\), we define the \emph{\(n\)-boundary} of the tree \(\bound n T : \Tree\) by induction on \(n\) and \(T\):
+  \begin{equation*}
+    \bound 0 T = \emp \qquad
+    \bound {n + 1} {[T_0, \dots, T_n]} = [\bound n {T_0}, \dots , \bound n {T_n}]
+  \end{equation*}
+  We further define path-to-path functions \(\incbdpath n \epsilon T : \bound n T \to T\) for \(\epsilon \in \{-,+\}\) by induction:
+  \begin{align*}
+    \incbdpath 0 - T ([0]) &= [0]\\
+    \incbdpath 0 + {[T_0, \dots, T_m]} ([0]) &= [m+1]\\
+    \incbdpath {n+1} \epsilon {[T_0, \dots, T_m]} ([k]) &= [k]\\
+    \incbdpath {n+1} \epsilon {[T_0,\dots, T_m]} (k :: p) &= [k :: \incbdpath {n+1} \epsilon {T_k} (p)]
+  \end{align*}
+  and then can define the \emph{source inclusion labelling} \(\incbd n + T : \arr {\bound n T} \star T\) and \emph{target inclusion labelling} \(\incbd n + T : \arr {\bound n T} \star T\) by:
+  \[\incbd n \epsilon T(p) = \SPath(\incbdpath n \epsilon T(p))\]
+  for each \(n\) and \(\epsilon \in \{-,+\}\).
+\end{definition}
 
-\todo[inline]{Use proposition to give an alternative definition}
+In the module \module{Catt.Tree.Boundary.Typing}, it is proven that:
+\[ T \vdash \incbd n \epsilon T : \bound n T\]
+for all trees \(T\), \(n \in \mathbb{N}\), and \(\epsilon \in \{-,+\}\).
+
+In \cref{sec:background}, the source and target variable sets were defined to be support of the source and target inclusions. This can now be justified by the following lemma.
+
+\begin{lemma}
+  For a dimension \(n \in \mathbb{N}\), \(T : \Tree\), and \(\epsilon \in \{-,+\}\) we have:
+  \[ \Supp(\incbd n \epsilon T) = \bdry n \epsilon T \]
+\end{lemma}
+\begin{proof}
+  The proof is given by the function \func{Catt.Tree.Boundary.Support}{tree-inc-label-supp} in the formalisation module \module{Catt.Tree.Boundary.Support} and proceeds by induction on \(n\) and \(T\).
+\end{proof}
+
+This definition also allows simple inductive proofs that the boundary inclusions satisfy the globularity conditions, which we state in the following proposition. These proofs are given in the formalisation module \module{Catt.Tree.Boundary.Properties}.
+
+\begin{proposition}
+  Let \(m \leq n\) and let \(T\) be a tree. Then:
+  \[ \bound m {\bound n T} \equiv \bound m T\]
+  Further, for \(\epsilon, \omega \in \{-,+\}\) we have:
+  \[ \incbd m \epsilon {\bound n T} \bullet \incbd n \omega T \equiv \incbd m \epsilon T \]
+  If instead \(n \geq \dep(T)\), then \(\bound n T \equiv T\) and \(\incbd n \epsilon T \equiv \id_T\).
+\end{proposition}
+
+Further, these constructions commute with suspension: \(\Sigma(\bound n T) \equiv \bound {n+1} {\Sigma(T)}\) and \(\Sigma(\incbd n \epsilon T) \equiv \incbd {n+1} \epsilon {\Sigma(T)}\) by definition.
+
+We now recall the definitions of standard type, standard coherence, and standard term for a tree \(T\), which are given by mutual induction:
+\begin{itemize}
+\item The \emph{standard type}, \(\stdty T n\), is an \(n\)-dimensional type where each component of the type is given by the standard term over the appropriate boundary of the tree \(T\), and then included back into \(T\) by applying the inclusion labelling.
+\item The \emph{standard coherence}, \(\stdcoh T n\), is the canonical dimension \(n\) coherence term over a tree \(T\). It is formed by a single coherence constructor over \(T\) with type given by the standard type, \(\stdty T n\).
+\item The \emph{standard term}, \(\stdtm T n\), is a variation on the standard coherence which does not introduce unnecessary unary composites. If \(T\) is linear (and so represents a disc context), and \(n = \dep(T)\), then \(\stdtm T n\) is simply given by the unique maximal path in \(T\). Otherwise, it is given by the standard coherence \(\stdcoh T n\).
+\end{itemize}
+
+At the end of \cref{sec:background} it was stated that \(\Sigma(\stdtm T n) \equiv \stdtm {\Sigma(T)} {n + 1}\). Using this, the standard term can instead be defined by letting \(\stdtm \emp 0\) be \(\SPath([0])\), \(\stdtm {\Sigma(T)} {n+1}\) be \(\Sigma(\stdtm T n)\), and \(\stdtm T n\) be \(\stdcoh T n\) otherwise, which avoids the case split on the linearity of \(T\). We now define all three constructions formally using structured syntax.
+
+\begin{definition}
+  We define the \(n\)-dimensional \emph{standard type} over a tree \(T\) as a structured type \(\stdty T n : \SType_T\), and the \(n\)-dimensional \emph{standard coherence} and \emph{standard term} over a tree \(T\) as structured terms \(\stdcoh T n, \stdtm T n : \STerm_T\) by mutual induction:
+  \begin{align*}
+    \stdty T 0 &= \star\\
+    \stdty T {n + 1} &= \arr {\stdtm {\bound n T} n \sub {\incbd {n + 1} - T}} {\stdty T n} {\stdtm {\bound n T} n \sub {\incbd {n+1} + T}}\\[10pt]
+    \stdcoh T n &= \SCoh T {\stdty T n} {\id_T}\\[10pt]
+    \stdtm T n &=
+                 \begin{cases*}
+                   \SPath([0])&if \(T = \emp\) and \(n = 0\)\\
+                   \Inc_0(\stdtm {T_1} {n-1})&if \(n \neq 0\) and \(T = [T_1]\)\\
+                   \stdcoh T n&\text{otherwise}
+                 \end{cases*}
+  \end{align*}
+  when \(n = \dep(T)\), we call the standard coherence \(\stdcoh T n\) the \emph{standard composite} of \(T\).
+\end{definition}
+
+We can immediately show that these standard construct commute with suspension.
+
+\begin{lemma}
+  For tree \(T\) and \(n \in \mathbb{N}\), \(\Sigma(\stdty T n) \equiv \stdty {\Sigma(T)} {n+1}\) and \(\Sigma(\stdcoh T n) \equiv \stdcoh {\Sigma(T)} {n+1}\).
+\end{lemma}
+\begin{proof}
+  We first consider the standard type. The case for \(n = 0\) follows immediately, so we let \(n > 0\). We then get for \(\epsilon \in \{-,+\}\):
+  \begin{align*}
+    \Sigma(\stdtm {\bound {n-1} T} {n-1} \sub {\incbd {n-1} \epsilon T}) &\equiv \Sigma(\stdtm {\bound {n-1} T} {n-1}) \sub {\Sigma(\incbd{n-1} \epsilon T)}&\text{by functoriality of suspension}\\
+                                                                         &\equiv \stdtm {\Sigma(\bound {n-1} T)} {n} \sub {\Sigma(\incbd{n-1} \epsilon T)}\\
+    &\equiv \stdtm {\bound n {\Sigma(T)}} n \sub {\incbd n \epsilon {\Sigma(T)}}
+  \end{align*}
+  By inductive hypothesis \(\Sigma(\stdty T {n-1}) \equiv \stdty {\Sigma(T)} n\) and so
+  \begin{align*}
+    \Sigma(\stdty T n) &\equiv \arr {\Sigma(\stdtm {\bound {n-1} T} {n-1} \sub {\incbd {n-1} - T})} {\Sigma(\stdty T {n-1})} {\Sigma(\stdtm {\bound {n-1} T} {n-1} \sub {\incbd {n-1} + T})}\\
+                       &\equiv \arr {\stdtm {\bound n {\Sigma(T)}} {n} \sub {\incbd n - {\Sigma(T)}}} {\stdty {\Sigma(T)} {n}} {\stdtm {\bound n {\Sigma(T)}} {n} \sub {\incbd n + {\Sigma(T)}}}\\
+    &\equiv \stdty {\Sigma(T)} {n + 1}
+  \end{align*}
+  as required.
+
+  For the standard coherence we have:
+  \[ \Sigma(\stdcoh T n) \equiv \SCoh {\Sigma(T)} {\Sigma(\stdty T n)} {\Sigma(\id_T)} \equiv \SCoh {\Sigma(T)} {\stdty {\Sigma(T)} {n+1}} {\id_{\Sigma(T)}} \equiv \stdcoh {\Sigma(T)} {n+1}\]
+  following from the case for types.
+\end{proof}
+
+\todo[inline]{Standard type globularity lem}
+
+\todo[inline]{Support for standard}
+
+\todo[inline]{Typing for standard}
 
 \todo[inline]{Discs as structured terms}
 
 \todo[inline]{Standard label}
 
 \todo[inline]{Disc removal and endocoherence removal for standard terms}
+
+\todo[inline]{Term is coherence under disc removal}
 
 \section{Insertion}
 \label{sec:insertion}
