@@ -4057,19 +4057,252 @@ Lastly, under the presence of both disc removal and endo-coherence removal, the 
 \todo[inline]{Proof of this}
 \todo[inline]{remove standard label maybe}
 
-Due to these two theorems, every standard term \(\std T n\) with \(n \geq \dep(T)\) is equal to either the unique variable of the singleton context (when \(n = \dep(T) = 0\)), a standard composite (when \(n = \dep(T) > 0\)) or an identity (when \(n > \dep(T)\)), and hence completely classifying the well-formed standard terms.
+Due to these two theorems, every standard term \(\stdtm T n\) with \(n \geq \dep(T)\) is equal to either the unique variable of the singleton context (when \(n = \dep(T) = 0\)), a standard composite (when \(n = \dep(T) > 0\)) or an identity (when \(n > \dep(T)\)), and hence completely classifying the well-formed standard terms.
 
 \section{Insertion}
 \label{sec:insertion}
 
-\todo[inline]{Motivation for insertion}
-\todo[inline]{Wish to move inner composite into outer composite}
+We now introduce \emph{insertion}, the construction that powers the strictly associative behaviour of \Cattsua. Insertion incorporates part of the structure of an locally maximal argument term into the head coherence, simplifying the overall syntax of the term.
 
-\todo[inline]{Explore action on trees}
+Consider the composite \(f * (g * h)\). This term has two locally maximal arguments, \(f\) and \(g \cdot h\), the second of which is a (standard) coherence. Insertion allows us to merge these two composites into one by ``inserting'' the pasting diagram of the inner coherence into the pasting diagram of the outer coherence. In the case above we will get that the term \(f * (g * h)\) is equal to the ternary composite \(f * g * h\), a term with a single coherence. As the term \((f * g) * h\) also reduces by insertion to the ternary composite, we see that both sides of the associator become equal under insertion. The action of insertion on these contexts is shown in \cref{fig:insertion}.
 
-\todo[inline]{Define branches}
+\begin{figure}
+$$
+\begin{aligned}
+\begin{tikzpicture}
+\node (x) at (0,0)  {$x$};
+\node (y) at (1.5,0) {$y$};
+\node (z) at (3,0) {$z$};
+\draw [->] (x) to node [above, font=\small] {$f$} (y);
+\draw [->] (y) to node [above, font=\small] {$g*h$} (z);
+\begin{scope}[xshift=1.25cm, yshift=1.75cm, red]
+%\draw [fill=red!10, draw=none] (1,0.05) ellipse (1.2cm and .6cm);
+\draw [rounded corners, fill=red!7, draw=none] (-.25,-.35) rectangle +(2.5,1);
+\node (x2) at (0,0)  {$x'$};
+\node (y2) at (1,0) {$y'$};
+\node (z2) at (2,0) {$z'$};
+\draw [->] (x2) to node [above, font=\small] {$g$} (y2);
+\draw [->] (y2) to node [above, font=\small] {$h$} (z2);
+\end{scope}
+\draw [->, thick, red] (2.25,1.25) to +(0,-.5);
+\end{tikzpicture}
+\end{aligned}
+\quad\leadsto\quad
+\begin{aligned}
+\begin{tikzpicture}
+\node (x) at (0,0)  {$x \vphantom'$};
+\node [red] (y) at (1,0) {$x'$};
+\node [red] (z) at (2,0) {$y'$};
+\node [red] (w) at (3,0) {$z'$};
+\begin{scope}[xshift=.5cm, yshift=1.5cm, red]
+\draw [rounded corners, fill=white, draw=none] (-.25,-.35) rectangle +(2.5,1);
+\end{scope}
+\draw [->] (x) to node [above, font=\small] {$f$} (y);
+\draw [->, red] (y) to node [above, font=\small] {$g$} (z);
+\draw [->, red] (z) to node [above, font=\small] {$h$} (w);
+\end{tikzpicture}
+\end{aligned}
+$$
+\caption{\label{fig:insertion}
+Insertion acting on the composite \(f * (g * h)\)}
+\end{figure}
 
-\todo[inline]{Insertion only possible when trunk height more than branch height}
+Insertion is an operation that is best understood with respect to trees instead of ps-contexts. Insertion merges the structure of two trees along a \emph{branch} of the first tree.
+
+\begin{definition}
+  Let \(S\) be a tree. A \emph{branch} of \(S\) is a non-empty list of natural numbers \(P\) which indexes a tree \(S^P\) which is linear. From each branch \(P\), a maximal path \(\bar P\) can be obtained by concatenating \(P\) with \(p^{\dep(S^P)}\), the unique maximal path of \(S^P\).
+
+  For a branch \(P\), we further define the \emph{branch height}, \(\bh(P)\), to be one less than the length of \(P\) (noting that branches are non-empty lists), and the \emph{leaf height}, \(\lh(P)\), to be one less than the length of \(\bar P\), which is equal to the dimension of \(\lfloor \hat P \rfloor\).
+\end{definition}
+While each branch \(P\) uniquely determines a maximal path \(\bar P\), the converse does not hold. There may be multiple branches of a tree which correspond to the same maximal path. Consider the tree \(T = [[[[\emp],\emp],emp]]\). This has two distinct branches \(P = [0,0,0]\) and \(Q = [0,0,0,0]\) which both correspond to the maximal path \([0,0,0,0,0]\). We graphically depict these branches below by drawing them in blue.
+
+\[ P = \begin{tikzpicture}[yscale=0.7,every node/.append style={scale=0.6},baseline=(x21.base)]
+    \node [on grid] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (0,1) (x11) {$\bullet$};
+    \node [on grid] at (-0.5,2)(x21){$\bullet$};
+    \node [on grid] at (0.5,2) (x22){$\bullet$};
+    \node [on grid, blue] at (-0.9,3)(x31) {$\bullet$};
+    \node [on grid] at (-0.1,3) (x32) {$\bullet$};
+    \node [on grid, blue] at (-0.9,4)(x41) {$\bullet$};
+    \begin{scope}[on background layer]
+      \draw (x01.center) to (x11.center);
+      \draw (x11.center) to (x21.center);
+      \draw (x11.center) to (x22.center);
+      \draw[blue,thick] (x21.center) to (x31.center);
+      \draw (x21.center) to (x32.center);
+      \draw[blue,thick] (x31.center) to (x41.center);
+    \end{scope}
+  \end{tikzpicture}
+  \qquad
+  Q = \begin{tikzpicture}[yscale=0.7,every node/.append style={scale=0.6},baseline=(x21.base)]
+    \node [on grid] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (0,1) (x11) {$\bullet$};
+    \node [on grid] at (-0.5,2)(x21){$\bullet$};
+    \node [on grid] at (0.5,2) (x22){$\bullet$};
+    \node [on grid] at (-0.9,3)(x31) {$\bullet$};
+    \node [on grid] at (-0.1,3) (x32) {$\bullet$};
+    \node [on grid, blue] at (-0.9,4)(x41) {$\bullet$};
+    \begin{scope}[on background layer]
+      \draw (x01.center) to (x11.center);
+      \draw (x11.center) to (x21.center);
+      \draw (x11.center) to (x22.center);
+      \draw (x21.center) to (x31.center);
+      \draw (x21.center) to (x32.center);
+      \draw[blue,thick] (x31.center) to (x41.center);
+    \end{scope}
+  \end{tikzpicture}
+\]
+While \(P\) and \(Q\) represent the same path, they have different branch heights: the branch height of \(P\) is \(0\) while the branch height of \(Q\) is \(1\). This will cause insertions along these two branches to proceed differently (though we will see later that if both insertions are valid then the results are equivalent\todo{cross ref}). The leaf height and branch height of the branch \(P\) is demonstrated in \cref{fig:leafheight}, where we also depict the trunk height of \(T\), which was defined in \cref{sec:trees}.
+
+\begin{figure}
+  \[
+    \begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+    \node [on grid] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (0,1) (x11) {$\bullet$};
+    \node [on grid] at (-0.5,2)(x21){$\bullet$};
+    \node [on grid] at (0.5,2) (x22){$\bullet$};
+    \node [on grid, blue] at (-0.9,3)(x31) {$\bullet$};
+    \node [on grid] at (-0.1,3) (x32) {$\bullet$};
+    \node [on grid, blue] at (-0.9,4)(x41) {$\bullet$};
+    \node [left=0 of x31.center ,on grid] {$T^P$};
+    \node [right=0 of x41.center ,on grid] {$\bar P$};
+    \begin{scope}[on background layer]
+      \draw (x01.center) to (x11.center);
+      \draw (x11.center) to (x21.center);
+      \draw (x11.center) to (x22.center);
+      \draw[blue,thick] (x21.center) to (x31.center);
+      \draw (x21.center) to (x32.center);
+      \draw[blue,thick] (x31.center) to (x41.center);
+    \end{scope}
+    \node [on grid] at (-0.7,1)(th) {};
+    \draw [|->] (-0.7,0) to node [left] {$\th(T)$} (th.center);
+    \draw [dotted,thick] (th) to (x11);
+    \node [on grid] at (-1.5,2) (bh) {};
+    \draw [|->] (-1.5,0) to node [left] {$\bh(P)$} (bh.center);
+    \draw [dotted,thick] (bh) to (x21);
+    \node [on grid] at (-2.3,4) (lh) {};
+    \draw [|->] (-2.3,0) to node [left] {$\lh(P)$} (lh.center);
+    \draw [dotted,thick] (lh) to (x41);
+  \end{tikzpicture}
+\]
+\caption{\label{fig:leafheight} Leaf height, branch height and trunk height.}
+\end{figure}
+
+Let us again consider the tree \(S = [[\emp,\emp],\emp]\) from \cref{fig:tree-example}. This tree has three branches, corresponding to the maximal paths \([0,0,0]\), \([0,1,0]\), and \([1,0]\). We consider the action of insertion of three trees \(T_1,T_2,T_3\), given below, into branch \(P = [0,0]\), which corresponds to the first of these maximal paths.
+\[T =
+  \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
+    \node [on grid] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (0,1)(x11) {$\bullet$};
+    \node [on grid] at (-0.5, 2) (x21) {$\bullet$};
+    \node [on grid] at (0.5,2)(x22) {$\bullet$};
+    \draw (x01.center) to (x11.center);
+    \draw (x11.center) to (x21.center);
+    \draw (x11.center) to (x22.center);
+  \end{tikzpicture}
+  \qquad
+  T' = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
+    \node [on grid] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (0,1)(x11) {$\bullet$};
+    \draw (x01.center) to (x11.center);
+    \path [draw=none] (-0.5,0) to (0.5,0)
+  \end{tikzpicture}
+  \qquad
+  T'' = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x21.base)]
+    \node [on grid] at (0,1)(x11) {$\bullet$};
+    \node [on grid] at (-0.5, 2) (x21) {$\bullet$};
+    \node [on grid] at (0.5,2)(x22) {$\bullet$};
+    \draw (x11.center) to (x21.center);
+    \draw (x11.center) to (x22.center);
+  \end{tikzpicture}
+\]
+We first consider the insertion of \(T\) into \(S\), which returns the inserted tree \(\insertion S P {T_1}\), where \(P\) is drawn in blue on the diagram.
+\[ S = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
+    \node [on grid] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+    \node [on grid, blue] at (-0.9, 2)(x21) {$\bullet$};
+    \node [on grid] at (-0.1, 2)(x22) {$\bullet$};
+    \node [on grid] at (0.5,1)(x12) {$\bullet$};
+    \begin{scope}[on background layer]
+    \draw (x01.center) to (x11.center);
+    \draw (x01.center) to (x12.center);
+    \draw[blue, thick] (x11.center) to (x21.center);
+    \draw (x11.center) to (x22.center);
+    \end{scope}
+  \end{tikzpicture}
+  \qquad
+  T = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base), red]
+    \node [on grid] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (0,1) (x11) {$\bullet$};
+    \node [on grid] at (-0.5, 2) (x21) {$\bullet$};
+    \node [on grid] at (0.5,2)(x22) {$\bullet$};
+    \draw (x01.center) to (x11.center);
+    \draw (x11.center) to (x21.center);
+    \draw (x11.center) to (x22.center);
+  \end{tikzpicture}
+  \qquad
+  \insertion S P {T} = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
+    \node [on grid, red] at (0,0) (x01) {$\bullet$};
+    \node [on grid, red] at (-0.5,1) (x11) {$\bullet$};
+    \node [on grid, red] at (-0.9, 2)(x21) {$\bullet$};
+    \node [on grid, red] at (-0.5, 2)(x22) {$\bullet$};
+    \node [on grid] at (-0.1, 2)(x23) {$\bullet$};
+    \node [on grid] at (0.5,1)(x12) {$\bullet$};
+    \begin{scope}[on background layer]
+    \draw [red] (x01.center) to (x11.center);
+    \draw (x01.center) to (x12.center);
+    \draw [red] (x11.center) to (x21.center);
+    \draw [red] (x11.center) to (x22.center);
+    \draw (x11.center) to (x23.center);
+    \end{scope}
+  \end{tikzpicture}
+\]
+
+
+In this case the structure of \(T\) is compatible with the point of insertion \(P\) and \(T\) can be inserted into \(S\), replacing the branch \(P\) with the appropriate part of \(T\), where this appropriate part is obtained by removing the trunk of \(T\).
+
+We now consider the insertion of \(T_2\) into \(S\). Despite \(T_2\) having a lower depth than \(S\), it is still insertable, forming the following tree \(\insertion S P {T_2}\).
+\[ S = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
+    \node [on grid] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+    \node [on grid, blue] at (-0.9, 2)(x21) {$\bullet$};
+    \node [on grid] at (-0.1, 2)(x22) {$\bullet$};
+    \node [on grid] at (0.5,1)(x12) {$\bullet$};
+    \begin{scope}[on background layer]
+    \draw (x01.center) to (x11.center);
+    \draw (x01.center) to (x12.center);
+    \draw[blue, thick] (x11.center) to (x21.center);
+    \draw (x11.center) to (x22.center);
+    \end{scope}
+  \end{tikzpicture}
+  \qquad
+  T' = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base), red]
+    \node [on grid] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (0,1)(x11) {$\bullet$};
+    \draw (x01.center) to (x11.center);
+    \path [draw=none] (-0.5,0) to (0.5,0)
+  \end{tikzpicture}
+  \qquad
+  \insertion S P {T'} = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
+    \node [on grid,red] at (0,0) (x01) {$\bullet$};
+    \node [on grid,red] at (-0.5,1) (x11) {$\bullet$};
+    \node [on grid] at (-0.5, 2)(x21) {$\bullet$};
+    \node [on grid] at (0.5,1)(x12) {$\bullet$};
+    \begin{scope}[on background layer]
+    \draw [red] (x01.center) to (x11.center);
+    \draw (x01.center) to (x12.center);
+    \draw (x11.center) to (x21.center);
+    \end{scope}
+  \end{tikzpicture}
+\]
+Here, the branch \(P\) is replaced by a singleton tree, which is the remaining \(T'\) after removing its trunk. We note that this operation is the same as pruning the locally maximal variable \(\lfloor \bar P \rfloor\) from \(\lfloor T \rfloor\). We will see in \cref{sec:univ-prop-insert} that all instances of pruning can be represented as an instance of insertion.
+
+When we consider the insertion of \(T''\) into \(S\), it is not clear how to proceed, as there is no ``corresponding part'' of \(T''\) to replace the branch \(P\) with. In the other two cases this is obtained by removing the trunk of the tree, but \(T''\) has no trunk to remove. In this case we say that the insertion is not possible to perform as \(\bh(P) > \th(T'')\), a condition necessary for insertion. More generally, we will be able to define the insertion an any \emph{insertion redex}, which we now define.
+
+\begin{definition}
+  An \emph{insertion redex} is a triple \((S,P,T)\) where \(S\) and \(T\) are trees and \(P\) is a branch of \(S\) such that \(\bh(P) \leq \th(T)\) and \(\lh(P) \geq \dep(T)\).
+\end{definition}
+
+
 
 \todo[inline]{Give components of insertion}
 \todo[inline]{Use paper for a lot of this}
