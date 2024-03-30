@@ -3485,31 +3485,31 @@ We next introduces \emph{paths}, which can be thought of as the variables in a t
 We now turn our attention to substitutions from a tree context \(\sigma : \lfloor T \rfloor \to \Gamma\). A substitution can be viewed as a function from the variables of its source context to terms of the target context. Therefore a substitution \(\sigma : \lfloor T \rfloor \to \Gamma\) acts on variables of \(\lfloor T \rfloor\). However, we have seen that the more natural notion of a variable in a tree context is a path. This motivates the following definition.
 
 \begin{definition}
-  A term-labelling \(L : \arr T A \Gamma\) from a tree \(T\) to context \(\Gamma\) with type \(A : \Type_\Gamma\) is a function \(\Path_T \to \Term_\Gamma\). If \(T = [T_0,\dots,T_n]\), then there are natural projections:
-  \[ L_i : \arr {T_i} {\arr {L[i]} {A} {L[i+1]}} {\Gamma} \]
-  given by \(L_i(p) = L(i :: p)\) for each \(i \in \{0,\dots,n\}\).
+  A term-labelling \(L : T \to \Gamma\) from a tree \(T\) to context \(\Gamma\) is a pair containing a function \(\Path_T \to \Term_\Gamma\) and a type of \(\Gamma\). To apply the function component of a labelling to a path \(p\), we write \(L(p)\) or \(L[x_0,x_1,\dots]\) for a path \([x_0,x_1,\dots]\). The type component of the labelling is given by \(\ty(L)\).
+
+  If \(T = [T_0,\dots,T_n]\), then there are natural projections \( L_i :T_i \to \Gamma\) given by \(L_i(p) = L(i :: p)\) and \(\ty(L) = \arr {L[i]} {\ty(L)} {L[i+1]}\) for \(0 \leq i \leq n\).
 \end{definition}
 
-For labellings to play the role of substitutions, a substitution \(\lfloor L \rfloor : \arr {\lfloor T \rfloor} A \Gamma\) will be defined for each term-labelling \(L : \arr T A \Gamma\). A natural way to define this substitution is by induction on the tree \(T\), which finally motivates the use of extended substitutions. Suppose we start with a labelling \(L : \arr {[T_0,\dots,T_n]} \star \Gamma\). To proceed, we will apply the inductive hypothesis to obtain a substitutions:
+For labellings to play the role of substitutions, a substitution \(\lfloor L \rfloor : \arr {\lfloor T \rfloor} {\ty(L)} \Gamma\) will be defined for each term-labelling \(L : T \to \Gamma\). A natural way to define this substitution is by induction on the tree \(T\), which finally motivates the use of extended substitutions. Suppose we start with a labelling \(L : \arr {[T_0,\dots,T_n]} \star \Gamma\). To proceed, we will apply the inductive hypothesis to obtain a substitutions:
 \[ \lfloor L_i \rfloor : \arr {\lfloor T_i \rfloor} {\arr {L[i]} {A} {L[i+1]}} {\Gamma} \]
 These substitutions are not regular (non-extended) substitutions, even though \(L\) has associated type \(\star\), and hence corresponds to a regular substitution.
 
 \begin{definition}
-  Let \(L : \arr T A \Gamma\) be a term-labelling. We define the substitution:
-  \[\lfloor L \rfloor : \arr {\lfloor T \rfloor} A \Gamma\]
-  by induction on the tree \(T\) as \(\langle A, L[0] \rangle\) if \(T = \emp\) and:
+  Let \(L : T \to \Gamma\) be a term-labelling. We define the substitution:
+  \[\lfloor L \rfloor : \arr {\lfloor T \rfloor} {\ty(L)} \Gamma\]
+  by induction on the tree \(T\) as \(\langle \ty(L), L[0] \rangle\) if \(T = \emp\) and:
   \[ \unrestrict \lfloor L_0 \rfloor \vee \unrestrict \lfloor L_1 \rfloor \vee \cdots \vee \unrestrict \lfloor L_n \rfloor \]
   if \(T = [T_0, \dots, T_n]\). Although it looks like the \(0\)-dimensional terms in the labelling are not used to generate the substitution, they appear in the types of the labellings \(L_i\), and so appear in the unrestricted substitutions.
 \end{definition}
 
 There are many ways of giving a more syntactic presentation of labellings. Given a tree \(T = [T_0,\dots,T_n]\), a labelling \(L : T \to \Gamma\) can be written as:
-\[ t_0\{L_0\}t_1\{L_1\}t_2\cdots t_n\{L_n\}t_{n+1} \]
+\[ t_0\{L_0\}t_1\{L_1\}t_2\cdots t_n\{L_n\}t_{n+1} : \ty(L) \]
 where each \(t_i\) is the term \(L[i]\) and the sublabellings \(L_i\) have been recursively put in this syntactic bracketing format. The syntactic presentation contains all the information of the original labelling, which can be recovered by letting \(L[i] = t_i\) for each \(i\), \(L[i :: p] = L_i(p)\).
 
 As an example, take the tree \(T = [[\emp,\emp], \emp]\) from \cref{fig:tree-example}, and let:
 \[\Gamma = (x : \star), (f : x \to x), (\alpha : f*f \to f)\]
-Then we can define the labelling \(L : \arr T \star \Gamma\) by:
-\[ L = x\bigl\{f*f\{\alpha\}f\{\id(f)\}f\bigr\}x\{f\}x \]
+Then we can define the labelling \(L : T \to \Gamma\) by:
+\[ L = x\bigl\{f*f\{\alpha\}f\{\id(f)\}f\bigr\}x\{f\}x : \star \]
 which sends the (maximal) paths \([0,0,0]\) to \(\alpha\), \([0,1,0]\) to \(\id(f)\), and \([1,0]\) to \(f\) and has associated substitution:
 \[ \lfloor L \rfloor = \langle x,x,f*f,f,\alpha,f,\id(f),x,f \rangle\]
 The curly brackets notation for labellings is used instead of a typical round bracket notation to avoid clashes with notations that already use round brackets, such as \(\id(f)\).
@@ -3547,36 +3547,36 @@ The key problem with the base syntax for \Catt is that term-labellings are diffi
 \[ M \bullet L : S \to \Gamma \]
 Such a labelling would need to send a path \(p: \Path_S\) to a term of \(\Gamma\). The only reasonable way forward is to apply \(M\) to \(p\) to get a term of \(\lfloor T \rfloor\), and then applying \(\lfloor L \rfloor\) to this term to get a term of \(\Gamma\). Unfortunately, for an arbitrary term \(t : \Term_{\lfloor T \rfloor}\) and labelling \(L : T \to \Gamma\), the term:
 \[ t \sub {\lfloor L \rfloor}\]
-does not have nice computational properties. We look at two examples:
+does not have nice computational properties. We examine two examples:
 \begin{itemize}
 \item Suppose \(t\) was of the form \(\lfloor p \rfloor\) for some path \(p\). We then have:
   \[ \lfloor p \rfloor \sub {\lfloor L \rfloor} \equiv L(p)\]
   and would hope that this syntactic equality would fall out immediately, and that the left hand side would reduce to the right hand side in the formalisation. This is not the case however, and proving that such a syntactic equality holds is non trivial.
-\item Suppose \(t \equiv \Sigma(s)\) and \(L = a\{L_1\}b\). Similar to the above case we would hope that the syntactic equality:
-  \[ \Sigma(s) \sub {\lfloor a\{L_1\}b \rfloor} \equiv s \sub {\lfloor L_1 \rfloor}\]
+\item Suppose \(t \equiv \Sigma(s)\) and \(L = a\{L_1\}b : A\). Similar to the above case we would hope that the syntactic equality:
+  \[ \Sigma(s) \sub {\lfloor a\{L_1\}b : A \rfloor} \equiv s \sub {\lfloor L_1 \rfloor}\]
   holds ``on the nose''. This however is not the case.
 \end{itemize}
 
-Structured terms alleviates these problems by recording that such a term \(t\) was generated from a path or generated using suspension. This allows the application of a labelling to a structured term to use this information, letting, for example, the two syntactic equalities above to hold by definition. If a labelling is the ``correct'' notion of substitution from a tree, then a structured term is the ``correct'' notion of term in a tree.
+Structured terms alleviates these problems by recording that such a term \(t\) was generated from a path or generated using suspension. This allows the application of a labelling to a structured term to use this information, for example letting the two syntactic equalities above to hold by definition. If a labelling is the ``correct'' notion of substitution from a tree, then a structured term is the ``correct'' notion of term in a tree.
 
 \begin{definition}
   Let \(\U\) be a member of \(\Ctx \uplus \Tree\), either some context \(\Gamma\) or some tree \(T\). We then define the \emph{structured syntax} classes \(\STerm_\U\) of \emph{structured terms}, \(\SType_\U\) of \emph{structured types}, and \emph{(\(\STerm\)-)labellings} \(\arr S A \U\) for some tree \(S\) and structured type \(A\). These syntax classes for structured terms and types are generated by the following rules:
   \begin{mathpar}
     \inferrule{p : \Path_T}{\SPath(p) : \STerm_T}\and
     \inferrule{s : \STerm_{T_i}\\ 0 \leq i \leq n}{\Inc_i(s) : \STerm_{[T_0,\dots,T_n]}} \and
-    \inferrule{S : \Tree\\ A : \SType_S \\ L : \arr S B \U}{\SCoh S A L : \STerm_\U}\and
+    \inferrule{S : \Tree\\ A : \SType_S \\ L : S \to \U}{\SCoh S A L : \STerm_\U}\and
     \inferrule{t : \Term_\Gamma}{\SOther(t) : \STerm_\Gamma} \\
     \inferrule{ }{\star : \SType_\U}\and
     \inferrule{s : \STerm_\U \\ A : \SType_\U \\ t: \STerm_\U}{\arr s A t : \SType_\U}
   \end{mathpar}
-  Labellings \(L : \arr S A \U\) are defined as functions \(\Path_S \to \STerm_\U\), similarly to term-labellings in \cref{sec:tree-contexts}. We note that the syntax for structured types is shared with the syntax for \Catt types, and will be careful to make it clear which syntax we are using.
+  Labellings \(L : S \to \U\) are defined as pairs of a function \(\Path_S \to \STerm_\U\) and structured type, similarly to term-labellings in \cref{sec:tree-contexts}. We note that the syntax for structured types is shared with the syntax for \Catt types, and will be careful to make it clear which syntax we are using when necessary.
 \end{definition}
 
 Each piece of structured syntax can be converted back into the base syntax of \Catt, using many of the constructions already introduced.
 
 \begin{definition}
-  Suppose \(\U : \Ctx \uplus \Tree\). Define \(\lfloor \U \rfloor\) to be \(\Gamma\) if \(\U = \Gamma\) for some context \(\Gamma\) or \(\lfloor T \rfloor\) if \(\U = T\) for some tree \(T\). Now, for a structured term \(s : \STerm_\U\), a structured type \(A : \SType_\U\), or a labelling \(L : \arr S B \U\), we define:
-  \[ \lfloor s \rfloor : \Term_{\lfloor \U \rfloor} \qquad \lfloor A \rfloor : \Type_{\lfloor \U \rfloor} \qquad \lfloor L \rfloor : \arr {\lfloor S \rfloor} {\lfloor B \rfloor} {\lfloor \U \rfloor} \]
+  Suppose \(\U : \Ctx \uplus \Tree\). Define \(\lfloor \U \rfloor\) to be \(\Gamma\) if \(\U = \Gamma\) for some context \(\Gamma\) or \(\lfloor T \rfloor\) if \(\U = T\) for some tree \(T\). Now, for a structured term \(s : \STerm_\U\), a structured type \(A : \SType_\U\), or a labelling \(L : S \to \U\), we define:
+  \[ \lfloor s \rfloor : \Term_{\lfloor \U \rfloor} \qquad \lfloor A \rfloor : \Type_{\lfloor \U \rfloor} \qquad \lfloor L \rfloor : \arr {\lfloor S \rfloor} {\lfloor \ty(L) \rfloor} {\lfloor \U \rfloor} \]
   by the equations:
   \begin{align*}
     \lfloor \SPath(p) \rfloor &= \lfloor p \rfloor\\
@@ -3586,18 +3586,18 @@ Each piece of structured syntax can be converted back into the base syntax of \C
     \lfloor \star \rfloor &= \star\\
     \lfloor \arr s A t \rfloor &= \arr {\lfloor s \rfloor} {\lfloor A \rfloor} {\lfloor t \rfloor}
   \end{align*}
-  and by defining \(\lfloor L \rfloor\) similarly to term labellings except \(\lfloor L \rfloor = \langle \lfloor A \rfloor, \lfloor L[0] \rfloor \rangle\) for labellings \(L : \arr {\emp} {A} {\U}\) from the singleton tree. We refer to \(\lfloor a \rfloor\), \(\lfloor A \rfloor\) and \(\lfloor L \rfloor\) as the term, type, or substitution generated by \(a\),\(A\), or \(L\).
+  and by defining \(\lfloor L \rfloor\) similarly to term labellings except \(\lfloor L \rfloor = \langle \lfloor \ty(L) \rfloor, \lfloor L[0] \rfloor \rangle\) for labellings \(L : {\emp} \to {\U}\) from the singleton tree. We refer to \(\lfloor a \rfloor\), \(\lfloor A \rfloor\) and \(\lfloor L \rfloor\) as the term, type, or substitution generated by \(a\),\(A\), or \(L\).
 \end{definition}
 
 For any tree \(T\), there is an \emph{identity labelling} \(\id_T\) given by:
-\[ \id_T(p) = \SPath(p)\]
+\[ \id_T(p) = \SPath(p) \qquad \ty(\id_T) = \star\]
 The function \func{Catt.Tree.Structured.Properties}{id-label-to-sub} in the formalisation (see \module{Catt.Tree.Structured.Properties}) shows that:
 \[\lfloor \id_T \rfloor = \id_{\lfloor T \rfloor}\]
 The main motivation for introducing structured syntax was to be able to define a composition of labellings, which we do now by defining the application of a labelling to a structured term, structured type, or another labelling.
 
 \begin{definition}
-  Let \(L : \arr T B \U\) be a labelling (with \(\U : \Ctx \uplus \Tree\)). We define the application of \(L\) to a structured term \(s : \STerm_{T}\), a structured type \(A : \SType_T\), and a labelling \(M : \arr S A T\) to give:
-  \[ s \sub L : \STerm_\U \qquad A \sub L : \SType_\U \qquad M \bullet L : \arr S {A \sub L} \U\]
+  Let \(L : T \to \U\) be a labelling (with \(\U : \Ctx \uplus \Tree\)). We define the application of \(L\) to a structured term \(s : \STerm_{T}\), a structured type \(A : \SType_T\), and a labelling \(M : S \to T\) to give:
+  \[ s \sub L : \STerm_\U \qquad A \sub L : \SType_\U \qquad M \bullet L : S \to \U\]
   These definitions are given by mutual recursion:
   \begin{align*}
     \SPath(p) \sub L &= L(p)\\
@@ -3606,16 +3606,17 @@ The main motivation for introducing structured syntax was to be able to define a
     \SOther(t) \sub L &= t \sub {\lfloor L \rfloor}\\[10pt]
     \star \sub L &= B\\
     (\arr s A t) \sub L &= \arr {s \sub L} {A \sub L} {t \sub L}\\[10pt]
-    (M \bullet L)(p) &= M(p) \sub L
+    (M \bullet L)(p) &= M(p) \sub L\\
+    \ty(M \bullet L) &= \ty(M) \sub L
   \end{align*}
-  and thus satisfy the computational properties given at the start of the section.
+  It can easily be seen that these definitions satisfy the computational properties given at the start of the section.
 \end{definition}
 
-The main theorem of this section is that the application of a labelling to a structured term is compatible with the map from structured syntax to \Catt syntax. We begin its proof with the following lemma:
+The main theorem of this section is that the application of a labelling to a structured term is compatible with the map from structured syntax to \Catt syntax.
 
 \begin{theorem}
   \label{thm:structured-main}
-  For any labelling \(L : \arr T B \U\) and structured term \(s : \STerm_T\), structured type \(A : \SType_T\), or labelling \(M : \arr S A T\), we have:
+  For any labelling \(L : T \to \U\) and structured term \(s : \STerm_T\), structured type \(A : \SType_T\), or labelling \(M : S \to T\), we have:
   \[ \lfloor s \sub L \rfloor \equiv \lfloor s \rfloor \sub {\lfloor L \rfloor} \qquad \lfloor A \sub L \rfloor \equiv \lfloor A \rfloor \sub {\lfloor L \rfloor} \qquad \lfloor M \bullet L \rfloor \equiv \lfloor M \rfloor \bullet \lfloor L \rfloor\]
 \end{theorem}
 \begin{proof}
@@ -3638,22 +3639,22 @@ The main theorem of this section is that the application of a labelling to a str
                                             &\equiv \fst(\lfloor T_k \rfloor) \sub {\unrestrict \lfloor L_k \rfloor}\\
       &= \lfloor L[k] \rfloor
     \end{align*}
-    where the last equality follows from the labelling \(L_k\) having type \(\arr {T_i} {\arr {\lfloor L[k] \rfloor} {B} {\lfloor L[k+1] \rfloor}} \U\). The case where \(k = n+1\) is similar to above using \(\snd(T_n)\) instead of \(\fst(T_k)\) (as there is no tree \(T_k\) in this case).
+    where the last equality follows from the labelling \(L_k\) having type component \(\ty(L_k) \equiv \arr {\lfloor L[k] \rfloor} {B} {\lfloor L[k+1] \rfloor}\). The case where \(k = n+1\) is similar to above using \(\snd(T_n)\) instead of \(\fst(T_k)\) (as there is no tree \(T_k\) in this case).
   \end{itemize}
 
-  The case for structured types follows by a simple induction using the case for terms. We now consider the case for a label \(M : \arr S A T\). Suppose \(S = [S_0,\dots,S_n]\). Then:
+  The case for structured types follows by a simple induction using the case for terms. We now consider the case for a label \(M : S \to T\). Suppose \(S = [S_0,\dots,S_n]\). Then:
   \begin{align*}
     \lfloor M \rfloor \bullet \lfloor L \rfloor &\equiv \left( \bigvee_i \unrestrict \lfloor M_i \rfloor  \right) \bullet \lfloor L \rfloor\\
                                                 &\equiv \bigvee_i \unrestrict \lfloor M_i \rfloor \bullet \lfloor L \rfloor&\text{by \cref{lem:wedge-sum-prop}}\\
-    &\equiv \bigvee_i \unrestrict \lfloor M_i \rfloor \bullet \lfloor L \rfloor\\
+    &\equiv \bigvee_i \unrestrict \left(\lfloor M_i \rfloor \bullet \lfloor L \rfloor\right)\\
                                                 &\equiv \bigvee_i \unrestrict \lfloor M_i \bullet L \rfloor&\text{by inductive hypothesis}\\
     &\equiv \lfloor M \bullet L \rfloor
   \end{align*}
   with the last line following from \((M \bullet L)_i\) and \(M_i \bullet L\) being the same labelling. This concludes all cases.
 \end{proof}
 
-Structured syntax is only used as computational aid for reasoning about the base syntax of \Catt, and therefore the desired notion of ``syntactic'' equality of structured syntax is syntactic equality of the underlying \Catt terms, that is we say \(s \equiv t\) for structured terms \(s\) and \(t\) exactly when \(\lfloor s \rfloor \equiv \lfloor t \rfloor\). On labellings \(L, M : \arr T A \U\) we can instead provide the equality:
-\[ L \equiv M \iff \forall (p : \Path_T).\ L(p) \equiv L(p)\]
+Structured syntax is only used as computational aid for reasoning about the base syntax of \Catt, and therefore the desired notion of ``syntactic'' equality of structured syntax is syntactic equality of the underlying \Catt terms, that is we say \(s \equiv t\) for structured terms \(s\) and \(t\) exactly when \(\lfloor s \rfloor \equiv \lfloor t \rfloor\). On labellings \(L, M : T \to \U\) we can instead provide the equality:
+\[ L \equiv M \iff \ty(L) \equiv \ty(M) \land \forall (p : \Path_T).\ L(p) \equiv L(p)\]
 and by observing the proof of \cref{thm:structured-main}, we see that this equality implies equality of the generated substitutions.
 
 It is therefore possible to derive many properties for this equality of structured terms simply by reducing all constructions used to the corresponding \Catt constructions, and using the corresponding result for the syntax of \Catt.
@@ -3670,7 +3671,7 @@ Using this technique, every syntactic result about \Catt can be transported to s
 To extend this, we redefine some of the constructions we have seen for \Catt in the previous sections, this time for structured terms.
 
 \begin{definition}
-  We define the suspension for a structured term \(a : \STerm_\U\), structured type \(A : STerm_\U\), and restricted substitution for a labelling \(L : \arr T A \U\), giving structured term \(\Sigma(a) : \STerm_\U\), structured type \(\Sigma(A) : \Sigma(A)\), and labelling \(\Sigma'(L) : \arr T {\Sigma(A)} {\Sigma(\U)}\). These are all defined by mutual induction as follows:
+  We define the suspension for a structured term \(a : \STerm_\U\), structured type \(A : \STerm_\U\), and restricted substitution for a labelling \(L : T \to \U\), giving structured term \(\Sigma(a) : \STerm_{\Sigma(\U)}\), structured type \(\Sigma(A) : \STerm_{\Sigma(\U)}\), and labelling \(\Sigma'(L) : T \to {\Sigma(\U)}\). These are all defined by mutual induction as follows:
   \begin{align*}
     \Sigma(a) &\equiv \Inc_0(a) &\text{if \(\U\) is a tree}\\
     \Sigma(\SCoh S A M) &\equiv \SCoh S A {\Sigma'(M)}&\text{if \(\U\) is a context}\\
@@ -3678,10 +3679,11 @@ To extend this, we redefine some of the constructions we have seen for \Catt in 
     \Sigma(\star) &= \arr N \star S&\text{if \(\U\) is a context}\\
     \Sigma(\star) &= \arr {\SPath[0]} \star {\SPath[1]}&\text{otherwise}\\
     \Sigma(\arr s A t) &= \arr {\Sigma(s)} {\Sigma(A)} {\Sigma(t)}\\[10pt]
-    \Sigma'(L)(p) &= \Sigma(L(p))
+    \Sigma'(L)(p) &= \Sigma(L(p))\\
+    \ty(\Sigma'(L)) &= \Sigma(\ty(L))
   \end{align*}
-  We further define an unrestriction operation that takes a labelling of the form \(M : \arr T {\arr s A t} \U\) and produces a labelling
-  \[\unrestrict M  : \arr {\Sigma(T)} {A} \U \equiv s{M}t\]
+  We further define an unrestriction operation that takes a labelling of the form \(M : T \to \U\)  with \(\ty(M) \equiv \arr s A t\) and produces a labelling
+  \[\unrestrict M : {\Sigma(T)} \to \U \equiv s\{M\}t : A\]
   This can be used to define the full suspension of a labelling as with \Catt substitutions by defining \(\Sigma(L)\) to be \(\unrestrict \Sigma'(L)\).
 \end{definition}
 
@@ -3689,17 +3691,17 @@ A simple case analysis demonstrates that these constructions commute with \(\lfl
 
 \begin{definition}
   We have seen that the wedge sum of trees \(S\) and \(T\) is given by \(S \doubleplus T\). Letting \(S = [S_0,\dots,S_m]\) and \(T = [T_0,\dots,T_n]\), we further define inclusion labellings:
-  \[ \inc_S : \arr S \star {S \doubleplus T} \qquad \inc_T : \arr T \star {S \doubleplus T}\]
+  \[ \inc_S : S \to {S \doubleplus T} \qquad \inc_T : T \to {S \doubleplus T}\]
   by the equations:
   \begin{align*}
-    \inc_S([k])&\equiv \SPath[k] & \inc_S(k :: p) &\equiv \SPath(k :: p)\\
-    \inc_T([k])&\equiv \SPath[m + k] & \inc_T(k :: p) &\equiv \SPath (m + k :: p)
+    \inc_S([k])&\equiv \SPath[k] & \inc_S(k :: p) &\equiv \SPath(k :: p) & \ty(\inc_S) &\equiv \star\\
+    \inc_T([k])&\equiv \SPath[m + k] & \inc_T(k :: p) &\equiv \SPath (m + k :: p) & \ty(\inc_T) &\equiv \star
   \end{align*}
-  and finally, we suppose \(L : \arr S A \U\) and \(M : \arr T A \U\) are labellings of the form:
-  \[ L \equiv s_0\{L_0\}s_1\cdots s_n\{L_n\}t_0 \qquad M \equiv t_0\{M_0\}t_1\cdots t_n\{M_n\}t_{n+1} \]
+  and finally, we suppose \(L : S \to \U\) and \(M : T \to \U\) are labellings of the form:
+  \[ L \equiv s_0\{L_0\}s_1\cdots s_n\{L_n\}t_0 : A \qquad M \equiv t_0\{M_0\}t_1\cdots t_n\{M_n\}t_{n+1} : A \]
   and define their concatenation to be the labelling:
-  \[ s_0\{L_0\}s_1\cdots s_n\{L_n\}t_0\{M_0\}t_1\cdots t_n\{M_n\}t_{n+1} \]
-  where \(L \doubleplus M : \arr {S \doubleplus T} A \U\).
+  \[ s_0\{L_0\}s_1\cdots s_n\{L_n\}t_0\{M_0\}t_1\cdots t_n\{M_n\}t_{n+1} : A \]
+  where \(L \doubleplus M : {S \doubleplus T} \to \U\).
 \end{definition}
 
 Many properties of these constructions among others are given in the formalisation module \module{Catt.Tree.Structured.Construct.Properties}. In particular, the diagrammatic notation for substitutions between wedge sums can be repurposed to define labellings, which will be used to define certain labellings in \cref{sec:insertion}.
@@ -3711,32 +3713,30 @@ Similarly to the definition of syntactic equality for structured syntax, we also
 \[ \U \vdash s = t \iff \lfloor \U \rfloor \vdash \lfloor s \rfloor = \lfloor t \rfloor \qquad \U \vdash A = B \iff \lfloor \U \rfloor \vdash \lfloor A \rfloor = \lfloor B \rfloor\]
 
 For labellings, (definitional) equality can be defined similarly to the syntactic equality relation:
-\[ \U \vdash L = M \iff \forall (p : \Path_T).\ \U \vdash L(p) = L(p)\]
+\[ \U \vdash L = M \iff \U \vdash \ty(L) = \ty(M) \land \forall (p : \Path_T).\ \U \vdash L(p) = L(p)\]
 Using \cref{lem:wedge-typing}, it can be proven by a simple induction that equality of labellings (along with equality of their associated types) induces equality of the generated substitutions.
 
 We also want the typing rules for \(s : \STerm_\U\) and \(A : \SType_\U\) to be inherited from the typing rules for \(\lfloor s \rfloor\) and \(\lfloor A \rfloor\). We reuse the notation for each typing judgement. For labellings, we introduce the following more natural typing judgement:
 
 \begin{definition}
-  For a labelling \(L : \arr T A \U\), where \(\U : \Ctx \uplus \Tree\), we define the judgement:
+  For a labelling \(L : T \to \U\), where \(\U : \Ctx \uplus \Tree\), we define the judgement:
   \[ \U \vdash L : T \]
   to mean that the labelling \(L\) is well-formed. This judgement is generated by the following rule:
   \begin{mathpar}
-    % \inferrule{\U \vdash L[0] : \ty(L)}{\U \vdash L : \emp}\and
-    % \inferrule{\forall k \leq n +1.\ \U \vdash L[k] : \ty(L)\\\forall i \leq n.\ \U\vdash L_i : T_i}{\U \vdash L : [T_0,\dots,T_n]}\and
     \inferrule{\U \vdash L[0] : \ty(L)\quad \cdots\quad \U\vdash L[n+1] : \ty(L)\\\U\vdash L_0 : T_0\quad \cdots\quad\U\vdash L_n : T_n}{\U \vdash L : [T_0,\dots,T_n]}
   \end{mathpar}
-  where \(\ty(L)\) is defined to be \(A\) for a labelling \(L : \arr T A \U\).
 \end{definition}
 
 From this typing judgement for labellings, one can obtain a derivation of the typing judgement for the generated substitution.
 
 \begin{proposition}
-  Let \(L : \arr T A \U\), and suppose \(\U \vdash L : T\) and \(\U \vdash A\). Then \( \lfloor \U \rfloor \vdash \lfloor L \rfloor : \lfloor T \rfloor\).
+  Let \(L : T \to \U\), and suppose \(\U \vdash L : T\) and \(\U \vdash \ty(L)\). Then:
+  \[ \lfloor \U \rfloor \vdash \lfloor L \rfloor : \lfloor T \rfloor\]
 \end{proposition}
 \begin{proof}
   We induct on the tree \(T\), splitting into cases on whether it is empty. If it is, then by case analysis on the judgement for label typing we get:
-  \[ \U \vdash L[0] : A \]
-  By definition, this implies that \(\U \vdash L[0] : A\). Then, \(\lfloor L \rfloor \equiv \langle \lfloor A \rfloor, \lfloor L[0] \rfloor \rangle\), and so the following derivation can be obtained:
+  \[ \U \vdash L[0] : \ty(L) \]
+  Then, \(\lfloor L \rfloor \equiv \langle \lfloor A \rfloor, \lfloor L[0] \rfloor \rangle\), and so the following derivation can be obtained:
   \[
     \begin{prooftree}
       \infer0{\U \vdash A}
@@ -3750,9 +3750,9 @@ From this typing judgement for labellings, one can obtain a derivation of the ty
 
   Suppose instead that \(T = [T_0,\dots,T_n]\), such that:
   \[ \lfloor L \rfloor \equiv \unrestrict \lfloor L_0 \rfloor \vee \cdots \vee \unrestrict \lfloor L_n \rfloor\]
-  From \(\U \vdash L : T\), we obtain \(\U \vdash L_i : T_i\) for each \(i \in \{0,\dots,n\}\), and so by inductive hypothesis we have \(\lfloor \U \rfloor \vdash \lfloor L_i \rfloor : \lfloor T_i \rfloor\). We have for each \(i\) that:
-  \[\ty(\lfloor L_i \rfloor) \equiv \arr {\lfloor L[i] \rfloor} {\lfloor A \rfloor} {\lfloor L[i+1] \rfloor}\]
-  and so as this is not the type \(\star\), the unrestriction \(\unrestrict \lfloor L_i \rfloor\) is well-formed. Furthermore, by construction of the unrestriction we have:
+  From \(\U \vdash L : T\), we obtain \(\U \vdash L_i : T_i\) for each \(i \in \{0,\dots,n\}\). We further obtain \(\U \vdash L[k] : \ty(L)\) for \(0 \leq k \leq n+1\) and so:
+  \[\ty(L_i) \equiv \arr {L[i]} {\ty(L)} {L[i+1]}\]
+  is well-formed and so by inductive hypothesis we have \(\lfloor \U \rfloor \vdash \lfloor L_i \rfloor : \lfloor T_i \rfloor\). We have for each \(i\) that \(\lfloor \ty(L) \rfloor\) is not the type \(\star\) and so the unrestriction \(\unrestrict \lfloor L_i \rfloor\) is well-formed. Furthermore, by construction of the unrestriction we have:
   \[ \fst(\lfloor T_i \rfloor) \sub {\lfloor L_i \rfloor} \equiv \lfloor L[i] \rfloor \qquad \snd(\lfloor T_i \rfloor) \sub {\lfloor L_i \rfloor} \equiv \lfloor L[i+ 1] \rfloor\]
   and so by \cref{lem:wedge-typing}, the wedge sums are well-formed, completing the proof.
 \end{proof}
@@ -3767,7 +3767,7 @@ The module \module{Catt.Tree.Structured.Typing.Properties} also introduces many 
 In keeping with the theme of this section, one could define \(\Supp(s)\) as \(\Supp(\lfloor s \rfloor)\) for a structured term \(s : \STerm_\U\). However, we choose not to do this, instead giving a definition of support for structured syntax that leverages the extra information available in the syntax.
 
 \begin{definition}
-  For a path \(p : \Path_T\), a structured term \(s : \STerm_\U\), a structured type \(A : \SType_\U\), and a labelling \(L : \arr S B \U\), we define their supports \(\Supp(p)\), \(\Supp(s)\), \(\Supp(A)\), and \(\Supp(L)\) by mutual recursion:
+  For a path \(p : \Path_T\), a structured term \(s : \STerm_\U\), a structured type \(A : \SType_\U\), and a labelling \(L : S \to \U\), we define their supports \(\Supp(p)\), \(\Supp(s)\), \(\Supp(A)\), and \(\Supp(L)\) by mutual recursion:
   \begin{align*}
     \Supp([n]) &= \{\lfloor [0] \rfloor\}\\
     \Supp(k :: p) &= \Sigma(\Supp(p)) \sub {\inc_{T_k}} &\text{where }T = [T_1,\dots,T_n]\\[10pt]
@@ -3787,9 +3787,9 @@ We note that each of these support definitions is naturally downwards closed, an
 \end{mathpar}
 for path \(p\), structured term \(s\), structured type \(A\), and labelling \(L\).
 
-By using this notion of support, we are able to avoid a lot of ``boilerplate'' proof. The above definition of support more closely resembles the format of structured terms, and without this definition, most proofs concerning the support of a structured term would begin by simplifying a variable set similar to \(\Supp(\lfloor s \rfloor)\) to one of more similar to \(\Supp(\lfloor s \rfloor)\). Here, we instead give this equivalence proof once.
+By using this notion of support, we are able to avoid a lot of ``boilerplate'' proof. The above definition of support more closely resembles the format of structured terms, and without this definition, most proofs concerning the support of a structured term would begin by simplifying a variable set similar to \(\Supp(\lfloor s \rfloor)\) to one more similar to \(\Supp(s)\). Here, we instead give this equivalence proof once.
 
-We end this section by giving alternative equality relations for labellings, which encapsulate the idea that a substitution is fully determined by where it sends locally maximal variables. These equalities are defined as follows for labellings \(L : \arr T A \U\) and \(M : \arr T B \U\):
+We end this section by giving alternative equality relations for labellings, which encapsulate the idea that a substitution is fully determined by where it sends locally maximal variables. These equalities are defined as follows for labellings \(L : T \to \U\) and \(M : T \to \U\):
 \begin{align*}
   L \equiv^{\max} M &\iff \forall (p : \MaxPath_T).\ L(p) \equiv M(p)\\
   \U \vdash L =^{\max} M &\iff \forall (p : \MaxPath_T).\ L(p) \equiv M(p)
@@ -3797,21 +3797,21 @@ We end this section by giving alternative equality relations for labellings, whi
 and define two labels to be equal exactly when their action on maximal paths is equal. The following theorem gives conditions for when the standard equality equality relation can be recovered from these.
 
 \begin{theorem}
-  Let \(L : \arr S A \U\) and \(M : \arr S B \U\) be labellings. Then the following rules are admissible:
+  Let \(L : S \to \U\) and \(M : S \to \U\) be labellings. Then the following rules are admissible:
   \begin{mathpar}
     \inferrule{\U \vdash L : S\\ \U \vdash M : S \\ L \equiv^{\max} M}{\U \vdash L = M}\and
-    \inferrule{\U \vdash L : S\\ \U \vdash M : S \\ L \equiv^{\max} M}{\U \vdash A = B}
+    \inferrule{\U \vdash L : S\\ \U \vdash M : S \\ L \equiv^{\max} M}{\U \vdash \ty(L) = \ty(M)}
   \end{mathpar}
   If the equality rule set \(\mathcal{R}\) satisfies the preservation and support conditions, then the rules above are still admissible with \(\U \vdash L =^{\max} M\) replacing the syntactic equalities.
 \end{theorem}
 \begin{proof}
   We prove the results for the syntactic equality, with the results for the definitional equality following similarly, but using the preservation property instead of uniqueness of typing. We proceed by induction on the tree \(S\), proving the admissibility of both rules simultaneously.
 
-  First suppose that \(S = \emp\). Then the path \([0] : \Path_{\emp}\) is maximal and so \(\U \vdash L = M\) follows by the reflexivity of equality. The second rule follows from the uniqueness of typing, as we get \(\U \vdash L[0] : A\) and \(\U \vdash M[0] : B\) from the premises.
+  First suppose that \(S = \emp\). Then the path \([0] : \Path_{\emp}\) is maximal and so \(\U \vdash L = M\) follows by the reflexivity of equality. The second rule follows from the uniqueness of typing, as we get \(\U \vdash L[0] : \ty(L)\) and \(\U \vdash M[0] : \ty(M)\) from the premises.
 
   Now suppose that \(S = [S_0,\dots,S_n]\). By inductive hypothesis, the following judgements hold for each \(i \in \{0,\dots,n\}\):
-  \[ \U \vdash L_i = M_i \qquad \U \vdash \arr {L[i]} {A} {L[i+1]} = \arr {M[i]} {B} {M[i+1]}\]
-  From the equalities on types, we immediately get that \(\U \vdash A = B\) as is required for the admissibility of the second rule, and also get that \(\U \vdash L[i] = M[i]\) for each \(0 \leq i \leq n+1\), which along with equality on (sub-)labellings above is sufficient to prove that:
+  \[ \U \vdash L_i = M_i \qquad \U \vdash \arr {L[i]} {\ty(L)} {L[i+1]} = \arr {M[i]} {\ty(M)} {M[i+1]}\]
+  From the equalities on types, we immediately get that \(\U \vdash \ty(L) = \ty(M)\) as is required for the admissibility of the second rule, and also get that \(\U \vdash L[i] = M[i]\) for each \(0 \leq i \leq n+1\), which along with equality on (sub-)labellings above is sufficient to prove that:
   \[ \U \vdash L = M\]
   which witnesses the admissibility of the first rule.
 \end{proof}
@@ -3836,8 +3836,8 @@ In contrast, the \(n\)-boundary of a tree and its associated source and target i
     \incbdpath {n+1} \epsilon {[T_0, \dots, T_m]} ([k]) &= [k]\\
     \incbdpath {n+1} \epsilon {[T_0,\dots, T_m]} (k :: p) &= [k :: \incbdpath {n+1} \epsilon {T_k} (p)]
   \end{align*}
-  and then can define the \emph{source inclusion labelling} \(\incbd n + T : \arr {\bound n T} \star T\) and \emph{target inclusion labelling} \(\incbd n + T : \arr {\bound n T} \star T\) by:
-  \[\incbd n \epsilon T(p) = \SPath(\incbdpath n \epsilon T(p))\]
+  and then can define the \emph{source inclusion labelling} \(\incbd n + T : {\bound n T} \to T\) and \emph{target inclusion labelling} \(\incbd n + T : {\bound n T} \to T\) by:
+  \[\incbd n \epsilon T(p) = \SPath(\incbdpath n \epsilon T(p)) \qquad \ty(\incbd n \epsilon T) = \star\]
   for each \(n\) and \(\epsilon \in \{-,+\}\).
 \end{definition}
 
@@ -4009,29 +4009,27 @@ To define the labelling \(\{A,t\}\), we define the extension of labelling from a
 \begin{definition}
   Let \(L : D^n \to \U\) be a labelling from a linear tree, and let \(s,t : \STerm_\U\) be structured terms. The \emph{extension} of \(L\) by \(s\) and \(t\), \(\ext(L,s,t)\), is defined inductively on \(n\) by:
   \begin{equation*}
-    \ext(L,s,t) =
+    \ty(\ext(L,s,t)) = \ty(L) \qquad \ext(L,s,t) =
     \begin{cases*}
       L[0]\,\{t\}\,s &if \(n = 0\)\\
       L[0]\,\{\ext(L_0,s,t)\}\,L[1]&otherwise
     \end{cases*}
   \end{equation*}
   We then define the labelling \(\{A,t\}\) by induction on \(A\):
-  \[ \{\star,t\} = (p \mapsto t) \qquad \{\arr s A t, u\} = \ext(\{A,s\},t,u)\]
-  Finally, given a tree \(T\), we define the \emph{standard labelling} \(\stdlbl T n : D^n \to T\) by \(\stdlbl T n = \{\stdty T n, \stdcoh T n\}\).
+  \[ \{\star,t\} = (p \mapsto t) \qquad \{\arr s A t, u\} = \ext(\{A,s\},t,u) \qquad \ty(\{A,t\}) = \star\]
 \end{definition}
 
 These constructions all satisfy the expected typing judgements. More precisely the following inference rules are admissible:
 \begin{mathpar}
   \inferrule{\U \vdash L : D^n\\ \U \vdash s : \stdty {D^n} n \sub L\\ \U \vdash t : \arr {p^n \sub L} {\stdty {D^n} n \sub L} {s}}{\U \vdash \ext(L,s,t) : D^{n+1}}\\
-  \inferrule{\U \vdash A \\ \U \vdash t : A}{\U \vdash \{A,t\} : D^{\dim(A)}}\and
-  \inferrule{T : \Tree \\ n \geq \dep(T)}{T \vdash \stdlbl T n : D^n}
+  \inferrule{\U \vdash A \\ \U \vdash t : A}{\U \vdash \{A,t\} : D^{\dim(A)}}
 \end{mathpar}
 The admissibility of the above rules is routine to verify.
 
-Using these construction, we can recover structured term definitions of the unary composite of a (structured) term \(t\) of type \(A\) of dimension \(n\) as \( \stdcoh {D^n} n \sub {\{A,t\}}\) and can define the identity of the same term \(t\) as \(\stdcoh {D^{n-1}} n \sub {\{A,t\}}\). Therefore, the rules for disc removal and endo-coherence removal can be rephrased in terms of structured syntax to get the following rules:
+Using these construction, we can recover structured term definitions of the unary composite of a (structured) term \(t\) of type \(A\) of dimension \(n\) as \( \stdcoh {D^n} n \sub {\{A,t\}}\) and can define the identity of the same term \(t\) as \(\stdcoh {D^n} {n+1} \sub {\{A,t\}}\). Therefore, the rules for disc removal and endo-coherence removal can be rephrased in terms of structured syntax to get the following rules:
 \begin{mathpar}
   \inferrule{\U : \Ctx \uplus \Tree\\ \U \vdash A \\ \U \vdash t : A \\ \dim(A) = n > 0}{ \U \vdash \stdcoh {D^n} n \sub {\{A,t\}} = t}\textsc{dr'}\\
-  \inferrule{\U : \Ctx \uplus \Tree\\ T : \Tree \\ L : \arr S \star \U\\ n = \dim(A)\\\\ T \vdash A \\ T \vdash s : A \\ \Supp(s) = \Var(T) \\ \U \vdash L : T}{\U \vdash \SCoh T {\arr s A s} L = \stdcoh {D^n} n \sub { \{A, s\} \bullet L}}\textsc{ecr'}
+  \inferrule{\U : \Ctx \uplus \Tree\\ T : \Tree \\ L : \arr S \star \U\\ n = \dim(A)\\\\ T \vdash A \\ T \vdash s : A \\ \Supp(s) = \Var(T) \\ \U \vdash L : T}{\U \vdash \SCoh T {\arr s A s} L = \stdcoh {D^n} {n+1} \sub { \{A, s\} \bullet L}}\textsc{ecr'}
 \end{mathpar}
 which are admissible if the equality rule set \(\mathcal{R}\) has disc removal or endo-coherence removal respectively.
 
@@ -4055,7 +4053,6 @@ Lastly, under the presence of both disc removal and endo-coherence removal, the 
   \[ T \vdash \stdtm T n = \stdcoh {D^n} {n+1} \sub {\{\stdty T n, \stdtm T n\}} \]
 \end{theorem}
 \todo[inline]{Proof of this}
-\todo[inline]{remove standard label maybe}
 
 Due to these two theorems, every standard term \(\stdtm T n\) with \(n \geq \dep(T)\) is equal to either the unique variable of the singleton context (when \(n = \dep(T) = 0\)), a standard composite (when \(n = \dep(T) > 0\)) or an identity (when \(n > \dep(T)\)), and hence completely classifying the well-formed standard terms.
 
@@ -4204,7 +4201,7 @@ Let us again consider the tree \(S = [[\emp,\emp],\emp]\) from \cref{fig:tree-ex
     \node [on grid] at (0,0) (x01) {$\bullet$};
     \node [on grid] at (0,1)(x11) {$\bullet$};
     \draw (x01.center) to (x11.center);
-    \path [draw=none] (-0.5,0) to (0.5,0)
+    \path [draw=none] (-0.5,0) to (0.5,0);
   \end{tikzpicture}
   \qquad
   T'' = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x21.base)]
@@ -4279,7 +4276,7 @@ We now consider the insertion of \(T'\) into \(S\). Despite \(T'\) having a lowe
     \node [on grid] at (0,0) (x01) {$\bullet$};
     \node [on grid] at (0,1)(x11) {$\bullet$};
     \draw (x01.center) to (x11.center);
-    \path [draw=none] (-0.5,0) to (0.5,0)
+    \path [draw=none] (-0.5,0) to (0.5,0);
   \end{tikzpicture}
   \qquad
   \insertion S P {T'} = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
@@ -4296,18 +4293,137 @@ We now consider the insertion of \(T'\) into \(S\). Despite \(T'\) having a lowe
 \]
 Here, the branch \(P\) is replaced by a singleton tree, which is the remaining \(T'\) after removing its trunk. We note that this operation is the same as pruning the locally maximal variable \(\lfloor \bar P \rfloor\) from \(\lfloor T \rfloor\). We will see in \cref{sec:univ-prop-insert} that all instances of pruning can be represented as an instance of insertion.
 
-When we consider the insertion of \(T''\) into \(S\), it is not clear how to proceed, as there is no ``corresponding part'' of \(T''\) to replace the branch \(P\) with. In the other two cases this is obtained by removing the trunk of the tree, but \(T''\) has no trunk to remove. In this case we say that the insertion is not possible to perform as \(\bh(P) > \th(T'')\), a condition necessary for insertion. More generally, we will be able to define the insertion an any \emph{insertion redex}, which we now define.
+When we consider the insertion of \(T''\) into \(S\), it is not clear how to proceed, as there is no ``corresponding part'' of \(T''\) to replace the branch \(P\) with. In the other two cases this is obtained by removing the trunk of the tree, but \(T''\) has no trunk to remove. In this case we say that the insertion is not possible to perform as \(\bh(P) > \th(T'')\), a condition necessary for insertion.
+
+More generally we consider a (structured) coherence term \(\SCoh S A L : \STerm_\U\). To apply insertion to this term, we must first identify a branch \(P\) of \(S\) such that \(\bar P \sub L \equiv \stdcoh T {\lh(P)} \sub M\), that is there is a locally maximal argument of \(L\) which is a standard coherence. We then must construct the following data as part of the insertion operation:
+
+\begin{itemize}
+\item The \emph{inserted tree} \(\insertion S P T\), obtained by inserting \(T\) into \(S\) along the branch \(P\). We have already given some examples of this operation.
+\item The \emph{interior labelling} \(\iota : T \to \insertion S P T\), the inclusion of \(T\) into a copy of \(T\) living in the inserted tree.
+\item The \emph{exterior labelling} \(\kappa : S \to \insertion S P T\), which maps \(\bar P\) to standard coherence over the copy of \(T\), or more specifically \(\mathcal{C}_\Theta^{\lh(P)} \sub \iota\), and other maximal paths to their copy in the inserted tree.
+\item The \emph{inserted labelling} \(\insertion L P M : \insertion S P T \to \U\), which collects the appropriate parts of \(L\) and \(M\).
+\end{itemize}
+Using this notation, insertion yields the following equality:
+\[\Coh S A L = \Coh {\insertion S P T} {A \sub \kappa} {\insertion L P M}\]
+These constructions can be assembled into the following diagram, where \(B\) is the type of \(\bar P\) and \(n = \lh(P)\):
+% https://q.uiver.app/?q=WzAsNSxbMCwwLCJEX24iXSxbMSwwLCJcXERlbHRhIl0sWzAsMSwiXFxUaGV0YSJdLFsxLDEsIlxcaW5zZXJ0aW9uIFxcRGVsdGEgeCBcXFRoZXRhIl0sWzIsMiwiXFxHYW1tYSJdLFsxLDMsIlxca2FwcGEiXSxbMiwzLCJcXGlvdGEiLDJdLFswLDEsIlxce0EseFxcfSJdLFswLDIsIlxce1xcbWF0aGNhbHtVfV9cXFRoZXRhXm4sIFxcbWF0aGNhbHtDfV9cXFRoZXRhXm5cXH0iLDJdLFsxLDQsIlxcc2lnbWEiLDAseyJjdXJ2ZSI6LTN9XSxbMiw0LCJcXHRhdSIsMix7ImN1cnZlIjoyfV0sWzMsNCwiXFxpbnNlcnRpb24gXFxzaWdtYSB4IFxcdGF1IiwxXSxbMywwLCIiLDEseyJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XV0=
+\[\begin{tikzcd}
+    {D^n} & S \\
+    T & {\insertion S P T} \\
+    && \U
+    \arrow["\kappa", from=1-2, to=2-2]
+    \arrow["\iota"', from=2-1, to=2-2]
+    \arrow["{\{B, \bar P\}}", from=1-1, to=1-2]
+    \arrow["{\{\stdty T n, \stdcoh T n\}}"', from=1-1, to=2-1]
+    \arrow["L", curve={height=-18pt}, from=1-2, to=3-3]
+    \arrow["M"', curve={height=12pt}, from=2-1, to=3-3]
+    \arrow["{\insertion L P M}"{description}, from=2-2, to=3-3]
+    % \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+  \end{tikzcd}
+\]
+It will be proven in \cref{sec:univ-prop-insert} that the square above is cocartesian, and so \(\insertion S P T\) is the pushout of \(S\) and \(T\).
+
+We now begin to define each of these constructions in turn. As we need a lot of data to perform an insertion, we will package it up to avoid repetition.
 
 \begin{definition}
-  An \emph{insertion redex} is a triple \((S,P,T)\) where \(S\) and \(T\) are trees and \(P\) is a branch of \(S\) such that \(\bh(P) \leq \th(T)\) and \(\lh(P) \geq \dep(T)\).
+  An \emph{insertion point} is a triple \((S,P,T)\) such that \(S\) and \(T\) are trees and \(P\) is a branch of \(S\) with \(\bh(P) \leq \th(T)\) and \(\lh(S) \geq \dim(T)\).
+
+  An \emph{insertion redex} is a sextuple \((S,P,T,\U,L,M)\) such that \((S,P,T)\) is an insertion point, \(L : S \to \U\) and \(M : T \to \U\) are labellings, and \(\bar P \sub L \equiv \mathcal{C}_T^{\lh(P)}\sub M\).
 \end{definition}
 
+We can now define the insertion operation on trees.
 
+\begin{definition}[Inserted tree]
+  Let \((S,P,T)\) be an insertion point. Define the \emph{inserted tree} \(\insertion S P T\) by induction on the branch \(P\), noting that \(P\) is always non-empty.
+    \begin{itemize}
+  \item Suppose \(P = [k]\) and \(S = [S_0,\dots,S_k,\dots,S_n]\). Then:
+    \[\insertion S P T = [S_0,\dots,S_{k-1}] \doubleplus T \doubleplus [S_{k+1},\dots,S_n]\]
+  \item Suppose \(P = k :: P'\) and again \(S = [S_0,\dots,S_k,\dots,S_n]\). We note that \(P'\) is a branch of \(S_k\) and by the condition on trunk height of \(T\) we have \(T = \Sigma(T_0)\). Then:
+    \[\insertion S P T = [S_0,\dots,S_{k-1},(\insertion {S_k} {P'} {T_0}),S_{k+1},\dots,S_n ] \]
+  \end{itemize}
+  We draw attention to the condition of the trunk height of \(T\) being at least the branch height of \(P\), which is necessary for the induction to proceed. We recall that a tree is identified with a list of trees, and that in the first case of insertion \(T\) is treated as a list, and in the second case \(\insertion {S_k} {P'} {T_0}\) is treated as a single tree which forms one of the subtrees of \(\insertion S P T\).
+\end{definition}
 
-\todo[inline]{Give components of insertion}
-\todo[inline]{Use paper for a lot of this}
+We now proceed to define the interior and exterior labellings, which will be done using the diagrammatic notation introduced in \cref{sec:wedge-sums}.
 
-\todo[inline]{Give insertion construction}
+\begin{definition}[Interior labelling]
+  Given an insertion point \((S, P, T)\) we define the interior labelling \(\iota_{S,P,T} : T \to \insertion S P T\) by induction on~\(P\).
+
+  \begin{itemize}
+  \item When \(P = [k]\) and \(S = [S_0,\dots,S_k,\dots,S_n]\) we define \(\iota\) by \(\ty(\iota) = \star\) and:
+    % https://q.uiver.app/?q=WzAsNixbMCwwLCJTXzBcXHZlZVxcZG90c1xcdmVlIFNfe2stMX0iXSxbNCwwLCJTX3trKzF9IFxcdmVlIFxcZG90cyBcXHZlZSBTX24iXSxbMiwwLCJUIl0sWzMsMCwiXFx2ZWUiXSxbMSwwLCJcXHZlZSJdLFsyLDIsIlQiXSxbNSwyLCJcXGlkIl1d
+    \[\begin{tikzcd}[column sep=smaller,row sep=10pt]
+        {[S_0,\dots,S_{k-1}]} & \doubleplus & T & \doubleplus & {[S_{k+1},\dots,S_n]} \\
+        \\
+        && T
+        \arrow["\id"{font = \normalsize}, from=3-3, to=1-3]
+      \end{tikzcd}
+    \]
+
+    \item When \(P = k :: P'\), \(S = [S_0,\dots,S_k,\dots,S_n]\), and \(T = [T_0]\) (by the trunk height condition) we define \(\iota\) by \(\ty(\iota) = \star\) and:
+    % https://q.uiver.app/?q=WzAsNixbMCwwLCJcXGxmbG9vciBbU18xLFxcZG90cyxTX3trLTF9XSBcXHJmbG9vciJdLFs0LDAsIlxcbGZsb29yIFtTX3trKzF9LFxcZG90cyxTX25dIFxccmZsb29yIl0sWzIsMCwiXFxTaWdtYSBcXGxmbG9vciBcXGluc2VydGlvbiB7U19rfSB7UCd9IHtUXzF9IFxccmZsb29yIl0sWzMsMCwiXFx2ZWUiXSxbMSwwLCJcXHZlZSJdLFsyLDIsIlxcU2lnbWEgXFxsZmxvb3IgVF8xIFxccmZsb29yIl0sWzUsMiwiXFxTaWdtYSBcXGlvdGFfe1NfayxQJyxUXzF9Il1d
+    \[\begin{tikzcd}[column sep=smaller, row sep=10pt]
+        {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma \insertion {S_k} {P'} {T_0}} & \vee & {[S_{k+1},\dots,S_n]} \\
+        \\
+        && {\Sigma T_0}
+        \arrow["{\Sigma \iota_{S_k,P',T_0}}"{font = \normalsize}, from=3-3, to=1-3]
+      \end{tikzcd}
+    \]
+  \end{itemize}
+We may drop the subscripts on \(\iota\) when they are easily inferred.
+\end{definition}
+
+\begin{definition}[Exterior labelling]
+  Given an insertion point \((S, P, T)\), we define the exterior labelling \(\kappa_{S,P,T} : S \to \insertion S P T\) by induction on \(P\).
+
+  \begin{itemize}
+  \item When \(P = [k]\) and \(S = [S_0,\dots,S_k,\dots,S_n]\) we define \(\kappa\) by \(\ty(\kappa) = \star\) and:
+    % https://q.uiver.app/?q=WzAsMTAsWzAsMCwiXFxsZmxvb3IgW1NfMSxcXGRvdHMsU197ay0xfV0gXFxyZmxvb3IiXSxbNCwwLCJcXGxmbG9vciBbU197aysxfSxcXGRvdHMsU19uXSBcXHJmbG9vciJdLFsyLDAsIlxcbGZsb29yIFQgXFxyZmxvb3IiXSxbMywwLCJcXHZlZSJdLFsxLDAsIlxcdmVlIl0sWzIsMiwiXFxTaWdtYSBcXGxmbG9vciBTX2sgXFxyZmxvb3IiXSxbMCwyLCJcXGxmbG9vciBbU18xLFxcZG90cyxTX3trLTF9XFxyZmxvb3IiXSxbMSwyLCJcXHZlZSJdLFszLDIsIlxcdmVlIl0sWzQsMiwiXFxsZmxvb3IgW1Nfe2srMX0sXFxkb3RzLFNfbl0gXFxyZmxvb3IiXSxbNSwyLCJcXHtcXG1hdGhjYWx7VX1fVF5uLCBcXG1hdGhjYWx7Q31fVF5uXFx9Il0sWzYsMCwiXFxpZCJdLFs5LDEsIlxcaWQiXV0=
+    \[\begin{tikzcd}[column sep=smaller,row sep = 10pt]
+        {[S_0,\dots,S_{k-1}]} & \doubleplus & {T} & \doubleplus & {[S_{k+1},\dots,S_n]} \\
+        \\
+        {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma S_k} & \vee & {[S_{k+1},\dots,S_n]}
+        \arrow["{\{\stdty T m, \stdcoh T m\}}"{font = \normalsize, pos=.4}, from=3-3, to=1-3]
+        \arrow["\id"{font = \normalsize}, from=3-1, to=1-1]
+        \arrow["\id"{font = \normalsize}, from=3-5, to=1-5]
+      \end{tikzcd}\]
+    Where we note that by the condition of \(P\) being a branch we have that \(S_k\) is linear and so \(\Sigma \lfloor S_k \rfloor\) is a some disc \(D^m\) where \(m = \dep(S_k) + 1\).
+
+    \item When \(P = k :: P'\), \(S = [S_0,\dots,S_k,\dots,S_n]\), and \(T = [T_0]\) (by the trunk height condition) we define \(\kappa\) by \(\ty(\kappa) = \star\) and:
+    % https://q.uiver.app/?q=WzAsMTAsWzAsMCwiXFxsZmxvb3IgW1NfMSxcXGRvdHMsU197ay0xfV0gXFxyZmxvb3IiXSxbNCwwLCJcXGxmbG9vciBbU197aysxfSxcXGRvdHMsU19uXSBcXHJmbG9vciJdLFsyLDAsIlxcU2lnbWEgXFxsZmxvb3IgXFxpbnNlcnRpb24ge1Nfa30ge1AnfSB7VF8xfSBcXHJmbG9vciJdLFszLDAsIlxcdmVlIl0sWzEsMCwiXFx2ZWUiXSxbMiwyLCJcXFNpZ21hIFxcbGZsb29yIFNfayBcXHJmbG9vciJdLFswLDIsIlxcbGZsb29yIFtTXzEsXFxkb3RzLFNfe2stMX1cXHJmbG9vciJdLFsxLDIsIlxcdmVlIl0sWzMsMiwiXFx2ZWUiXSxbNCwyLCJcXGxmbG9vciBbU197aysxfSxcXGRvdHMsU19uXSBcXHJmbG9vciJdLFs1LDIsIlxcU2lnbWEgXFxrYXBwYV97U19rLFAnLFRfMX0iXSxbNiwwLCJcXGlkIl0sWzksMSwiXFxpZCJdXQ==
+    \[\begin{tikzcd}[column sep=smaller, row sep = 10pt]
+        {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma \insertion {S_k} {P'} {T_0}} & \vee & {[S_{k+1},\dots,S_n]} \\
+        \\
+        {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma S_k} & \vee & {[S_{k+1},\dots,S_n]}
+        \arrow["{\Sigma \kappa_{S_k,P',T_0}}"{font=\normalsize}, from=3-3, to=1-3]
+        \arrow["\id"{font=\normalsize}, from=3-1, to=1-1]
+        \arrow["\id"{font=\normalsize}, from=3-5, to=1-5]
+      \end{tikzcd}\]
+  \end{itemize}
+Again the subscripts on \(\kappa\) may be dropped where they can be inferred.
+\end{definition}
+
+Lastly we define the inserted labelling, the labelling out of the inserted tree.
+
+\begin{definition}[Inserted labelling]
+  Given an insertion point \((S, P, T)\) with \(L : S \to \U\) and \(M : T \to \U\), we define the \emph{inserted labelling} \(\insertion L P M : {\insertion S P T} \to \U\). Let
+  \[ S = [S_0,\dots,S_n] \qquad L = s_0 \{L_0\}s_1 \cdots \{L_n\}s_{n+1} : A\]
+  and then proceed by induction on \(P\).
+
+  \begin{itemize}
+    \item Let \(P = [k]\), and
+    \[ T = [T_0,\dots,T_m] \qquad M = t_0\{M_0\}t_1 \cdots \{M_m\}t_{m+1} : B\]
+    Then define \(\insertion L {[k]} M\) to be:
+    \[s_0\{L_0\}s_1 \cdots \{L_{k-1}\}t_0\{M_0\}t_1\cdots \{M_m\}t_{m+1}\{L_{k+1}\}s_{k+2}\cdots \{L_n\}s_{n+1} : A\]
+
+    \item Suppose \(P = k :: P'\) so that
+    \[T = [T_0] \qquad M = t_0\{M_0\}t_1 : B\]
+    Define \(\insertion L P M\) as:
+    \[s_0\{L_0\}s_1\cdots \{L_{k-1}\}t_0\{\insertion {L_k} {P'} {M_0}\}t_1\{L_{k+1}\}s_{k+2} \cdots \{L_n\}s_{n+1} : A\]
+  \end{itemize}
+\end{definition}
+
+\todo[inline]{Typing of these constructions}
 
 \subsection{Universal property of insertion}
 \label{sec:univ-prop-insert}
