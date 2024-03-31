@@ -3593,6 +3593,7 @@ For any tree \(T\), there is an \emph{identity labelling} \(\id_T\) given by:
 \[ \id_T(p) = \SPath(p) \qquad \ty(\id_T) = \star\]
 The function \func{Catt.Tree.Structured.Properties}{id-label-to-sub} in the formalisation (see \module{Catt.Tree.Structured.Properties}) shows that:
 \[\lfloor \id_T \rfloor = \id_{\lfloor T \rfloor}\]
+
 The main motivation for introducing structured syntax was to be able to define a composition of labellings, which we do now by defining the application of a labelling to a structured term, structured type, or another labelling.
 
 \begin{definition}
@@ -3706,6 +3707,31 @@ A simple case analysis demonstrates that these constructions commute with \(\lfl
 
 Many properties of these constructions among others are given in the formalisation module \module{Catt.Tree.Structured.Construct.Properties}. In particular, the diagrammatic notation for substitutions between wedge sums can be repurposed to define labellings, which will be used to define certain labellings in \cref{sec:insertion}.
 
+It will be useful to be able to interpret all \Catt syntax as structured syntax. For terms such a mapping is trivially given by the \(\SOther\) constructor. For a type \(A\), a structured type \(\lceil A \rceil\) can be formed by a simple induction, applying the \(\SOther\) constructor to each term in the type. For substitutions, we give the following definition.
+
+\begin{definition}
+  Let \(\sigma : \lfloor S \rfloor \to_A \Gamma\) be a substitution. We then define the labelling:
+  \[ \lceil \sigma \rceil : S \to \Gamma \]
+  by \(\lceil \sigma \rceil(p) = \SOther(\lfloor p \rfloor \sub \sigma)\) and \(\ty(\lceil \sigma \rceil) = \lceil A \rceil\).
+\end{definition}
+
+This construction is an inverse to taking generating a substitution from a labelling.
+
+\begin{proposition}
+  Let \(\sigma : \lfloor S \rfloor \to_A \Gamma\) be a substitution. Then \(\lfloor \lceil \sigma \rceil \rfloor \equiv \sigma\). Further, for any labelling \(L : S \to \Gamma\), \(\lceil \lfloor L \rfloor \rceil \equiv L\).
+\end{proposition}
+\begin{proof}
+  We note that every variable of \(\lfloor S \rfloor\) is given by \(\lfloor p \rfloor\) for some path \(p\). We then have the equality:
+  \begin{equation*}
+    \lfloor p \rfloor \sub {\lfloor \lceil \sigma \rceil \rfloor} \equiv \lfloor p \sub {\lceil \sigma \rceil} \rfloor \equiv \lfloor \SOther(\lfloor p \rfloor \sub \sigma) \rfloor \equiv \lfloor p \rfloor \sub \sigma
+  \end{equation*}
+  and so \(\sigma\) and \(\lfloor \lceil \sigma \rceil \rfloor\) have the same action on each variable and so are equal.
+
+  Letting \(L : S \to \Gamma\) be a labelling. Then for any path \(p\):
+  \[ \lceil \lfloor L \rfloor \rceil(p) \equiv \SOther(\lfloor p \rfloor \sub {\lfloor L \rfloor}) \equiv \SOther(\lfloor L(p) \rfloor) \]
+  and so \(\lfloor \lceil \lfloor L \rfloor \rceil(p) \rfloor \equiv \lfloor L(p) \rfloor\). Therefore \(L \equiv \lceil \lfloor L \rfloor \rceil\) by definition.
+\end{proof}
+
 \subsection{Typing and equality}
 \label{sec:typing-struct-terms}
 
@@ -3726,6 +3752,23 @@ We also want the typing rules for \(s : \STerm_\U\) and \(A : \SType_\U\) to be 
     \inferrule{\U \vdash L[0] : \ty(L)\quad \cdots\quad \U\vdash L[n+1] : \ty(L)\\\U\vdash L_0 : T_0\quad \cdots\quad\U\vdash L_n : T_n}{\U \vdash L : [T_0,\dots,T_n]}
   \end{mathpar}
 \end{definition}
+
+Paths \(p\) can be equipped with a canonical structured type, \(\ty(p)\), as follows:
+\begin{itemize}
+\item For paths \([k]\), \(\ty([k]) = \star\),
+\item For paths \(k :: p\) where \(p\) is a path, the type \(\ty(k :: p)\) is obtained by taking the type \(\ty(p)\), applying \(\Inc_k\) to each term, and replacing the \(\star\) type at its base by the type \(\arr {\SPath[k]} {\star} {\SPath[k+1]}\).
+\end{itemize}
+This can be used to prove that the identity labelling is well-formed.
+\begin{proposition}
+  Let \(S\) be a tree. Then \(S \vdash \id_S : S\).
+\end{proposition}
+\begin{proof}
+  Let \(x\) be a list that indexes a subtree of \(S\), and define the labelling \(\mathsf{subtree}(x) : S^x \to x\) by \(\ty(\mathsf{subtree}(x)) = \ty(x \doubleplus [0])\) and \(\mathsf{subtree}(x)(p) = \SPath(x \doubleplus p)\).
+
+  We then prove the more general result that \(S \vdash \mathsf{subtree}(x) : S^x\) for each \(x\), with the desired result following from the case \(x = \emp\). If \(S^x = \emp\), then the typing judgement follows from \(S \vdash S^x[0] : \ty(S^x[0])\).
+
+  If \(S^x = [T_0, \dots, T_n]\) then we must show that \(S \vdash S^x[k] : \ty(S^x[0])\), which follows from the observation that \(\ty(S^x[0]) \equiv \ty(S^x[i])\) for any \(i\) as the definition does not use the last element of the path. We are also required to show that \(S \vdash S^x_i : T_i\), but \(T_i \equiv S^{x \doublplus [i]}\) and \(S^x_i \equiv S^{x \doubleplus [i]}\), and so this follows from inductive hypothesis.
+\end{proof}
 
 From this typing judgement for labellings, one can obtain a derivation of the typing judgement for the generated substitution.
 
@@ -3757,7 +3800,26 @@ From this typing judgement for labellings, one can obtain a derivation of the ty
   and so by \cref{lem:wedge-typing}, the wedge sums are well-formed, completing the proof.
 \end{proof}
 
-It can be shown that the reverse implication also holds: if \(\lfloor \U \rfloor \vdash \lfloor L \rfloor : \lfloor T \rfloor\) then \(\U \vdash L : T\). This is done in the formalisation module \module{Catt.Tree.Structured.Typing.Properties} by function \func{Catt.Tree.Structured.Typing.Properties}{Label-Ty}. By these results, many of the properties enjoyed by the typing judgements in \Cattr with a tame rule set \(\mathcal{R}\) also apply to the typing judgements for structured terms.
+It can be shown that the reverse implication also holds: if \(\lfloor \U \rfloor \vdash \lfloor L \rfloor : \lfloor T \rfloor\) then \(\U \vdash L : T\). This follows as a corollary from the following proposition.
+
+\begin{proposition}
+  Let \(\sigma : \arr {\lfloor T \rfloor} A \Gamma\) be a substitution with \(\Gamma \vdash \sigma : \lfloor S \rfloor\). Then for any \(L : S \to T\) we have:
+  \[T \vdash L : S \implies \Gamma \vdash L \bullet \lceil \sigma \rceil : S\]
+  and hence \(\Gamma \vdash \lceil  \sigma \rceil : T\) follows from letting \(L\) be the identity labelling.
+\end{proposition}
+\begin{proof}
+  Let \(S = [S_0, \dots, S_n]\) (where we allow this list to be empty). By the definition of the typing for a labelling, it suffices to show that for each \(0 \leq i \leq n\) and \(0 \leq k \leq n + 1\) that:
+  \[ S \vdash L[k] \bullet \lceil \sigma \rceil : \ty(L) \sub {\lceil \sigma \rceil} \qquad S \vdash (L \bullet \lceil \sigma \rceil)_i : S_i\]
+  The second typing judgement follows directly from inductive hypothesis, as \((L \bullet \lceil \sigma \rceil)_i \equiv L_i \bullet \lceil \sigma \rceil\). By definition of typing for structured terms, the first judgement requires us to prove that:
+  \[ \lfloor S \rfloor \vdash \lfloor L[k] \bullet \lceil \sigma \rceil \rfloor : \lfloor \ty(L) \sub {\lceil \sigma \rceil} \rfloor\]
+  which is equivalent to:
+  \[ \lfloor  S \rfloor \vdash \lfloor L[k] \rfloor \sub \sigma : \lfloor \ty(L) \rfloor \sub \sigma\]
+  and so follows from typing being preserved by substitution.
+\end{proof}
+
+
+
+By these results, many of the properties enjoyed by the typing judgements in \Cattr with a tame rule set \(\mathcal{R}\) also apply to the typing judgements for structured terms.
 
 The module \module{Catt.Tree.Structured.Typing.Properties} also introduces many functions for constructing the typing judgements for structured syntax. One such function is \func{Catt.Tree.Structured.Typing.Properties}{TySCoh}, which represents the admissibility of the following rule:
 \begin{equation}
@@ -3969,6 +4031,7 @@ The second lemma gives a globularity condition for the standard type.
 We can now finally state and prove the typing properties of standard constructions.
 
 \begin{proposition}
+  \label{prop:standard-typing}
   Suppose that \(\mathcal{O}\) contains the standard operations. Then the following rules are admissible:
   \begin{mathpar}
     \inferrule{T : \Tree\\ n \in \mathbb{N}}{T \vdash \stdty T n}\and
@@ -4328,7 +4391,7 @@ We now begin to define each of these constructions in turn. As we need a lot of 
 \begin{definition}
   An \emph{insertion point} is a triple \((S,P,T)\) such that \(S\) and \(T\) are trees and \(P\) is a branch of \(S\) with \(\bh(P) \leq \th(T)\) and \(\lh(S) \geq \dim(T)\).
 
-  An \emph{insertion redex} is a sextuple \((S,P,T,\U,L,M)\) such that \((S,P,T)\) is an insertion point, \(L : S \to \U\) and \(M : T \to \U\) are labellings, and \(\bar P \sub L \equiv \mathcal{C}_T^{\lh(P)}\sub M\).
+  An \emph{insertion redex} is a sextuple \((S,P,T,\U,L,M)\) such that \((S,P,T)\) is an insertion point, \(L : S \to \U\) and \(M : T \to \U\) are labellings, and \(L(\bar P) \equiv \mathcal{C}_T^{\lh(P)}\sub M\).
 \end{definition}
 
 We can now define the insertion operation on trees.
@@ -4338,10 +4401,10 @@ We can now define the insertion operation on trees.
     \begin{itemize}
   \item Suppose \(P = [k]\) and \(S = [S_0,\dots,S_k,\dots,S_n]\). Then:
     \[\insertion S P T = [S_0,\dots,S_{k-1}] \doubleplus T \doubleplus [S_{k+1},\dots,S_n]\]
-  \item Suppose \(P = k :: P'\) and again \(S = [S_0,\dots,S_k,\dots,S_n]\). We note that \(P'\) is a branch of \(S_k\) and by the condition on trunk height of \(T\) we have \(T = \Sigma(T_0)\). Then:
-    \[\insertion S P T = [S_0,\dots,S_{k-1},(\insertion {S_k} {P'} {T_0}),S_{k+1},\dots,S_n ] \]
+  \item Suppose \(P = k :: Q\) and again \(S = [S_0,\dots,S_k,\dots,S_n]\). We note that \(Q\) is a branch of \(S_k\) and by the condition on trunk height of \(T\) we have \(T = \Sigma(T_0)\). Then:
+    \[\insertion S P T = [S_0,\dots,S_{k-1},(\insertion {S_k} {Q} {T_0}),S_{k+1},\dots,S_n ] \]
   \end{itemize}
-  We draw attention to the condition of the trunk height of \(T\) being at least the branch height of \(P\), which is necessary for the induction to proceed. We recall that a tree is identified with a list of trees, and that in the first case of insertion \(T\) is treated as a list, and in the second case \(\insertion {S_k} {P'} {T_0}\) is treated as a single tree which forms one of the subtrees of \(\insertion S P T\).
+  We draw attention to the condition of the trunk height of \(T\) being at least the branch height of \(P\), which is necessary for the induction to proceed. We recall that a tree is identified with a list of trees, and that in the first case of insertion \(T\) is treated as a list, and in the second case \(\insertion {S_k} {Q} {T_0}\) is treated as a single tree which forms one of the subtrees of \(\insertion S P T\).
 \end{definition}
 
 We now proceed to define the interior and exterior labellings, which will be done using the diagrammatic notation introduced in \cref{sec:wedge-sums}.
@@ -4360,13 +4423,13 @@ We now proceed to define the interior and exterior labellings, which will be don
       \end{tikzcd}
     \]
 
-    \item When \(P = k :: P'\), \(S = [S_0,\dots,S_k,\dots,S_n]\), and \(T = [T_0]\) (by the trunk height condition) we define \(\iota\) by \(\ty(\iota) = \star\) and:
+    \item When \(P = k :: Q\), \(S = [S_0,\dots,S_k,\dots,S_n]\), and \(T = [T_0]\) (by the trunk height condition) we define \(\iota\) by \(\ty(\iota) = \star\) and:
     % https://q.uiver.app/?q=WzAsNixbMCwwLCJcXGxmbG9vciBbU18xLFxcZG90cyxTX3trLTF9XSBcXHJmbG9vciJdLFs0LDAsIlxcbGZsb29yIFtTX3trKzF9LFxcZG90cyxTX25dIFxccmZsb29yIl0sWzIsMCwiXFxTaWdtYSBcXGxmbG9vciBcXGluc2VydGlvbiB7U19rfSB7UCd9IHtUXzF9IFxccmZsb29yIl0sWzMsMCwiXFx2ZWUiXSxbMSwwLCJcXHZlZSJdLFsyLDIsIlxcU2lnbWEgXFxsZmxvb3IgVF8xIFxccmZsb29yIl0sWzUsMiwiXFxTaWdtYSBcXGlvdGFfe1NfayxQJyxUXzF9Il1d
     \[\begin{tikzcd}[column sep=smaller, row sep=10pt]
-        {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma \insertion {S_k} {P'} {T_0}} & \vee & {[S_{k+1},\dots,S_n]} \\
+        {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma \insertion {S_k} {Q} {T_0}} & \vee & {[S_{k+1},\dots,S_n]} \\
         \\
         && {\Sigma T_0}
-        \arrow["{\Sigma \iota_{S_k,P',T_0}}"{font = \normalsize}, from=3-3, to=1-3]
+        \arrow["{\Sigma \iota_{S_k,Q,T_0}}"{font = \normalsize}, from=3-3, to=1-3]
       \end{tikzcd}
     \]
   \end{itemize}
@@ -4389,13 +4452,13 @@ We may drop the subscripts on \(\iota\) when they are easily inferred.
       \end{tikzcd}\]
     Where we note that by the condition of \(P\) being a branch we have that \(S_k\) is linear and so \(\Sigma \lfloor S_k \rfloor\) is a some disc \(D^m\) where \(m = \dep(S_k) + 1\).
 
-    \item When \(P = k :: P'\), \(S = [S_0,\dots,S_k,\dots,S_n]\), and \(T = [T_0]\) (by the trunk height condition) we define \(\kappa\) by \(\ty(\kappa) = \star\) and:
+    \item When \(P = k :: Q\), \(S = [S_0,\dots,S_k,\dots,S_n]\), and \(T = [T_0]\) (by the trunk height condition) we define \(\kappa\) by \(\ty(\kappa) = \star\) and:
     % https://q.uiver.app/?q=WzAsMTAsWzAsMCwiXFxsZmxvb3IgW1NfMSxcXGRvdHMsU197ay0xfV0gXFxyZmxvb3IiXSxbNCwwLCJcXGxmbG9vciBbU197aysxfSxcXGRvdHMsU19uXSBcXHJmbG9vciJdLFsyLDAsIlxcU2lnbWEgXFxsZmxvb3IgXFxpbnNlcnRpb24ge1Nfa30ge1AnfSB7VF8xfSBcXHJmbG9vciJdLFszLDAsIlxcdmVlIl0sWzEsMCwiXFx2ZWUiXSxbMiwyLCJcXFNpZ21hIFxcbGZsb29yIFNfayBcXHJmbG9vciJdLFswLDIsIlxcbGZsb29yIFtTXzEsXFxkb3RzLFNfe2stMX1cXHJmbG9vciJdLFsxLDIsIlxcdmVlIl0sWzMsMiwiXFx2ZWUiXSxbNCwyLCJcXGxmbG9vciBbU197aysxfSxcXGRvdHMsU19uXSBcXHJmbG9vciJdLFs1LDIsIlxcU2lnbWEgXFxrYXBwYV97U19rLFAnLFRfMX0iXSxbNiwwLCJcXGlkIl0sWzksMSwiXFxpZCJdXQ==
     \[\begin{tikzcd}[column sep=smaller, row sep = 10pt]
-        {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma \insertion {S_k} {P'} {T_0}} & \vee & {[S_{k+1},\dots,S_n]} \\
+        {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma \insertion {S_k} {Q} {T_0}} & \vee & {[S_{k+1},\dots,S_n]} \\
         \\
         {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma S_k} & \vee & {[S_{k+1},\dots,S_n]}
-        \arrow["{\Sigma \kappa_{S_k,P',T_0}}"{font=\normalsize}, from=3-3, to=1-3]
+        \arrow["{\Sigma \kappa_{S_k,Q,T_0}}"{font=\normalsize}, from=3-3, to=1-3]
         \arrow["\id"{font=\normalsize}, from=3-1, to=1-1]
         \arrow["\id"{font=\normalsize}, from=3-5, to=1-5]
       \end{tikzcd}\]
@@ -4416,21 +4479,164 @@ Lastly we define the inserted labelling, the labelling out of the inserted tree.
     Then define \(\insertion L {[k]} M\) to be:
     \[s_0\{L_0\}s_1 \cdots \{L_{k-1}\}t_0\{M_0\}t_1\cdots \{M_m\}t_{m+1}\{L_{k+1}\}s_{k+2}\cdots \{L_n\}s_{n+1} : A\]
 
-    \item Suppose \(P = k :: P'\) so that
+    \item Suppose \(P = k :: Q\) so that
     \[T = [T_0] \qquad M = t_0\{M_0\}t_1 : B\]
     Define \(\insertion L P M\) as:
-    \[s_0\{L_0\}s_1\cdots \{L_{k-1}\}t_0\{\insertion {L_k} {P'} {M_0}\}t_1\{L_{k+1}\}s_{k+2} \cdots \{L_n\}s_{n+1} : A\]
+    \[s_0\{L_0\}s_1\cdots \{L_{k-1}\}t_0\{\insertion {L_k} {Q} {M_0}\}t_1\{L_{k+1}\}s_{k+2} \cdots \{L_n\}s_{n+1} : A\]
   \end{itemize}
 \end{definition}
 
-\todo[inline]{Typing of these constructions}
+The now proceed to prove that each of these constructions used to generate insertion is well-formed. We begin with the following small lemma.
+
+\begin{lemma}
+  \label{lem:inserted-label-lem}
+  Let \((S,P,T,U,L,M)\) be an insertion redex. If we further suppose that \(\U \vdash L : S\) and \(\U \vdash M : T\), then:
+  \[ \U \vdash \arr {L[k]} {\ty(L)} {L[k+1]} = \arr {M[0]} {\ty(M)} {M[m+1]}\]
+  where \(k\) is the first element of \(P\) (as \(P\) is non-empty) and \(T\) has length \(m\).
+\end{lemma}
+\begin{proof}
+  From the insertion redex, we have \(L(\bar P) \equiv \stdcoh T {\lh(P)} \sub M\). By assumption, \(P\) is of the form \(k :: p\), where \(p\) is a path and \(S = [S_0,\dots,S_n]\) and so
+  \[\SPath(\bar P) \equiv  \Inc_k(\SPath(p)) \]
+  and so supposing that \(S_k \vdash \SPath(p) : A\) (as every path is well-formed), we can obtain:
+  \[\U \vdash \SPath(\bar P) \sub L : \Sigma(A) \sub {\inc_k} \sub L\]
+  By \cref{prop:prop:standard-typing}, \(\U \vdash \stdcoh T {\lh(P)} \sub M : \stdty T {\lh(P)} \sub M\). Therefore by uniqueness of types (using the syntactic equality from the insertion redex), we have:
+  \[ \U \vdash \Sigma(A) \sub {\inc_k \bullet L} = \stdty T {\lh(P)} \sub M\]
+  By truncating both sides of of this equality \(\lh(P) - 1\) times we get:
+  \[ \U \vdash \Sigma(\star) \sub {\inc_k \bullet L} = \stdty T 1 \sub M\]
+  which after expanding definitions on both sides gives the required equality.
+\end{proof}
+
+The typing properties of each of the constructions involved in insertion are given in the following proposition.
+\begin{proposition}
+  Let \((S,P,T)\) be an insertion point. Then:
+  \[\insertion S P T \vdash \iota_{S,P,T} : T \qquad \insertion S P T \vdash \kappa_{S,P,T} : S\]
+  If we further have \(\U \vdash L : S\) and \(\U \vdash M : S\) with \(L(\bar P) \equiv \stdcoh T {\lh(P)} \sub M\) then:
+  \[ \U \vdash \insertion L P M : \insertion S P T\]
+\end{proposition}
+\begin{proof}
+  The labellings \(\iota\) and \(\kappa\) are formed using constructions that have already been shown to be well-formed. We therefore focus on the typing judgement for the inserted labelling. As in the definition of the inserted labelling, we let
+  \[ S = [S_0,\dots,S_n] \qquad L = s_0 \{L_0\}s_1 \cdots \{L_n\}s_{n+1} : A\]
+  By inspection of the typing derivation \(\U \vdash L : S\) we have that \(\U \vdash s_i : A\) and \(\U \vdash L_i : S_i\) for each \(i\).
+
+  We then proceed by induction on \(P\).
+  \begin{itemize}
+  \item Let \(P = [k]\) and
+    \[ T = [T_0,\dots,T_m] \qquad M = t_0\{M_0\}t_1 \cdots \{M_m\}t_{m+1} : B\]
+    By \(\U \vdash M : T\), we have that \(\U \vdash t_i : B\) and \(\U \vdash M_i : T_i\) for each \(i\). Applying \cref{lem:inserted-label-lem}, we have \(\U \vdash A = B\), \(\U \vdash s_k = t_0\), and \(\U \vdash s_{k+1} = t_{m+1}\). Therefore by applying the conversion rule, \(\U \vdash t_i : A\). To complete this case, we must show that for each \(i\):
+    \[ \U \vdash (\insertion L P M)_i : (\insertion S P T)_i\]
+    For most \(i\) this is trivial, however there is a subtlety for \(i = k-1\) that \((\insertion L P M)_{k-1} \not\equiv L_{k-1}\), as:
+    \[\ty((\insertion L P M)_{k-1}) \equiv \arr {s_{k-1}} A {t_0} \not\equiv \arr {s_{k-1}} A {s_k} \equiv \ty(L_{k-1})\]
+    However, the equality \(\U \vdash s_k = t_0\) means that these two types are definitionally equal, and so the required typing derivation follows from \(\U \vdash L_{k-1} : S_k\). A similar argument is needed to prove that \(\U \vdash L_{k+1} : S_{k+1}\), completing this case.
+  \item Suppose \(P = k :: Q\) so that
+    \[T = [T_0] \qquad M = t_0\{M_0\}t_1 : B\]
+    with \(\U \vdash M_0 : T_0\) and \(\U \vdash t_i : B\) for \(i \in \{0,1\}\). Then:
+    \begin{align*}
+      L_k(\bar{Q}) &\equiv L(\bar P)\\
+                    &\equiv \stdcoh T {\lh(P)} \sub M\\
+                    &\equiv \Sigma \left(\stdcoh {T_0} {\lh(Q)}\right) \sub M\\
+                    &\equiv \stdcoh {T_0} {\lh(Q)} \sub {M_0}
+    \end{align*}
+    and so by inductive hypothesis, we have \(\U \vdash\insertion {L_k} {Q} {M_0} : \insertion {S_k} {Q} {T_0}\). Then by a similar argument to above it can be shown that \(\insertion L P M\) is well-formed.
+  \end{itemize}
+  Hence, \(\U \vdash \insertion L P M : \insertion S P T\) for all branches \(P\).
+\end{proof}
 
 \subsection{Universal property of insertion}
 \label{sec:univ-prop-insert}
 
-\todo[inline]{Build lemmas towards universal property}
+As stated in the previous section, the constructions involved in insertion arise as a pushout square. In this section, we prove this result, which we state below:
 
-\todo[inline]{Give intuitive reasoning}
+\begin{theorem}
+  \label{thm:univ-prop}
+  Let \((S,P,T)\) be an insertion point. Then the following commutative square of \Cattr is cocartesian:
+\[\begin{tikzcd}[column sep = large, row sep = large]
+    {D^n} & \lfloor S \rfloor \\
+    \lfloor T \rfloor & {\lfloor \insertion S P T \rfloor}
+    \arrow["\lfloor \kappa \rfloor", from=1-2, to=2-2]
+    \arrow["\lfloor \iota \rfloor"', from=2-1, to=2-2]
+    \arrow["{\{\ty(\lfloor \bar P \rfloor), \lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
+    \arrow["{\{\lfloor \stdty T {\lh(P)} \rfloor, \lfloor \stdcoh T {\lh(P)} \rfloor\}}"', from=1-1, to=2-1]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+  \end{tikzcd}
+\]
+The context \(\lfloor \insertion S P T \rfloor\) is the pushout of \(\lfloor S \rfloor\) and \(\lfloor T \rfloor\) along the maps that send the maximal variable of \(D^n\) to the locally maximal variable corresponding to the branch \(P\) and the standard coherence of over \(T\) of dimension equal to the leaf height of \(P\).
+\end{theorem}
+
+This theorem allows an intuitive understanding of the insertion operation; The insertion \(\insertion S P T\) is the result of taking the disjoint union of \(S\) and \(T\) and gluing the locally maximal variable of \(S\) corresponding to the path to the composite of \(T\). The original motivation for insertion was to take a term where one of the locally maximal arguments was a standard composition and flatten the structure, which aligns with the intuition given by the universal property.
+
+\begin{remark}
+  As contexts have an interpretation as freely generated \(\infty\)-categories, and the category of \(\infty\)-categories is cocomplete, there is an \(\infty\)-category pushout of this square. It however may be surprising that this pushout is freely generated and happens to be freely generated by a pasting diagram.
+\end{remark}
+
+We work towards \cref{thm:univ-prop} by introducing a couple of lemmas. These lemmas will mostly be proven by deferring to the formalisation, using the machinery of structured terms introduced in \cref{sec:structured-terms} to simplify the computations involved. We first show that the square is commutative, while also justifying the description of the external labelling given at the start of the section.
+
+\begin{lemma}
+  \label{lem:iota-kappa-comm}
+  Let \((S,P,T)\) be an insertion point. Then \(\kappa(\bar P) \equiv \stdcoh T {\lh(P)} \sub \iota\).
+\end{lemma}
+\begin{proof}
+  See \func{Catt.Tree.Insertion.Properties}{κ-branch-path} in \module{Catt.Tree.Insertion.Properties}.
+\end{proof}
+
+We next state two factorisation properties for the internal and external labellings.
+
+\begin{lemma}
+  \label{lem:ins-comm-max}
+  For insertion redex \((S,P,T,\U,L,M)\), the following hold:
+  \[ \iota_{S,P,T} \circ (\insertion L P M) \equiv M \qquad \kappa_{S,P,T} \circ (\insertion L PM) \equiv^{\mathsf{max}} L \]
+  Hence the maps \(L\) and \(M\) factor through the labellings \(\kappa\) and \(\iota\) repsectively.
+\end{lemma}
+\begin{proof}
+  See \func{Catt.Tree.Insertion.Properties}{ι-comm} and \func{Catt.Tree.Insertion.Properties}{κ-comm} in \module{Catt.Tree.Insertion.Properties}.
+\end{proof}
+
+We can now proceed with the proof of \cref{thm:univ-prop}.
+
+\begin{proof}[Proof of \cref{thm:univ-prop}]
+  Let \((S,P,T)\) be an insertion point. We must first show that the candidate pushout square is in fact commutative, for which it is sufficient to show:
+  \[ \{\ty(\bar P), \bar P\} \bullet \kappa \equiv^{\max} \{\stdty T {\lh(P)}, \stdcoh T {\lh(P)}\} \bullet \iota \]
+  which follows from \cref{lem:iota-kappa-comm}. To prove that this square is cocartesian, we take two substitutions \(\sigma : \lfloor S \rfloor \to \Gamma\) and \(\tau : \lfloor T \rfloor \to \Gamma\) such that the following diagram is commutative:
+  \[
+    \begin{tikzcd}[column sep = large, row sep = large]
+      {D^n} & \lfloor S \rfloor \\
+      \lfloor T \rfloor & {\lfloor \insertion S P T \rfloor}\\
+      && \Gamma
+      \arrow["\lfloor \kappa \rfloor", from=1-2, to=2-2]
+      \arrow["\lfloor \iota \rfloor"', from=2-1, to=2-2]
+      \arrow["{\{\ty(\lfloor \bar P \rfloor), \lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
+      \arrow["{\{\lfloor \stdty T n \rfloor, \lfloor \stdcoh T n \rfloor\}}"', from=1-1, to=2-1]
+      \arrow["\sigma", curve={height=-18pt}, from=1-2, to=3-3]
+      \arrow["\tau"', curve={height=12pt}, from=2-1, to=3-3]
+    \end{tikzcd}
+  \]
+  We therefore have that \(\lceil \sigma \rceil\) is a labelling \(S \to \Gamma\) and \(\lceil \tau \rceil\) is a labelling \(T \to \Gamma\) with
+  \[\Gamma \vdash \lceil \sigma \rceil(\bar P) = \stdcoh T {\lh(P)} \sub{\lceil \tau \rceil}\]
+  To apply \cref{lem:ins-comm-max}, we need this to be a syntactic equality. We therefore define \(M  =\lceil \tau \rceil\) and \(L\) to be given by:
+  \[ L(p) =
+    \begin{cases*}
+      \stdcoh T {\lh(P)} \sub M &if \(p = \bar P\)\\
+      \lceil \sigma \rceil(p)&otherwise
+    \end{cases*}
+  \]
+  by the equality above, \(L\) is well formed and \(\lfloor L \rfloor = \sigma\). We then get a well-formed map \(\lfloor \insertion L P M \rfloor\) from \(\lfloor \insertion S P T \rfloor\) to \(\Gamma\) such that the following diagram is commutative by \cref{lem:ins-comm-max}:
+  \[
+    \begin{tikzcd}[column sep = large, row sep = large]
+      {D^n} & \lfloor S \rfloor \\
+      \lfloor T \rfloor & {\lfloor \insertion S P T \rfloor}\\
+      && \Gamma
+      \arrow["\lfloor \kappa \rfloor", from=1-2, to=2-2]
+      \arrow["\lfloor \iota \rfloor"', from=2-1, to=2-2]
+      \arrow["{\{\ty(\lfloor \bar P \rfloor), \lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
+      \arrow["{\{\lfloor \stdty T n \rfloor, \lfloor \stdcoh T n \rfloor\}}"', from=1-1, to=2-1]
+      \arrow["\lfloor \sigma \rfloor", curve={height=-18pt}, from=1-2, to=3-3]
+      \arrow["\lfloor M \rfloor"', curve={height=12pt}, from=2-1, to=3-3]
+      \arrow["\lfloor \insertion L P M \rfloor"{description}, from=2-2, to=3-3]
+    \end{tikzcd}
+  \]
+  Finally, the uniqueness of this morphism follows from the observation that every path of \(\insertion S P T\) is either of the form \(\iota(p)\) for some \(p : \Path_T\) or \(\kappa(q)\) for some \(q: \Path_S\).
+\end{proof}
+
+\todo[inline]{Pruning contained}
 
 \subsection{The insertion rule}
 \label{sec:insertion-rule}
