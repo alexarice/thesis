@@ -3767,7 +3767,7 @@ This can be used to prove that the identity labelling is well-formed.
 
   We then prove the more general result that \(S \vdash \mathsf{subtree}(x) : S^x\) for each \(x\), with the desired result following from the case \(x = \emp\). If \(S^x = \emp\), then the typing judgement follows from \(S \vdash S^x[0] : \ty(S^x[0])\).
 
-  If \(S^x = [T_0, \dots, T_n]\) then we must show that \(S \vdash S^x[k] : \ty(S^x[0])\), which follows from the observation that \(\ty(S^x[0]) \equiv \ty(S^x[i])\) for any \(i\) as the definition does not use the last element of the path. We are also required to show that \(S \vdash S^x_i : T_i\), but \(T_i \equiv S^{x \doublplus [i]}\) and \(S^x_i \equiv S^{x \doubleplus [i]}\), and so this follows from inductive hypothesis.
+  If \(S^x = [T_0, \dots, T_n]\) then we must show that \(S \vdash S^x[k] : \ty(S^x[0])\), which follows from the observation that \(\ty(S^x[0]) \equiv \ty(S^x[i])\) for any \(i\) as the definition does not use the last element of the path. We are also required to show that \(S \vdash S^x_i : T_i\), but \(T_i \equiv S^{x \doubleplus [i]}\) and \(S^x_i \equiv S^{x \doubleplus [i]}\), and so this follows from inductive hypothesis.
 \end{proof}
 
 From this typing judgement for labellings, one can obtain a derivation of the typing judgement for the generated substitution.
