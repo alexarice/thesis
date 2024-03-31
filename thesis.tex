@@ -4109,15 +4109,23 @@ We end this section with two further results that can be proven in the presence 
   We note that \(\stdcoh T n\) and \(\stdtm T n\) only differ when \(T = D^n\). If \(\mathcal{R}\) has disc removal, then for each \(n \neq 0\) we have \(\stdcoh {D^n} n = \SPath(p^n) \equiv \stdtm {D^n} n\). Conversely, if \(\stdcoh T n = \stdtm T n\) when \(n > 0\) or \(\dep(T) > 0\), then \(\stdcoh {D^n} n = \stdtm {D^n} n\) for any \(n > 0\). Then as \(\mathcal{R}\) is tame, we can apply the substitution \(\{A,t\}\) to both sides of the equation to get the statement of disc removal.
 \end{proof}
 
-Lastly, under the presence of both disc removal and endo-coherence removal, the standard terms \(\stdtm T n\) for which \(n > \dep(T)\) can be shown to be equal to identities.
+Lastly, under the presence of endo-coherence removal, the standard coherences \(\stdtm T n\) for which \(n > \dep(T)\) can be shown to be equal to identities.
 
 \begin{theorem}
-  Suppose the equality rule set \(\mathcal{R}\) has both endo-coherence removal and disc removal. Let \(T\) be a tree and suppose \(n > \dep(T)\). Then:
-  \[ T \vdash \stdtm T n = \stdcoh {D^n} {n+1} \sub {\{\stdty T n, \stdtm T n\}} \]
+  Suppose the equality rule set \(\mathcal{R}\) has endo-coherence removal. Let \(T\) be a tree and suppose \(n \geq \dep(T)\). Then:
+  \[ T \vdash \stdcoh T {n+1} = \stdcoh {D^n} {n+1} \sub {\{\stdty T n, \stdtm T n\}} \]
 \end{theorem}
-\todo[inline]{Proof of this}
+\begin{proof}
+  The following chain of equalities hold:
+  \begin{align*}
+    \stdcoh T {n+1} &\equiv \SCoh T {\arr {\stdtm {\bound n T} n \sub {\incbd n T -}} {\stdty T n} {\stdtm {\bound n T} n \sub {\incbd n T +}}} {\id_S}\\
+                    &\equiv \SCoh T {\arr {\stdtm T n} {\stdty T n} {\stdtm T n}} {\id_S}&\text{by \cref{prop:bdry-glob}}\\
+                    &= \stdcoh {D^n} {n+1} \sub {\{\stdty T n, \stdtm T n\}}&\text{by \textsc{ecr'}}
+  \end{align*}
+  where \textsc{ecr'} can be applied as \(\Supp(\stdtm T n) = \Var(\lfloor T \rfloor)\) by \cref{lem:std-supp}.
+\end{proof}
 
-Due to these two theorems, every standard term \(\stdtm T n\) with \(n \geq \dep(T)\) is equal to either the unique variable of the singleton context (when \(n = \dep(T) = 0\)), a standard composite (when \(n = \dep(T) > 0\)) or an identity (when \(n > \dep(T)\)), and hence completely classifying the well-formed standard terms.
+Due to these two theorems, every standard term \(\stdtm T n\) with \(n \geq \dep(T)\) is equal to either the unique variable of the singleton context (when \(n = \dep(T) = 0\)), a standard composite (when \(n = \dep(T) > 0\)) or an identity (when \(n > \dep(T)\)), hence completely classifying the well-formed standard terms.
 
 \section{Insertion}
 \label{sec:insertion}
