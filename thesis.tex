@@ -1154,6 +1154,13 @@ when \(\dim(\Gamma)\) is not zero.
 
 In the original \Catt paper, these inclusion substitutions are not given and instead the source and target variables are given directly as subcontexts. It can be easily checked that the free variables of the inclusions are equal to the subcontexts, and that the free variable sets of these inclusions are downwards closed. It is known, e.g. from \cite[Lemma~55]{benjamin2021globular}, that these constructions agree with the constructions of the source and target pasting diagrams in \cref{sec:pasting-diagrams}.
 
+We finally state the following well-known result (see \cite{finster2017type}) about isomorphisms between pasting contexts.
+
+\begin{proposition}
+  \label{prop:ps-context-iso}
+  Let \(\Gamma\) and \(\Delta\) be ps-contexts and suppose \(\sigma : \Gamma \to \Delta\) is an isomorphism. Then \(\Gamma \equiv \Delta\) and \(\sigma\) is the identity substitution.
+\end{proposition}
+
 \subsection{Typing for \Catt}
 \label{sec:typing-catt}
 
@@ -1184,9 +1191,9 @@ The typing rules for these judgements are then given in \cref{fig:catt-typing}. 
     \and
     \inferrule{(x : A) \in \Gamma}{\Gamma \vdash x : A}
     \and
-    \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\\dim(\Delta) \neq 0\\\supp(s) = \supp(\incbd {} - \Delta)\\\supp(t) = \supp(\incbd {} + \Delta)}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
+    \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\\dim(\Delta) \neq 0\\\Supp(s) = \Supp(\incbd {} - \Delta)\\\Supp(t) = \Supp(\incbd {} + \Delta)}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
     \and
-    \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\\supp(s) = \supp(t) = \Var(\Delta)}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
+    \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\\Supp(s) = \Supp(t) = \Var(\Delta)}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
   \end{mathpar}
   \caption{Typing rules for \Catt}
   \label{fig:catt-typing}
@@ -1457,14 +1464,14 @@ The formalisation also differs from the presentation in the texts by the way tha
 This decision was made purely for convenience, by fibring over natural numbers instead of contexts, we sometimes avoid the need for providing more explicit arguments to syntactic constructions. It comes with drawback that the context must be provided for certain operations, such as the support of a piece of syntax, or the dimension of a term.
 
 One place an explicit argument can be avoided is when defining the weakening of a piece of syntax, an operation witnessing that for a piece of syntax living in a context \(\Gamma\), there is a copy living in \(\Gamma , A\) for any \(A\). These operations are defined in \module{Catt.Syntax} and take the following form, where we reuse the name \(\wk\) here as an abuse of notation:
-\[ \funcn{Catt.Syntax}{wk-tm}{\wk} : \Term_{\Gamma} \to \Term_{\Gamma, A}\quad\funcn{Catt.Syntax}{wk-ty}{\wk} : \Type_{\Gamma} \to \Type_{\Gamma, A}\quad \funcn{Catt.Syntax}{169}{wk-sub} : (\arr \Gamma B \Delta) \to (\arr {\Gamma} {\wk(B)} {\Delta, A}) \]
+\[ \funcn{Catt.Syntax}{wk-tm}{\wk} : \Term_{\Gamma} \to \Term_{\Gamma, A}\quad\funcn{Catt.Syntax}{wk-ty}{\wk} : \Type_{\Gamma} \to \Type_{\Gamma, A}\quad \funcn{Catt.Syntax}{wk-sub}{\wk} : (\arr \Gamma B \Delta) \to (\arr {\Gamma} {\wk(B)} {\Delta, A}) \]
 If terms are fibred over contexts then this type \(A\) must often be specified, though with the fibring over context length this is no longer necessary. When using de Bruijn indices, this operation is no longer the identity on terms, as each variable must be incremented due to the index in a variable counting from the end of the context. One might ask why de Bruijn levels (which index from the start of the context) were not used instead, but this would not solve our problem as \(\mathsf{Fin}_n\) is not a sub type of \(\mathsf{Fin}_{n+1}\) in Agda. Furthermore, using de Bruijn levels would cause the substitution application introduced in \cref{sec:syntax-catt} (and expanded in \cref{sec:extend-subst}) to compute poorly, due to the way substitutions are defined. The definition of weakening is given in \cref{fig:wk}.
 
 Weakening can be used to give a short inductive definition of the identity substitution, a substitution \(\id_\Gamma : \Gamma \to \Gamma\) which sends every variable to itself. On the inductive case \(\id_{\Gamma, (x : A)}\), it clear that the variable \(x\) should be sent to \(x\), but the constructor for substitutions also requires a substitution \(\Gamma \to \Gamma, (x : A)\). This can be obtained by weakening a recursive call to the identity on \(\Gamma\). Similarly, an inclusion \(\Gamma \to \Gamma, (x : A)\) can be defined as \(\wk(\id_\Gamma)\), and applying this substitution is the same operation as weakening.
 
 To begin proving syntactic properties of \Cattr, we need a notion of syntactic equality. This will be written \(\Gamma \equiv \Delta\) for contexts \(\Gamma\) and \(\Delta\), and similarly for terms \(s\) and \(t\), types \(A\) and \(B\), and substitutions \(\sigma\) and \(\tau\). It is given by alpha equivalence, and so we would hope that the formalisation could leverage the use of de Bruijn indices to use the in-built equality type for syntactic equality. This is too restrictive however, there will be many times where we want to compare two terms of differing context length (in practice this context length will be propositionally equal, instead of definitionally equal).
 
-Therefore, four syntactic equality relations are defined mutually inductively on the constructors of each piece of syntax in \module{Catt.Syntax.Properties}. These definitions can easily be heterogeneous, allowing two terms \(s : \Term_n\) and \(t : \Term_m\) to be compared. Unfortunately, using these comes at the cost of large amounts of boilerplate, as these inductively defined equalities do not come equipped with the J-rule, and so it must be manually proved that each operation respects syntactic equality. An example of such a function is \funcn{Catt.Syntax.Properties}{wk-tm-≃}{\textsf{wk-tm-\(\simeq\)}}, which states that the weakenings of two syntactically equal terms are syntactically equal.
+Therefore, four syntactic equality relations are defined mutually inductively on the constructors of each piece of syntax in \module{Catt.Syntax.Properties}. These definitions can easily be heterogeneous, allowing two terms \(s : \Term_n\) and \(t : \Term_m\) to be compared. Unfortunately, using these comes at the cost of large amounts of boilerplate, as these inductively defined equalities do not come equipped with the J-rule, and so it must be manually proved that each operation respects syntactic equality. An example of such a function is \funcn{Catt.Syntax.Properties}{wk-tm-≃}{wk-tm-\(\simeq\)}, which states that the weakenings of two syntactically equal terms are syntactically equal.
 
 \module{Catt.Syntax.Properties} contains many of the basic properties about the syntax of \Cattr, including:
 \begin{itemize}
@@ -1574,7 +1581,7 @@ where \(n = \dim(A)\). Many properties of identity terms can be easily derived f
 The typing rules for \Cattr differ from those from \Catt in three key ways:
 \begin{enumerate}
 \item The fixed conditions on the support of the types in a coherence have been replaced by a set of operations \(\mathcal{O}\). Instead of having two typing rules for coherences, one for equivalences and one for composites, we simply have one typing rule and specify that a coherence \(\Coh \Delta {\arr s A t} \sigma\) can be well-formed when:
-  \[ (\Delta, \supp(s), \supp(t)) \in \mathcal{O} \]
+  \[ (\Delta, \Supp(s), \Supp(t)) \in \mathcal{O} \]
 This will be further motivated and explained in \cref{sec:support}.
 \item A definitional equality is added to the system, generated by a set of equality rules \(\mathcal{R}\) which specifies pairs of terms which should be equated. The equality take the form of three new judgements:
   \begin{alignat*}{2}
@@ -1856,7 +1863,7 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
 \section{The set of operations \texorpdfstring{\(\mathcal{O}\)}{O}}
 \label{sec:support}
 
-In \cref{sec:typing-equality}, we introduced a set of operations \(\mathcal{O}\), which allows us to vary the operations available in the theory, much like the set \(\mathcal{R}\) allows us to vary the equality rules of the theory. The set \(\mathcal{O}\) replaces the conditions on the support of the type contained in a coherence, and consists of a set of triples of a context \(\Delta\), along with two sets \(x,y \subseteq \Var(\Delta)\). A certain type \(\arr s A t : \Type_\Delta\) is permitted to appear in a coherence exactly when \((\Delta , \supp(s), \supp(t))\) is an element of \(\mathcal{O}\).
+In \cref{sec:typing-equality}, we introduced a set of operations \(\mathcal{O}\), which allows us to vary the operations available in the theory, much like the set \(\mathcal{R}\) allows us to vary the equality rules of the theory. The set \(\mathcal{O}\) replaces the conditions on the support of the type contained in a coherence, and consists of a set of triples of a context \(\Delta\), along with two sets \(x,y \subseteq \Var(\Delta)\). A certain type \(\arr s A t : \Type_\Delta\) is permitted to appear in a coherence exactly when \((\Delta , \Supp(s), \Supp(t))\) is an element of \(\mathcal{O}\).
 
 There are two key advantages to setting up the theory this way.
 \begin{itemize}
@@ -2957,7 +2964,7 @@ The Dyck words presented in this section can be viewed as a more direct syntax f
 \end{remark}
 
 \subsection{The pruning construction}
-
+\label{sec:prune-construction}
 Equipped with Dyck words, and a classification of locally maximal variables as peaks, we are now able to define each of the constructions used in the pruning operation.
 
 \begin{definition}
@@ -4399,7 +4406,7 @@ We now begin to define each of these constructions in turn. As we need a lot of 
 \begin{definition}
   An \emph{insertion point} is a triple \((S,P,T)\) such that \(S\) and \(T\) are trees and \(P\) is a branch of \(S\) with \(\bh(P) \leq \th(T)\) and \(\lh(S) \geq \dim(T)\).
 
-  An \emph{insertion redex} is a sextuple \((S,P,T,\U,L,M)\) such that \((S,P,T)\) is an insertion point, \(L : S \to \U\) and \(M : T \to \U\) are labellings, and \(L(\bar P) \equiv \mathcal{C}_T^{\lh(P)}\sub M\).
+  An \emph{insertion redex} is a sextuple \((S,P,T,\U,L,M)\) such that \((S,P,T)\) is an insertion point, \(L : S \to \U\) and \(M : T \to \U\) are labellings with \(\ty(L) \equiv \ty(M) \equiv \star\), and \(L(\bar P) \equiv \mathcal{C}_T^{\lh(P)}\sub M\).
 \end{definition}
 
 We can now define the insertion operation on trees.
@@ -4507,7 +4514,7 @@ The now proceed to prove that each of these constructions used to generate inser
   \[\SPath(\bar P) \equiv  \Inc_k(\SPath(p)) \]
   and so supposing that \(S_k \vdash \SPath(p) : A\) (as every path is well-formed), we can obtain:
   \[\U \vdash \SPath(\bar P) \sub L : \Sigma(A) \sub {\inc_k} \sub L\]
-  By \cref{prop:prop:standard-typing}, \(\U \vdash \stdcoh T {\lh(P)} \sub M : \stdty T {\lh(P)} \sub M\). Therefore by uniqueness of types (using the syntactic equality from the insertion redex), we have:
+  By \cref{prop:standard-typing}, \(\U \vdash \stdcoh T {\lh(P)} \sub M : \stdty T {\lh(P)} \sub M\). Therefore by uniqueness of types (using the syntactic equality from the insertion redex), we have:
   \[ \U \vdash \Sigma(A) \sub {\inc_k \bullet L} = \stdty T {\lh(P)} \sub M\]
   By truncating both sides of of this equality \(\lh(P) - 1\) times we get:
   \[ \U \vdash \Sigma(\star) \sub {\inc_k \bullet L} = \stdty T 1 \sub M\]
@@ -4549,26 +4556,43 @@ The typing properties of each of the constructions involved in insertion are giv
   Hence, \(\U \vdash \insertion L P M : \insertion S P T\) for all branches \(P\).
 \end{proof}
 
+We now end this section by formally giving the equality rule set for insertion.
+
+\begin{definition}
+  \label{def:insertion-rule}
+  The \emph{insertion rule set}, \insert, is the set consisting of the triples:
+  \[ (\Gamma, \lfloor \SCoh S A L \rfloor, \lfloor \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P M} \rfloor)\]
+  for each insertion redex \((S,P,T,\Gamma,L,M)\), and structured type \(A\).
+
+  A set of rules \(\mathcal{R}\) \emph{contains insertion} if \(\insert \subseteq \mathcal{R}\). Insertion makes the following rule admissible:
+  \begin{equation*}
+    \inferrule{(S,P,T,\Gamma,L,M)\text{ is an insertion redex}\\ S \vdash A \\ \Gamma \vdash L : S}{\Gamma \vdash \SCoh S A L = \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P M}}
+  \end{equation*}
+  The set \(\mathcal{R}\) \emph{has insertion} if the rule \textsc{insert} holds in the generated theory.
+\end{definition}
+
 \subsection{Universal property of insertion}
 \label{sec:univ-prop-insert}
 
-As stated in the previous section, the constructions involved in insertion arise as a pushout square. In this section, we prove this result, which we state below:
+As stated in the previous section, the constructions involved in insertion arise as a pushout square. In this section, we prove this result, which we state below. Throughout this section we assume we are working in a tame theory for which the support and preservation conditions hold. We further only the maximal arguments of substitutions from a disc, as we only work with well-formed syntax up to definitional equality and so the type will always be inferable.
 
 \begin{theorem}
   \label{thm:univ-prop}
   Let \((S,P,T)\) be an insertion point. Then the following commutative square of \Cattr is cocartesian:
 \[\begin{tikzcd}[column sep = large, row sep = large]
-    {D^n} & \lfloor S \rfloor \\
+    {D^{\lh(P)}} & \lfloor S \rfloor \\
     \lfloor T \rfloor & {\lfloor \insertion S P T \rfloor}
     \arrow["\lfloor \kappa \rfloor", from=1-2, to=2-2]
     \arrow["\lfloor \iota \rfloor"', from=2-1, to=2-2]
-    \arrow["{\{\ty(\lfloor \bar P \rfloor), \lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
-    \arrow["{\{\lfloor \stdty T {\lh(P)} \rfloor, \lfloor \stdcoh T {\lh(P)} \rfloor\}}"', from=1-1, to=2-1]
+    \arrow["{\{\lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
+    \arrow["{\{\lfloor \stdcoh T {\lh(P)} \rfloor\}}"', from=1-1, to=2-1]
     \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
   \end{tikzcd}
 \]
 The context \(\lfloor \insertion S P T \rfloor\) is the pushout of \(\lfloor S \rfloor\) and \(\lfloor T \rfloor\) along the maps that send the maximal variable of \(D^n\) to the locally maximal variable corresponding to the branch \(P\) and the standard coherence of over \(T\) of dimension equal to the leaf height of \(P\).
 \end{theorem}
+
+
 
 This theorem allows an intuitive understanding of the insertion operation; The insertion \(\insertion S P T\) is the result of taking the disjoint union of \(S\) and \(T\) and gluing the locally maximal variable of \(S\) corresponding to the path to the composite of \(T\). The original motivation for insertion was to take a term where one of the locally maximal arguments was a standard composition and flatten the structure, which aligns with the intuition given by the universal property.
 
@@ -4606,13 +4630,13 @@ We can now proceed with the proof of \cref{thm:univ-prop}.
   which follows from \cref{lem:iota-kappa-comm}. To prove that this square is cocartesian, we take two substitutions \(\sigma : \lfloor S \rfloor \to \Gamma\) and \(\tau : \lfloor T \rfloor \to \Gamma\) such that the following diagram is commutative:
   \[
     \begin{tikzcd}[column sep = large, row sep = large]
-      {D^n} & \lfloor S \rfloor \\
+      {D^{\lh(P)}} & \lfloor S \rfloor \\
       \lfloor T \rfloor & {\lfloor \insertion S P T \rfloor}\\
       && \Gamma
       \arrow["\lfloor \kappa \rfloor", from=1-2, to=2-2]
       \arrow["\lfloor \iota \rfloor"', from=2-1, to=2-2]
-      \arrow["{\{\ty(\lfloor \bar P \rfloor), \lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
-      \arrow["{\{\lfloor \stdty T n \rfloor, \lfloor \stdcoh T n \rfloor\}}"', from=1-1, to=2-1]
+      \arrow["{\{\lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
+      \arrow["{\{\lfloor \stdcoh T n \rfloor\}}"', from=1-1, to=2-1]
       \arrow["\sigma", curve={height=-18pt}, from=1-2, to=3-3]
       \arrow["\tau"', curve={height=12pt}, from=2-1, to=3-3]
     \end{tikzcd}
@@ -4629,13 +4653,13 @@ We can now proceed with the proof of \cref{thm:univ-prop}.
   by the equality above, \(L\) is well formed and \(\lfloor L \rfloor = \sigma\). We then get a well-formed map \(\lfloor \insertion L P M \rfloor\) from \(\lfloor \insertion S P T \rfloor\) to \(\Gamma\) such that the following diagram is commutative by \cref{lem:ins-comm-max}:
   \[
     \begin{tikzcd}[column sep = large, row sep = large]
-      {D^n} & \lfloor S \rfloor \\
+      {D^{\lh(P)}} & \lfloor S \rfloor \\
       \lfloor T \rfloor & {\lfloor \insertion S P T \rfloor}\\
       && \Gamma
       \arrow["\lfloor \kappa \rfloor", from=1-2, to=2-2]
       \arrow["\lfloor \iota \rfloor"', from=2-1, to=2-2]
-      \arrow["{\{\ty(\lfloor \bar P \rfloor), \lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
-      \arrow["{\{\lfloor \stdty T n \rfloor, \lfloor \stdcoh T n \rfloor\}}"', from=1-1, to=2-1]
+      \arrow["{\{\lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
+      \arrow["{\{\lfloor \stdcoh T n \rfloor\}}"', from=1-1, to=2-1]
       \arrow["\lfloor \sigma \rfloor", curve={height=-18pt}, from=1-2, to=3-3]
       \arrow["\lfloor M \rfloor"', curve={height=12pt}, from=2-1, to=3-3]
       \arrow["\lfloor \insertion L P M \rfloor"{description}, from=2-2, to=3-3]
@@ -4644,13 +4668,105 @@ We can now proceed with the proof of \cref{thm:univ-prop}.
   Finally, the uniqueness of this morphism follows from the observation that every path of \(\insertion S P T\) is either of the form \(\iota(p)\) for some \(p : \Path_T\) or \(\kappa(q)\) for some \(q: \Path_S\).
 \end{proof}
 
-\todo[inline]{Pruning contained}
+From this result we will be able to show that having insertion in a theory implies the existence of pruning. The plan will be to show that pruning satisfies a similar universal property.
+
+\begin{proposition}
+  Let \(\mathcal{D} : \Dyck_0\) be a Dyck word, and let \(p\) be a peak of \(\mathcal{D}\). Then the following square is a pushout square:
+  \[\begin{tikzcd}[column sep = large, row sep = large]
+    {D^{n+1}} & \lfloor \mathcal{D} \rfloor \\
+    D^{n} & {\lfloor \mathcal{D} \sslash p \rfloor}
+    \arrow["\pi_p", from=1-2, to=2-2]
+    \arrow["{\{\src(\lfloor p \rfloor)\}}"', from=2-1, to=2-2]
+    \arrow["{\{\lfloor p \rfloor\}}", from=1-1, to=1-2]
+    \arrow["{\{\id(d_n)\}}"', from=1-1, to=2-1]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+  \end{tikzcd}
+\]
+where \(\dim(A) = n\), and each substitution from a disc is given only by its maximal element.
+\end{proposition}
+\begin{proof}
+  As discussed in \cref{sec:prune-construction}, the substitution \(\pi_p\) sends \(\lfloor p \rfloor\) to the identity on the source of \(\lfloor p \rfloor\), which makes the square commute, as it suffices to consider the action of each substitution on \(d_{n+1}\), the maximal variable of \(D^{n+1}\). We now assume that we have substitutions \(\sigma : \lfloor \mathcal{D} \rfloor \to \Gamma\) and \(\{t\} : D^n \to \Gamma\) such that the following diagram commutes:
+  \[\begin{tikzcd}[column sep = large, row sep = large]
+    {D^{n+1}} & \lfloor \mathcal{D} \rfloor \\
+    D^{n} & {\lfloor \mathcal{D} \sslash p \rfloor}\\
+    && \Gamma
+    \arrow["\pi_p", from=1-2, to=2-2]
+    \arrow["{\{\src(\lfloor p \rfloor)\}}"', from=2-1, to=2-2]
+    \arrow["{\{\lfloor p \rfloor\}}", from=1-1, to=1-2]
+    \arrow["{\{\id(d_n)\}}"', from=1-1, to=2-1]
+    \arrow["\sigma", curve={height=-18pt}, from=1-2, to=3-3]
+    \arrow["{\{t\}}", curve={height=18pt}, from=2-1, to=3-3]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+  \end{tikzcd}
+\]
+We immediately have that \(\lfloor p \rfloor \sub \sigma = \id(\{t\})\). We can therefore let \(\sigma'\) the same substitution as \(\sigma\) but with \(\lfloor p \rfloor \sub \sigma\) replaced by \(\id(\{t\})\), and then can form the substitution:
+\[ \sigma \sslash p \equiv \sigma' \sslash p : \lfloor \mathcal{D}\sslash p \rfloor \to \Gamma\]
+By \cref{prop:prune-ty}, we immediately have \(\sigma = \sigma' = \pi_p \bullet \sigma \sslash p\). The other equality follows from a diagram chase, noting that \(d_n^-\) in \(D^{n+1}\) is sent to the variable \(d^n\) in \(D^n\) by the map \(\{\id(d_n)\}\).
+
+It remains to show that the chosen universal map \(\sigma \sslash p\) is unique, but this is trivial as every variable of \(\lfloor \mathcal{D} \sslash p \rfloor\) is also a variable of \(\lfloor \mathcal{D} \rfloor\), and so the universal map is fully determined by the substitution \(\sigma\).
+\end{proof}
+
+\begin{corollary}
+  Let \(\mathcal{R}\) have insertion. Then \(\mathcal{R}\) has pruning.
+\end{corollary}
+\begin{proof}
+  Assume \(\mathcal{R}\) has insertion. Then take a term \(\Coh {\lfloor \mathcal{D} \rfloor} A \sigma : \Term_\Gamma\) with a peak \(p : \Peak_{\mathcal{D}}\) such that:
+  \[ \lfloor p \rfloor \sub \sigma \equiv \id(A,t)\]
+  for some term \(t\) and type \(A\) of \(\Gamma\). We then need to show that:
+  \[ \Gamma \vdash \Coh {\lfloor \mathcal{D} \rfloor} A \sigma = \Coh {\lfloor \mathcal{D} \sslash p\rfloor} {A \sub {\pi_p}} {\sigma \sslash p}\]
+  Using the result of \cref{sec:equiv-trees-dyck}, from \(\lfloor \mathcal{D} \rfloor\) we can obtain a tree \(S\) with \(\lfloor S \rfloor \equiv \lfloor \mathcal{D} \rfloor\). Further, \(\lfloor p \rfloor\) is a locally maximal variable of \(\lfloor \mathcal{D}  \rfloor\), and so there exists a branch \(P\) such that \(\lfloor \bar P \rfloor\) is this locally maximal variable, and \(\bh(P) = \lh(P) - 1\). Then the diagram:
+  \[ % https://q.uiver.app/#q=WzAsMyxbMSwwLCJEXntuKzF9Il0sWzAsMSwiRF5uIl0sWzIsMSwiXFxsZmxvb3IgUyBcXHJmbG9vciJdLFswLDEsIlxceyBcXGlkKHQpIFxcfSIsMl0sWzAsMiwiXFx7IFxcbGZsb29yIHAgXFxyZmxvb3IgXFx9Il1d
+    \begin{tikzcd}
+      & {D^{n+1}} \\
+      {D^n} && {\lfloor S \rfloor}
+      \arrow["{\{ \id(t) \}}"', from=1-2, to=2-1]
+      \arrow["{\{ \lfloor p \rfloor \}}", from=1-2, to=2-3]
+    \end{tikzcd}
+  \]
+  has two pushouts, the one given by insertion, and the one given by pruning. Therefore we obtain an isomorphism \(\lfloor \insertion S P {D^n} \rfloor \cong \lfloor \mathcal{D} \sslash p \rfloor\). By \cref{prop:ps-context-iso}, this isomorphism must be the identity (as both pushouts exist in \Catt), and so we can deduce that \(\pi_p = \kappa_{S,P,D^n}\) and \(\sigma \sslash p = \lfloor \insertion {\lceil \sigma \rceil} P {\{\lceil t \rceil\}}  \rfloor\). Therefore the above equality is given by an insertion along \(P\).
+\end{proof}
 
 \subsection{The insertion rule}
 \label{sec:insertion-rule}
 
-\todo[inline]{Give equality rule}
-\todo[inline]{Prove properties}
+We now prove that the insertion rule set given in \cref{sec:insertion-rule} satisfies the various conditions presented in \cref{sec:ruleset}. We begin with the following lemma.
+
+\begin{lemma}
+  \label{lem:insertion-map}
+  Let \((S,P,T)\) be an insertion point and let \(L : S \to \U\) and \(M : T \to \U\) be labellings. Let \(f : \STerm_\U \to \STerm_{\U'}\) be any function from structured terms of \(\U\) to structured terms of \(\U'\). Then for any path \(p\) of \(\insertion S P T\) we have:
+  \[ f((\insertion S P T)(p)) \equiv (\insertion {f \circ L} P {f \circ M})(p)\]
+  where \(f \circ L\) is the result of composing \(f\) to the function component of \(L\).
+\end{lemma}
+\begin{proof}
+  The proof of this follows by a simple induction on \(P\) and is given in the formalisation module \module{Catt.Tree.Insertion.Properties} by function \func{Catt.Tree.Insertion.Properties}{label-from-insertion-map}.
+\end{proof}
+
+\begin{proposition}
+  The insertion rule set, \insert, satisifies the suspension condition. It further satisfies the \(\mathcal{R}\)-substitution condition for any rule set \(\mathcal{R}\), and so also satisfies the weakening condition.
+\end{proposition}
+\begin{proof}
+  Let \((S,P,T,\Gamma,L,M)\) be an insertion redex and \(A\) a structured type of \(S\), such that:
+  \[ s \equiv \SCoh S A L \qquad t \equiv \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P T} \qquad (\Gamma, \lfloor s \rfloor, \lfloor t \rfloor) \in \insert\]
+  To prove the suspension condition, we observe that \(0 :: P\) is a branch of \(\Sigma(S)\) such that \(\insertion {\Sigma(S)} {0::P} {\Sigma(T)} \equiv \Sigma(\insertion S P T)\) and \(\kappa_{\Sigma(S),0::P,\Sigma(T)} \equiv \Sigma(\kappa_{S,P,T})\) by definition. By applying \cref{lem:insertion-map} with \(f = \Sigma\), we get:
+  \[ \insertion {\Sigma'(L)} {P} {\Sigma'(M)} \equiv \Sigma'(\insertion L P M)\]
+  and so by unwrapping definitions we obtain \(\insertion {\Sigma(L)} {0 :: P} {\Sigma(M)} \equiv \Sigma(\insertion L P M)\). Therefore we have:
+  \begin{align*}
+    \Sigma(s) &\equiv \SCoh {\Sigma(S)} {\Sigma (A)} {\Sigma(L)} \\
+    \Sigma(t) &\equiv \SCoh {\insertion {\Sigma(S)} {0::P} {\Sigma(T)}} {\Sigma(A) \sub {\kappa_{\Sigma(S),0::P,\Sigma(T)}}} {\insertion {\Sigma(L)} {0::P} {\Sigma(M)}}
+  \end{align*}
+  and so as
+  \[\Sigma(L)(0 :: \bar P) \equiv \Sigma'(L)(\bar P) \equiv \Sigma(\stdcoh T {\lh(P)} \sub M) \equiv \stdcoh {\Sigma(T)} {\lh(0::P)} \sub {\Sigma(M)}\]
+  we get \((\Sigma(\Gamma), \Sigma(\lfloor s \rfloor), \Sigma (\lfloor t \rfloor) ) \in \insert\) as required.
+
+  For the substitution condition we let \(\sigma : \arr \Gamma \star \Delta\) be any substitution. Then:
+  \[\lfloor s \rfloor \sub \sigma \equiv \lfloor \SCoh S A {L \bullet \lceil \sigma \rceil}  \rfloor \qquad \lfloor t \rfloor \sub \sigma \equiv \lfloor \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {(\insertion L P T) \bullet \lceil \sigma \rceil} \rfloor\]
+  Again using \cref{lem:insertion-map}, this time with \(f = u \mapsto u\sub{\lceil \sigma \rceil}\), we have:
+  \[(\insertion L P M) \bullet \lceil \sigma \rceil \equiv \insertion {L \bullet \lceil \sigma \rceil} P {M \bullet \lceil \sigma \rceil}\]
+
+  Further, we have the equality:
+  \[(L \bullet \lceil \sigma \rceil)(\bar P) \equiv L(p) \sub {\lceil \sigma \rceil} \equiv \stdcoh T {\lh(P)} \sub {M \bullet \lceil \sigma \rceil}\]
+  and so \((\Gamma, \lfloor s \rfloor \sub \sigma, \lfloor t \rfloor \sub \sigma) \in \insert\) and so \insert satisfies the \(\mathcal{R}\)-substitution condition for any \(\mathcal{R}\), as we made no assumption on \(\sigma\) being well-formed.
+\end{proof}
 
 \subsection{Further properties}
 \label{sec:further-properties}
@@ -5218,13 +5334,14 @@ We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and onl
 
 We take a brief moment to explore the theory \Cattsu in its entirety. For this section we will further assume that we take the set of operations \(\mathcal{O}\) to be the regular operations.
 
-We begin by proving a property of terms over disc contexts, which we call \emph{disc trivialisation}. This is the following structure theorem: in a disc context \(D^n\), every term is either a variable, or the iterated identity on a variable, up to definitional equality. Restricting to those terms \(t : \Term_{D^n}\) that are full, that is \(\supp(t) = \Var{D^n}\), then there is exactly one term (up to definitional equality) at each dimension \(k \geq n\). Hence, the type theory \Cattsu trivialises disc contexts.
+We begin by proving a property of terms over disc contexts, which we call \emph{disc trivialisation}. This is the following structure theorem: in a disc context \(D^n\), every term is either a variable, or the iterated identity on a variable, up to definitional equality. Restricting to those terms \(t : \Term_{D^n}\) that are full, that is \(\Supp(t) = \Var{D^n}\), then there is exactly one term (up to definitional equality) at each dimension \(k \geq n\). Hence, the type theory \Cattsu trivialises disc contexts.
 
 \todo[inline]{Link to other paper}
 
 We now state and prove disc trivialisation, recalling the definition of an iterated canonical identity from \cref{def:canonical-id}.
 
 \begin{theorem}[Disc trivialisation]
+  \label{thm:disc-triv}
   Suppose \(D^n \vdash t : A\) in \Cattsu. Then \(t\) is equal to an iterated canonical identity on a variable, that is \(t = \id^k(x)\) for some variable \(x \in \Var(D^n)\) and \(k \in \mathbb{N}\).
 \end{theorem}
 \begin{proof}
@@ -5240,6 +5357,33 @@ We now state and prove disc trivialisation, recalling the definition of an itera
 
   We therefore assume that \(t\) is an equivalence and \(u\) and \(v\) are full. Then \(u\) and \(v\) must be iterated identities on \(d_n\), and must have the same dimension and so are syntactically equal. To avoid \(t\) being an endo-coherence removal redex, it must be an identity \(\id(B,s)\). Now, \(s \equiv \id^k(x)\) for some variable \(x\) (as \(s\) is a subterm of \(t\)), and so if \(k = 0\) then \(\ty(s) \equiv d_{n-1}^- \to d_{n-1}^+\) and if \(k > 0\) then \(\ty(s) \equiv \id^{k-1}(x) \to \id^{k-1}(x)\). In either case, \(\ty(s)\) is in normal form, and so since \(B\) is also a normal form and \(\Gamma \vdash s : B\) (by the well-typing of \(t\) and \cref{cor:id-typing}), we have \(B \equiv \ty(s)\) and so \(t \equiv \id(s) \equiv \id^{k+1}(x)\) as required.
 \end{proof}
+
+Disc trivialisation allows us to prove the following results concerning terms and substitutions in pasting diagrams.
+
+\begin{theorem}
+  Let \(\mathcal{D}\) be a Dyck word. Let \(t\) be a well-formed \Cattsu term of \(\lfloor \mathcal{D} \rfloor\). Then \(\Supp(t)\) is a ps-context.
+\end{theorem}
+\begin{proof}
+  Suppose, for contradiction, that we have a Dyck word \(\mathcal{D}\) and a term \(t\) where \(\Supp(t)\) is not a ps-context. Assume further that \(\mathcal{D}\) is minimal (in terms of length) where such a term exists.
+
+  Immediately, \(\mathcal{D} \nequiv \circleddash\), as all terms have non-empty support. We now examine the locally maximal variables of \(\mathcal{D}\). There must exist some locally maximal variable \(f : x \to y\) such that \(f \not\in \Supp(t)\), as otherwise \(\Supp(t) = \Var(\lfloor \mathcal{D} \rfloor)\).
+
+  Now suppose that \(x \not\in\Supp(t)\). Then we let \(p\) be the peak corresponding to \(f\) and consider the term:
+  \[t \sub {\pi_p} : \Term_{\lfloor \mathcal{D}\sslash p \rfloor}\]
+  Then \(\Supp(t \sub {\pi_p}) = \Supp(t)\), which contradicts the minimality of \(\mathcal{D}\). By a similar argument, \(y\) must also be in \(\Supp(t)\). It is also the case that if such a variable \(f : x \to y\) with \(f \not\in \Supp(t)\) and \(\{x,y\} \subseteq \Supp(t)\) exists, then \(\Supp(t)\) cannot be a ps-context, by an argument involving the linear order on ps-contexts introduced by \citeauthor{finster2017type}~\cite{finster2017type}.
+
+  Now suppose \(\mathcal{D}\) has a peak \(p\) that is not \(f\). Then \(f\sub{\pi_p} : x \sub{\pi_p} \to y \sub{\pi_p}\) is a locally maximal variable of \(\lfloor \mathcal{D} \sslash p \rfloor\) with \(f\sub{\pi_p} \not\in \Supp(t \sub {\pi_p})\) and \(\{x \sub {\pi_p}, y \sub {\pi_p}\} \subseteq \Supp(t \sub {\pi_p})\). Hence \(\Supp(t \sub {\pi_p})\) is not a ps-context, again breaking the minimality of \(\mathcal{D}\).
+
+  Therefore \(\mathcal{D}\) has one peak, and so \(\lfloor \mathcal{D} \rfloor \equiv D^n\) for some \(n\). Now by \cref{thm:disc-triv}, \(t\) is \Cattsu equal to a variable \(z\) or an iterated identity on a variable \(z\). Since \Cattsu preserves support, we must have \(\Supp(t) = \Supp(z)\), but \(\Supp(z)\) is a disc and so is a ps-context.
+
+  Hence no such term \(t\) existed.
+\end{proof}
+
+Since any \Catt term is also a \Cattsu term, we get the following corollary.
+
+\begin{corollary}
+  If \(\Gamma \vdash t : A\) in \Catt, and \(\Gamma\) is a ps-context, then \(\Supp(t)\) is a ps-context.
+\end{corollary}
 
 \todo[inline]{Isos of ps contexts}
 
