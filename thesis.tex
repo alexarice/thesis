@@ -4922,7 +4922,7 @@ By standard properties of pushouts, we have that \(\insertion {D^n} P T\) is iso
   Let \(T\) be a tree, \(n \geq \dim (T)\), and \(P\) a branch of \(D^n\) with \(\bh(P) \leq \th(T)\). Then \(\insertion {D^n} P T = T\) and \(\iota_{D^n,P,T} \equiv \id\). Suppose further that \((D^n,P,T,\Gamma,L,M)\) is an insertion redex. Then \(\insertion \sigma P \tau \equiv \tau\).
 \end{lemma}
 \begin{proof}
-  See the functions \func{Catt.Tree.Insertion.Properties}{disc-insertion}, \func{Catt.Tree.Insertion.Properties}{disc-ι}, and \func{Catt.Tree.Insertion.Properties}{disc-label-from} in formalisation module \module{Catt.Tree.Insertion.Properties}
+  See the functions \func{Catt.Tree.Insertion.Properties}{disc-insertion}, \func{Catt.Tree.Insertion.Properties}{disc-ι}, and \func{Catt.Tree.Insertion.Properties}{disc-label-from} in formalisation module \module{Catt.Tree.Insertion.Properties}.
 \end{proof}
 
 
@@ -5314,11 +5314,11 @@ From this theorem it can be deduced that weakening, suspension, and applications
 
 Before giving normalisation results for \Cattsu, we recall the Eckmann-Hilton argument (\cref{fig:eh}) and give the definition of the term giving this equivalence. First let \(\Delta\) be the ps-context given by:
 \begin{alignat*}{2}
-  \Delta = D^2 \wedge D^2 = &(x : *),\\
-                            &(y : *),&\ &(f : x \to y),\\
-                            &&&(g : x \to y),(a : f \to g),\\
-                            &(z : *),&&(h : x \to y),\\
-                            &&&(j : x \to y),(b : h \to j)
+  \Delta = D^2 \wedge D^2 ={} &(x : *),\\
+                              &(y : *),&\ &(f : x \to y),\\
+                              &&&(g : x \to y),(a : f \to g),\\
+                              &(z : *),&&(h : x \to y),\\
+                              &&&(j : x \to y),(b : h \to j)
 \end{alignat*}
 which is given by the diagram:
 \[
