@@ -82,6 +82,18 @@
 \DeclareMathOperator{\len}{len}
 \DeclareMathOperator{\ext}{ext}
 
+\makeatletter
+\providecommand{\leftsquigarrow}{%
+  \mathrel{\mathpalette\reflect@squig\relax}%
+}
+\newcommand{\reflect@squig}[2]{%
+  \reflectbox{$\m@th#1\rightsquigarrow$}%
+}
+\makeatother
+
+\newcommand{\olsi}[1]{\,\overline{\!{#1}}} % overline short italic
+
+
 
 \newcommand*{\module}[1]{\href{https://alexarice.github.io/catt-agda/#1.html}{#1}}
 \newcommand*{\funcn}[3]{\href{https://alexarice.github.io/catt-agda/#1.html\##2}{#3}}

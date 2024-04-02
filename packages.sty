@@ -7,7 +7,6 @@
 \usepackage[final]{microtype}
 
 \usepackage[ttscale=.75]{libertine}
-\usepackage[libertine]{newtxmath}
 \usepackage{dsfont}
 
 \usepackage[parfill]{parskip}
@@ -75,6 +74,7 @@ backrefstyle=two]%
 \savesymbol{Bbbk}
 \usepackage{amssymb}
 \usepackage{stmaryrd}
+% \usepackage{mathabx}
 
 
 % % tocbibind allows us to have the toc in the toc
@@ -100,6 +100,11 @@ backrefstyle=two]%
 
 % Used in hyperref's setup, and must be loaded before tikz-cd.
 \usepackage[dvipsnames]{xcolor}
+
+\definecolor{Diag1}{RGB}{0,114,178}
+\definecolor{Diag2}{RGB}{213,94,0}
+\definecolor{Diag3}{RGB}{204,121,167}
+
 \usepackage[most]{tcolorbox}
 \usepackage{tikz-cd}
 
@@ -197,7 +202,7 @@ backrefstyle=two]%
 \usepackage{xspace}
 
 \usepackage{quiver}
-\usetikzlibrary{nfold, backgrounds}
+\usetikzlibrary{nfold, backgrounds, decorations.pathmorphing}
 \tikzcdset{column sep/smaller/.initial=0em}
 \tikzcdset{arrow style = tikz, diagrams={>=stealth}}
 \tikzcdset{Rightarrow/.append style ={nfold}}

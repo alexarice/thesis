@@ -1682,8 +1682,7 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
     {%
       \begin{figure}[hbtp]
         \centering
-        \fbox{\begin{subfigure}{0.46\textwidth}
-            \vspace{0.4pt}
+        \fbox{\begin{subfigure}{0.47\textwidth}
             \begin{mathpar}
               \inferrule{ }{\star : \Type_\Gamma}
               \and
@@ -1720,7 +1719,7 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
               \and
               \inferrule{(x : A) \in \Gamma}{\Gamma \vdash x : A}
               \and
-              \inferrule{\Gamma \vdash t : A\\ \Gamma \vdash A = B}{\Gamma \vdash t : B}\textsc{conv}
+              \inferrule{\Gamma \vdash t : A\\ \Gamma \vdash A = B}{\Gamma \vdash t : B}
               \and
               \inferrule{\Delta \vdash_{\mathsf{ps}}\\ \Delta \vdash \arr s A t \\ \Gamma \vdash \sigma : \Delta\\(\Delta, \Supp(s), \Supp(t)) \in \mathcal{O}}{\Gamma \vdash \Coh \Delta {\arr s A t} \sigma : \arr {s \sub \sigma} {A \sub \sigma} {t \sub \sigma}}
             \end{mathpar}
@@ -1745,8 +1744,8 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
           \end{subfigure}}
 
         \vspace{7pt}
-        \fbox{\begin{subfigure}{0.46\textwidth}
-            \vspace{1pt}
+        \fbox{\begin{subfigure}{0.47\textwidth}
+            \vspace{3.7pt}
             \begin{mathpar}
               \inferrule{ }{(x : \star) \vdash_{\mathsf{ps}} x : \star}
               \and
@@ -1760,7 +1759,6 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
           \end{subfigure}}
         \hfill
         \fbox{\begin{subfigure}{0.49\textwidth}
-            \vspace{6pt}
             \begin{mathpar}
               \FV(\star) = \{\}
               \and
@@ -4120,6 +4118,7 @@ We end this section with two further results that can be proven in the presence 
 Lastly, under the presence of endo-coherence removal, the standard coherences \(\stdtm T n\) for which \(n > \dep(T)\) can be shown to be equal to identities.
 
 \begin{theorem}
+  \label{thm:std-ecr}
   Suppose the equality rule set \(\mathcal{R}\) has endo-coherence removal. Let \(T\) be a tree and suppose \(n \geq \dep(T)\). Then:
   \[ T \vdash \stdcoh T {n+1} = \stdcoh {D^n} {n+1} \sub {\{\stdty T n, \stdtm T n\}} \]
 \end{theorem}
@@ -4160,7 +4159,7 @@ $$
 \draw [->] (x2) to node [above, font=\small] {$g$} (y2);
 \draw [->] (y2) to node [above, font=\small] {$h$} (z2);
 \end{scope}
-\draw [->, thick, red] (2.25,1.25) to +(0,-.5);
+\draw [->, very thick, red] (2.25,1.25) to +(0,-.5);
 \end{tikzpicture}
 \end{aligned}
 \quad\leadsto\quad
@@ -4186,27 +4185,27 @@ Insertion acting on the composite \(f * (g * h)\)}
 Insertion is an operation that is best understood with respect to trees instead of ps-contexts. Insertion merges the structure of two trees along a \emph{branch} of the first tree.
 
 \begin{definition}
-  Let \(S\) be a tree. A \emph{branch} of \(S\) is a non-empty list of natural numbers \(P\) which indexes a tree \(S^P\) which is linear. From each branch \(P\), a maximal path \(\bar P\) can be obtained by concatenating \(P\) with \(p^{\dep(S^P)}\), the unique maximal path of \(S^P\).
+  Let \(S\) be a tree. A \emph{branch} of \(S\) is a non-empty list of natural numbers \(P\) which indexes a tree \(S^P\) which is linear. From each branch \(P\), a maximal path \(\olsi P\) can be obtained by concatenating \(P\) with \(p^{\dep(S^P)}\), the unique maximal path of \(S^P\).
 
-  For a branch \(P\), we further define the \emph{branch height}, \(\bh(P)\), to be one less than the length of \(P\) (noting that branches are non-empty lists), and the \emph{leaf height}, \(\lh(P)\), to be one less than the length of \(\bar P\), which is equal to the dimension of \(\lfloor \hat P \rfloor\).
+  For a branch \(P\), we further define the \emph{branch height}, \(\bh(P)\), to be one less than the length of \(P\) (noting that branches are non-empty lists), and the \emph{leaf height}, \(\lh(P)\), to be one less than the length of \(\olsi P\), which is equal to the dimension of \(\lfloor \hat P \rfloor\).
 \end{definition}
-While each branch \(P\) uniquely determines a maximal path \(\bar P\), the converse does not hold. There may be multiple branches of a tree which correspond to the same maximal path. Consider the tree \(T = [[[[\emp],\emp],emp]]\). This has two distinct branches \(P = [0,0,0]\) and \(Q = [0,0,0,0]\) which both correspond to the maximal path \([0,0,0,0,0]\). We graphically depict these branches below by drawing them in blue.
+While each branch \(P\) uniquely determines a maximal path \(\olsi P\), the converse does not hold. There may be multiple branches of a tree which correspond to the same maximal path. Consider the tree \(T = [[[[\emp],\emp],emp]]\). This has two distinct branches \(P = [0,0,0]\) and \(Q = [0,0,0,0]\) which both correspond to the maximal path \([0,0,0,0,0]\). We graphically depict these branches below by drawing them in blue.
 
 \[ P = \begin{tikzpicture}[yscale=0.7,every node/.append style={scale=0.6},baseline=(x21.base)]
     \node [on grid] at (0,0) (x01) {$\bullet$};
     \node [on grid] at (0,1) (x11) {$\bullet$};
     \node [on grid] at (-0.5,2)(x21){$\bullet$};
     \node [on grid] at (0.5,2) (x22){$\bullet$};
-    \node [on grid, blue] at (-0.9,3)(x31) {$\bullet$};
+    \node [on grid, Diag1] at (-0.9,3)(x31) {$\bullet$};
     \node [on grid] at (-0.1,3) (x32) {$\bullet$};
-    \node [on grid, blue] at (-0.9,4)(x41) {$\bullet$};
+    \node [on grid, Diag1] at (-0.9,4)(x41) {$\bullet$};
     \begin{scope}[on background layer]
       \draw (x01.center) to (x11.center);
       \draw (x11.center) to (x21.center);
       \draw (x11.center) to (x22.center);
-      \draw[blue,thick] (x21.center) to (x31.center);
+      \draw[Diag1,very thick] (x21.center) to (x31.center);
       \draw (x21.center) to (x32.center);
-      \draw[blue,thick] (x31.center) to (x41.center);
+      \draw[Diag1,very thick] (x31.center) to (x41.center);
     \end{scope}
   \end{tikzpicture}
   \qquad
@@ -4217,18 +4216,18 @@ While each branch \(P\) uniquely determines a maximal path \(\bar P\), the conve
     \node [on grid] at (0.5,2) (x22){$\bullet$};
     \node [on grid] at (-0.9,3)(x31) {$\bullet$};
     \node [on grid] at (-0.1,3) (x32) {$\bullet$};
-    \node [on grid, blue] at (-0.9,4)(x41) {$\bullet$};
+    \node [on grid, Diag1] at (-0.9,4)(x41) {$\bullet$};
     \begin{scope}[on background layer]
       \draw (x01.center) to (x11.center);
       \draw (x11.center) to (x21.center);
       \draw (x11.center) to (x22.center);
       \draw (x21.center) to (x31.center);
       \draw (x21.center) to (x32.center);
-      \draw[blue,thick] (x31.center) to (x41.center);
+      \draw[Diag1,very thick] (x31.center) to (x41.center);
     \end{scope}
   \end{tikzpicture}
 \]
-While \(P\) and \(Q\) represent the same path, they have different branch heights: the branch height of \(P\) is \(0\) while the branch height of \(Q\) is \(1\). This will cause insertions along these two branches to proceed differently (though we will see later that if both insertions are valid then the results are equivalent\todo{cross ref}). The leaf height and branch height of the branch \(P\) is demonstrated in \cref{fig:leafheight}, where we also depict the trunk height of \(T\), which was defined in \cref{sec:trees}.
+While \(P\) and \(Q\) represent the same path, they have different branch heights: the branch height of \(P\) is \(0\) while the branch height of \(Q\) is \(1\). This will cause insertions along these two branches to proceed differently (though we will see later that if both insertions are valid then the results are equivalent in \cref{lem:insertion-irrel}). The leaf height and branch height of the branch \(P\) is demonstrated in \cref{fig:leafheight}, where we also depict the trunk height of \(T\), which was defined in \cref{sec:trees}.
 
 \begin{figure}
   \[
@@ -4237,28 +4236,28 @@ While \(P\) and \(Q\) represent the same path, they have different branch height
     \node [on grid] at (0,1) (x11) {$\bullet$};
     \node [on grid] at (-0.5,2)(x21){$\bullet$};
     \node [on grid] at (0.5,2) (x22){$\bullet$};
-    \node [on grid, blue] at (-0.9,3)(x31) {$\bullet$};
+    \node [on grid, Diag1] at (-0.9,3)(x31) {$\bullet$};
     \node [on grid] at (-0.1,3) (x32) {$\bullet$};
-    \node [on grid, blue] at (-0.9,4)(x41) {$\bullet$};
+    \node [on grid, Diag1] at (-0.9,4)(x41) {$\bullet$};
     \node [left=0 of x31.center ,on grid] {$T^P$};
-    \node [right=0 of x41.center ,on grid] {$\bar P$};
+    \node [right=0 of x41.center ,on grid] {$\olsi P$};
     \begin{scope}[on background layer]
       \draw (x01.center) to (x11.center);
       \draw (x11.center) to (x21.center);
       \draw (x11.center) to (x22.center);
-      \draw[blue,thick] (x21.center) to (x31.center);
+      \draw[Diag1,very thick] (x21.center) to (x31.center);
       \draw (x21.center) to (x32.center);
-      \draw[blue,thick] (x31.center) to (x41.center);
+      \draw[Diag1,very thick] (x31.center) to (x41.center);
     \end{scope}
     \node [on grid] at (-0.7,1)(th) {};
     \draw [|->] (-0.7,0) to node [left] {$\th(T)$} (th.center);
-    \draw [dotted,thick] (th) to (x11);
+    \draw [dotted,very thick] (th) to (x11);
     \node [on grid] at (-1.5,2) (bh) {};
     \draw [|->] (-1.5,0) to node [left] {$\bh(P)$} (bh.center);
-    \draw [dotted,thick] (bh) to (x21);
+    \draw [dotted,very thick] (bh) to (x21);
     \node [on grid] at (-2.3,4) (lh) {};
     \draw [|->] (-2.3,0) to node [left] {$\lh(P)$} (lh.center);
-    \draw [dotted,thick] (lh) to (x41);
+    \draw [dotted,very thick] (lh) to (x41);
   \end{tikzpicture}
 \]
 \caption{\label{fig:leafheight} Leaf height, branch height and trunk height.}
@@ -4295,18 +4294,18 @@ We first consider the insertion of \(T\) into \(S\), which returns the inserted 
 \[ S = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
     \node [on grid] at (0,0) (x01) {$\bullet$};
     \node [on grid] at (-0.5,1) (x11) {$\bullet$};
-    \node [on grid, blue] at (-0.9, 2)(x21) {$\bullet$};
+    \node [on grid, Diag1] at (-0.9, 2)(x21) {$\bullet$};
     \node [on grid] at (-0.1, 2)(x22) {$\bullet$};
     \node [on grid] at (0.5,1)(x12) {$\bullet$};
     \begin{scope}[on background layer]
     \draw (x01.center) to (x11.center);
     \draw (x01.center) to (x12.center);
-    \draw[blue, thick] (x11.center) to (x21.center);
+    \draw[Diag1, very thick] (x11.center) to (x21.center);
     \draw (x11.center) to (x22.center);
     \end{scope}
   \end{tikzpicture}
   \qquad
-  T = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base), red]
+  T = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base), Diag2]
     \node [on grid] at (0,0) (x01) {$\bullet$};
     \node [on grid] at (0,1) (x11) {$\bullet$};
     \node [on grid] at (-0.5, 2) (x21) {$\bullet$};
@@ -4317,17 +4316,17 @@ We first consider the insertion of \(T\) into \(S\), which returns the inserted 
   \end{tikzpicture}
   \qquad
   \insertion S P {T} = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
-    \node [on grid, red] at (0,0) (x01) {$\bullet$};
-    \node [on grid, red] at (-0.5,1) (x11) {$\bullet$};
-    \node [on grid, red] at (-0.9, 2)(x21) {$\bullet$};
-    \node [on grid, red] at (-0.5, 2)(x22) {$\bullet$};
+    \node [on grid, Diag2] at (0,0) (x01) {$\bullet$};
+    \node [on grid, Diag2] at (-0.5,1) (x11) {$\bullet$};
+    \node [on grid, Diag2] at (-0.9, 2)(x21) {$\bullet$};
+    \node [on grid, Diag2] at (-0.5, 2)(x22) {$\bullet$};
     \node [on grid] at (-0.1, 2)(x23) {$\bullet$};
     \node [on grid] at (0.5,1)(x12) {$\bullet$};
     \begin{scope}[on background layer]
-    \draw [red] (x01.center) to (x11.center);
+    \draw [Diag2] (x01.center) to (x11.center);
     \draw (x01.center) to (x12.center);
-    \draw [red] (x11.center) to (x21.center);
-    \draw [red] (x11.center) to (x22.center);
+    \draw [Diag2] (x11.center) to (x21.center);
+    \draw [Diag2] (x11.center) to (x22.center);
     \draw (x11.center) to (x23.center);
     \end{scope}
   \end{tikzpicture}
@@ -4340,18 +4339,18 @@ We now consider the insertion of \(T'\) into \(S\). Despite \(T'\) having a lowe
 \[ S = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
     \node [on grid] at (0,0) (x01) {$\bullet$};
     \node [on grid] at (-0.5,1) (x11) {$\bullet$};
-    \node [on grid, blue] at (-0.9, 2)(x21) {$\bullet$};
+    \node [on grid, Diag1] at (-0.9, 2)(x21) {$\bullet$};
     \node [on grid] at (-0.1, 2)(x22) {$\bullet$};
     \node [on grid] at (0.5,1)(x12) {$\bullet$};
     \begin{scope}[on background layer]
     \draw (x01.center) to (x11.center);
     \draw (x01.center) to (x12.center);
-    \draw[blue, thick] (x11.center) to (x21.center);
+    \draw[Diag1, very thick] (x11.center) to (x21.center);
     \draw (x11.center) to (x22.center);
     \end{scope}
   \end{tikzpicture}
   \qquad
-  T' = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base), red]
+  T' = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base), Diag2]
     \node [on grid] at (0,0) (x01) {$\bullet$};
     \node [on grid] at (0,1)(x11) {$\bullet$};
     \draw (x01.center) to (x11.center);
@@ -4359,32 +4358,32 @@ We now consider the insertion of \(T'\) into \(S\). Despite \(T'\) having a lowe
   \end{tikzpicture}
   \qquad
   \insertion S P {T'} = \begin{tikzpicture}[yscale=0.7, every node/.style={scale=0.6},baseline=(x11.base)]
-    \node [on grid,red] at (0,0) (x01) {$\bullet$};
-    \node [on grid,red] at (-0.5,1) (x11) {$\bullet$};
+    \node [on grid,Diag2] at (0,0) (x01) {$\bullet$};
+    \node [on grid,Diag2] at (-0.5,1) (x11) {$\bullet$};
     \node [on grid] at (-0.5, 2)(x21) {$\bullet$};
     \node [on grid] at (0.5,1)(x12) {$\bullet$};
     \begin{scope}[on background layer]
-    \draw [red] (x01.center) to (x11.center);
+    \draw [Diag2] (x01.center) to (x11.center);
     \draw (x01.center) to (x12.center);
     \draw (x11.center) to (x21.center);
     \end{scope}
   \end{tikzpicture}
 \]
-Here, the branch \(P\) is replaced by a singleton tree, which is the remaining \(T'\) after removing its trunk. We note that this operation is the same as pruning the locally maximal variable \(\lfloor \bar P \rfloor\) from \(\lfloor T \rfloor\). We will see in \cref{sec:univ-prop-insert} that all instances of pruning can be represented as an instance of insertion.
+Here, the branch \(P\) is replaced by a singleton tree, which is the remaining \(T'\) after removing its trunk. We note that this operation is the same as pruning the locally maximal variable \(\lfloor \olsi P \rfloor\) from \(\lfloor T \rfloor\). We will see in \cref{sec:univ-prop-insert} that all instances of pruning can be represented as an instance of insertion.
 
 When we consider the insertion of \(T''\) into \(S\), it is not clear how to proceed, as there is no ``corresponding part'' of \(T''\) to replace the branch \(P\) with. In the other two cases this is obtained by removing the trunk of the tree, but \(T''\) has no trunk to remove. In this case we say that the insertion is not possible to perform as \(\bh(P) > \th(T'')\), a condition necessary for insertion.
 
-More generally we consider a (structured) coherence term \(\SCoh S A L : \STerm_\U\). To apply insertion to this term, we must first identify a branch \(P\) of \(S\) such that \(\bar P \sub L \equiv \stdcoh T {\lh(P)} \sub M\), that is there is a locally maximal argument of \(L\) which is a standard coherence. We then must construct the following data as part of the insertion operation:
+More generally we consider a (structured) coherence term \(\SCoh S A L : \STerm_\U\). To apply insertion to this term, we must first identify a branch \(P\) of \(S\) such that \(\olsi P \sub L \equiv \stdcoh T {\lh(P)} \sub M\), that is there is a locally maximal argument of \(L\) which is a standard coherence. We then must construct the following data as part of the insertion operation:
 
 \begin{itemize}
 \item The \emph{inserted tree} \(\insertion S P T\), obtained by inserting \(T\) into \(S\) along the branch \(P\). We have already given some examples of this operation.
 \item The \emph{interior labelling} \(\iota : T \to \insertion S P T\), the inclusion of \(T\) into a copy of \(T\) living in the inserted tree.
-\item The \emph{exterior labelling} \(\kappa : S \to \insertion S P T\), which maps \(\bar P\) to standard coherence over the copy of \(T\), or more specifically \(\mathcal{C}_\Theta^{\lh(P)} \sub \iota\), and other maximal paths to their copy in the inserted tree.
+\item The \emph{exterior labelling} \(\kappa : S \to \insertion S P T\), which maps \(\olsi P\) to standard coherence over the copy of \(T\), or more specifically \(\mathcal{C}_\Theta^{\lh(P)} \sub \iota\), and other maximal paths to their copy in the inserted tree.
 \item The \emph{inserted labelling} \(\insertion L P M : \insertion S P T \to \U\), which collects the appropriate parts of \(L\) and \(M\).
 \end{itemize}
 Using this notation, insertion yields the following equality:
 \[\Coh S A L = \Coh {\insertion S P T} {A \sub \kappa} {\insertion L P M}\]
-These constructions can be assembled into the following diagram, where \(B\) is the type of \(\bar P\) and \(n = \lh(P)\):
+These constructions can be assembled into the following diagram, where \(B\) is the type of \(\olsi P\) and \(n = \lh(P)\):
 % https://q.uiver.app/?q=WzAsNSxbMCwwLCJEX24iXSxbMSwwLCJcXERlbHRhIl0sWzAsMSwiXFxUaGV0YSJdLFsxLDEsIlxcaW5zZXJ0aW9uIFxcRGVsdGEgeCBcXFRoZXRhIl0sWzIsMiwiXFxHYW1tYSJdLFsxLDMsIlxca2FwcGEiXSxbMiwzLCJcXGlvdGEiLDJdLFswLDEsIlxce0EseFxcfSJdLFswLDIsIlxce1xcbWF0aGNhbHtVfV9cXFRoZXRhXm4sIFxcbWF0aGNhbHtDfV9cXFRoZXRhXm5cXH0iLDJdLFsxLDQsIlxcc2lnbWEiLDAseyJjdXJ2ZSI6LTN9XSxbMiw0LCJcXHRhdSIsMix7ImN1cnZlIjoyfV0sWzMsNCwiXFxpbnNlcnRpb24gXFxzaWdtYSB4IFxcdGF1IiwxXSxbMywwLCIiLDEseyJzdHlsZSI6eyJuYW1lIjoiY29ybmVyIn19XV0=
 \[\begin{tikzcd}
     {D^n} & S \\
@@ -4392,12 +4391,12 @@ These constructions can be assembled into the following diagram, where \(B\) is 
     && \U
     \arrow["\kappa", from=1-2, to=2-2]
     \arrow["\iota"', from=2-1, to=2-2]
-    \arrow["{\{B, \bar P\}}", from=1-1, to=1-2]
+    \arrow["{\{B, \olsi P\}}", from=1-1, to=1-2]
     \arrow["{\{\stdty T n, \stdcoh T n\}}"', from=1-1, to=2-1]
     \arrow["L", curve={height=-18pt}, from=1-2, to=3-3]
     \arrow["M"', curve={height=12pt}, from=2-1, to=3-3]
     \arrow["{\insertion L P M}"{description}, from=2-2, to=3-3]
-    % \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+    % \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=2-2, to=1-1]
   \end{tikzcd}
 \]
 It will be proven in \cref{sec:univ-prop-insert} that the square above is cocartesian, and so \(\insertion S P T\) is the pushout of \(S\) and \(T\).
@@ -4407,7 +4406,7 @@ We now begin to define each of these constructions in turn. As we need a lot of 
 \begin{definition}
   An \emph{insertion point} is a triple \((S,P,T)\) such that \(S\) and \(T\) are trees and \(P\) is a branch of \(S\) with \(\bh(P) \leq \th(T)\) and \(\lh(S) \geq \dim(T)\).
 
-  An \emph{insertion redex} is a sextuple \((S,P,T,\U,L,M)\) such that \((S,P,T)\) is an insertion point, \(L : S \to \U\) and \(M : T \to \U\) are labellings with \(\ty(L) \equiv \ty(M) \equiv \star\), and \(L(\bar P) \equiv \mathcal{C}_T^{\lh(P)}\sub M\).
+  An \emph{insertion redex} is a sextuple \((S,P,T,\U,L,M)\) such that \((S,P,T)\) is an insertion point, \(L : S \to \U\) and \(M : T \to \U\) are labellings with \(\ty(L) \equiv \ty(M) \equiv \star\), and \(L(\olsi P) \equiv \mathcal{C}_T^{\lh(P)}\sub M\).
 \end{definition}
 
 We can now define the insertion operation on trees.
@@ -4511,10 +4510,10 @@ The now proceed to prove that each of these constructions used to generate inser
   where \(k\) is the first element of \(P\) (as \(P\) is non-empty) and \(T\) has length \(m\).
 \end{lemma}
 \begin{proof}
-  From the insertion redex, we have \(L(\bar P) \equiv \stdcoh T {\lh(P)} \sub M\). By assumption, \(P\) is of the form \(k :: p\), where \(p\) is a path and \(S = [S_0,\dots,S_n]\) and so
-  \[\SPath(\bar P) \equiv  \Inc_k(\SPath(p)) \]
+  From the insertion redex, we have \(L(\olsi P) \equiv \stdcoh T {\lh(P)} \sub M\). By assumption, \(P\) is of the form \(k :: p\), where \(p\) is a path and \(S = [S_0,\dots,S_n]\) and so
+  \[\SPath(\olsi P) \equiv  \Inc_k(\SPath(p)) \]
   and so supposing that \(S_k \vdash \SPath(p) : A\) (as every path is well-formed), we can obtain:
-  \[\U \vdash \SPath(\bar P) \sub L : \Sigma(A) \sub {\inc_k} \sub L\]
+  \[\U \vdash \SPath(\olsi P) \sub L : \Sigma(A) \sub {\inc_k} \sub L\]
   By \cref{prop:standard-typing}, \(\U \vdash \stdcoh T {\lh(P)} \sub M : \stdty T {\lh(P)} \sub M\). Therefore by uniqueness of types (using the syntactic equality from the insertion redex), we have:
   \[ \U \vdash \Sigma(A) \sub {\inc_k \bullet L} = \stdty T {\lh(P)} \sub M\]
   By truncating both sides of of this equality \(\lh(P) - 1\) times we get:
@@ -4527,7 +4526,7 @@ The typing properties of each of the constructions involved in insertion are giv
   \label{prop:ins-typing}
   Let \((S,P,T)\) be an insertion point. Then:
   \[\insertion S P T \vdash \iota_{S,P,T} : T \qquad \insertion S P T \vdash \kappa_{S,P,T} : S\]
-  If we further have \(\U \vdash L : S\) and \(\U \vdash M : S\) with \(L(\bar P) \equiv \stdcoh T {\lh(P)} \sub M\) then:
+  If we further have \(\U \vdash L : S\) and \(\U \vdash M : S\) with \(L(\olsi P) \equiv \stdcoh T {\lh(P)} \sub M\) then:
   \[ \U \vdash \insertion L P M : \insertion S P T\]
 \end{proposition}
 \begin{proof}
@@ -4548,7 +4547,7 @@ The typing properties of each of the constructions involved in insertion are giv
     \[T = [T_0] \qquad M = t_0\{M_0\}t_1 : B\]
     with \(\U \vdash M_0 : T_0\) and \(\U \vdash t_i : B\) for \(i \in \{0,1\}\). Then:
     \begin{align*}
-      L_k(\bar{Q}) &\equiv L(\bar P)\\
+      L_k(\olsi{Q}) &\equiv L(\olsi P)\\
                     &\equiv \stdcoh T {\lh(P)} \sub M\\
                     &\equiv \Sigma \left(\stdcoh {T_0} {\lh(Q)}\right) \sub M\\
                     &\equiv \stdcoh {T_0} {\lh(Q)} \sub {M_0}
@@ -4586,9 +4585,9 @@ As stated in the previous section, the constructions involved in insertion arise
     \lfloor T \rfloor & {\lfloor \insertion S P T \rfloor}
     \arrow["\lfloor \kappa \rfloor", from=1-2, to=2-2]
     \arrow["\lfloor \iota \rfloor"', from=2-1, to=2-2]
-    \arrow["{\{\lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
+    \arrow["{\{\lfloor \olsi P \rfloor\}}", from=1-1, to=1-2]
     \arrow["{\{\lfloor \stdcoh T {\lh(P)} \rfloor\}}"', from=1-1, to=2-1]
-    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=2-2, to=1-1]
   \end{tikzcd}
 \]
 The context \(\lfloor \insertion S P T \rfloor\) is the pushout of \(\lfloor S \rfloor\) and \(\lfloor T \rfloor\) along the maps that send the maximal variable of \(D^n\) to the locally maximal variable corresponding to the branch \(P\) and the standard coherence of over \(T\) of dimension equal to the leaf height of \(P\).
@@ -4606,7 +4605,7 @@ We work towards \cref{thm:univ-prop} by introducing a couple of lemmas. These le
 
 \begin{lemma}
   \label{lem:iota-kappa-comm}
-  Let \((S,P,T)\) be an insertion point. Then \(\kappa(\bar P) \equiv \stdcoh T {\lh(P)} \sub \iota\).
+  Let \((S,P,T)\) be an insertion point. Then \(\kappa(\olsi P) \equiv \stdcoh T {\lh(P)} \sub \iota\).
 \end{lemma}
 \begin{proof}
   See \func{Catt.Tree.Insertion.Properties}{κ-branch-path} in \module{Catt.Tree.Insertion.Properties}.
@@ -4628,7 +4627,7 @@ We can now proceed with the proof of \cref{thm:univ-prop}.
 
 \begin{proof}[Proof of \cref{thm:univ-prop}]
   Let \((S,P,T)\) be an insertion point. We must first show that the candidate pushout square is in fact commutative, for which it is sufficient to show:
-  \[ \{\ty(\bar P), \bar P\} \bullet \kappa \equiv^{\max} \{\stdty T {\lh(P)}, \stdcoh T {\lh(P)}\} \bullet \iota \]
+  \[ \{\ty(\olsi P), \olsi P\} \bullet \kappa \equiv^{\max} \{\stdty T {\lh(P)}, \stdcoh T {\lh(P)}\} \bullet \iota \]
   which follows from \cref{lem:iota-kappa-comm}. To prove that this square is cocartesian, we take two substitutions \(\sigma : \lfloor S \rfloor \to \Gamma\) and \(\tau : \lfloor T \rfloor \to \Gamma\) such that the following diagram is commutative:
   \[
     \begin{tikzcd}[column sep = large, row sep = large]
@@ -4637,18 +4636,18 @@ We can now proceed with the proof of \cref{thm:univ-prop}.
       && \Gamma
       \arrow["\lfloor \kappa \rfloor", from=1-2, to=2-2]
       \arrow["\lfloor \iota \rfloor"', from=2-1, to=2-2]
-      \arrow["{\{\lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
+      \arrow["{\{\lfloor \olsi P \rfloor\}}", from=1-1, to=1-2]
       \arrow["{\{\lfloor \stdcoh T n \rfloor\}}"', from=1-1, to=2-1]
       \arrow["\sigma", curve={height=-18pt}, from=1-2, to=3-3]
       \arrow["\tau"', curve={height=12pt}, from=2-1, to=3-3]
     \end{tikzcd}
   \]
   We therefore have that \(\lceil \sigma \rceil\) is a labelling \(S \to \Gamma\) and \(\lceil \tau \rceil\) is a labelling \(T \to \Gamma\) with
-  \[\Gamma \vdash \lceil \sigma \rceil(\bar P) = \stdcoh T {\lh(P)} \sub{\lceil \tau \rceil}\]
+  \[\Gamma \vdash \lceil \sigma \rceil(\olsi P) = \stdcoh T {\lh(P)} \sub{\lceil \tau \rceil}\]
   To apply \cref{lem:ins-comm-max}, we need this to be a syntactic equality. We therefore define \(M  =\lceil \tau \rceil\) and \(L\) to be given by:
   \[ L(p) =
     \begin{cases*}
-      \stdcoh T {\lh(P)} \sub M &if \(p = \bar P\)\\
+      \stdcoh T {\lh(P)} \sub M &if \(p = \olsi P\)\\
       \lceil \sigma \rceil(p)&otherwise
     \end{cases*}
   \]
@@ -4660,7 +4659,7 @@ We can now proceed with the proof of \cref{thm:univ-prop}.
       && \Gamma
       \arrow["\lfloor \kappa \rfloor", from=1-2, to=2-2]
       \arrow["\lfloor \iota \rfloor"', from=2-1, to=2-2]
-      \arrow["{\{\lfloor \bar P \rfloor\}}", from=1-1, to=1-2]
+      \arrow["{\{\lfloor \olsi P \rfloor\}}", from=1-1, to=1-2]
       \arrow["{\{\lfloor \stdcoh T n \rfloor\}}"', from=1-1, to=2-1]
       \arrow["\lfloor \sigma \rfloor", curve={height=-18pt}, from=1-2, to=3-3]
       \arrow["\lfloor M \rfloor"', curve={height=12pt}, from=2-1, to=3-3]
@@ -4681,7 +4680,7 @@ From this result we will be able to show that having insertion in a theory impli
     \arrow["{\{\src(\lfloor p \rfloor)\}}"', from=2-1, to=2-2]
     \arrow["{\{\lfloor p \rfloor\}}", from=1-1, to=1-2]
     \arrow["{\{\id(d_n)\}}"', from=1-1, to=2-1]
-    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=2-2, to=1-1]
   \end{tikzcd}
 \]
 where \(\dim(A) = n\), and each substitution from a disc is given only by its maximal element.
@@ -4698,7 +4697,7 @@ where \(\dim(A) = n\), and each substitution from a disc is given only by its ma
     \arrow["{\{\id(d_n)\}}"', from=1-1, to=2-1]
     \arrow["\sigma", curve={height=-18pt}, from=1-2, to=3-3]
     \arrow["{\{t\}}", curve={height=18pt}, from=2-1, to=3-3]
-    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=2-2, to=1-1]
   \end{tikzcd}
 \]
 We immediately have that \(\lfloor p \rfloor \sub \sigma = \id(\{t\})\). We can therefore let \(\sigma'\) the same substitution as \(\sigma\) but with \(\lfloor p \rfloor \sub \sigma\) replaced by \(\id(\{t\})\), and then can form the substitution:
@@ -4709,6 +4708,7 @@ It remains to show that the chosen universal map \(\sigma \sslash p\) is unique,
 \end{proof}
 
 \begin{corollary}
+  \label{cor:insertion-pruning}
   Let \(\mathcal{R}\) have insertion. Then \(\mathcal{R}\) has pruning.
 \end{corollary}
 \begin{proof}
@@ -4716,7 +4716,7 @@ It remains to show that the chosen universal map \(\sigma \sslash p\) is unique,
   \[ \lfloor p \rfloor \sub \sigma \equiv \id(A,t)\]
   for some term \(t\) and type \(A\) of \(\Gamma\). We then need to show that:
   \[ \Gamma \vdash \Coh {\lfloor \mathcal{D} \rfloor} A \sigma = \Coh {\lfloor \mathcal{D} \sslash p\rfloor} {A \sub {\pi_p}} {\sigma \sslash p}\]
-  Using the result of \cref{sec:equiv-trees-dyck}, from \(\lfloor \mathcal{D} \rfloor\) we can obtain a tree \(S\) with \(\lfloor S \rfloor \equiv \lfloor \mathcal{D} \rfloor\). Further, \(\lfloor p \rfloor\) is a locally maximal variable of \(\lfloor \mathcal{D}  \rfloor\), and so there exists a branch \(P\) such that \(\lfloor \bar P \rfloor\) is this locally maximal variable, and \(\bh(P) = \lh(P) - 1\). Then the diagram:
+  Using the result of \cref{sec:equiv-trees-dyck}, from \(\lfloor \mathcal{D} \rfloor\) we can obtain a tree \(S\) with \(\lfloor S \rfloor \equiv \lfloor \mathcal{D} \rfloor\). Further, \(\lfloor p \rfloor\) is a locally maximal variable of \(\lfloor \mathcal{D}  \rfloor\), and so there exists a branch \(P\) such that \(\lfloor \olsi P \rfloor\) is this locally maximal variable, and \(\bh(P) = \lh(P) - 1\). Then the diagram:
   \[ % https://q.uiver.app/#q=WzAsMyxbMSwwLCJEXntuKzF9Il0sWzAsMSwiRF5uIl0sWzIsMSwiXFxsZmxvb3IgUyBcXHJmbG9vciJdLFswLDEsIlxceyBcXGlkKHQpIFxcfSIsMl0sWzAsMiwiXFx7IFxcbGZsb29yIHAgXFxyZmxvb3IgXFx9Il1d
     \begin{tikzcd}
       & {D^{n+1}} \\
@@ -4757,7 +4757,7 @@ We now prove that the insertion rule set given in \cref{sec:insertion-rule} sati
     \Sigma(t) &\equiv \SCoh {\insertion {\Sigma(S)} {0::P} {\Sigma(T)}} {\Sigma(A) \sub {\kappa_{\Sigma(S),0::P,\Sigma(T)}}} {\insertion {\Sigma(L)} {0::P} {\Sigma(M)}}
   \end{align*}
   and so as
-  \[\Sigma(L)(0 :: \bar P) \equiv \Sigma'(L)(\bar P) \equiv \Sigma(\stdcoh T {\lh(P)} \sub M) \equiv \stdcoh {\Sigma(T)} {\lh(0::P)} \sub {\Sigma(M)}\]
+  \[\Sigma(L)(0 :: \olsi P) \equiv \Sigma'(L)(\olsi P) \equiv \Sigma(\stdcoh T {\lh(P)} \sub M) \equiv \stdcoh {\Sigma(T)} {\lh(0::P)} \sub {\Sigma(M)}\]
   we get \((\Sigma(\Gamma), \Sigma(\lfloor s \rfloor), \Sigma (\lfloor t \rfloor) ) \in \insert\) as required.
 
   For the substitution condition we let \(\sigma : \arr \Gamma \star \Delta\) be any substitution. Then:
@@ -4766,7 +4766,7 @@ We now prove that the insertion rule set given in \cref{sec:insertion-rule} sati
   \[(\insertion L P M) \bullet \lceil \sigma \rceil \equiv \insertion {L \bullet \lceil \sigma \rceil} P {M \bullet \lceil \sigma \rceil}\]
 
   Further, we have the equality:
-  \[(L \bullet \lceil \sigma \rceil)(\bar P) \equiv L(p) \sub {\lceil \sigma \rceil} \equiv \stdcoh T {\lh(P)} \sub {M \bullet \lceil \sigma \rceil}\]
+  \[(L \bullet \lceil \sigma \rceil)(\olsi P) \equiv L(p) \sub {\lceil \sigma \rceil} \equiv \stdcoh T {\lh(P)} \sub {M \bullet \lceil \sigma \rceil}\]
   and so \((\Gamma, \lfloor s \rfloor \sub \sigma, \lfloor t \rfloor \sub \sigma) \in \insert\) and so \insert satisfies the \(\mathcal{R}\)-substitution condition for any \(\mathcal{R}\), as we made no assumption on \(\sigma\) being well-formed.
 \end{proof}
 
@@ -4792,8 +4792,8 @@ Similar to the other rule sets introduced so far, to prove the support condition
   \[ s \equiv \SCoh S A L \qquad t \equiv \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P T} \qquad (\Gamma, \lfloor s \rfloor, \lfloor t \rfloor) \in \insert\]
   We now assume that \(\Gamma \vdash_{\mathcal{R}} \lfloor s \rfloor : B\) for some \(B\) and must prove that \(\Supp(s) = \Supp(t)\). By inspecting the typing judgement, we can obtain proofs of the following typing judgements:
   \[ \Gamma \vdash L : S \qquad S \vdash A \qquad \Gamma \vdash M : T\]
-  where the typing of \(M\) is obtained by transporting the typing of \(L(\bar P)\) along the syntactic equality \(L(\bar P) \equiv \stdcoh T {\lh(P)} \sub M\). By \cref{lem:ins-comm-max}, we have:
-  \[ \kappa_{S,P,T} \bullet \insertion L P M \equiv^\max L \]
+  where the typing of \(M\) is obtained by transporting the typing of \(L(\olsi P)\) along the syntactic equality \(L(\olsi P) \equiv \stdcoh T {\lh(P)} \sub M\). By \cref{lem:ins-comm-max}, we have:
+  \[ \kappa_{S,P,T} \bullet \insertion L P M \equiv^{\max} L \]
   By \cref{prop:ins-typing}, both sides of this equation are well-formed and so by \cref{thm:label-max-equality}, we obtain the equality:
   \[ \Gamma \vdash_{\mathcal{R}} \kappa_{S,P,T} \bullet \insertion L P M = L\]
   As \(\mathcal{R}\) satisfies the support property, we get:
@@ -4836,7 +4836,7 @@ Using this property, we can give the preservation condition for the insertion ru
   \[ \Gamma \vdash \SCoh {\insertion S P T} {(\arr a A b) \sub \kappa} {\insertion L P M} : {(\arr a A b) \sub \kappa \sub {\insertion L P M}}\]
   By \cref{lem:ins-comm-max,thm:label-max-equality}, \(\Gamma \vdash \kappa \bullet \insertion L P M = L\), and so:
   \begin{align*}
-    (\arr a A b) \sub \kappa \sub {\insertion L P M} &\equiv (\arr a A b) \sub {\kappa \bullet \insertion L P M}\\
+    (\arr a A b) \sub \kappa \sub {\insertion L P M} &\equiv (\arr a A b) \sub {\kappa \bullet (\insertion L P M)}\\
                                                      &= (\arr a A b) \sub {L}\\
                                                      &= B
   \end{align*}
@@ -4855,22 +4855,24 @@ It has now been proved that insertion can form part of a reasonable type theory.
 
 The first two properties we consider concern the interaction of insertion with disc contexts, and will be crucial for proving confluence cases involving insertion and disc removal. Disc contexts often admit insertions, and the disc acts as a left and right unit for the insertion operation.
 
+\paragraph{Insertion into a disc.}
+
 We begin by considering insertions into a disc. A disc context has a branch of height \(0\), and so if the locally maximal variable is sent to a standard coherence, then insertion can always be preformed. Inserting into a disc effectively performs disc removal, replacing the entire disc with the entirety of the inner context. We illustrate this by the following diagram, where we take the branch \([0,0]\) of \(D^4\) (which we note is not the minimal branch).
 
 \[
   \insertion {\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
       \node [on grid] at (0,0) (x01) {$\bullet$};
       \node [on grid] at (0,1) (x11) {$\bullet$};
-      \node [on grid, blue] at (0,2)(x21){$\bullet$};
-      \node [on grid, blue] at (0,3)(x31) {$\bullet$};
-      \node [on grid, blue] at (0,4)(x41) {$\bullet$};
+      \node [on grid, Diag1] at (0,2)(x21){$\bullet$};
+      \node [on grid, Diag1] at (0,3)(x31) {$\bullet$};
+      \node [on grid, Diag1] at (0,4)(x41) {$\bullet$};
       \begin{scope}[on background layer]
         \draw (x01.center) to (x11.center);
-        \draw[blue,thick] (x11.center) to (x21.center);
-        \draw[blue,thick] (x21.center) to (x31.center);
-        \draw[blue,thick] (x31.center) to (x41.center);
+        \draw[Diag1,very thick] (x11.center) to (x21.center);
+        \draw[Diag1,very thick] (x21.center) to (x31.center);
+        \draw[Diag1,very thick] (x31.center) to (x41.center);
       \end{scope}
-    \end{tikzpicture}\quad} {[0,0]} {\quad\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base), red]
+    \end{tikzpicture}\quad} {[0,0]} {\quad\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base), Diag2]
       \node [on grid] at (0,0) (x01) {$\bullet$};
       \node [on grid] at (0,1) (x11) {$\bullet$};
       \node [on grid] at (-0.5,2)(x21){$\bullet$};
@@ -4886,7 +4888,7 @@ We begin by considering insertions into a disc. A disc context has a branch of h
       \draw (x31.center) to (x41.center);
     \end{tikzpicture}\qquad}
   =
-  \qquad\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base),red]
+  \qquad\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base),Diag2]
     \node [on grid] at (0,0) (x01) {$\bullet$};
     \node [on grid] at (0,1) (x11) {$\bullet$};
     \node [on grid] at (-0.5,2)(x21){$\bullet$};
@@ -4903,7 +4905,7 @@ We begin by considering insertions into a disc. A disc context has a branch of h
   \end{tikzpicture}
 \]
 
-This property of insertion also has a simple proof by universal property. Suppose we have disc \(D^n\) with a branch \(P\) and we insert tree \(T\). Then the inserted is given by the following pushout.
+This property of insertion also has a simple proof by universal property. Suppose we have disc \(D^n\) with a branch \(P\) and we insert tree \(T\). Then the inserted tree is given by the following pushout.
 \[
   \begin{tikzcd}
     {D^n} & {D^n} \\
@@ -4912,7 +4914,7 @@ This property of insertion also has a simple proof by universal property. Suppos
     \arrow["\id", from=1-1, to=1-2]
     \arrow["\iota"', from=2-1, to=2-2]
     \arrow["\kappa", from=1-2, to=2-2]
-    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180}, draw=none, from=2-2, to=1-1]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=2-2, to=1-1]
   \end{tikzcd}
 \]
 By standard properties of pushouts, we have that \(\insertion {D^n} P T\) is isomorphic to \(T\). As this pushout holds in \Catt, we have a \Catt isomorphism between pasting contexts and so by \cref{prop:ps-context-iso}, \(T = \insertion {D^n} P T\), \(\iota = \id\). The following lemma gives syntactic versions of these properties.
@@ -4925,12 +4927,500 @@ By standard properties of pushouts, we have that \(\insertion {D^n} P T\) is iso
   See the functions \func{Catt.Tree.Insertion.Properties}{disc-insertion}, \func{Catt.Tree.Insertion.Properties}{disc-ι}, and \func{Catt.Tree.Insertion.Properties}{disc-label-from} in formalisation module \module{Catt.Tree.Insertion.Properties}.
 \end{proof}
 
+\paragraph{Insertion of a disc.}
+
+We now consider the opposite situation, where a disc context is inserted into an arbitrary tree. For a tree \(T\), with a branch \(P\), we can always insert the disc context \(D^{\lh(P)}\), as the trunk height condition will be satisfied by the linearity of the disc context. Inserting such a disc context makes no change to the tree \(T\), as the operation effectively replaces a branch of \(T\) (which is linear by construction) by a disc. The diagram below depicts this construction.
+
+\[
+  \insertion {\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+      \node [on grid] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (0,1) (x11) {$\bullet$};
+      \node [on grid] at (-0.5,2)(x21){$\bullet$};
+      \node [on grid] at (0.5,2) (x22){$\bullet$};
+      \node [on grid] at (0,3)(x31) {$\bullet$};
+      \node [on grid] at (1,3) (x32) {$\bullet$};
+      \node [on grid, Diag1] at (0,4)(x41) {$\bullet$};
+      \node [on grid] at (1,4)(x42) {$\bullet$};
+      \begin{scope}[on background layer]
+        \draw (x01.center) to (x11.center);
+        \draw (x11.center) to (x21.center);
+        \draw (x11.center) to (x22.center);
+        \draw (x22.center) to (x31.center);
+        \draw (x22.center) to (x32.center);
+        \draw[very thick,Diag1] (x31.center) to (x41.center);
+        \draw (x32.center) to (x42.center);
+      \end{scope}
+    \end{tikzpicture}\quad} {[0,1,0,0]} {\quad\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base),Diag2]
+      \node [on grid] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (0,1) (x11) {$\bullet$};
+      \node [on grid] at (0,2)(x21){$\bullet$};
+      \node [on grid] at (0,3)(x31) {$\bullet$};
+      \node [on grid] at (0,4)(x41) {$\bullet$};
+      \draw (x01.center) to (x11.center);
+      \draw (x11.center) to (x21.center);
+      \draw (x21.center) to (x31.center);
+      \draw (x31.center) to (x41.center);
+    \end{tikzpicture}\qquad}
+  =
+  \qquad\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+    \node [on grid, Diag2] at (0,0) (x01) {$\bullet$};
+    \node [on grid, Diag2] at (0,1) (x11) {$\bullet$};
+    \node [on grid] at (-0.5,2)(x21){$\bullet$};
+    \node [on grid, Diag2] at (0.5,2) (x22){$\bullet$};
+    \node [on grid, Diag2] at (0,3)(x31) {$\bullet$};
+    \node [on grid] at (1,3) (x32) {$\bullet$};
+    \node [on grid, Diag2] at (0,4)(x41) {$\bullet$};
+    \node [on grid] at (1,4)(x42) {$\bullet$};
+    \begin{scope}[on background layer]
+      \draw[Diag2] (x01.center) to (x11.center);
+      \draw (x11.center) to (x21.center);
+      \draw[Diag2] (x11.center) to (x22.center);
+      \draw[Diag2] (x22.center) to (x31.center);
+      \draw (x22.center) to (x32.center);
+      \draw[Diag2] (x31.center) to (x41.center);
+      \draw (x32.center) to (x42.center);
+    \end{scope}
+  \end{tikzpicture}
+\]
+
+Similar to the insertion into the disc, the insertion of a disc can be characterised by universal property. Take any tree \(T\) with a branch \(P\). Then the tree \(\insertion T P {D^{\lh(P)}}\) is the following pushout:
+\[
+  \begin{tikzcd}
+    {D^n} & T \\
+    {D^n} & {\insertion T P {D^n}}
+    \arrow["{\{\olsi P\}}", from=1-1, to=1-2]
+    \arrow["{\{\stdcoh {D^n} n\}}"', from=1-1, to=2-1]
+    \arrow["\iota"', from=2-1, to=2-2]
+    \arrow["\kappa", from=1-2, to=2-2]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=2-2, to=1-1]
+  \end{tikzcd}
+\]
+The situation here is less clear than before, as the map \(D^n \to D^n\) is not the identity. However, in the presence of disc removal this map becomes equal to the identity, and in this case a similar argument can be made to determine that \(\kappa\) should be the identity and \(\insertion T P {D^{\lh(P)}}\) should be equal to the tree \(T\). The results are given in the lemma below:
+
+\begin{lemma}
+  \label{lem:disc-insertion-2}
+  Let \((T,P,D^{\lh(P)},\Gamma,L,M)\) be an insertion redex. Then:
+  \[\insertion T P {D^{\lh(P)}} \equiv S \qquad \insertion L P M \equiv^{\mathsf{max}} L\]
+  We further have:
+  \[S \vdash_{\mathcal{R}} \kappa_{S,P,D^{\lh(P)}} =^{\mathsf{max}} \id_{S}\]
+  where \(\mathcal{R}\) is a (tame) equality rule set which has disc removal.
+\end{lemma}
+\begin{proof}
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-disc} and \func{Catt.Tree.Insertion.Properties}{disc-label-from-2} in the formalisation module \module{Catt.Tree.Insertion.Properties} and \func{Catt.Typing.Insertion.Equality}{κ-disc} in \module{Catt.Typing.Insertion.Equality}.
+\end{proof}
+
+\paragraph{Insertion of an endo-coherence.} We now turn our attention to the interaction between insertion and endo-coherence removal. Unlike in \Cattsu, the locally maximal argument in an insertion redex need not be in normal form. In particular, since the only condition on the locally maximal argument is that it is a standard coherence, it may be an endo-coherence removal. In such a situation there are two distinct ways of applying equalities:
+\begin{itemize}
+\item The endo-coherence could be directly inserted into the head term.
+\item The endo-coherence could be transformed into an identity on a standard coherence (see \cref{thm:std-ecr}) which could then undergo to insertion, the first of which ``prunes'' the identity, and the second of which inserts the coherence term which was the locally maximal argument to the identity.
+\end{itemize}
+As the insertion of an identity acts in a similar way to pruning (see \cref{cor:insertion-pruning}), we reuse the notation.
+
+\begin{definition}
+  Let \(S\) be a tree, and \(P\) be a branch of \(S\). Then define:
+  \[ S \sslash P = \insertion S P {D^{\lh(P) - 1}} \qquad \pi_P = \kappa_{S,P,D^{\lh(P) - 1}}\]
+  where we note that \((S,P,D^{\lh(P)-1})\) is always an insertion point.
+\end{definition}
+
+To perform the second equality path of pruning an identity followed by inserting the maximal argument of that identity, we must obtain a branch of the pruned context \(S \sslash P\). This can be done when \(\lh(P) - \bh(P) \geq 2\) by taking the same list as \(P\), as depicted in \cref{fig:pruned-branch}. We name such a branch the \emph{pruned branch}.
+
+\begin{definition}
+  Let \(S\) be a tree, and \(P\) be a branch of \(S\) with \(\lh(P) - \bh(P) \geq 2\). We then define the \emph{pruned branch} \(P'\) of \(S \sslash P\) to be given by the same list as \(P\).
+\end{definition}
+
+If \(\lh(P) - \bh(P) = 1\) (noting that \(\lh(P) - \bh(P)\) cannot be zero) then pruning the branch \(P\) removes the branch entirely, and so the condition \(\lh(P) - \bh(P) \geq 2\) is necessary to form the pruned branch. It is clear that \(\bh(P') = \bh(P)\) and \(\lh(P') = \lh(P) - 1\).
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.45\linewidth}
+    \centering
+    \begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+      \node [on grid] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+      \node [on grid] at (0.5,1)(x12){$\bullet$};
+      \node [on grid] at (0.5,2) (x21){$\bullet$};
+      \node [on grid, Diag1] at (0,3)(x31) {$\bullet$};
+      \node [on grid] at (1,3) (x32) {$\bullet$};
+      \node [on grid, Diag1] at (0,4)(x41) {$\bullet$};
+      \node [on grid] at (1,4)(x42) {$\bullet$};
+      \node [on grid] at (-0.8,2)(bh) {};
+      \node [left=0 of bh ,on grid] {$\bh(P)$};
+      \node [on grid] at (-0.8,4)(lh) {};
+      \node [left=0 of lh ,on grid] {$\lh(P)$};
+      \begin{scope}[on background layer]
+        \draw (x01.center) to (x11.center);
+        \draw (x01.center) to (x12.center);
+        \draw (x12.center) to (x22.center);
+        \draw[very thick,Diag1] (x22.center) to (x31.center);
+        \draw (x22.center) to (x32.center);
+        \draw[very thick,Diag1] (x31.center) to (x41.center);
+        \draw (x32.center) to (x42.center);
+      \end{scope}
+      \draw [<->] (bh.center) to (lh.center);
+      \draw [dotted, very thick] (bh) to (x21);
+      \draw [dotted, very thick] (lh) to (x41);
+    \end{tikzpicture}
+    \caption{Tree \(S\) and branch \(P = [1,0,0]\)}
+  \end{subfigure}
+  \begin{subfigure}{0.45\linewidth}
+    \centering
+    \begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+      \node [on grid] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+      \node [on grid] at (0.5,1)(x12){$\bullet$};
+      \node [on grid] at (0.5,2) (x21){$\bullet$};
+      \node [on grid, Diag1] at (0,3)(x31) {$\bullet$};
+      \node [on grid] at (1,3) (x32) {$\bullet$};
+      \node [on grid] at (1,4)(x42) {$\bullet$};
+      \begin{scope}[on background layer]
+        \draw (x01.center) to (x11.center);
+        \draw (x01.center) to (x12.center);
+        \draw (x12.center) to (x22.center);
+        \draw[very thick,Diag1] (x22.center) to (x31.center);
+        \draw (x22.center) to (x32.center);
+        \draw (x32.center) to (x42.center);
+      \end{scope}
+    \end{tikzpicture}
+    \caption{Tree \(S \sslash P\) and branch \(P' = [1,0,0]\)}
+  \end{subfigure}
+  \caption{The pruned branch}
+  \label{fig:pruned-branch}
+\end{figure}
+
+We also note that the path \(\olsi{P'}\) is the maximal argument of the labelling \(\iota_{S,P,D^{\lh{P}- 1}}\), the inclusion of \(D^{\lh(P)- 1}\) into \(S \sslash P\). Insertion along the pruned branch is then characterised by the following pushout.
+\[\begin{tikzcd}
+	{D^n} & S \\
+	{D^{n-1}} & {S \sslash P} \\
+	T & {\insertion {(S \sslash P)} {P'} T} \\
+	&&& \U\\
+	&&& \U
+	\arrow["{\{\olsi P\}}", from=1-1, to=1-2]
+	\arrow["{\pi_P}", from=1-2, to=2-2]
+	\arrow["{\{\olsi {P'}\}}"', from=2-1, to=2-2]
+	\arrow["{\{\stdcoh {D^{n-1}} n\}}"', from=1-1, to=2-1]
+	\arrow["{\{ \stdcoh T {n-1} \}}"', from=2-1, to=3-1]
+	\arrow["\kappa", from=2-2, to=3-2]
+	\arrow["\iota"', from=3-1, to=3-2]
+	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=2-2, to=1-1]
+	\arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=3-2, to=2-1]
+	\arrow["L", curve={height=-36pt}, from=1-2, to=4-4]
+	\arrow["M"', curve={height=30pt}, from=3-1, to=5-4]
+	\arrow["{\insertion L P {(\{\stdcoh T {n-1}\} \bullet M)}}"{sloped}, from=2-2, to=4-4, dashed]
+	\arrow["{\insertion {(\insertion L P {(\{\stdcoh T {n-1}\} \bullet M)})} {P'} {M}}"'{sloped, pos=0.45}, from=3-2, to=5-4, dashed]
+        \arrow[equal, nfold, from=4-4, to=5-4]
+\end{tikzcd}
+\]
+The top pushout is from the construction of \(S \sslash P\), noting that \(\iota_{S,P,D^{\lh(P) - 1}} = \{\olsi {P'}\}\). The bottom pushout is from the construction of the insertion along the pruned branch. By the pasting lemma for pushouts, the whole outer rectangle is also a pushout along the maps \(\{\hat P\}\) and \(\{\stdcoh {D^{n-1}} n\} \bullet \{\stdcoh T {n-1}\}\). In the presence of endo-coherence removal we have:
+\[ \{\stdcoh {D^{n-1}} n\} \bullet \{\stdcoh T {n-1}\} = \{\stdcoh T n\}\]
+by \cref{thm:std-ecr} and so the outer pushout rectangle is the pushout generated by directly inserting the endo-coherence. There are two ways to form the unique map \(\insertion {(S \sslash P)} {P'} {T} \to \U\), one by the outer pushout rectangle that gives the map \(\insertion L P M\), and one by first using the top pushout square with the maps \(L\) and \(\{\stdcoh T {n-1}\} \bullet M\) to get a map \(S \sslash P \to \U\), and then using this map with the bottom pushout square and \(M\) to get the morphisms depicted in the commutative diagram.
+
+These results appear in the next lemma.
+
+\begin{lemma}
+  \label{lem:pruned-bp}
+  Suppose \(S\) has branch \(P\) with \(\lh(P) - \bh(P) \geq 2\). Then \(\iota_{S,P,D^{\lh(P) - 1}} \equiv \{ \olsi {P'} \} \). Further suppose that \((S,P,T)\) is an insertion point. Then if the (tame) rule set \(\mathcal{R}\) has disc removal and endo-coherence removal we get:
+  \[\insertion {(S \sslash P)} {P'} T = \insertion S P T \qquad \U \vdash_{\mathcal{R}} \pi_P \bullet \kappa_{S \sslash P,P',T} =^{\mathsf{max}} \kappa_{S,P,T} \]
+  If we further have that \((S,P,T,\U,L,M)\) is an insertion redex then:
+  \[\insertion {(\insertion {L} P {(\{\stdcoh T {\lh(P) - 1}\} \bullet M)})} {P'} {M} \equiv^{\mathsf{max}} \insertion L P M\]
+\end{lemma}
+\begin{proof}
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-pruned-branch}, \func{Catt.Tree.Insertion.Properties}{pruned-branch-prop}, and \func{Catt.Tree.Insertion.Properties}{label-from-pruned-branch} in formalisation module \module{Catt.Tree.Insertion.Properties}, and \func{Catt.Typing.Insertion.Equality}{pruned-branch-κ} in \module{Catt.Typing.Insertion.Equality}
+\end{proof}
+
+\paragraph{Branch irrelevance.}
+As has already been noted, a tree \(S\) may admit multiple branches \(P\) and \(Q\) which represent the same locally maximal variable, that is \(\olsi P \equiv \olsi Q\). If there is an insertion that can be applied along either branch \(P\) or \(Q\) then it does not matter which branch we choose. This can be immediately seen by the universal property: The pushout square for an insertion point \((S,P,T)\) only mentions the path \(\olsi P\) and never uses the actual branch \(P\).
+
+\begin{lemma}
+  \label{lem:insertion-irrel}
+  Suppose \((S,P,T)\) and \((S,Q,T)\) are insertion points with \(\olsi P \equiv \olsi Q\). Then \(\insertion S P T \equiv \insertion S Q T\) and \(\kappa_{S,P,T} \equiv^{\mathsf{max}} \kappa_{S,Q,T}\). If we further have \(L : S \to \Gamma\) and \(M : T \to \Gamma\), then \(\insertion L P M \equiv^{\mathsf{max}} \insertion L Q M\).
+\end{lemma}
+\begin{proof}
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-irrel}, \func{Catt.Tree.Insertion.Properties}{κ-irrel}, and \func{Catt.Tree.Insertion.Properties}{irrel-label-from} in formalisation module \module{Catt.Tree.Insertion.Properties}.
+\end{proof}
+
+It is natural to ask why we define branches at all, and don't identify points where insertion can be performed by a maximal path, implicitly taking the branch of minimal branching height. While this could be done, it would make other confluence cases more difficult, as the branch associated to a maximal path could significantly change if a different branch is pruned from the tree.
+
+\paragraph{Parallel insertion.}
+We now begin to consider the interaction between insertion and itself. In contrast to the previous case, we now consider two branches \(P\) and \(Q\) such that \(\olsi P\) and \(\olsi Q\) are not the same maximal path, in which case we say the branches \(P\) and \(Q\) are \emph{parallel}. Assume we have a tree \(S\) such that \((S, P, T)\) and \((S,Q, U)\) are insertion points. We then aim to perform both insertions, and prove that the order they occur in is irrelevant. To do this we must form a branch of the inserted tree \(\insertion S P T\), which is intuitively given by the branch \(Q\), but such a branch must be adapted to the new inserted tree.
+
+\begin{definition}
+  Let \((S, P, T)\) be an insertion point and let \(Q\) be a branch of \(S\) such that \(\olsi P \neq \olsi Q\). Then we define the branch \(\insertion Q P T\) of \(\insertion S P T\) by induction on \(P\) and \(Q\).
+  \begin{itemize}
+  \item Suppose \(P = [k]\) and \(Q = j :: x\). Then if \(j < k\) we let \(\insertion Q P T = Q\). Otherwise we let:
+    \[\insertion Q P T = (j + \len(T) - 1) :: x\]
+  \item Suppose \(P = k :: P_2\) and \(Q = j :: x\). If \(j \neq k\) then let \(\insertion Q P T = Q\). Otherwise, both \(P_2\) and \(x\) are branches of \(S_k\) and so we let \[\insertion Q P T = k :: \insertion x {P_2} T\]
+  \end{itemize}
+  It is clear that \(\insertion Q P T\) satisfies the condition for being a branch.
+\end{definition}
+
+The maximal path associated to the branch \(\insertion Q P T\) is obtained by applying the labelling \(\kappa\) to the maximal path associated to \(Q\). That is:
+\[ \olsi {\insertion Q P T} \equiv \olsi Q \sub {\kappa_{S,P,T}}\]
+A graphical example of such a situation is given in \cref{fig:ins-parallel} where we note how the right branch changes after the left-hand insertion is performed. We also note that the final trees at the bottom of the diagram are coloured slightly differently, which corresponds to the inserted labellings from these trees being different. To remedy this, we introduce a variant of the inserted labelling, which takes arguments from the head labelling instead of the argument labelling wherever possible.
+
+\begin{figure}[ht]
+  \centering
+  \newsavebox\redbase
+  \sbox\redbase{\(\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x11.base),Diag1]
+      \node [on grid] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (0,1) (x11) {$\bullet$};
+      \node [on grid] at (-0.5,2)(x21){$\bullet$};
+      \node [on grid] at (0,2) (x22){$\bullet$};
+      \node [on grid] at (0.5,2) (x23){$\bullet$};
+      \draw (x01.center) to (x11.center);
+      \draw (x11.center) to (x21.center);
+      \draw (x11.center) to (x22.center);
+      \draw (x11.center) to (x23.center);
+    \end{tikzpicture}
+    \quad\mathop{{}_{[1,0]}\mathord{\gg}}\quad
+    \insertion{\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x11.base)]
+        \node [on grid] at (0,0) (x01) {$\bullet$};
+        \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+        \node [on grid] at (0,1)(x12){$\bullet$};
+        \node [on grid] at (0.5,1)(x13){$\bullet$};
+        \node [on grid, Diag1] at (-0.5,2) (x21){$\bullet$};
+        \node [on grid, Diag2] at (0.5,2) (x22){$\bullet$};
+        \begin{scope}[on background layer]
+          \draw (x01.center) to (x11.center);
+          \draw (x01.center) to (x12.center);
+          \draw (x01.center) to (x13.center);
+          \draw[Diag1, very thick] (x12.center) to (x21.center);
+          \draw[Diag2, very thick] (x12.center) to (x22.center);
+        \end{scope}
+      \end{tikzpicture}\quad
+    }{[1,1]}{\quad\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x11.base),Diag2]
+        \node [on grid] at (0,0) (x01) {$\bullet$};
+        \node [on grid] at (0,1) (x11) {$\bullet$};
+        \node [on grid] at (-0.5,2)(x21){$\bullet$};
+        \node [on grid] at (0.5,2) (x22){$\bullet$};
+        \draw (x01.center) to (x11.center);
+        \draw (x11.center) to (x21.center);
+        \draw (x11.center) to (x22.center);
+      \end{tikzpicture}}\)}
+  \newsavebox\redleft
+  \sbox{\redleft}{\(\insertion{\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x11.base)]
+        \node [on grid, Diag1] at (0,0) (x01) {$\bullet$};
+        \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+        \node [on grid, Diag1] at (0,1)(x12){$\bullet$};
+        \node [on grid] at (0.5,1)(x13){$\bullet$};
+        \node [on grid, Diag1] at (-0.6,2) (x21){$\bullet$};
+        \node [on grid, Diag1] at (-0.2,2) (x22){$\bullet$};
+        \node [on grid, Diag1] at (0.2,2) (x23){$\bullet$};
+        \node [on grid, Diag2] at (0.6,2) (x24){$\bullet$};
+        \begin{scope}[on background layer]
+          \draw (x01.center) to (x11.center);
+          \draw[Diag1] (x01.center) to (x12.center);
+          \draw (x01.center) to (x13.center);
+          \draw[Diag1] (x12.center) to (x21.center);
+          \draw[Diag1] (x12.center) to (x22.center);
+          \draw[Diag1] (x12.center) to (x23.center);
+          \draw[Diag2, very thick] (x12.center) to (x24.center);
+        \end{scope}
+      \end{tikzpicture}\quad
+    }{[1,3]}{\quad\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x11.base),Diag2]
+        \node [on grid] at (0,0) (x01) {$\bullet$};
+        \node [on grid] at (0,1) (x11) {$\bullet$};
+        \node [on grid] at (-0.5,2)(x21){$\bullet$};
+        \node [on grid] at (0.5,2) (x22){$\bullet$};
+        \draw (x01.center) to (x11.center);
+        \draw (x11.center) to (x21.center);
+        \draw (x11.center) to (x22.center);
+      \end{tikzpicture}}\)}
+
+  \newsavebox\redright
+  \sbox{\redright}{\(\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x11.base),Diag1]
+      \node [on grid] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (0,1) (x11) {$\bullet$};
+      \node [on grid] at (-0.5,2)(x21){$\bullet$};
+      \node [on grid] at (0,2) (x22){$\bullet$};
+      \node [on grid] at (0.5,2) (x23){$\bullet$};
+      \draw (x01.center) to (x11.center);
+      \draw (x11.center) to (x21.center);
+      \draw (x11.center) to (x22.center);
+      \draw (x11.center) to (x23.center);
+    \end{tikzpicture}
+    \quad\mathop{{}_{[1,0]}\mathord{\gg}}\quad
+    \begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x11.base)]
+      \node [on grid,Diag2] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+      \node [on grid,Diag2] at (0,1)(x12){$\bullet$};
+      \node [on grid] at (0.5,1)(x13){$\bullet$};
+      \node [on grid, Diag1] at (-0.5,2) (x21){$\bullet$};
+      \node [on grid, Diag2] at (0,2) (x22){$\bullet$};
+      \node [on grid, Diag2] at (0.5,2) (x23){$\bullet$};
+      \begin{scope}[on background layer]
+        \draw (x01.center) to (x11.center);
+        \draw[Diag2] (x01.center) to (x12.center);
+        \draw (x01.center) to (x13.center);
+        \draw[Diag1, very thick] (x12.center) to (x21.center);
+        \draw[Diag2] (x12.center) to (x22.center);
+        \draw[Diag2] (x12.center) to (x23.center);
+      \end{scope}
+    \end{tikzpicture}\)}
+
+  \newsavebox\redleftbot
+  \sbox{\redleftbot}{\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x11.base)]
+      \node [on grid,Diag2] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+      \node [on grid,Diag2] at (0,1)(x12){$\bullet$};
+      \node [on grid] at (0.5,1)(x13){$\bullet$};
+      \node [on grid, Diag1] at (-0.8,2) (x21){$\bullet$};
+      \node [on grid, Diag1] at (-0.4,2) (x22){$\bullet$};
+      \node [on grid, Diag1] at (0,2) (x23){$\bullet$};
+      \node [on grid, Diag2] at (0.4,2) (x24){$\bullet$};
+      \node [on grid, Diag2] at (0.8,2) (x25){$\bullet$};
+      \begin{scope}[on background layer]
+        \draw (x01.center) to (x11.center);
+        \draw[Diag2] (x01.center) to (x12.center);
+        \draw (x01.center) to (x13.center);
+        \draw[Diag1] (x12.center) to (x21.center);
+        \draw[Diag1] (x12.center) to (x22.center);
+        \draw[Diag1] (x12.center) to (x23.center);
+        \draw[Diag2] (x12.center) to (x24.center);
+        \draw[Diag2] (x12.center) to (x25.center);
+      \end{scope}
+    \end{tikzpicture}}
+
+  \newsavebox\redrightbot
+  \sbox{\redrightbot}{\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x11.base)]
+      \node [on grid,Diag1] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+      \node [on grid,Diag1] at (0,1)(x12){$\bullet$};
+      \node [on grid] at (0.5,1)(x13){$\bullet$};
+      \node [on grid, Diag1] at (-0.8,2) (x21){$\bullet$};
+      \node [on grid, Diag1] at (-0.4,2) (x22){$\bullet$};
+      \node [on grid, Diag1] at (0,2) (x23){$\bullet$};
+      \node [on grid, Diag2] at (0.4,2) (x24){$\bullet$};
+      \node [on grid, Diag2] at (0.8,2) (x25){$\bullet$};
+      \begin{scope}[on background layer]
+        \draw (x01.center) to (x11.center);
+        \draw[Diag1] (x01.center) to (x12.center);
+        \draw (x01.center) to (x13.center);
+        \draw[Diag1] (x12.center) to (x21.center);
+        \draw[Diag1] (x12.center) to (x22.center);
+        \draw[Diag1] (x12.center) to (x23.center);
+        \draw[Diag2] (x12.center) to (x24.center);
+        \draw[Diag2] (x12.center) to (x25.center);
+      \end{scope}
+    \end{tikzpicture}}
 
 
-\todo[inline]{Confluence properties for insertion}
-\todo[inline]{End with standard coherences being preserved}
+
+  \begin{tikzpicture}
+    \node(redbase) at (0,0) {\usebox\redbase};
+    \node(redleft) at (-4,-5){\usebox\redleft};
+    \node(redright) at (4,-5){\usebox\redright};
+    \node(redleftbot) at (-4,-9){\usebox\redleftbot};
+    \node(redrightbot) at (4,-9){\usebox\redrightbot};
+    \draw[arrows={->[scale=1.5]},
+    line join=round,
+    decorate, decoration={
+      zigzag,
+      segment length=4,
+      amplitude=1.2,post=lineto,
+      post length=2pt
+    }] (redbase) to (redleft);
+    \draw[arrows={->[scale=1.5]},
+    line join=round,
+    decorate, decoration={
+      zigzag,
+      segment length=4,
+      amplitude=1.2,post=lineto,
+      post length=2pt
+    }] (redbase) to (redright);
+    \draw[arrows={->[scale=1.5]},
+    line join=round,
+    decorate, decoration={
+      zigzag,
+      segment length=4,
+      amplitude=1.2,post=lineto,
+      post length=2pt
+    }] (redleft) to (redleftbot);
+    \draw[arrows={->[scale=1.5]},
+    line join=round,
+    decorate, decoration={
+      zigzag,
+      segment length=4,
+      amplitude=1.2,post=lineto,
+      post length=2pt
+    }] (redright) to (redrightbot);
+  \end{tikzpicture}
+  \caption{Parallel insertions}
+  \label{fig:ins-parallel}
+\end{figure}
+
+\begin{definition}
+  We define an alternative to the inserted labelling as follows: Given an insertion point \((S, P, T)\) with \(L : S \to \U\) and \(M : T \to \U\) we define this \emph{alternative inserted labelling} \(\insertionprime L P M : {\insertion S P T} \to \U\). Let
+  \[ S = [S_0,\dots,S_n] \qquad L = s_0 \{L_0\}s_1 \cdots \{L_n\}s_{n+1} : A\]
+  and then proceed by induction on \(P\).
+
+  \begin{itemize}
+    \item Let \(P = [k]\), and
+    \[ T = [T_0,\dots,T_m] \qquad M = t_0\{M_0\}t_1 \cdots \{M_m\}t_{m+1} : B\]
+    Then define \(\insertion L {[k]} M\) to be:
+    \[s_0\{L_0\}s_1 \cdots \{L_{k-1}\}\mathbf{s_k}\{M_0\}t_1\cdots \{M_m\}\mathbf{s_{k+1}}\{L_{k+1}\}s_{k+2}\cdots \{L_n\}s_{n+1} : A\]
+
+    \item Suppose \(P = k :: Q\) so that
+    \[T = [T_0] \qquad M = t_0\{M_0\}t_1 : B\]
+    Define \(\insertion L P M\) as:
+    \[s_0\{L_0\}s_1\cdots \{L_{k-1}\}\mathbf{s_k}\{\insertion {L_k} {Q} {M_0}\}\mathbf{s_{k+1}}\{L_{k+1}\}s_{k+2} \cdots \{L_n\}s_{n+1} : A\]
+  \end{itemize}
+  The terms that differ from the regular inserted labelling are written in bold.
+\end{definition}
+
+It is immediate that the alternative inserted labelling only differs up to syntactic equality.
+
+\begin{proposition}
+  Let \((S,P,T,\U,L,M)\) be an insertion redex. Then:
+  \[\insertionprime L P M = \insertion L P M\]
+\end{proposition}
+\begin{proof}
+  See function \func{Catt.Tree.Insertion.Typing}{label-from-insertion-eq} in the module \module{Catt.Tree.Insertion.Typing}.
+\end{proof}
+
+We now examine the universal property of parallel insertion. This is given by the following diagram, where we insert along \(P\) first, followed by \(Q\), letting \(n = \lh(P)\) and \(m = \lh(Q)\).
+\[
+  \begin{tikzcd}[row sep = large]
+    & {D^n} & T \\
+    {D^m} & S & {\insertion S P T} \\
+    U && {\insertion {(\insertion S P T)} {\insertion Q P T} U}
+    \arrow["{\{\olsi P\}}", from=1-2, to=2-2]
+    \arrow["{\{\olsi Q\}}"', from=2-1, to=2-2]
+    \arrow["{\{\stdcoh U m\}}"', from=2-1, to=3-1]
+    \arrow["{\{\stdcoh T n\}}", from=1-2, to=1-3]
+    \arrow["{\iota_{S,P,T}}", from=1-3, to=2-3]
+    \arrow["{\kappa_{S,P,T}}"', from=2-2, to=2-3]
+    \arrow["{\kappa_{\insertion S P T,\insertion Q P T, U}}", from=2-3, to=3-3]
+    \arrow["{\iota_{\insertion S P T, \insertion Q P T, U}}"', from=3-1, to=3-3]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=2-3, to=1-2]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=3-3, to=2-1]
+  \end{tikzcd}
+\]
+Here, the top pushout square is given by the insertion along \(P\), and the bottom square is given by the insertion along \(\insertion Q P T\), noting that:
+\[ \{ \olsi Q \} \bullet \kappa_{S,P,T} \equiv \{ \olsi {\insertion Q P T}\}\]
+The construction is therefore given by the colimit of the top-left border of the diagram. By a symmetric argument, it can be seen that performing the insertions in the opposite order also leads to a colimit of the same diagram. We finally state the lemma that formally states these ideas.
+
+\begin{lemma}
+  \label{lem:insertion-different}
+  Let \((S,P,T)\) and \((S,Q,U)\) be insertion points such that \(\olsi P \not\equiv \olsi Q\). Then we have:
+  \begin{align*}
+    \insertion {(\insertion S P T)} {\insertion Q P T} U &\equiv \insertion {(\insertion S Q U)} {\insertion P Q U} T\\
+    \kappa_{S,P,T} \circ \kappa_{\insertion S P T, \insertion Q P T, U} &\equiv^{\max} \kappa_{S,Q,U} \circ \kappa_{\insertion S Q U, \insertion P Q U, T}
+    \intertext{Further:}
+    \insertionprime {(\insertion L P M)} {\insertion Q P T} N &\equiv^{\max} \insertionprime {(\insertion L Q N)} {\insertion P Q U} M
+  \end{align*}
+for any insertion redexes \((S,P,T,\U,L,M)\) and \((S,P,T,\U,L,N)\).
+\end{lemma}
+\begin{proof}
+  See functions \func{Catt.Tree.Insertion.Properties}{insertion-parallel}, \func{Catt.Tree.Insertion.Properties}{κ-parallel}, and \func{Catt.Tree.Insertion.Properties}{label-from-parallel} in formalisation module \module{Catt.Tree.Insertion.Properties}.
+\end{proof}
 
 
+
+\paragraph{Boundaries of inserted contexts.}
+
+\paragraph{Insertion into standard constructions.}
+
+\paragraph{Chained insertion.}
 
 \chapter{Semistrict variants of \Catt}
 \label{cha:cattstrict}
@@ -5522,7 +6012,7 @@ Disc trivialisation allows us to prove the following results concerning terms an
 \begin{proof}
   Suppose, for contradiction, that we have a Dyck word \(\mathcal{D}\) and a term \(t\) where \(\Supp(t)\) is not a ps-context. Assume further that \(\mathcal{D}\) is minimal (in terms of length) where such a term exists.
 
-  Immediately, \(\mathcal{D} \nequiv \circleddash\), as all terms have non-empty support. We now examine the locally maximal variables of \(\mathcal{D}\). There must exist some locally maximal variable \(f : x \to y\) such that \(f \not\in \Supp(t)\), as otherwise \(\Supp(t) = \Var(\lfloor \mathcal{D} \rfloor)\).
+  Immediately, \(\mathcal{D} \not\equiv \circleddash\), as all terms have non-empty support. We now examine the locally maximal variables of \(\mathcal{D}\). There must exist some locally maximal variable \(f : x \to y\) such that \(f \not\in \Supp(t)\), as otherwise \(\Supp(t) = \Var(\lfloor \mathcal{D} \rfloor)\).
 
   Now suppose that \(x \not\in\Supp(t)\). Then we let \(p\) be the peak corresponding to \(f\) and consider the term:
   \[t \sub {\pi_p} : \Term_{\lfloor \mathcal{D}\sslash p \rfloor}\]
