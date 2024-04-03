@@ -5364,7 +5364,7 @@ A graphical example of such a situation is given in \cref{fig:ins-parallel} wher
     Define \(\insertion L P M\) as:
     \[s_0\{L_0\}s_1\cdots \{L_{k-1}\}\mathbf{s_k}\{\insertion {L_k} {Q} {M_0}\}\mathbf{s_{k+1}}\{L_{k+1}\}s_{k+2} \cdots \{L_n\}s_{n+1} : A\]
   \end{itemize}
-  The terms that differ from the regular inserted labelling are written in bold.
+  The terms that differ from the regular inserted labelling are written in bold. In the edge case where \(M = \emp\), we arbitrarily use \(s_k\) instead of \(s_{k+1}\) for the definition of \(\insertionprime L {[k]} M\).
 \end{definition}
 
 It is immediate that the alternative inserted labelling only differs up to syntactic equality.
@@ -5437,7 +5437,7 @@ When this condition holds, taking the \(n\)-boundary of \(T\) returns a linear t
       \node [on grid] at (-0.5,3)(x31) {$\bullet$};
       \node [on grid, Diag1] at (0.5,3)(x32) {$\bullet$};
       \node [on grid, Diag1] at (0.5,4)(x41) {$\bullet$};
-      \draw[dashed] (-1,2.5) to (1,2.5);
+      \draw[dashed, thick] (-1,2.5) to (1,2.5);
       \begin{scope}[on background layer]
         \draw (x01.center) to (x11.center);
         \draw (x01.center) to (x12.center);
@@ -5473,7 +5473,7 @@ When this condition holds, taking the \(n\)-boundary of \(T\) returns a linear t
       \node [on grid, Diag2] at (0.5,3)(x32) {$\bullet$};
       \node [on grid, Diag2] at (0,4)(x41) {$\bullet$};
       \node [on grid, Diag2] at (1,4)(x42) {$\bullet$};
-      \draw[dashed] (-1,2.5) to (1,2.5);
+      \draw[dashed, thick] (-1,2.5) to (1,2.5);
       \begin{scope}[on background layer]
         \draw (x01.center) to (x11.center);
         \draw[Diag2] (x01.center) to (x12.center);
@@ -5501,6 +5501,114 @@ When this condition holds, taking the \(n\)-boundary of \(T\) returns a linear t
     \[ \incbd n \epsilon S \circ \kappa_{S,P,T} \equiv^{\mathsf{max}} \incbd n \epsilon {\insertion S P T}\]
   for \(\epsilon \in \{-,+\}\).
 \end{lemma}
+
+\begin{proof}
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-bd-1} and \func{Catt.Tree.Insertion.Properties}{bd-κ-comm-1} in the formalisation module \module{Catt.Tree.Insertion.Properties}.
+\end{proof}
+
+We now move to the second case. We again suppose we have an insertion point \((S,P,T)\) and dimension \(n \in \mathbb{N}\). To perform an insertion into the boundary \(\bound n S\), the dimension \(n\) must be high enough to not remove the branch \(P\) from \(S\). More specifically, we must have the inequality:
+\[ n > \bh(P)\]
+which ensures that the list \(P\) is still a branch of \(\bound n S\).
+
+\begin{definition}
+  Let \(S\) be a tree with a branch \(P\), and let \(n > \bh(P)\). Then there is a branch \(\bound n P\) of \(\bound n S\) given by the same list as \(P\) with \(\bh(\bound n P) = \bh(P)\).
+\end{definition}
+
+As \(\th(\bound n T) \geq \bh(P)\) when \(\th(T) \geq \bh(P)\) and \(n > \bh(P)\), we are able to insert the tree \(\bound n T\) into \(bound n S\) along the branch \(\bound n P\). This is depicted in the following diagram, where \(\bh(P) = 2\) and \(n = 3\). In this diagram, the insertion \(\insertion S P T\) is drawn, and dashed lines are drawn across each tree where they would be truncated by the boundary operation. Crucially, the branch is still well-formed under this line, and preforming the insertion on the truncated trees yields the truncation of the inserted tree.
+
+\[\insertion{\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+      \node [on grid] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+      \node [on grid] at (0.5,1)(x12){$\bullet$};
+      \node [on grid] at (0.5,2) (x21){$\bullet$};
+      \node [on grid, Diag1] at (0,3)(x31) {$\bullet$};
+      \node [on grid] at (1,3) (x32) {$\bullet$};
+      \node [on grid, Diag1] at (0,4)(x41) {$\bullet$};
+      \node [on grid] at (1,4)(x42) {$\bullet$};
+      \draw [dashed, thick] (-0.5,3.5) to (1.5,3.5);
+      \begin{scope}[on background layer]
+        \draw (x01.center) to (x11.center);
+        \draw (x01.center) to (x12.center);
+        \draw (x12.center) to (x22.center);
+        \draw[very thick,Diag1] (x22.center) to (x31.center);
+        \draw (x22.center) to (x32.center);
+        \draw[very thick,Diag1] (x31.center) to (x41.center);
+        \draw (x32.center) to (x42.center);
+      \end{scope}
+    \end{tikzpicture}\quad}
+  {[1,0,0]}
+  {\quad \begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base), Diag2]
+      \node [on grid] at (0,0) (x01) {$\bullet$};
+      \node [on grid] at (0,1) (x11) {$\bullet$};
+      \node [on grid] at (0,2) (x21){$\bullet$};
+      \node [on grid] at (-0.5,3)(x31) {$\bullet$};
+      \node [on grid] at (0.5,3) (x32) {$\bullet$};
+      \node [on grid] at (-0.5,4)(x41) {$\bullet$};
+      \draw [dashed, black, thick] (-1,3.5) to (1,3.5);
+      \draw (x01.center) to (x11.center);
+      \draw (x11.center) to (x21.center);
+      \draw (x21.center) to (x31.center);
+      \draw (x21.center) to (x32.center);
+      \draw (x31.center) to (x41.center);
+    \end{tikzpicture}}
+  \qquad = \qquad
+  \begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+    \node [on grid, Diag2] at (0,0) (x01) {$\bullet$};
+    \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+    \node [on grid, Diag2] at (0.5,1)(x12){$\bullet$};
+    \node [on grid, Diag2] at (0.5,2) (x21){$\bullet$};
+    \node [on grid, Diag2] at (0,3)(x31) {$\bullet$};
+    \node [on grid, Diag2] at (0.5,3) (x32) {$\bullet$};
+    \node [on grid] at (1,3) (x33) {$\bullet$};
+    \node [on grid, Diag2] at (0,4)(x41) {$\bullet$};
+    \node [on grid] at (1,4)(x42) {$\bullet$};
+    \draw [dashed,thick] (-0.5,3.5) to (1.5,3.5);
+    \begin{scope}[on background layer]
+      \draw (x01.center) to (x11.center);
+      \draw[Diag2] (x01.center) to (x12.center);
+      \draw[Diag2] (x12.center) to (x22.center);
+      \draw[Diag2] (x22.center) to (x31.center);
+      \draw[Diag2] (x22.center) to (x32.center);
+      \draw (x22.center) to (x33.center);
+      \draw[Diag2] (x31.center) to (x41.center);
+      \draw (x33.center) to (x42.center);
+    \end{scope}
+  \end{tikzpicture}
+\]
+
+As with the previous case, we explore the interaction of the boundary inclusion labellings and the exterior labelling. We aim to give conditions under which:
+\[ \incbd n - S \bullet \kappa_{S,P,T} \equiv \kappa_{\bound n S,\bound n P,\bound n T} \bullet \incbd n - {\insertion S P T}\]
+We examine the action of each side of the equation on the path \(\olsi {\bound n P}\). On the right hand side, this path is sent by \(\kappa\) to a standard coherence, and so on the left hand side, \((\incbd n - S)(\olsi {\bound n P}) \) must be sent to a standard coherence by \(\kappa\). For this to happen, either \((\incbd n - S)( \olsi {\bound n P})\) must be a maximal path, which will always be the case when \(n \geq \lh(P)\), or \(\bound n T\) is not linear, which is the case when \(n > \th(T)\) and \(n \leq \lh(P)\). These conditions lead to the following lemma.
+
+\begin{lemma}
+  \label{lem:insertion-bd-2}
+  Let \(n \in \mathbb{N}\) and suppose \((S,P,T)\) is an insertion point with \(n > \bh(P)\). Then:
+  \[ \insertion {\bound n S} {\bound n P} {\bound n T} \equiv \bound n {\insertion S P T} \]
+  Suppose further that one of the following hold:
+  \begin{enumerate}
+  \item \(n > \th(T)\) and \(n \leq \lh(P)\)
+  \item \(n \geq \lh(P)\)
+  \end{enumerate}
+  Then:
+  \[ \incbd n \epsilon S \bullet \kappa_{S,P,T} \equiv^{\mathsf{max}} \kappa_{\bound n S,\bound n P,\bound n T} \bullet \incbd n \epsilon {\insertion S P T} \]
+  for \(\epsilon \in \{-,+\}\).
+\end{lemma}
+\begin{proof}
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-bd-2} and \func{Catt.Tree.Insertion.Properties}{bd-κ-comm-2} in the formalisation module \module{Catt.Tree.Insertion.Properties}.
+\end{proof}
+
+Both of the further conditions in \cref{lem:insertion-bd-2} imply that \(n > \bh(P)\). We have therefore seen 3 conditions that can be put on \(n\), \(P\), and \(T\):
+\begin{itemize}
+\item \(n \leq \th(T)\) and \(n < \lh(P)\),
+\item \(n > \th(T)\) and \(n \leq \lh(P)\),
+\item \(n \geq \lh(P)\).
+\end{itemize}
+One of these conditions must always hold for any \(n\) and insertion point \((S,P,T)\), and hence one of \cref{lem:insertion-bd-1,lem:insertion-bd-2} can always be applied.
+
+\begin{remark}
+  The further conditions in each of \cref{lem:insertion-bd-1,lem:insertion-bd-2} could be dropped in favour of weakening the syntactic equalities to definitional equalities and assuming that we work in a theory with disc removal, as this would remove the distinction between standard terms and standard coherences. It was however more convenient to take this approach in the formalisation, and although the extra side conditions may seem arbitrary, the key result is that one of the above lemmas always holds.
+\end{remark}
+
 
 
 \paragraph{Insertion into standard constructions.}
