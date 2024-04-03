@@ -4190,7 +4190,7 @@ Insertion is an operation that is best understood with respect to trees instead 
 
   For a branch \(P\), we further define the \emph{branch height}, \(\bh(P)\), to be one less than the length of \(P\) (noting that branches are non-empty lists), and the \emph{leaf height}, \(\lh(P)\), to be one less than the length of \(\olsi P\), which is equal to the dimension of \(\lfloor \hat P \rfloor\).
 \end{definition}
-While each branch \(P\) uniquely determines a maximal path \(\olsi P\), the converse does not hold. There may be multiple branches of a tree which correspond to the same maximal path. Consider the tree \(T = [[[[\emp],\emp],emp]]\). This has two distinct branches \(P = [0,0,0]\) and \(Q = [0,0,0,0]\) which both correspond to the maximal path \([0,0,0,0,0]\). We graphically depict these branches below by drawing them in blue.
+While each branch \(P\) uniquely determines a maximal path \(\olsi P\), the converse does not hold. There may be multiple branches of a tree which correspond to the same maximal path. Consider the tree \(T = [[[[\emp],\emp],\emp]]\). This has two distinct branches \(P = [0,0,0]\) and \(Q = [0,0,0,0]\) which both correspond to the maximal path \([0,0,0,0,0]\). We graphically depict these branches below by drawing them in blue.
 
 \[ P = \begin{tikzpicture}[yscale=0.7,every node/.append style={scale=0.6},baseline=(x21.base)]
     \node [on grid] at (0,0) (x01) {$\bullet$};
@@ -4228,7 +4228,7 @@ While each branch \(P\) uniquely determines a maximal path \(\olsi P\), the conv
     \end{scope}
   \end{tikzpicture}
 \]
-While \(P\) and \(Q\) represent the same path, they have different branch heights: the branch height of \(P\) is \(0\) while the branch height of \(Q\) is \(1\). This will cause insertions along these two branches to proceed differently (though we will see later that if both insertions are valid then the results are equivalent in \cref{lem:insertion-irrel}). The leaf height and branch height of the branch \(P\) is demonstrated in \cref{fig:leafheight}, where we also depict the trunk height of \(T\), which was defined in \cref{sec:trees}.
+While \(P\) and \(Q\) represent the same path, they have different branch heights: the branch height of \(P\) is \(2\) while the branch height of \(Q\) is \(3\). This will cause insertions along these two branches to proceed differently (though we will see later that if both insertions are valid then the results are equivalent in \cref{lem:insertion-irrel}). The leaf height and branch height of the branch \(P\) is demonstrated in \cref{fig:leafheight}, where we also depict the trunk height of \(T\), which was defined in \cref{sec:trees}.
 
 \begin{figure}
   \[
@@ -4737,7 +4737,7 @@ We now prove that the insertion rule set given in \cref{sec:insertion-rule} sati
 \begin{lemma}
   \label{lem:insertion-map}
   Let \((S,P,T)\) be an insertion point and let \(L : S \to \U\) and \(M : T \to \U\) be labellings. Let \(f : \STerm_\U \to \STerm_{\U'}\) be any function from structured terms of \(\U\) to structured terms of \(\U'\). Then for any path \(p\) of \(\insertion S P T\) we have:
-  \[ f((\insertion S P T)(p)) \equiv (\insertion {f \circ L} P {f \circ M})(p)\]
+  \[ f((\insertion S P T)(p)) \equiv (\insertion {(f \circ L)} P {(f \circ M)})(p)\]
   where \(f \circ L\) is the result of composing \(f\) to the function component of \(L\).
 \end{lemma}
 \begin{proof}
@@ -4745,6 +4745,7 @@ We now prove that the insertion rule set given in \cref{sec:insertion-rule} sati
 \end{proof}
 
 \begin{proposition}
+  \label{prop:insert-tame}
   The insertion rule set, \insert, satisifies the suspension condition. It further satisfies the \(\mathcal{R}\)-substitution condition for any rule set \(\mathcal{R}\), and so also satisfies the weakening condition.
 \end{proposition}
 \begin{proof}
@@ -4786,6 +4787,7 @@ We next prove the support condition for the insertion rule set. We start with th
 Similar to the other rule sets introduced so far, to prove the support condition for the insertion rule set, we will take an arbitrary rule set \(\mathcal{R}\) that is tame and satisfies the support condition, and prove instead that the insertion set satisfies the \(\mathcal{R}\)-support condition. This result can be then used as part of the strategy for proving the support condition outlined in \cref{lem:proof-strat-supp}.
 
 \begin{proposition}
+  \label{prop:insert-supp}
   Let \(\mathcal{R}\) be a tame equality rule set that satisfies the support condition. Then \insert satisfies the \(\mathcal{R}\)-support condition.
 \end{proposition}
 \begin{proof}
@@ -4820,6 +4822,7 @@ whenever \((\lfloor S \rfloor, U, V) \in \mathcal{O}\)
 Using this property, we can give the preservation condition for the insertion rule set.
 
 \begin{proposition}
+  \label{prop:insert-preserve}
   Let \(\mathcal{R}\) be a tame equality rule set and suppose the operation set \(\mathcal{O}\) supports insertion. Then the set \insert satisfies the \(\mathcal{R}\)-preservation condition.
 \end{proposition}
 \begin{proof}
@@ -4922,7 +4925,7 @@ By standard properties of pushouts, we have that \(\insertion {D^n} P T\) is iso
 
 \begin{lemma}
   \label{lem:disc-insertion-1}
-  Let \(T\) be a tree, \(n \geq \dim (T)\), and \(P\) a branch of \(D^n\) with \(\bh(P) \leq \th(T)\). Then \(\insertion {D^n} P T = T\) and \(\iota_{D^n,P,T} \equiv \id\). Suppose further that \((D^n,P,T,\Gamma,L,M)\) is an insertion redex. Then \(\insertion \sigma P \tau \equiv \tau\).
+  Let \(T\) be a tree, \(n \geq \dim (T)\), and \(P\) a branch of \(D^n\) with \(\bh(P) \leq \th(T)\). Then \(\insertion {D^n} P T = T\) and \(\iota_{D^n,P,T} \equiv \id\). Suppose further that \((D^n,P,T,\Gamma,L,M)\) is an insertion redex. Then \(\insertion L P M \equiv M\).
 \end{lemma}
 \begin{proof}
   See the functions \func{Catt.Tree.Insertion.Properties}{disc-insertion}, \func{Catt.Tree.Insertion.Properties}{disc-ι}, and \func{Catt.Tree.Insertion.Properties}{disc-label-from} in formalisation module \module{Catt.Tree.Insertion.Properties}.
@@ -5307,11 +5310,11 @@ A graphical example of such a situation is given in \cref{fig:ins-parallel} wher
 
 
   \begin{tikzpicture}
-    \node(redbase) at (0,0) {\usebox\redbase};
-    \node(redleft) at (-4,-5){\usebox\redleft};
-    \node(redright) at (4,-5){\usebox\redright};
-    \node(redleftbot) at (-4,-9){\usebox\redleftbot};
-    \node(redrightbot) at (4,-9){\usebox\redrightbot};
+    \node(redbase) at (0,0) {\fcolorbox{gray}{white}{\usebox\redbase}};
+    \node(redleft) at (-4,-5){\fcolorbox{gray}{white}{\usebox\redleft}};
+    \node(redright) at (4,-5){\fcolorbox{gray}{white}{\usebox\redright}};
+    \node(redleftbot) at (-4,-9){\fcolorbox{gray}{white}{\usebox\redleftbot}};
+    \node(redrightbot) at (4,-9){\fcolorbox{gray}{white}{\usebox\redrightbot}};
     \draw[arrows={->[scale=1.5]},
     line join=round,
     decorate, decoration={
@@ -5623,22 +5626,19 @@ Equipped with \cref{lem:insertion-bd-1,lem:insertion-bd-2}, we can now prove tha
 \end{proof}
 We can then proceed to the main theorem of this section.
 \begin{theorem}
+  \label{thm:std-insert-props}
   Let \(\mathcal{R}\) be a tame equality rule set that has disc removal and insertion.  Then for any insertion point \((S,P,T)\) and \(n \in \mathbb{N}\), we have:
+  \[\insertion S P T \vdash_{\mathcal{R}} \stdtm {\bound n S} n \sub {\incbd n \epsilon S \bullet \kappa_{S,P,T}} = \stdtm {\bound n {\insertion S P T}} n \sub {\incbd n \epsilon {\insertion S P T}}\]
   \[\insertion S P T \vdash_{\mathcal{R}} \stdty S n \sub {\kappa_{S,P,T}} = \stdty {\insertion S P T} n\]
-  and if \(n \geq \dep(S)\) then:
+
+  for \(\epsilon \in \{-,+\}\) and if \(n \geq \dep(S)\) then:
   \[\insertion S P T \vdash_{\mathcal{R}} \stdcoh S n \sub {\kappa_{S,P,T}} = \stdcoh {\insertion S P T} n \qquad \insertion S P T \vdash_{\mathcal{R}}\stdtm S n \sub {\kappa_{S,P,T}} = \stdtm {\insertion S P T} n \]
 \end{theorem}
 
 \begin{proof}
-  We prove all three properties by mutual induction: We begin with the case for types. If \(n = 0\), then both sides of the equality are \(\star\). Instead consider the \(n + 1\) case, where we have:
-  \begin{alignat*}{3}
-    \stdty S {n+1} \sub {\kappa_{S,P,T}} \equiv{} &\stdtm {\bound n S} n \sub {\incbd n - S} \sub {\kappa_{S,P,T}} &\qquad& \stdty {\insertion S P T} {n+1} \equiv{}&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n - {\insertion S P T}} \\
-                                                  &\to_{\stdty S n \sub {\kappa_{S,P,T}}} &&&&\to_{\stdty {\insertion S P T} n}\\
-                                                  &\stdtm {\bound n S} n \sub {\incbd n + S} \sub {\kappa_{S,P,T}}&&&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n + {\insertion S P T}}
-  \end{alignat*}
-  By the inductive hypothesis on \(n\), we have \(\stdty S n \sub {\kappa_{S,P,T}} = \stdty {\insertion S P T} n\), and so it suffices to show that:
+  We prove all three properties by mutual induction: We begin with the equality:
   \[ \stdtm {\bound n S} n \sub {\incbd n \epsilon S \bullet \kappa_{S,P,T}} = \stdtm {\bound n {\insertion S P T}} n \sub {\incbd n \epsilon {\insertion S P T}}\]
-  for \(\epsilon \in \{-,+\}\). The conditions for either \cref{lem:insertion-bd-1,lem:insertion-bd-2} must hold, and so we treat in case separately. If the conditions for \cref{lem:insertion-bd-1} hold then the required equality is immediately implied by \(\bound n {\insertion S P T} \equiv \bound n S\) and \(\incbd n \epsilon S \bullet \kappa_{S,P,T} \equiv \incbd n \epsilon {\insertion S P T}\). If instead the conditions for \cref{lem:insertion-bd-2} hold then:
+  The conditions for either \cref{lem:insertion-bd-1,lem:insertion-bd-2} must hold, and so we treat in case separately. If the conditions for \cref{lem:insertion-bd-1} hold then the required equality is immediately implied by \(\bound n {\insertion S P T} \equiv \bound n S\) and \(\incbd n \epsilon S \bullet \kappa_{S,P,T} \equiv \incbd n \epsilon {\insertion S P T}\). If instead the conditions for \cref{lem:insertion-bd-2} hold then:
   \begin{align*}
     \stdtm {\bound n S} n \sub {\incbd n \epsilon S \bullet \kappa_{S,P,T}} &\equiv \stdtm {\bound n S} n \sub {\kappa_{\bound n S, \bound n P, \bound n T} \bullet \incbd n \epsilon {\insertion S P T}}\\
                                                                             &\equiv \stdtm {\bound n S} n \sub {\kappa_{\bound n S, \bound n P, \bound n T}} \sub {\incbd n \epsilon {\insertion S P T}}\\
@@ -5646,6 +5646,14 @@ We can then proceed to the main theorem of this section.
     &\equiv \stdtm {\bound n {\insertion S P T}} n \sub {\incbd n \epsilon {\insertion S P T}}
   \end{align*}
   where the last equality is due to the inductive hypothesis on terms.
+
+  We begin with the case for types. If \(n = 0\), then both sides of the equality are \(\star\). Instead consider the \(n + 1\) case, where we have:
+  \begin{alignat*}{3}
+    \stdty S {n+1} \sub {\kappa_{S,P,T}} \equiv{} &\stdtm {\bound n S} n \sub {\incbd n - S} \sub {\kappa_{S,P,T}} &\qquad& \stdty {\insertion S P T} {n+1} \equiv{}&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n - {\insertion S P T}} \\
+                                                  &\to_{\stdty S n \sub {\kappa_{S,P,T}}} &&&&\to_{\stdty {\insertion S P T} n}\\
+                                                  &\stdtm {\bound n S} n \sub {\incbd n + S} \sub {\kappa_{S,P,T}}&&&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n + {\insertion S P T}}
+  \end{alignat*}
+  By the inductive hypothesis on \(n\), we have \(\stdty S n \sub {\kappa_{S,P,T}} = \stdty {\insertion S P T} n\), and other necessary equalities follow from the first case we considered.
 
   We now consider the case for standard coherences, where we must prove that:
   \[ \SCoh S {\stdty S n} {\kappa_{S,P,T}} = \SCoh {\insertion S P T} {\stdty {\insertion S P T} n} {\id} \]
@@ -5660,10 +5668,11 @@ We can then proceed to the main theorem of this section.
 \end{proof}
 
 \begin{corollary}
+  \label{cor:standard-coh-insert}
   If \(\mathcal{R}\) has disc removal and insertion, then an insertion into a standard coherence is equal to the standard coherence over the inserted tree.
 \end{corollary}
 \begin{proof}
-  Let \(s \equiv \stdcoh S n \sub L\) be a standard coherence, and suppose \((S,P,T,\U,L,M)\) is an insertion redex. Then:
+  Let \(s \equiv \stdcoh S n \sub L\) be a standard coherence, and suppose \((S,P,T,\U,L,M)\) is an insertion redex with \(\U \vdash s : A\) for some \(A\). Then:
   \begin{align*}
     \stdcoh S n \sub L &= \SCoh {\insertion S P T} {\stdty S n \sub {\kappa_{S,P,T}}} {\insertion L P M}\\
                        &= \SCoh {\insertion S P T} {\stdty {\insertion S P T} n} {\insertion L P M}\\
@@ -5672,9 +5681,310 @@ We can then proceed to the main theorem of this section.
   and so \(s\) is equal to a standard coherence over the tree \(\insertion S P T\).
 \end{proof}
 
-
-
 \paragraph{Chained insertion.}
+
+We finally explore the situation where a term \(s\) has a locally maximal argument \(t\) which can be inserted, and this term \(t\) admits an insertion itself. For the argument \(t\) to be insertable, it must be a standard coherence, and by \cref{cor:standard-coh-insert}, if \(t = t'\) by insertion, then \(t'\) will be equal to a standard coherence over some tree \(T\). For the term \(t'\) to be insertable, \(T\) must have sufficient trunk height. Conditions for this are given in the following lemma.
+
+\begin{lemma}
+  \label{lem:insert-lin-height}
+  Let \((S,P,T)\) be an insertion point. Further assume \(S\) is not linear. Then \(\th(\insertion S P T) \geq \th(S)\).
+\end{lemma}
+\begin{proof}
+  See \func{Catt.Tree.Insertion.Properties}{insertion-trunk-height} in \module{Catt.Tree.Insertion.Properties}.
+\end{proof}
+
+If a tree \(S\) is not linear, then any branch of \(S\) has branch height greater than the trunk height of \(S\), and hence any insertion into \(S\) only modifies the tree above its trunk height, and so can only increase the trunk height. Therefore if \((S,P,T)\) and \(T, Q , U\) are insertion points, and \(T\) is not linear, then \((S, P, \insertion T Q U)\) is also an insertion point.
+
+Conversely, it is possible to insert the argument directly into the head term, before performing the inner insertion, looking to perform the inner insertion afterwards. For this to be possible, a branch of the inserted tree must be given. This can again be done under a non-linearity condition.
+
+\begin{definition}
+  Let \((S, P, T)\) be an insertion point where \(T\) is not linear. Then from a branch \(Q\) of \(T\) we can obtain a branch \(\insertion S P Q\) of \(\insertion S P T\). We first observe that \(\bh(Q) \geq \th(T) \geq \bh(P)\). We define this branch by induction on \(P\) and \(Q\):
+  \begin{itemize}
+  \item Suppose \(P = [k]\) and \(Q = q :: x\). Then define:
+    \[\insertion S P Q = (k - 1 + q) :: x\]
+  \item Suppose \(P = k :: P_2\) with \(S = [S_0,\dots,S_n]\) and \(T = \Sigma(T_0)\). In this case we must have \(Q = 0 :: Q_2\) where \(Q_2\) is a branch of \(T_0\). Then define:
+    \[ \insertion S P Q = k :: \insertion {S_k} {P_2} {Q_2}\]
+  \end{itemize}
+  It is clear that \(\insertion S P Q\) has the same branching and leaf height as \(Q\).
+\end{definition}
+
+A simple inductive proof shows that:
+\[\olsi {\insertion S P Q} \equiv \olsi Q \sub{\iota_{S,P,T}}\]
+Now given insertion points \((S,P,T)\) and \((T, Q ,U)\) with \(T\) non-linear we have that the triple \((\insertion S P T, \insertion S P Q, U)\) is another insertion point. Therefore two ways of performing both insertions, which are depicted in \cref{fig:chained-insertion}.
+
+\begin{figure}[ht]
+  \centering
+  \newsavebox\chaintop
+  \sbox\chaintop{\(\insertion{\insertion{\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+          \node [on grid] at (0,0) (x01) {$\bullet$};
+          \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+          \node [on grid] at (0.5,1)(x12){$\bullet$};
+          \node [on grid, Diag1] at (0,2) (x21){$\bullet$};
+          \node [on grid] at (1,2) (x22){$\bullet$};
+          \node [on grid, Diag1] at (0,3)(x31) {$\bullet$};
+          \node [on grid] at (1,3) (x32) {$\bullet$};
+          \node [on grid, Diag1] at (0,4)(x41) {$\bullet$};
+          \node [on grid] at (1,4)(x42) {$\bullet$};
+          \begin{scope}[on background layer]
+            \draw (x01.center) to (x11.center);
+            \draw (x01.center) to (x12.center);
+            \draw[very thick,Diag1] (x12.center) to (x21.center);
+            \draw (x12.center) to (x22.center);
+            \draw[very thick,Diag1] (x21.center) to (x31.center);
+            \draw (x22.center) to (x32.center);
+            \draw[very thick,Diag1] (x31.center) to (x41.center);
+            \draw (x32.center) to (x42.center);
+          \end{scope}
+        \end{tikzpicture}\quad}
+      {[1,0]}
+      {\quad \begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base), Diag1]
+          \node [on grid] at (0,0) (x01) {$\bullet$};
+          \node [on grid] at (0,1) (x11) {$\bullet$};
+          \node [on grid] at (0,2) (x21){$\bullet$};
+          \node [on grid] at (-0.5,3)(x31) {$\bullet$};
+          \node [on grid] at (0.5,3) (x32) {$\bullet$};
+          \node [on grid, Diag2] at (-0.5,4)(x41) {$\bullet$};
+          \node [on grid] at (0.5,4)(x42) {$\bullet$};
+          \draw (x01.center) to (x11.center);
+          \draw (x11.center) to (x21.center);
+          \draw (x21.center) to (x31.center);
+          \draw (x21.center) to (x32.center);
+          \begin{scope}[on background layer]
+            \draw[very thick, Diag2] (x31.center) to (x41.center);
+          \end{scope}
+          \draw (x32.center) to (x42.center);
+        \end{tikzpicture}}\quad}
+    {[0,0,0,0]}
+    {\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base), Diag2]
+          \node [on grid] at (0,0) (x01) {$\bullet$};
+          \node [on grid] at (0,1) (x11) {$\bullet$};
+          \node [on grid] at (0,2) (x21){$\bullet$};
+          \node [on grid] at (0,3)(x31) {$\bullet$};
+          \node [on grid] at (-0.5,4)(x41) {$\bullet$};
+          \node [on grid] at (0.5,4)(x42) {$\bullet$};
+          \draw (x01.center) to (x11.center);
+          \draw (x11.center) to (x21.center);
+          \draw (x21.center) to (x31.center);
+          \draw (x31.center) to (x41.center);
+          \draw (x31.center) to (x42.center);
+        \end{tikzpicture}}\)}
+  \newsavebox\chainleft
+  \sbox\chainleft{\(\insertion{\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+          \node [on grid, Diag1] at (0,0) (x01) {$\bullet$};
+          \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+          \node [on grid, Diag1] at (0.5,1)(x12){$\bullet$};
+          \node [on grid, Diag1] at (0,2) (x21){$\bullet$};
+          \node [on grid] at (1,2) (x22){$\bullet$};
+          \node [on grid, Diag1] at (-0.33,3)(x31) {$\bullet$};
+          \node [on grid, Diag1] at (0.33,3) (x32) {$\bullet$};
+          \node [on grid] at (1,3) (x33) {$\bullet$};
+          \node [on grid, Diag2] at (-0.33,4)(x41) {$\bullet$};
+          \node [on grid, Diag1] at (0.33,4)(x42) {$\bullet$};
+          \node [on grid] at (1,4)(x43) {$\bullet$};
+          \begin{scope}[on background layer]
+            \draw (x01.center) to (x11.center);
+            \draw[Diag1] (x01.center) to (x12.center);
+            \draw[Diag1] (x12.center) to (x21.center);
+            \draw (x12.center) to (x22.center);
+            \draw[Diag1] (x21.center) to (x31.center);
+            \draw[Diag1] (x21.center) to (x32.center);
+            \draw (x22.center) to (x33.center);
+            \draw[very thick,Diag2] (x31.center) to (x41.center);
+            \draw[Diag1] (x32.center) to (x42.center);
+            \draw (x33.center) to (x43.center);
+          \end{scope}
+        \end{tikzpicture}\quad}
+      {[1,0,0,0]}
+      {\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base), Diag2]
+          \node [on grid] at (0,0) (x01) {$\bullet$};
+          \node [on grid] at (0,1) (x11) {$\bullet$};
+          \node [on grid] at (0,2) (x21){$\bullet$};
+          \node [on grid] at (0,3)(x31) {$\bullet$};
+          \node [on grid] at (-0.5,4)(x41) {$\bullet$};
+          \node [on grid] at (0.5,4)(x42) {$\bullet$};
+          \draw (x01.center) to (x11.center);
+          \draw (x11.center) to (x21.center);
+          \draw (x21.center) to (x31.center);
+          \draw (x31.center) to (x41.center);
+          \draw (x31.center) to (x42.center);
+        \end{tikzpicture}}\)
+  }
+  \newsavebox\chainright
+  \sbox\chainright{\(\insertion{\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+          \node [on grid] at (0,0) (x01) {$\bullet$};
+          \node [on grid] at (-0.5,1) (x11) {$\bullet$};
+          \node [on grid] at (0.5,1)(x12){$\bullet$};
+          \node [on grid, Diag1] at (0,2) (x21){$\bullet$};
+          \node [on grid] at (1,2) (x22){$\bullet$};
+          \node [on grid, Diag1] at (0,3)(x31) {$\bullet$};
+          \node [on grid] at (1,3) (x32) {$\bullet$};
+          \node [on grid, Diag1] at (0,4)(x41) {$\bullet$};
+          \node [on grid] at (1,4)(x42) {$\bullet$};
+          \begin{scope}[on background layer]
+            \draw (x01.center) to (x11.center);
+            \draw (x01.center) to (x12.center);
+            \draw[very thick,Diag1] (x12.center) to (x21.center);
+            \draw (x12.center) to (x22.center);
+            \draw[very thick,Diag1] (x21.center) to (x31.center);
+            \draw (x22.center) to (x32.center);
+            \draw[very thick,Diag1] (x31.center) to (x41.center);
+            \draw (x32.center) to (x42.center);
+          \end{scope}
+        \end{tikzpicture}\quad}
+      {[1,0]}
+      {\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base), Diag2]
+          \node [on grid] at (0,0) (x01) {$\bullet$};
+          \node [on grid] at (0,1) (x11) {$\bullet$};
+          \node [on grid] at (0,2) (x21){$\bullet$};
+          \node [on grid] at (-0.5,3)(x31) {$\bullet$};
+          \node [on grid, Diag1] at (0.5,3) (x32) {$\bullet$};
+          \node [on grid] at (-0.83,4)(x41) {$\bullet$};
+          \node [on grid] at (-0.16,4)(x42) {$\bullet$};
+          \node [on grid, Diag1] at (0.5,4)(x43) {$\bullet$};
+          \draw (x01.center) to (x11.center);
+          \draw (x11.center) to (x21.center);
+          \draw (x21.center) to (x31.center);
+          \draw (x31.center) to (x41.center);
+          \draw (x31.center) to (x42.center);
+          \begin{scope}[on background layer]
+            \draw[Diag1] (x21.center) to (x32.center);
+            \draw[Diag1] (x32.center) to (x43.center);
+          \end{scope}
+        \end{tikzpicture}}\)
+  }
+  \newsavebox\chainbot
+  \sbox\chainbot{\(\begin{tikzpicture}[xscale=1.4,every node/.append style={scale=0.85},baseline=(x21.base)]
+          \node [on grid, Diag2] at (0.125,0) (x01) {$\bullet$};
+          \node [on grid] at (-0.3125,1) (x11) {$\bullet$};
+          \node [on grid, Diag2] at (0.5625,1)(x12){$\bullet$};
+          \node [on grid, Diag2] at (0.125,2) (x21){$\bullet$};
+          \node [on grid] at (1,2) (x22){$\bullet$};
+          \node [on grid, Diag2] at (-0.25,3)(x31) {$\bullet$};
+          \node [on grid, Diag1] at (0.5,3) (x32) {$\bullet$};
+          \node [on grid] at (1,3) (x33) {$\bullet$};
+          \node [on grid, Diag2] at (-0.5,4)(x41) {$\bullet$};
+          \node [on grid, Diag2] at (0,4)(x42) {$\bullet$};
+          \node [on grid, Diag1] at (0.5,4)(x43) {$\bullet$};
+          \node [on grid] at (1,4)(x44) {$\bullet$};
+          \begin{scope}[on background layer]
+            \draw (x01.center) to (x11.center);
+            \draw[Diag2] (x01.center) to (x12.center);
+            \draw[Diag2] (x12.center) to (x21.center);
+            \draw (x12.center) to (x22.center);
+            \draw[Diag2] (x21.center) to (x31.center);
+            \draw[Diag1] (x21.center) to (x32.center);
+            \draw (x22.center) to (x33.center);
+            \draw[Diag2] (x31.center) to (x41.center);
+            \draw[Diag2] (x31.center) to (x42.center);
+            \draw[Diag1] (x32.center) to (x43.center);
+            \draw (x33.center) to (x44.center);
+          \end{scope}
+        \end{tikzpicture}\)
+  }
+
+  \begin{tikzpicture}
+    \node(chaintop) at (0,0) {\fcolorbox{gray}{white}{\usebox\chaintop}};
+    \node(chainleft) at (-4.5,-6){\fcolorbox{gray}{white}{\usebox\chainleft}};
+    \node(chainright) at (4.5,-6){\fcolorbox{gray}{white}{\usebox\chainright}};
+    \node(chainbot) at (0,-12){\fcolorbox{gray}{white}{\usebox\chainbot}};
+    \draw[arrows={->[scale=1.5]},
+    line join=round,
+    decorate, decoration={
+      zigzag,
+      segment length=4,
+      amplitude=1.2,post=lineto,
+      post length=2pt
+    }] (chaintop) to (chainleft);
+    \draw[arrows={->[scale=1.5]},
+    line join=round,
+    decorate, decoration={
+      zigzag,
+      segment length=4,
+      amplitude=1.2,post=lineto,
+      post length=2pt
+    }] (chaintop) to (chainright);
+    \draw[arrows={->[scale=1.5]},
+    line join=round,
+    decorate, decoration={
+      zigzag,
+      segment length=4,
+      amplitude=1.2,post=lineto,
+      post length=2pt
+    }] (chainleft) to (chainbot);
+    \draw[arrows={->[scale=1.5]},
+    line join=round,
+    decorate, decoration={
+      zigzag,
+      segment length=4,
+      amplitude=1.2,post=lineto,
+      post length=2pt
+    }] (chainright) to (chainbot);
+  \end{tikzpicture}
+  \caption{Chained insertion}
+  \label{fig:chained-insertion}
+\end{figure}
+
+We now explore the universal property of the insertion along the branch \(\insertion S P Q\). We assume that \(n = \lh(P)\) and \(m = \lh(Q)\) and form the following diagram:
+\[
+  \begin{tikzcd}
+    & {D^n} & S \\
+    {D^m} & T & {\insertion S P T} \\
+    U && {\insertion {(\insertion S P T)} {\insertion S P Q} U}
+    \arrow["{\{\olsi P \}}", from=1-2, to=1-3]
+    \arrow["{\{ \stdcoh T n \}}"', from=1-2, to=2-2]
+    \arrow["{\{ \olsi Q \}}"', from=2-1, to=2-2]
+    \arrow["{\{\stdcoh U m\}}"', from=2-1, to=3-1]
+    \arrow["{\iota_{S,P,T}}"', from=2-2, to=2-3]
+    \arrow["{\kappa_{S,P,T}}", from=1-3, to=2-3]
+    \arrow["{\kappa_{\insertion S P T, \insertion S P Q, U}}", from=2-3, to=3-3]
+    \arrow["{\iota_{\insertion S P T, \insertion S P Q, U}}"', from=3-1, to=3-3]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=2-3, to=1-2]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=3-3, to=2-1]
+  \end{tikzcd}
+\]
+The top pushout square is given by the insertion of \(T\) into \(S\) along \(P\). The morphism \(\{\olsi Q\} \bullet \iota_{S,P,T}\) through the middle of the diagram is then equal to  \(\{\olsi {\insertion S P Q} \}\), allowing the bottom pushout rectangle to be formed by the insertion of \(U\) into \(\insertion S P T\) along \(\insertion S P Q\).
+
+We can also consider the universal property of the tree generated by first inserting \(U\) into \(T\), and then inserting the inserted tree into \(S\), which is given by the diagram below:
+\[
+  \begin{tikzcd}
+    & {D^n} && S \\
+    {D^m} & T \\
+    U & {\insertion T Q U} & & {\insertion S P {(\insertion T Q U)}}
+    \arrow["{\{\olsi P \}}", from=1-2, to=1-4]
+    \arrow["{\{ \stdcoh T n \}}"', from=1-2, to=2-2]
+    \arrow["{\{ \olsi Q \}}"', from=2-1, to=2-2]
+    \arrow["{\{\stdcoh U m\}}"', from=2-1, to=3-1]
+    \arrow["{\kappa_{T,Q,U}}", from=2-2, to=3-2]
+    \arrow["{\iota_{T,Q,U}}"', from=3-1, to=3-2]
+    \arrow["{\kappa_{S,P,\insertion T Q U}}", from=1-4, to=3-4]
+    \arrow["{\iota_{S,P,\insertion T Q U}}"', from=3-2, to=3-4]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=3-4, to=1-2]
+    \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=3-2, to=2-1]
+  \end{tikzcd}
+\]
+The left hand pushout square is given by the insertion of \(U\) into \(T\) along \(Q\). The morphism \(\{\stdcoh T n\} \bullet \kappa_{T,Q,U}\) which runs vertically through the center of the diagram is then equal to \(\{\stdcoh {\insertion T Q U} n\}\) by \cref{cor:standard-coh-insert}, allowing for the right hand pushout square to be formed as the insertion of \(\insertion T Q U\) into \(S\) along \(P\). By common properties of colimits, both of these constructions then arise as colimits of the same diagram, the shared top left boundary of both constructions. The results of this section are stated in the following lemma.
+
+\begin{lemma}
+  \label{lem:inserted-insertion}
+  Let \((S,P,T)\) and \((T,Q,U)\) be insertion points. Further assume \(T\) is not linear. Then:
+  \begin{alignat*}{3}
+    &\insertion S P {(\insertion T Q U)} & &= & &\insertion {(\insertion S P T)} {\insertion S P Q} U\\
+    &\kappa_{S,P,\insertion T Q U} &&=^{\mathsf{max}}{} &&\kappa_{S,P,T} \circ \kappa_{\insertion S P T, \insertion S P Q, U}\\
+    &\insertion L P {(\insertion M Q N)} &&\equiv^{\mathsf{max}}{} &&\insertion {(\insertion L P M)} {\insertion S P Q} N
+  \end{alignat*}
+  for any \(\L : S \to \U\), \(M : T \to \U\), and \(N : U \to \U\).
+\end{lemma}
+\begin{proof}
+  See functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-inserted-branch} and \func{Catt.Tree.Insertion.Properties}{label-from-inserted-branch} in module \module{Catt.Tree.Insertion.Properties}, and \func{Catt.Typing.Insertion.Equality}{κ-inserted-branch} in module \module{Catt.Typing.Insertion.Equality}.
+\end{proof}
+
+
+
+
+
+
+
+
 
 \chapter{Semistrict variants of \Catt}
 \label{cha:cattstrict}
@@ -6049,7 +6359,7 @@ When it is not specified, we will assume that the operation set \(\mathcal{O}\) 
 \begin{proof}
   By \cref{prop:dr-weak,prop:dr-susp,prop:dr-sub}, disc removal satisfies the weakening, suspension, and \(\su\)-substitution conditions. Endo-coherence removal and pruning satisfy the same conditions by \cref{prop:ecr-props,prop:prune-tame}. As these conditions are closed under unions, the set \su must also satisfy the weakening, suspension, and substitution conditions, and hence is tame.
 
-  We now use the proof strategy introduced in \cref{sec:further-theories} to prove that \su satisfies the support condition. Firstly, by \cref{lem:supp-sat-conds} we know that \(\su_{\mathsf{s}}\) is also tame. Disc removal then satisfies the \(\su_{\mathsf{s}}\)-support condition by \cref{prop:dr-supp}. The same condition is satisfied by endo-coherence removal (\cref{item:ecr-supp}) and pruning (\cref{prop:prune-supp}) and so \(\su\) satisfies the \(\su_{\mathsf{s}}\)-support condition. By \cref{lem:proof-strat-supp}, \su satisfies the support condition.
+  We now use the proof strategy introduced in \cref{sec:further-conditions} to prove that \su satisfies the support condition. Firstly, by \cref{lem:supp-sat-conds} we know that \(\su_{\mathsf{s}}\) is also tame. Disc removal then satisfies the \(\su_{\mathsf{s}}\)-support condition by \cref{prop:dr-supp}. The same condition is satisfied by endo-coherence removal (\cref{item:ecr-supp}) and pruning (\cref{prop:prune-supp}) and so \(\su\) satisfies the \(\su_{\mathsf{s}}\)-support condition. By \cref{lem:proof-strat-supp}, \su satisfies the support condition.
 
   Lastly, \su satisfies the \su-preservation condition as it is satisfied by disc removal (\cref{prop:dr-preserve}), endo-coherence removal (\cref{item:ecr-preserve}), and pruning (\cref{prop:prune-preserve}) and is closed under unions of rule sets.
 \end{proof}
@@ -6127,6 +6437,7 @@ The reduction \(\red_{\su'}\) applies equality rules from \Cattsu when the redex
 By \cref{prop:red-is-eq}, we know that the reflexive symmetric transitive closure of \(\red_{\su'}\) is the equality relation generated by \su'. We therefore prove that this agrees with the equality relation from \Cattsu.
 
 \begin{proposition}
+  \label{prop:suprime-equiv}
   The type theories generated from \su and \su' are equivalent. Terms are equal or well-formed in one theory exactly when they are equal or well-formed in the other, and similar properties hold for types and substitutions.
 \end{proposition}
 \begin{proof}
@@ -6290,6 +6601,169 @@ Since any \Catt term is also a \Cattsu term, we get the following corollary.
 
 \section{\Cattsua}
 \label{sec:cattsua}
+
+We now move on to defining \Cattsua, the type theory for strictly unital and associative \(\infty\)-categories. \Cattsua extends \Cattsu by replacing the pruning equality with the more general insertion equality, which was introduced in \cref{sec:insertion}. Under certain conditions, insertion can merge more complex terms into a single coherence. As an example, the term \((f * g) * h\), which is a composite which has a composite as one of its arguments, is reduced by insertion to the ternary composite \(f*g*h\), reducing the depth of the term.
+
+As we did for \Cattsu, we will prove in this section that \Cattsua satisfies standard meta-theoretic properties, and provide a reduction scheme for it which is strongly terminating and confluent.
+
+\begin{example}
+  We consider the the associator term, and its reductions in \Cattsua. The associator witnesses the associativity law in a weak \(\infty\)-category. Letting \(\Delta\) be the following ps-context:
+  \begin{alignat*}{2}
+    \Delta = \lfloor [\emp,\emp,\emp] \rfloor ={}& (w : *)\\
+                                                 &(x : *)&&(f : w \to x)\\
+                                                 &(y : *)&&(g : x \to y)\\
+                                                 &(z : *)&&(h : y \to z)
+  \end{alignat*}
+  we can define the associator as:
+  \[ \alpha = \Coh \Delta {(f * g) * h \to f * (g * h)} {\id_\Delta}\]
+  This then admits the following reduction sequence in \Cattsua:
+  \begin{align*}
+    \alpha &\rightsquigarrow \Coh \Delta {f*g*h \to f * (g * h)} {\id_\Delta}&\text{by insertion}\\
+           &\rightsquigarrow \Coh \Delta {f * g * h \to f * g * h} {\id_\Delta}&\text{by insertion}\\
+           &\rightsquigarrow \id(f*g*h) &\text{by endo-coherence removal}
+  \end{align*}
+\end{example}
+
+We formally define \Cattsua by the version of \Cattr generated by the rule set \sua, which we define below:
+
+\begin{definition}
+  We define the equality rule set \sua for \Cattsua by:
+  \[ \sua = \dr \cup \ecr \cup \insert \]
+  \Cattsua is then the variant of \Cattr where \(\mathcal{R} = \sua\).
+\end{definition}
+
+As before, when we do not specify an operation set, it should be assumed that the regular operation set is used. When we use the groupoidal operation set, we refer to the resulting theory as \emph{groupoidal \Cattsua}.
+
+\begin{theorem}
+  \label{thm:sua-conds}
+  The rule set \sua is tame and satisfies the support condition. If \(\mathcal{O}\) supports insertion, then \sua also satisfies the preservation condition.
+\end{theorem}
+\begin{proof}
+  By \cref{prop:dr-weak,prop:dr-susp,prop:dr-sub,prop:ecr-props,prop:insert-tame}, each of the disc removal, endo-coherence removal, and insertion sets satisfy the weakening, suspension, and \(\sua\)-substitution conditions. It follows that \(\sua\) satisfies the weakening, suspension, and substiutiton conditions. Hence, \sua is tame.
+
+  To prove that the support condition holds for \sua, we use the strategy introduced in \cref{sec:further-conditions} and instead show that \sua satisfies the \(\sua_{\mathsf{S}}\)-support condition. By \cref{lem:supp-sat-conds}, the equality rule set \(\sua_{\mathsf{S}}\), the restriction of \sua to support preserving equalities, is also tame. As it trivially satisfies the support condition, we have by \cref{prop:dr-supp,item:ecr-supp,prop:insert-supp} that disc removal, endo-coherence removal, and insertion satisfy the \(\sua_{\mathsf{S}}\)-support condition. Therefore, \sua satisfies the \(\sua_{\mathsf{S}}\)-support condition and so by \cref{lem:proof-strat-supp} \sua satisfises the support condition.
+
+  Finally, the \sua-preservation condition is satisfied by disc removal (by \cref{prop:dr-preserve}) and endo-coherence removal (by \cref{item:ecr-preserve}). If \(\mathcal{O}\) supports insertion, then insertion also satisfies the \sua-preservation condition by \cref{prop:insert-preserve}. Therefore \sua satisfises the preservation condition, completing the proof.
+\end{proof}
+
+While the groupoidal operation set trivially supports insertion, we have not yet proven that the regular operation set, \Reg, supports insertion. This is done now using \cref{thm:sua-conds}.
+
+\begin{proposition}
+  The regular operation set, \Reg, supports insertion.
+\end{proposition}
+\begin{proof}
+  Using that the regular operation set is equal to the standard operation set, we instead prove that the standard operation set supports insertion. For this it will be sufficient to prove that for an insertion point \((S, P, T)\), dimension \(n \in \mathbb{N}\) and \(\epsilon \in \{-,+\}\) that:
+  \[ \bdry n \epsilon S \sub {\kappa_{S,P,T}} = \bdry n \epsilon {\insertion S P T}\]
+  Then:
+  \begin{align*}
+    \bdry n \epsilon S \sub {\kappa_{S,P,T}} &= \Supp(\stdtm {\bound n S} n \sub {\incbd n \epsilon S}) \sub {\kappa_{S,P,T}}&\text{by \cref{lem:std-supp}}\\
+                                             &= \Supp(\stdtm {\bound n S} n \sub {\incbd n \epsilon S \bullet \kappa_{S,P,T}})\\
+                                             &= \Supp(\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n \epsilon {\insertion S P T}})&\text{by (*)}\\
+    &= \bdry n \epsilon {\insertion S P T} &\text{by \cref{lem:std-supp}}
+  \end{align*}
+  where the equality \((*)\) holds as \sua satisfies the support condition by \cref{thm:sua-conds} and:
+  \[ \insertion S P T \vdash_\sua \stdtm {\bound n S} n \sub {\incbd n \epsilon S \bullet \kappa_{S,P,T}} = \stdtm {\bound n {\insertion S P T}} n \sub {\incbd n \epsilon {\insertion S P T}} \]
+  by \cref{thm:std-insert-props}.
+\end{proof}
+
+\subsection{Normalisation for \Cattsua}
+\label{sec:norm-cattsua}
+
+Using the results of \cref{sec:reduction}, we give a normalisation algorithm for \Cattsua by defining a reduction scheme which generates the equality relation and proving that this reduction scheme is strongly terminating and confluent.
+
+As with \Cattsu, we can not directly use the reduction \(\red_\su\) directly, as we have seen already that the reduction \(\red_\ecr\) alone is non terminating. Similarly to pruning, allowing insertions into identity terms also creates non-terminating loops of reductions when combined with endo-coherence removal, as was explained in \cref{sec:reduction-cattsu}. We therefore restrict our reduction so that no head-reductions can be applied to identity terms.
+
+Although these restrictions are sufficient to ensure termination, we choose to further restrict the set of insertion reductions, in order to streamline the proof of confluence. Firstly, we only allow insertions of a locally maximal argument when that argument is either an identity or a standard composition. The motivation for this restriction is that identities and standard compositions are the only standard coherence that can be in normal form. Moreover, not allowing the insertion of endo-coherences avoids a difficult insertion/argument endo-coherence removal confluence case.
+
+Finally we also disallow insertions into a unary composite and insertions of a unary composite, as we already seen in \cref{sec:further-properties} that discs act as a left and right unit for insertion, and so these two insertion reductions are subsumed by disc removal. Further, disallowing the insertion of discs removes another case where an insertable standard coherence is not in normal form. We now define the resulting reduction scheme.
+
+\begin{definition}
+  Define the reduction \(\red_{\sua'}\) to be the reductino generated by the equality rule set \(\sua'\) where:
+  \[\sua' = \dr \cup \ecr' \cup \insert'\]
+  where \(\ecr'\) is the endo-coherence removal set without the identity-to-identity reductions, and \(\insert'\) is the insertion rule set restricted to insertion redexes \((S,P,T,\Gamma,L,M)\) where and types \(A\) such that \(\SCoh S A L\) is not an identity or a unary composite, and \(L(\olsi P) \equiv \stdcoh T {\lh(P)}\) is an identity or a standard composite which is not a unary composite.
+\end{definition}
+
+It can be determined by a simple observation that \(\sua'\) is tame, as suspension and the application of substitution cannot transform a term into an identity or unary composite where it wasn't before. We further justify the restrictions made to insertion by showing that many insertion reductions can still be performed, starting with the following technical lemma.
+
+\begin{lemma}
+  \label{lem:insertion-irrel}
+  If \(P\) is a branch of \(S\), and \(L, L' : S \to \Gamma\) are labellings differing only on \(\olsi P\), then the following holds for insertion redex \((S,P,T,\Gamma,L,M)\):
+  \[\insertion L P M \equiv \insertion {L'} P M\]
+\end{lemma}
+\begin{proof}
+  By inspection of the definition, \(\insertion L P M\) does not use the term \(L(\olsi P)\).
+\end{proof}
+
+We now show that most insertion reductions can still be simulated up to bounded equality.
+
+\begin{lemma}
+  \label{lem:insertable}
+  Let \((S,P,T,\Gamma, L, M)\) be an insertion redex. Further suppose that \(a \equiv \SCoh S A L\) is not an identity or disc. Then there exists a term \(s\) with:
+  \[a \red_{\sua'}^* s =_{\dim(a)} \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P M}\]
+  even when \(L(\olsi P)\) is a unary composite or is not a standard composite or identity.
+\end{lemma}
+
+\begin{proof}
+  We proceed by induction on \(\lh(P) - \dep(T)\). If \(\lh(P) - \dep(T) = 0\) then \(\stdcoh T {\lh(P)}\) is a composite. The only case for which insertion cannot be performed is when \(\stdcoh T {\lh(P)}\) is a unary composite, such that \(T = D^{\lh(P)}\). Now by \cref{lem:disc-insertion-2}, \(\insertion S P T \equiv S\), \(\insertion L P M \equiv^{\max} L\) and \(\kappa_{S,P,T} = \id_S\) and so
+\[a  =_{\dim(a)} \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P M}\]
+  We now assume that \(\lh(P) > \dim(T)\). We may also assume without loss of generality that \(\stdcoh T {\lh(P)}\) is not an identity, as otherwise it would be immediately insertable. This allows us to perform endo-coherence removal to get:
+  \[\stdcoh T {\lh(P)} \red \id(\stdty T {\lh(P) - 1}, \stdtm T {\lh(P)- 1}) \sub M\]
+  Now suppose \(b \equiv \Coh S A {L'}\) where \(L'\) is the result of applying the above reduction to the term of \(L\) corresponding to \(\olsi P\). Since \(L'(\olsi P)\) is now an identity it can be inserted to get \(b \red c\) where:
+  \begin{align*}
+    c &\equiv \SCoh {S \sslash P} {A \sub {\pi_P}} {\insertion {L'} P {(\{\stdtm T {\lh(P) - 1}\} \bullet M)}}\\
+    &\equiv \SCoh {S \sslash P} {A \sub {\pi_P}} {\insertion {L'} P {(\{\stdcoh T {\lh(P) - 1}\} \bullet M)}}
+  \end{align*}
+  where \(\stdtm T {\lh(P - 1)} \equiv \stdcoh T {\lh(P - 1)}\) as if \(\stdtm T {\lh(P)-1}\) was a variable then \(\stdcoh T {\lh(P)}\) would be an identity.
+
+  We now wish to show that \(2 + \bh(P) \leq \lh(P)\) so that \(P'\) exists as a branch of \(S \sslash P\). Since we always have \(1 + \bh(P) \leq \lh(P)\), we consider the case where \(1 + \bh(P) = \lh(P)\). We know that \(\bh(P) \leq \dep(T) \leq \lh(P)\) and so must be equal to one of the two. If \(\dep(T) = \lh(P)\) then \(\stdcoh T {\lh(P)}\) is an standard composite. If \(\dep(T) = \bh(P)\) then \(\th(T) = \dep(T)\) and so \(T\) is linear. However this makes \(\stdcoh T {\lh(P)}\) an identity. Either case is a contradiction and so \(2 + \bh(P) \leq \lh(P)\) and so \(P'\) is a branch of \(S \sslash P\).
+
+  By \cref{lem:pruned-bp,lem:iota-kappa-comm}, we now have:
+  \begin{align*}
+    &\phantom{{}\equiv{}}\olsi {P'} \sub {\insertion{L'} P {(\{\stdcoh T {\lh(P) - 1}\} \bullet M)}} \\
+    &\equiv d_{\lh(P) - 1} \sub {\iota_{S,P,D^{\lh(P) - 1}} \bullet (\insertion {L'} P {(\{\stdcoh T {\lh(P) - 1}\} \bullet M)})} \\
+    &\equiv d_{\lh(P) - 1} \sub {\{\stdcoh T {\lh(P) - 1}\} \bullet M} \\
+    &\equiv \stdcoh T {\lh(P) - 1}\sub M
+  \end{align*}
+   As \(\lh(P') - \dim(T) = \lh(P) - \dim(T) - 1\) we can use the induction hypothesis to get that \(c \leadsto d\) and:
+  \begin{align*}
+    d =_{\dim(a)}{} &\SCoh {\insertion {(S \sslash P)} {P'} T} {A \sub {\pi_P \bullet \kappa_{S\sslash P,P',T}}} {\\&\insertion {(\insertion {L'} P {(\{\stdcoh T {\lh(P) - 1}\} \bullet M)})} {P'} {M}}
+  \end{align*}
+  By \cref{lem:pruned-bp,lem:insertion-irrel},
+  \begin{equation*}
+    d =_{\dim(a)} \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P M}
+  \end{equation*}
+  which completes the proof as \(a \leadsto^* d\).
+\end{proof}
+
+Using this lemma, we now show that the type theories \Cattsua and \(\Catt_{\sua'}\) are equivalent.
+
+\begin{proposition}
+  The type theories generated by \sua and \sua' are equivalent. Terms, types, and substitutions are equal or well-formed in one theory exactly when they are equal or well-formed in the other.
+\end{proposition}
+\begin{proof}
+  Both directions proceed by \cref{lem:subset-lem}. Since \(\sua' \subseteq \sua\), it suffices to show that if \((\Gamma,s,t) \in \sua\) with \(\Gamma \vdash_{\sua} s : A\) for some type \(A\) then:
+  \[ \Gamma \vdash_{\sua'} s = t\]
+  If \((\Gamma,s,t) \in \sua'\), then there is nothing to do. If it is in \ecr', then the argument is the same as in the proof of \cref{prop:suprime-equiv}. We therefore assume \((\Gamma,s,t) \in \insert\), and so there must be some insertion redex \((S,P,T,\Gamma,L,M)\) such that \(s \equiv \lfloor \SCoh S B L \rfloor\) and
+  \[ t \equiv \lfloor  \SCoh {\insertion S P T} {B \sub {\kappa_{S,P,T}}} {\insertion L P M} \rfloor \]
+  By an induction on dimension, we assume that the theories generated by \sua and \sua' are already equivalent for terms of dimension less than \(\dim(s)\). We begin a case analysis of such reductions than are not in \insert. If \(s\) is an identity, then \(B \equiv b \to b\) for some term \(b\) and so \(t\) is an endo-coherence. If \(t\) is already an identity, then \(s \equiv t\). Otherwise:
+  \begin{align*}
+    \Gamma \vdash_{\sua'} t &= \id(b \sub {\kappa_{S,P,T}}) \sub {\insertion L P M}\\
+                            &\equiv \id(b) \sub {\kappa_{S,P,T} \bullet (\insertion L P M)}\\
+                            &= \id(b) \sub L\\
+                              &\equiv s
+  \end{align*}
+  where the first equality is by endo-coherence removal, and the second equality is by \cref{lem:kappa-iota-insert}, appealing to the induction on dimension.
+
+  We now assume that \(s\) is a unary composite \(\stdcoh {D^n} n \sub L\). Then, by \cref{lem:disc-insertion-1}:
+  \[ t \equiv \SCoh T {\stdty {D^n} n \sub {\kappa_{D^n,P,T}}} M \]
+  By appealing to inductive hypothesis on dimension and \cref{thm:std-insert-props}, \(\stdty {D^n} n \sub {\kappa_{D^n, P , T}} = \stdty T n\) and so \(t = \stdcoh T n \sub M \equiv L(\olsi P)\). Therefore the equality \(s = t\) is given by disc removal.
+
+  Lastly, if \(s\) is not a unary composite or an identity, then we are done by \cref{lem:insertable} and the inductive hypothesise on dimension.
+\end{proof}
+
+\todo[inline]{Termination}
+\todo[inline]{Confluence, introducing lemmas as needed}
+
 
 \section{Towards normalisation by evaluation}
 \label{sec:towards-nbe}
