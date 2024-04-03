@@ -4105,6 +4105,7 @@ which are admissible if the equality rule set \(\mathcal{R}\) has disc removal o
 We end this section with two further results that can be proven in the presence of disc removal and endo-coherence removal. The first states that disc removal is sufficient (and necessary) to unify standard coherences and standard terms.
 
 \begin{theorem}
+  \label{thm:std-dr}
   The tame equality rule set \(\mathcal{R}\) has disc removal if and only if the rule:
   \begin{mathpar}
     \inferrule{T : \Tree \\ n \in \mathbb{N}\\ n \geq \dep(T) > 0}{T \vdash \stdcoh T n = \stdtm T n}
@@ -5578,7 +5579,7 @@ As \(\th(\bound n T) \geq \bh(P)\) when \(\th(T) \geq \bh(P)\) and \(n > \bh(P)\
 
 As with the previous case, we explore the interaction of the boundary inclusion labellings and the exterior labelling. We aim to give conditions under which:
 \[ \incbd n - S \bullet \kappa_{S,P,T} \equiv \kappa_{\bound n S,\bound n P,\bound n T} \bullet \incbd n - {\insertion S P T}\]
-We examine the action of each side of the equation on the path \(\olsi {\bound n P}\). On the right hand side, this path is sent by \(\kappa\) to a standard coherence, and so on the left hand side, \((\incbd n - S)(\olsi {\bound n P}) \) must be sent to a standard coherence by \(\kappa\). For this to happen, either \((\incbd n - S)( \olsi {\bound n P})\) must be a maximal path, which will always be the case when \(n \geq \lh(P)\), or \(\bound n T\) is not linear, which is the case when \(n > \th(T)\) and \(n \leq \lh(P)\). These conditions lead to the following lemma.
+We examine the action of each side of the equation on the path \(\olsi {\bound n P}\). On the right hand side, this path is sent by \(\kappa\) to a standard coherence, and so on the left hand side, \((\incbd n - S)(\olsi {\bound n P}) \) must also be sent to a standard coherence by \(\kappa\). If \((\incbd n - S)( \olsi {\bound n P})\) is a maximal path, which will always be the case when \(n \geq \lh(P)\), then it will be sent to a standard coherence. Alternatively, if \(n \leq \lh(P)\) then \(\lh(\bound n P) = n\) and if \(n > \th(T)\) then the standard term returned by \(\kappa_{S,P,T}\) will be a standard coherence. These conditions lead to the following lemma.
 
 \begin{lemma}
   \label{lem:insertion-bd-2}
@@ -5606,12 +5607,72 @@ Both of the further conditions in \cref{lem:insertion-bd-2} imply that \(n > \bh
 One of these conditions must always hold for any \(n\) and insertion point \((S,P,T)\), and hence one of \cref{lem:insertion-bd-1,lem:insertion-bd-2} can always be applied.
 
 \begin{remark}
-  The further conditions in each of \cref{lem:insertion-bd-1,lem:insertion-bd-2} could be dropped in favour of weakening the syntactic equalities to definitional equalities and assuming that we work in a theory with disc removal, as this would remove the distinction between standard terms and standard coherences. It was however more convenient to take this approach in the formalisation, and although the extra side conditions may seem arbitrary, the key result is that one of the above lemmas always holds.
+  The further conditions in each of \cref{lem:insertion-bd-1,lem:insertion-bd-2} could be dropped in favour of weakening the syntactic equalities to definitional equalitie in a theory with disc removal, as this would remove the distinction between standard terms and standard coherences. It was however more convenient to take this approach in the formalisation, and although the extra side conditions may seem arbitrary, the key result is that one of the above lemmas always holds.
 \end{remark}
 
-
-
 \paragraph{Insertion into standard constructions.}
+
+Equipped with \cref{lem:insertion-bd-1,lem:insertion-bd-2}, we can now prove that the standard constructions are preserved by applying an exterior labelling up to a definitional equality containing insertion and disc removal. We begin with the following lemma, whose intuition is clear from the universal property of insertion.
+
+\begin{lemma}
+  \label{lem:kappa-iota-insert}
+  Suppose \((S,P,T)\) is an insertion point. Then \(\insertion {\kappa_{S,P,T}} P {\iota_{S,P,T}} \equiv \id_{\insertion S P T}\).
+\end{lemma}
+\begin{proof}
+  See \func{Catt.Tree.Insertion.Properties}{κ-ι-prop} in \module{Catt.Tree.Insertion.Properties}.
+\end{proof}
+We can then proceed to the main theorem of this section.
+\begin{theorem}
+  Let \(\mathcal{R}\) be a tame equality rule set that has disc removal and insertion.  Then for any insertion point \((S,P,T)\) and \(n \in \mathbb{N}\), we have:
+  \[\insertion S P T \vdash_{\mathcal{R}} \stdty S n \sub {\kappa_{S,P,T}} = \stdty {\insertion S P T} n\]
+  and if \(n \geq \dep(S)\) then:
+  \[\insertion S P T \vdash_{\mathcal{R}} \stdcoh S n \sub {\kappa_{S,P,T}} = \stdcoh {\insertion S P T} n \qquad \insertion S P T \vdash_{\mathcal{R}}\stdtm S n \sub {\kappa_{S,P,T}} = \stdtm {\insertion S P T} n \]
+\end{theorem}
+
+\begin{proof}
+  We prove all three properties by mutual induction: We begin with the case for types. If \(n = 0\), then both sides of the equality are \(\star\). Instead consider the \(n + 1\) case, where we have:
+  \begin{alignat*}{3}
+    \stdty S {n+1} \sub {\kappa_{S,P,T}} \equiv{} &\stdtm {\bound n S} n \sub {\incbd n - S} \sub {\kappa_{S,P,T}} &\qquad& \stdty {\insertion S P T} {n+1} \equiv{}&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n - {\insertion S P T}} \\
+                                                  &\to_{\stdty S n \sub {\kappa_{S,P,T}}} &&&&\to_{\stdty {\insertion S P T} n}\\
+                                                  &\stdtm {\bound n S} n \sub {\incbd n + S} \sub {\kappa_{S,P,T}}&&&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n + {\insertion S P T}}
+  \end{alignat*}
+  By the inductive hypothesis on \(n\), we have \(\stdty S n \sub {\kappa_{S,P,T}} = \stdty {\insertion S P T} n\), and so it suffices to show that:
+  \[ \stdtm {\bound n S} n \sub {\incbd n \epsilon S \bullet \kappa_{S,P,T}} = \stdtm {\bound n {\insertion S P T}} n \sub {\incbd n \epsilon {\insertion S P T}}\]
+  for \(\epsilon \in \{-,+\}\). The conditions for either \cref{lem:insertion-bd-1,lem:insertion-bd-2} must hold, and so we treat in case separately. If the conditions for \cref{lem:insertion-bd-1} hold then the required equality is immediately implied by \(\bound n {\insertion S P T} \equiv \bound n S\) and \(\incbd n \epsilon S \bullet \kappa_{S,P,T} \equiv \incbd n \epsilon {\insertion S P T}\). If instead the conditions for \cref{lem:insertion-bd-2} hold then:
+  \begin{align*}
+    \stdtm {\bound n S} n \sub {\incbd n \epsilon S \bullet \kappa_{S,P,T}} &\equiv \stdtm {\bound n S} n \sub {\kappa_{\bound n S, \bound n P, \bound n T} \bullet \incbd n \epsilon {\insertion S P T}}\\
+                                                                            &\equiv \stdtm {\bound n S} n \sub {\kappa_{\bound n S, \bound n P, \bound n T}} \sub {\incbd n \epsilon {\insertion S P T}}\\
+                                                                            &= \stdtm {\insertion {\bound n S} {\bound n P} {\bound n T}} n \sub{\incbd n \epsilon {\insertion S P T}}\\
+    &\equiv \stdtm {\bound n {\insertion S P T}} n \sub {\incbd n \epsilon {\insertion S P T}}
+  \end{align*}
+  where the last equality is due to the inductive hypothesis on terms.
+
+  We now consider the case for standard coherences, where we must prove that:
+  \[ \SCoh S {\stdty S n} {\kappa_{S,P,T}} = \SCoh {\insertion S P T} {\stdty {\insertion S P T} n} {\id} \]
+  By \cref{lem:iota-kappa-comm}, \(\olsi P \sub \kappa_{S,P,T}\) is the standard coherence \(\stdcoh T {\lh(P)} \sub {\iota_{S,P,T}}\), and so the left hand side of the above equation admits an insertion. Therefore:
+  \begin{align*}
+    \SCoh S {\stdty S n} {\kappa_{S,P,T}} &= \SCoh {\insertion S P T} {\stdty S n \sub {\kappa_{S,P,T}}} {\insertion {\kappa_{S,P,T}} P {\iota_{S,P,T}}}&\text{by insertion}\\
+                                          &\equiv \SCoh {\insertion S P T} {\stdty S n \sub {\kappa_{S,P,T}}} {\id}&\text{by \cref{lem:kappa-iota-insert}}\\
+                                          &= \SCoh {\insertion S P T} {\stdty {\insertion S P T} n} {\id}&\text{by inductive hypothesis}\\
+                                          &\equiv \stdcoh {\insertion S P T} n
+  \end{align*}
+  Finally, the equality for standard terms follows from the equality for standard coherences, using \cref{thm:std-dr}.
+\end{proof}
+
+\begin{corollary}
+  If \(\mathcal{R}\) has disc removal and insertion, then an insertion into a standard coherence is equal to the standard coherence over the inserted tree.
+\end{corollary}
+\begin{proof}
+  Let \(s \equiv \stdcoh S n \sub L\) be a standard coherence, and suppose \((S,P,T,\U,L,M)\) is an insertion redex. Then:
+  \begin{align*}
+    \stdcoh S n \sub L &= \SCoh {\insertion S P T} {\stdty S n \sub {\kappa_{S,P,T}}} {\insertion L P M}\\
+                       &= \SCoh {\insertion S P T} {\stdty {\insertion S P T} n} {\insertion L P M}\\
+    &= \stdcoh {\insertion S P T} n \sub {\insertion L P M}
+  \end{align*}
+  and so \(s\) is equal to a standard coherence over the tree \(\insertion S P T\).
+\end{proof}
+
+
 
 \paragraph{Chained insertion.}
 
