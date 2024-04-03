@@ -6761,7 +6761,51 @@ Using this lemma, we now show that the type theories \Cattsua and \(\Catt_{\sua'
   Lastly, if \(s\) is not a unary composite or an identity, then we are done by \cref{lem:insertable} and the inductive hypothesise on dimension.
 \end{proof}
 
-\todo[inline]{Termination}
+Having shown that the reflexive symmetric transitive closure of the reduction \(\red_{\sua'}\) agrees with the equality of \Cattsua, we move on to showing that this reduction is strongly terminating. To do this we appeal to \cref{cor:strong-term}, and show that all reductions reduce the syntactic complexity of the terms involved.
+
+\begin{lemma}
+  \label{lem:insert-sc-prop}
+  The following inequality holds for any insertion redex \((S,P,T,\Gamma,L,M)\):
+  \[\sc(\insertion L P M) < \sc(L)\]
+\end{lemma}
+\begin{proof}
+  We extend the notion of syntactic depth to labellings in the obvious way. We begin by noting that:
+  \begin{align*}
+    \sc(L) &= \left(\bighash_{p \neq \olsi P} \sc(L(p))\right) \+ \sc(L(\olsi P))\\
+                &= \left(\bighash_{p \neq \olsi P} \sc(L(p))\right) \+ \sc(\stdcoh T n \sub M)\\
+                &> \left(\bighash_{p\neq \olsi P} \sc(L(p))\right) \+ \sc(M)
+  \end{align*}
+  Further, we show that for all labels \(L\) and \(M\) with appropriate conditions that:
+  \[\sc(\insertion L P M) \leq \bighash_{p\neq \olsi P} \sc(L(p)) \+ \sc(M) \]
+  which we do by induction on \(P\). If \(P = [k]\) then it is clear that \(\insertion L P M\) contains all the terms of \(M\) and some of the terms of \(L\), and crucially not \(L(\olsi P)\). If instead \(P = k :: P_2\) then by induction hypothesis we get that:
+  \[\sc(\insertion {L_k} {P_2} {M_0}) \leq \bighash_{p\neq \olsi {P_2}} \sc(L_k(p)) \+ \sc(M_1)\]
+  It is then clear again that \(\insertion L P M\) contains terms from \(M\) and terms of \(L\) which are not \(L(\olsi P)\), and so the inequality holds.
+\end{proof}
+
+We can now show that insertion reductions reduce syntactic complexity.
+
+\begin{proposition}
+  \label{prop:insert-sc}
+  Let \(s \red t\) be an instance of insertion. If \(s\) is not an identity then \(\sc(s) > \sc(t)\).
+\end{proposition}
+\begin{proof}
+  Let \((S,P,T,\Gamma,L,M)\) be an insertion redex so that:
+    \[\SCoh S A L \red \SCoh {\insertion S P T} {A \sub \kappa} {\insertion L P M}\]
+    by insertion. By assumption \(\Coh S A L\) is not an identity. Then:
+    \begin{align*}
+      \sc(t) &= \sc(\SCoh {\insertion S P T} {A \sub \kappa} {\insertion L P M})\\
+             &\leq 2\omega^{\dim(A)} \+ \sc(\insertion L P M)\\
+      &< 2\omega^{\dim(A)} \+ \sc(L) &\text{by \cref{lem:insert-sc-prop}}\\
+      &\leq \SCoh S A L\\
+               &= \sc(s)
+    \end{align*}
+    and so \(\sc(s) > \sc(t)\), completing the proof.
+\end{proof}
+
+\begin{corollary}
+  By \cref{cor:strong-term}, it suffices to show that each rule of \(\sua'\) reduces syntactic complexity, which follows from \cref{prop:disc-rem-sc,prop:ecr-sc,prop:insert-sc}.
+\end{corollary}
+
 \todo[inline]{Confluence, introducing lemmas as needed}
 
 
