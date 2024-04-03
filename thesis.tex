@@ -6752,7 +6752,7 @@ Using this lemma, we now show that the type theories \Cattsua and \(\Catt_{\sua'
                             &= \id(b) \sub L\\
                               &\equiv s
   \end{align*}
-  where the first equality is by endo-coherence removal, and the second equality is by \cref{lem:kappa-iota-insert}, appealing to the induction on dimension.
+  where the first equality is by endo-coherence removal, and the second equality is by \cref{lem:ins-comm-max}, appealing to the induction on dimension.
 
   We now assume that \(s\) is a unary composite \(\stdcoh {D^n} n \sub L\). Then, by \cref{lem:disc-insertion-1}:
   \[ t \equiv \SCoh T {\stdty {D^n} n \sub {\kappa_{D^n,P,T}}} M \]
@@ -6806,7 +6806,120 @@ We can now show that insertion reductions reduce syntactic complexity.
   By \cref{cor:strong-term}, it suffices to show that each rule of \(\sua'\) reduces syntactic complexity, which follows from \cref{prop:disc-rem-sc,prop:ecr-sc,prop:insert-sc}.
 \end{corollary}
 
-\todo[inline]{Confluence, introducing lemmas as needed}
+\subsection{Confluence of \Cattsua}
+\label{sec:confluence-cattsua}
+
+In this section, we prove the following theorem:
+
+\begin{theorem}
+  The reduction \(\red_{\sua'}\) is confluent.
+\end{theorem}
+
+The confluence proof for \Cattsua is significantly more complex than the corresponding proof for \Cattsu. The primary difficulty with \Cattsua is that a term can undergo an insertion where the term to be inserted can also under head reductions. In particular, consider the case where $a \equiv \SCoh S A L \red b$ is an instance of insertion along some branch \(P\), and \(a \red c\) is an insertion on the argument \(L(\olsi P)\). The difficulty of this critical pair is that \(L(\olsi P)\) need not be in head normal form, and furthermore, the reduction \(a \leadsto c\) can make the original insertion invalid. This does not occur in the predecessor theory \Cattsu, where only identities can be pruned, and all reducts of identities are again identities. We begin with this case below.
+
+We will prove this theorem using \cref{lem:conf-strat}. It is therefore sufficient to show that whenever \(b \leftsquigarrow a \red c\), with \(a \red b\) being a reduction derived from \textsc{rule}, that the following diagram can be formed:
+
+\[
+  \begin{tikzcd}[column sep=tiny]
+    && a \\
+    b &&&& c \\
+    & {b'} & {\mathclap{=_{\dim(s)}}} & {c'}
+    \arrow[squiggly, from=1-3, to=2-5]
+    \arrow[squiggly, from=1-3, to=2-1]
+    \arrow["{*}"', squiggly, from=2-1, to=3-2]
+    \arrow["{*}", squiggly, from=2-5, to=3-4]
+  \end{tikzcd}
+\]
+
+Without loss of generality, we let \(a \equiv \SCoh S A L\), as variables do not reduce. We then split by cases on the reduction \(a \red b\), ignoring cases where both reductions are identical and ignoring cases which follow by symmetry of other cases.
+
+\paragraph{Insertion:}
+
+Let \(a \leadsto b\) be an insertion along redex \((S,P,T,\Gamma,L,M)\) such that \(a\) is not an identity or unary composite and \(\stdcoh T {\lh(P)}\) is a standard composite or identity. We now split on the reduction \(a \red c\).
+
+\emph{Insertion on the inserted argument \(L(\olsi P)\):\quad} Suppose \(\stdcoh T {\lh(P)} \sub M\) admits an insertion along redex \((T, Q, U, \Gamma, M, N)\). Then:
+\[\stdcoh T {\lh(P)} \sub M \red \SCoh {\insertion T Q U} {\stdty T {\lh(P)}\sub{\kappa_{T,Q,U}}} {\insertion M Q N}\]
+We then have \(c \equiv \SCoh S A {L'}\) where \(L'\) is \(L\) with the reduction above applied. We can conclude that \(\stdcoh T {\lh(P)}\) must be a composite (i.e. not an identity) as otherwise the second insertion would not be possible. Similarly \(T\) cannot be linear as otherwise \(\stdcoh T {\lh(P)}\) would be a unary composite.
+
+We now need the following lemmas, the second of which is a directed version of \cref{thm:std-insert-props} with more conditions.
+
+\begin{lemma}
+  \label{lem:comp-to-tm}
+  For all \(n\) and \(S\), \(\stdcoh S n \red^* \stdtm S n\).
+\end{lemma}
+\begin{proof}
+  The only case in which \(\stdcoh S n \neq \stdtm S n\) is when \(S = D^n\), in which case a single disc removal gives the required reduction.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:standard-type-exterior-reduct}
+  Let \((S,P,T)\) be an insertion point. Then if \(S\) is not linear or \(n \leq \dep(S)\), \(\stdty S n \sub{\kappa_{S,P,T}} \red^* \stdty {\insertion S P T} n\) and if \(\dep(S) \leq n\) and \(S\) is not linear or \(\dep(S) = n\) then \(\stdtm S n  \sub{\kappa_{S,P,T}} \red^* \stdtm {\insertion S P T} n\).
+\end{lemma}
+\begin{proof}
+  We proceed by induction on \(n\), starting with the statement for types. If \(n = 0\) then both standard types are \(\star\), so we are done. Otherwise we have:
+   \begin{alignat*}{3}
+    \stdty S {n+1} \sub {\kappa_{S,P,T}} \equiv{} &\stdtm {\bound n S} n \sub {\incbd n - S} \sub {\kappa_{S,P,T}} &\qquad& \stdty {\insertion S P T} {n+1} \equiv{}&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n - {\insertion S P T}} \\
+                                                  &\to_{\stdty S n \sub {\kappa_{S,P,T}}} &&&&\to_{\stdty {\insertion S P T} n}\\
+                                                  &\stdtm {\bound n S} n \sub {\incbd n + S} \sub {\kappa_{S,P,T}}&&&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n + {\insertion S P T}}
+  \end{alignat*}
+  By inductive hypothesis: \(\stdty S n \sub{\kappa_{S,P,T}} \red^* \stdty {\insertion S P T} n\), and so we need to show that:
+  \[\stdtm {\bound n S} n\sub{\incbd n \epsilon S \bullet \kappa_{S,P,T}} \red^* \stdty {\bound n {\insertion S P T}} n \sub{\incbd n \epsilon {\insertion S P T}}\]
+  We now note that either the conditions for \cref{lem:insertion-bd-1} or \cref{lem:insertion-bd-2} must hold. If conditions for \cref{lem:insertion-bd-1} hold then (as everything is well typed in \Catt) we get that the required reduction is trivial. Therefore we focus on the second case. Here we get from \cref{lem:insertion-bd-2} that:
+  \[\stdtm {\bound n S} n\sub{\incbd n \epsilon S \bullet \kappa_{S,P,T}} \equiv \stdtm {\bound n S} n\sub{\kappa_{\bound n S,\bound n P,\bound n T} \bullet \incbd n \epsilon {\insertion S P T}}\]
+  Then we can apply the inductive hypothesis for terms as if \(n \leq \dim(S)\) then \(\dep(\bound n S) = n\) and otherwise \(\bound n S = S\) is not linear, and so we get the required reduction.
+
+  Now we move on to the case for terms. If \(\stdtm S n\) is a variable, then we must have that \(S\) is linear and so \(S = D^n\). We must also have in this case that \(\stdtm S n = \olsi P\). Then by \cref{lem:iota-kappa-comm}, \(\stdtm S n \sub {\kappa_{S,P,T}} \equiv \stdcoh T n \sub {\iota_{S,P,T}}\) and then by \cref{lem:disc-insertion-1,lem:comp-to-tm} this reduces to \(\stdtm {\insertion S P T} n\) as required. If \(\stdtm S n\) is not a variable, then \(\stdtm S n \equiv \stdcoh S n\), and \(\stdcoh S n\) cannot be an identity (as either \(S\) is non linear or \(n = \dim(S)\)). By \cref{lem:iota-kappa-comm} and other assumptions we get that \(\stdcoh S n \sub {\kappa_{S,P,T}}\) admits an insertion along branching point \(P\) and so:
+  \begin{alignat*}{2}
+    \stdtm S n\sub{\kappa_{S,P,T}} &\equiv{} &&\stdcoh S n\sub {\kappa_{S,P,T}}\\
+    &\red{} &&\SCoh {\insertion S P T} {\stdty S n \sub {\kappa_{S,P,T}}} {\insertion {\kappa_{S,P,T}} P {\iota_{S,P,T}}}\\
+    &\equiv{} &&\SCoh {\insertion S P T} {\stdty S n \sub {\kappa_{S,P,T}}} {\id}\\
+    &\red^*{} &&\SCoh {\insertion S P T} {\stdty {\insertion S P T} n} {\id}\\
+    &\equiv{} &&\stdcoh {\insertion S P T} n\\
+    &\red^*{} &&\stdtm {\insertion S P T} n
+  \end{alignat*}
+  With the second equivalence coming from \cref{lem:kappa-iota-insert}, the second reduction coming from inductive hypothesis (which is well founded as the proof for types only uses the proof for terms on strictly lower values of \(n\)), and the last reduction coming from \cref{lem:comp-to-tm}.
+\end{proof}
+
+By this lemma (as \(T\) is not linear), we have
+\[\stdty T {\lh(P)}\sub{\kappa_{T,Q,U}} \red^* \stdty {\insertion T P Q} {\lh(P)}\]
+and so \(\stdcoh T {\lh(P)} \sub M \red^* \stdcoh {\insertion T Q U} {\lh(P)} \sub {\insertion M Q N}\). Let \(c'\) be the term obtained by applying this further reduction to the appropriate argument. Now by \cref{lem:insert-lin-height}, we have that \(\th(\insertion T Q U) \geq \th(T)\) and so by \cref{lem:insertable}, there is \(c' \leadsto^* c''\) with:
+\begin{equation*}
+  c'' =_{\dim(a)} \SCoh {\insertion S P {(\insertion T Q U)}} {A \sub {\kappa_{S,P,\insertion T Q U}}} {\insertion L P {(\insertion M Q N)}}
+\end{equation*}
+We now examine how \(b\) reduces. As \(T\) is not linear, there is a branch \(\insertion S P Q\) of \(\insertion S P T\) and we get the following by \cref{lem:ins-comm-max}:
+\begin{equation*}
+  \olsi {\insertion S P Q} \sub {\insertion L P M}
+  \equiv \olsi Q \sub {\iota_{S,P,T} \bullet (\insertion L P M)}
+  \equiv \olsi Q \sub M
+  \equiv \stdcoh U {\lh(Q)}\sub N
+\end{equation*}
+Since \(\th(U) \geq \bh(Q) = \bh(\insertion S P Q)\) we can reduce \(b\) to \(b'\) by insertion as follows:
+\begin{equation*}
+  b' \equiv{} \SCoh {\insertion {(\insertion S P T)} {\insertion S P Q} U} {A \sub {\kappa_{S,P,T} \bullet \kappa_{\insertion S P T, \insertion S P Q, U}}} {\insertion {(\insertion L P M)} {\insertion S P Q} N}
+\end{equation*}
+and then by \cref{lem:inserted-insertion} we get \(b' =_{\dim(a)} c''\) as required.
+
+\emph{Argument reduction on the inserted argument \(L(\olsi P)\):\quad}
+
+\emph{Other reduction on the inserted argument \(L(\olsi P)\):\quad}
+
+\emph{Reduction of non-inserted argument:\quad}
+\todo[inline]{No other reductions}
+
+\emph{Insertion:\quad}
+
+\emph{Disc removal:\quad}
+
+\emph{Endo-coherence removal:\quad}
+
+\emph{Cell reduction:\quad}
+
+\paragraph{Disc removal:}
+
+\paragraph{Endo coherence removal:}
+
+\todo[inline]{Possibly refer to cases from cattsu?}
+
 
 
 \section{Towards normalisation by evaluation}
