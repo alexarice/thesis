@@ -74,6 +74,7 @@ backrefstyle=two]%
 \savesymbol{Bbbk}
 \usepackage{amssymb}
 \usepackage{stmaryrd}
+\usepackage{bm}
 % \usepackage{mathabx}
 
 
@@ -153,8 +154,8 @@ backrefstyle=two]%
 \declaretheorem[sibling=theorem,style=definition]{definition}
 \declaretheorem[sibling=theorem,style=remark]{example}
 \declaretheorem[sibling=theorem,style=remark]{remark}
-\declaretheorem[style=theorem,name=Guiding principle for groupoids,numbered=no]{principle-groupoid}
-\declaretheorem[style=theorem,name=Guiding principle for categories,numbered=no]{principle-category}
+\declaretheorem[style=definition,name=Guiding principle for groupoids,numbered=no]{principle-groupoid}
+\declaretheorem[style=definition,name=Guiding principle for categories,numbered=no]{principle-category}
 % Now we set the shading using the tcolorbox package.
 %
 % The related thmtools' option "shaded" and the package mdframed seem to have
@@ -184,8 +185,8 @@ backrefstyle=two]%
     before upper={\setlength{\parindent}{\normalparindent}\setlength{\parskip}{\normalparskip}}
   }}
 \newcommand{\setenvcolor}[2]{%
-    \tcolorboxenvironment{#1}{shadedenv={#2}}
-    \addtotheorempreheadhook[#1]{\tikzcdset{background color=#2}}
+  \tcolorboxenvironment{#1}{shadedenv={#2}}
+  \addtotheorempreheadhook[#1]{\tikzcdset{background color=#2}}
 }
 %
 \setenvcolor{theorem}{ShadeOfPurple}
@@ -221,3 +222,4 @@ backrefstyle=two]%
 \usepackage{subcaption}
 \usepackage{float}
 \usepackage{afterpage}
+\hfuzz=1.5pt

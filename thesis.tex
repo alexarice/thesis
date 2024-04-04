@@ -5374,6 +5374,7 @@ A graphical example of such a situation is given in \cref{fig:ins-parallel} wher
 It is immediate that the alternative inserted labelling only differs up to syntactic equality.
 
 \begin{proposition}
+  \label{prop:insertion-prime-eq}
   Let \((S,P,T,\U,L,M)\) be an insertion redex. Then:
   \[\insertionprime L P M = \insertion L P M\]
 \end{proposition}
@@ -5972,7 +5973,7 @@ The left hand pushout square is given by the insertion of \(U\) into \(T\) along
     &\kappa_{S,P,\insertion T Q U} &&=^{\mathsf{max}}{} &&\kappa_{S,P,T} \circ \kappa_{\insertion S P T, \insertion S P Q, U}\\
     &\insertion L P {(\insertion M Q N)} &&\equiv^{\mathsf{max}}{} &&\insertion {(\insertion L P M)} {\insertion S P Q} N
   \end{alignat*}
-  for any \(\L : S \to \U\), \(M : T \to \U\), and \(N : U \to \U\).
+  for any \(L : S \to \U\), \(M : T \to \U\), and \(N : U \to \U\).
 \end{lemma}
 \begin{proof}
   See functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-inserted-branch} and \func{Catt.Tree.Insertion.Properties}{label-from-inserted-branch} in module \module{Catt.Tree.Insertion.Properties}, and \func{Catt.Typing.Insertion.Equality}{κ-inserted-branch} in module \module{Catt.Typing.Insertion.Equality}.
@@ -6000,7 +6001,7 @@ The results in this chapter will heavily depend on the theory developed in the p
 \end{itemize}
 The term \(\N(t)\) is called the \emph{normal form} of \(t\). Such an algorithm allows equality of two term \(s\) and \(t\) to be decided by taking the normal form of each term and checking if they are syntactically equal. Normalisation can be extended to types and substitutions in a natural way.
 
-In \cref{sec:cattsu,sec:cattsua}, the normalisation algorithm is defined by giving a reduction relation on syntax of the type theory, which we show to be terminating, meaning that there is no infinite reduction sequence and confluent, meaning that any two reduction paths converge to a common reduct. The normal form of a term can then be obtained by reducing it until there are no further reductions possible. In \cref{sec:reduction}, these notions are recalled, and we demonstrate that the resulting normalisation algorthm satisfies the two properties stated above. This section also introduces a method for obtaining a reduction scheme from an arbitrary equality rule set \(\mathcal{R}\).
+In \cref{sec:cattsu,sec:cattsua}, the normalisation algorithm is defined by giving a reduction relation on syntax of the type theory, which we show to be terminating, meaning that there is no infinite reduction sequence and confluent, meaning that any two reduction paths converge to a common reduct. The normal form of a term can then be obtained by reducing it until there are no further reductions possible. In \cref{sec:reduction}, these notions are recalled, and we demonstrate that the resulting normalisation algorithm satisfies the two properties stated above. This section also introduces a method for obtaining a reduction scheme from an arbitrary equality rule set \(\mathcal{R}\).
 
 Such a normalisation procedure allows a type checking algorithm can be implemented, creating an interpreter for the language. This allows us to write larger terms, and it can be automatically verified whether they are well-formed. In \cref{sec:towards-nbe}, we introduce our implementation of \Catt, \Cattsu, and \Cattsua, written in rust. This implementation supports features such as implicit arguments to terms, implicit suspension, and native support for trees and tree labellings. We will explain how the tool can be used, and use it to give larger examples of \Cattsua terms, including proofs of Eckmann-Hilton (see \cref{fig:eh}) and its higher dimensional coherence condition, the Syllepsis.
 
@@ -6462,6 +6463,7 @@ By \cref{prop:red-is-eq}, we know that the reflexive symmetric transitive closur
 We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and only if \(s \red_{\su'}^{\mathsf{rts}} t\). To demonstrate normalisation, it therefore remains to show that the reduction scheme is confluent, for which we employ the strategy introduced in \cref{lem:conf-strat}.
 
 \begin{theorem}
+  \label{thm:su-conf}
   The reduction \(\red_{\su'}\) is confluent.
 \end{theorem}
 \begin{proof}
@@ -6666,7 +6668,7 @@ While the groupoidal operation set trivially supports insertion, we have not yet
   by \cref{thm:std-insert-props}.
 \end{proof}
 
-\subsection{Normalisation for \Cattsua}
+\subsection{Reduction for \Cattsua}
 \label{sec:norm-cattsua}
 
 Using the results of \cref{sec:reduction}, we give a normalisation algorithm for \Cattsua by defining a reduction scheme which generates the equality relation and proving that this reduction scheme is strongly terminating and confluent.
@@ -6686,7 +6688,7 @@ Finally we also disallow insertions into a unary composite and insertions of a u
 It can be determined by a simple observation that \(\sua'\) is tame, as suspension and the application of substitution cannot transform a term into an identity or unary composite where it wasn't before. We further justify the restrictions made to insertion by showing that many insertion reductions can still be performed, starting with the following technical lemma.
 
 \begin{lemma}
-  \label{lem:insertion-irrel}
+  \label{lem:insertion-change-max}
   If \(P\) is a branch of \(S\), and \(L, L' : S \to \Gamma\) are labellings differing only on \(\olsi P\), then the following holds for insertion redex \((S,P,T,\Gamma,L,M)\):
   \[\insertion L P M \equiv \insertion {L'} P M\]
 \end{lemma}
@@ -6728,14 +6730,32 @@ We now show that most insertion reductions can still be simulated up to bounded 
   \begin{align*}
     d =_{\dim(a)}{} &\SCoh {\insertion {(S \sslash P)} {P'} T} {A \sub {\pi_P \bullet \kappa_{S\sslash P,P',T}}} {\\&\insertion {(\insertion {L'} P {(\{\stdcoh T {\lh(P) - 1}\} \bullet M)})} {P'} {M}}
   \end{align*}
-  By \cref{lem:pruned-bp,lem:insertion-irrel},
+  By \cref{lem:pruned-bp,lem:insertion-change-max},
   \begin{equation*}
     d =_{\dim(a)} \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P M}
   \end{equation*}
   which completes the proof as \(a \leadsto^* d\).
 \end{proof}
 
-Using this lemma, we now show that the type theories \Cattsua and \(\Catt_{\sua'}\) are equivalent.
+We further show that insertions into discs can be simulated by disc removal.
+
+\begin{lemma}
+  \label{lem:disc-insertion-red}
+  Let \((D^n,P,T,\Gamma,L,M)\) be an insertion redex and let \(a \equiv \stdcoh {D^n} n \sub L\). Then:
+  \[ a \red_{\sua'} s =_{n} \SCoh {\insertion {D^n} P T} {\stdty {D^n} n \sub \kappa} {\insertion L P M}\]
+\end{lemma}
+\begin{proof}
+  We have the equality:
+  \begin{align*}
+    \SCoh {\insertion {D^n} P T} {\stdty {D^n} n \sub \kappa} {\insertion L P M} &\equiv \SCoh T {\stdty {D^n} n \sub {\kappa_{D^n,P,T}}} M&\text{ \cref{lem:disc-insertion-1}}\\
+                                                                                 &=_n \SCoh T {\stdty T n} M&\text{by \cref{thm:std-insert-props}}\\
+                                                                                 &\equiv \stdcoh T n \sub M\\
+                                                                                 &\equiv L(\olsi P)
+  \end{align*}
+  Therefore the reduction \(a \red s \equiv L(\olsi P)\) is given by disc removal.
+\end{proof}
+
+Using these lemmas, we now show that the type theories \Cattsua and \(\Catt_{\sua'}\) are equivalent.
 
 \begin{proposition}
   The type theories generated by \sua and \sua' are equivalent. Terms, types, and substitutions are equal or well-formed in one theory exactly when they are equal or well-formed in the other.
@@ -6754,11 +6774,7 @@ Using this lemma, we now show that the type theories \Cattsua and \(\Catt_{\sua'
   \end{align*}
   where the first equality is by endo-coherence removal, and the second equality is by \cref{lem:ins-comm-max}, appealing to the induction on dimension.
 
-  We now assume that \(s\) is a unary composite \(\stdcoh {D^n} n \sub L\). Then, by \cref{lem:disc-insertion-1}:
-  \[ t \equiv \SCoh T {\stdty {D^n} n \sub {\kappa_{D^n,P,T}}} M \]
-  By appealing to inductive hypothesis on dimension and \cref{thm:std-insert-props}, \(\stdty {D^n} n \sub {\kappa_{D^n, P , T}} = \stdty T n\) and so \(t = \stdcoh T n \sub M \equiv L(\olsi P)\). Therefore the equality \(s = t\) is given by disc removal.
-
-  Lastly, if \(s\) is not a unary composite or an identity, then we are done by \cref{lem:insertable} and the inductive hypothesise on dimension.
+  If \(s\) is a unary composite we apply \cref{lem:disc-insertion-red} and use the inductive hypothesis on dimension. Otherwise, we are done by \cref{lem:insertable} and the inductive hypothesis on dimension.
 \end{proof}
 
 Having shown that the reflexive symmetric transitive closure of the reduction \(\red_{\sua'}\) agrees with the equality of \Cattsua, we move on to showing that this reduction is strongly terminating. To do this we appeal to \cref{cor:strong-term}, and show that all reductions reduce the syntactic complexity of the terms involved.
@@ -6812,6 +6828,7 @@ We can now show that insertion reductions reduce syntactic complexity.
 In this section, we prove the following theorem:
 
 \begin{theorem}
+  \label{thm:sua-conf}
   The reduction \(\red_{\sua'}\) is confluent.
 \end{theorem}
 
@@ -6831,13 +6848,9 @@ We will prove this theorem using \cref{lem:conf-strat}. It is therefore sufficie
   \end{tikzcd}
 \]
 
-Without loss of generality, we let \(a \equiv \SCoh S A L\), as variables do not reduce. We then split by cases on the reduction \(a \red b\), ignoring cases where both reductions are identical and ignoring cases which follow by symmetry of other cases.
+We split by cases on the reduction \(a \red b\), ignoring cases where both reductions are identical and ignoring cases which follow by symmetry of other cases. Any cases which do not mention insertion will follow from an identical argument to the one given in \cref{thm:su-conf}, and so we omit these here. We can therefore assume without loss of generality that \(a \leadsto b\) is an insertion along redex \((S,P,T,\Gamma,L,M)\) such that \(a\) is not an identity or unary composite and \(\stdcoh T {\lh(P)}\) is an identity or a standard composite which is not unary. We now split on the reduction \(a \red c\).
 
-\paragraph{Insertion:}
-
-Let \(a \leadsto b\) be an insertion along redex \((S,P,T,\Gamma,L,M)\) such that \(a\) is not an identity or unary composite and \(\stdcoh T {\lh(P)}\) is a standard composite or identity. We now split on the reduction \(a \red c\).
-
-\emph{Insertion on the inserted argument \(L(\olsi P)\):\quad} Suppose \(\stdcoh T {\lh(P)} \sub M\) admits an insertion along redex \((T, Q, U, \Gamma, M, N)\). Then:
+\paragraph{Insertion on the inserted argument \(\bm{L(\olsi P)}\):} Suppose \(\stdcoh T {\lh(P)} \sub M\) admits an insertion along redex \((T, Q, U, \Gamma, M, N)\). Then:
 \[\stdcoh T {\lh(P)} \sub M \red \SCoh {\insertion T Q U} {\stdty T {\lh(P)}\sub{\kappa_{T,Q,U}}} {\insertion M Q N}\]
 We then have \(c \equiv \SCoh S A {L'}\) where \(L'\) is \(L\) with the reduction above applied. We can conclude that \(\stdcoh T {\lh(P)}\) must be a composite (i.e. not an identity) as otherwise the second insertion would not be possible. Similarly \(T\) cannot be linear as otherwise \(\stdcoh T {\lh(P)}\) would be a unary composite.
 
@@ -6899,28 +6912,84 @@ Since \(\th(U) \geq \bh(Q) = \bh(\insertion S P Q)\) we can reduce \(b\) to \(b'
 \end{equation*}
 and then by \cref{lem:inserted-insertion} we get \(b' =_{\dim(a)} c''\) as required.
 
-\emph{Argument reduction on the inserted argument \(L(\olsi P)\):\quad}
+\paragraph{Argument reduction on the inserted argument \(\bm{L(\olsi P)}\):}
 
-\emph{Other reduction on the inserted argument \(L(\olsi P)\):\quad}
+Suppose \(M \leadsto M'\), and \(L'\) is \(L\) but with the argument for \(\olsi P\) replaced by \(\stdcoh T {\lh(P)} \sub {M'}\), such that \(L \red L'\) and \(a \red c \equiv \Coh S A {L'}\). Then \(c\) admits an insertion and reduces as follows:
+\[c \leadsto c' \equiv \Coh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion {L'} P {M'}}\]
+Since each term in \(\insertion {L} P {M}\) is a term of \(L\) or a term of \(M\), we can simply apply the same reductions from \(L \red L'\) and \(L \red M'\) to get \(\insertion L P M \red^* \insertion {L'} P {M'}\). Therefore \(b \red^* c'\).
 
-\emph{Reduction of non-inserted argument:\quad}
-\todo[inline]{No other reductions}
+\paragraph{Other reduction on the inserted argument \(\bm{L(\olsi P)}\):}
 
-\emph{Insertion:\quad}
+The argument \(L(\olsi P)\) is either a standard composite which is not unary or an identity. Therefore, the type contained in the coherence is in normal form and hence a cell reduction cannot be applied. Further, disc removal cannot be applied, as \(L(\olsi P)\) is not a unary composite, and endo-coherence removal cannot be applied as if \(L(\olsi P)\) is an endo-coherence then it is an identity. Hence, there are no other reductinos that can be applied to the inserted argument and so this case is vacuous.
 
-\emph{Disc removal:\quad}
-
-\emph{Endo-coherence removal:\quad}
-
-\emph{Cell reduction:\quad}
+\paragraph{Reduction of non-inserted argument:}
+Suppose \(L \leadsto L'\) along an argument which is not \(\olsi P\) and \(c \equiv \Coh S A {L'}\). Then as \(L'(\olsi P) \equiv \mathcal{C}_T^{\lh(P)}\), an insertion can still be performed on \(c\) to get:
+\[ c \leadsto c' \equiv \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion {L'} P M}\]
+Since the terms of \(\insertion L P M\) are a subset of the terms of \(L\) and \(M\), we get \(\insertion L P M \red^* \insertion {L'} P M\) and so \(b \red^* c'\).
 
 \paragraph{Disc removal:}
 
-\paragraph{Endo coherence removal:}
+By assumption, insertion cannot be applied to unary composites, and so this case is vacuous.
 
-\todo[inline]{Possibly refer to cases from cattsu?}
+\paragraph{Endo-coherence removal:}
 
+Suppose \(A \equiv \arr s B s\) and \(a \red c\) by endo-coherence removal. In this case \(c \equiv \id(A,s) \sub L\) and
+\[ b \equiv \Coh {\insertion S P T} {(\arr s B s) \sub {\kappa_{S,P,T}}} {\insertion L P M}\]
+which reduces by endo-coherence removal to:
+\[b' \equiv \id(A, s) \sub {\kappa_{S,P,T} \bullet (\insertion L P M)}\]
+Finally, by \cref{lem:ins-comm-max}, we have that \(\kappa_{S,P,T} \circ (\insertion L P M) =_{\dim(S)} L\) and so \(b' = _{\dim(S)} c\) and since \(\dim(S) \leq \dim(a)\), we get \(b' =_{\dim(a)} c\) as required.
 
+\paragraph{Cell reduction:}
+
+If \(A \red B\) and \(c \equiv \SCoh S B L\) from cell reduction, then if \(c\) is not an identity or disc then it admits insertion to reduce to:
+\[c' \equiv \SCoh {\insertion S P T} {B \sub {\kappa_{S,P,T}}} {\insertion L P M}\]
+As reduction is compatible with substitution, \(b\) also reduces to~\(c'\). If instead \(c\) was an identity then
+\begin{align*}
+  b &\equiv \SCoh {\insertion {D^n} P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P M}\\
+    &\red \SCoh {\insertion {D^n} P T} {\stdty {D^n} {n+1}\sub {\kappa_{S,P,T}}} {(\insertion L P M)}\\
+    &\red^* \id(d_n) \sub {\kappa_{S,P,T} \bullet \insertion L P M}\\
+    &=_{n+1} \id(d_n) \sub L\\
+    &\equiv c
+\end{align*}
+Where the second reduction is due to \cref{lem:always-ecr} and the equality is due to \cref{lem:ins-comm-max}. If \(c\) is a disc then \cref{lem:disc-insertion-red} can be applied to get that \(c\) reduces to a term \(c''\) with \(c'' =_{n+1} c'\) with \(b \red c'\), completing this case.
+
+\paragraph{Insertion:}
+
+Suppose \(a \leadsto c\) is also an insertion, along a branch \(Q\) of \(S\). We now split on whether \(\olsi P = \olsi Q\). First suppose \(\olsi P = \olsi Q\); then by \cref{lem:insertion-irrel}, we have \(b =_{\dim(a)} c\). Suppose now that \(\olsi P \neq \olsi Q\), and that \(L(\olsi Q) \equiv \stdcoh U {\lh(Q)} \sub N\), such that:
+\[c \equiv \SCoh {\insertion S Q U} {A \sub {\kappa_{S,Q,U}}} {\insertion L Q N}\]
+We now consider the case where \(b\) is an identity. As \(P\) and \(Q\) are distinct branches of \(S\), we must have that \(S\) itself is not linear. Therefore the insertion along \(P\) must be an insertion of an identity. Further, for \(b\) to have the correct type for an identity, we must have that \(A \sub {\pi_P} \equiv \SPath(\olsi Q) \to \SPath(\olsi Q)\). The only path sent to \(\olsi Q\) by \(\pi_P\) is \(\olsi Q\) itself, and so \(A \equiv \SPath(\olsi Q) \to \SPath(\olsi Q)\). Now, by \cref{lem:iota-kappa-comm}:
+\begin{align*}
+  c &\equiv \SCoh {\insertion S Q U} {\stdcoh U {\lh(Q)} \sub {\iota} \to \stdcoh U {\lh(Q)} \sub {\iota}} {\insertion L Q N}\\
+    &\red \id(\stdcoh U {\lh(Q)} \sub \iota) \sub {\insertion L Q N}&\text{ by endo-coherence removal}\\
+    &\equiv \id(\stdcoh U {\lh(Q)}) \sub N & \text{by \cref{lem:ins-comm-max}}
+\end{align*}
+Then, \(\insertion L P M\) sends \(\olsi Q\) to \(L(\olsi Q) \equiv \stdcoh U {\lh(Q)} \sub N\), and so \(b \equiv \id(\stdcoh U {\lh(Q)}) \sub N\).
+
+The case where \(c\) is an identity is symmetric, so we now consider when neither \(b\) or \(c\) are identities. We now observe that \(b\) and \(c\) further reduce as follows:
+\begin{align*}
+  b &\red b' =_{\dim(a)} \SCoh {\insertion {(\insertion S P T)} {\insertion Q P T} U} {A\sub{\kappa_{S,P,T} \bullet \kappa_{\insertion S P T, \insertion Q P T, U}}} {\insertion {(\insertion L P M)} {\insertion Q P T} N}\\
+  c &\red c' =_{\dim(a)} \SCoh {\insertion {(\insertion S Q U)} {\insertion P Q U} T} {A\sub{\kappa_{S,Q,U} \bullet \kappa_{\insertion S Q U, \insertion P Q U, T}}} {\insertion {(\insertion L Q N)} {\insertion P Q U} M}
+\end{align*}
+We show that the first reduction is valid with the validity of the second holding by symmetry. If \(b\) is a unary composite then we apply \cref{lem:disc-insertion-red} to obtain a suitable \(b'\): Otherwise we obtain the reduction via insertion, noting that:
+\begin{align*}
+  \olsi{\insertion Q P T} \sub {\insertion L P M} &\equiv \olsi{Q} \sub{\kappa} \sub{\insertion L P M}\\
+                                           &\equiv L(Q)\\
+                                           &\equiv \stdcoh U {\lh(Q)}\sub N\\
+                                           &\equiv \stdcoh U {\lh(\insertion Q P T)}\sub N
+\end{align*}
+as required for the insertion, with the third equality coming from \cref{lem:ins-comm-max}. Lastly the trunk height condition is satisfied as \(\bh(Q) = \bh(\insertion Q P T)\).
+
+Therefore both reductions are valid. We now need the following lemma to complete the proof:
+
+\begin{lemma}
+  Let \((S, P, T, \Gamma, L, M)\) be an insertion redex. Then:
+  \[ \insertion L P M =_{\bh(P)+1} \insertionprime L P M\]
+\end{lemma}
+\begin{proof}
+  By \cref{prop:insertion-prime-eq}, the two labellings are equal. By inspection of the definition, the maximum dimension of terms that differ is \(\dim(\bh(P))\).
+\end{proof}
+
+By the above and \cref{lem:insertion-different}, \(b' =_{\dim(a)} c'\). This completes all cases of \cref{thm:sua-conf}.
 
 \section{Towards normalisation by evaluation}
 \label{sec:towards-nbe}
