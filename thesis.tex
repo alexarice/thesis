@@ -75,14 +75,14 @@ Things to go in introduction:
 \chapter{Background}
 \label{sec:background}
 
-We begin with an overview of the important concepts required for the rest of the thesis. Throughout, we will assume knowledge of various basic concepts from computer science, as well as a basic knowledge of category theory (including functor categories, presheaves, and (co)limits) and type theory. The following sections introduce a form of globular higher categories and give a definition of the type theory \Catt, close to the original definition.
+We begin with an overview of the important concepts required for the rest of the thesis. Throughout, we will assume knowledge of various basic concepts from computer science, as well as a basic knowledge of category theory (including functor categories, presheaves, and (co)limits) and type theory. The following sections introduce a form of globular higher categories and give a definition of the type theory \Catt which is close to the original definition.
 
-This section additionally serves as a place to introduce the various syntax and notation which will be used throughout the rest of the thesis.
+This section additionally serves as a place to introduce various syntax and notations which will be used throughout the rest of the thesis.
 
 \section{Higher categories}
 \label{sec:higher-categories}
 
-A higher category is a generalisation of the ordinary notion of a category to allow higher dimensional structure. This manifests in the form of allowing arrows or morphisms to have their source or target be another morphism instead of an object. More precisely, higher categories are equipped with the notion of an \(n\)-cell, where an \((n+1)\)-cell has source and target \(n\)-cells, and \(0\)-cells play the role of objects in an ordinary category. There are many differing definitions of higher categories (see \cite{leinster2001survey}), some of which use different shapes of cell. In this thesis, we will study globular higher categories, in particular those defined by the type theory \Catt~\cite{finster2017type}, which are known to be equivalent to a definition of \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck} based off an earlier definition by \citeauthor{PursuingStacks}~\cite{PursuingStacks}, which we introduce in \cref{sec:weak}.
+A higher category is a generalisation of the ordinary notion of a category to allow higher dimensional structure. This manifests in the form of allowing arrows or morphisms to have their source or target be another morphism instead of an object. In this thesis, we are primarily concerned with \(\infty\)-categories, which are equipped with the notion of an \(n\)-cell for each \(n \in \mathbb{N}\), where each \((n+1)\)-cell has a source and target \(n\)-cell, and \(0\)-cells play the role of objects in an ordinary category. There are many differing definitions of \(\infty\)-categories (see \cite{leinster2001survey}), some of which use different shapes of cell. The \(\infty\)-categories we study here will be globular, and in particular will be those defined by the type theory \Catt~\cite{finster2017type}, which are known to be equivalent to a definition of \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck} based off an earlier definition by \citeauthor{PursuingStacks}~\cite{PursuingStacks}, which we introduce in \cref{sec:weak}.
 
 The role of objects is played by \(0\)-cells, with \(1\)-cells as the morphisms between these objects. For \(0\)-cells \(x\) and \(y\), a \(1\)-cell \(f\) with source \(x\) and target \(y\) will be drawn as:
 \[
@@ -94,25 +94,25 @@ The role of objects is played by \(0\)-cells, with \(1\)-cells as the morphisms 
 or may be written as \(f: x \to y\). Two cells are \emph{parallel} if they have the same source and target. Between any two parallel \(n\)-cells \(f\) and \(g\), we have a set of \((n+1)\)-cells between them. A \(2\)-cell \(\alpha : f \to g\) may be drawn as:
 \[
   \begin{tikzcd}
-    x & y
-    \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-12pt}, from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=12pt}, from=1-1, to=1-2]
+    \bullet & \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-12pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=12pt}, from=1-1, to=1-2]
     \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
   \end{tikzcd}
 \]
-and a \(3\)-cell \(\gamma\) between parallel \(2\)-cells \(\alpha\) and \(\beta\) could be could be drawn as:
+where all unnamed \(0\)-cells are written as a \(\bullet\). A \(3\)-cell \(\gamma\) between parallel \(2\)-cells \(\alpha\) and \(\beta\) could be could be drawn as:
 \[
   \begin{tikzcd}
-    x && y
-    \arrow[""{name=0, anchor=center, inner sep=0}, "f", curve={height=-15pt}, from=1-1, to=1-3]
-    \arrow[""{name=1, anchor=center, inner sep=0}, "g"', curve={height=15pt}, from=1-1, to=1-3]
+    \bullet && \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, "", curve={height=-15pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, ""', curve={height=15pt}, from=1-1, to=1-3]
     \arrow[""{name=2, anchor=center, inner sep=0}, "\alpha", shift left=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
     \arrow[""{name=3, anchor=center, inner sep=0}, "\beta"', shift right=4, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
     \arrow["\gamma", shorten <=4pt, shorten >=4pt, Rightarrow, nfold=3, from=2, to=3]
   \end{tikzcd}
 \]
 
-Just as in ordinary \(1\)-category theory, we expect to be able to compose morphisms. For \(1\)-cells, nothing has changed, given \(1\)-cells \(f: x \to y\) and \(g : y \to z\) we form the composition \(f * g\):
+Just as in ordinary \(1\)-category theory, we expect to be able to compose morphisms whose boundaries are compatible. For \(1\)-cells, nothing has changed, given \(1\)-cells \(f: x \to y\) and \(g : y \to z\) we form the composition \(f * g\):
 \[
   \begin{tikzcd}
     x & y & z
@@ -120,13 +120,13 @@ Just as in ordinary \(1\)-category theory, we expect to be able to compose morph
     \arrow[from=1-2, to=1-3, "g"]
   \end{tikzcd}
 \]
-which has source \(x\) and target \(z\). We pause here to note that composition will be given in ``diagrammatic order'' throughout the whole thesis, which is the opposite of the order of function composition but the same as the order of the arrows if drawn head to tail. This is chosen as it will be common for us to draw higher dimensional arrows in a diagram, and rare for us to consider categories where the higher arrows are given by functions. In an attempt to avoid confusion, we use an asterisk (\(*\)) to represent composition of arrows or cells in a higher category, and will use a circle (\(\circ\)) only for function composition.
+which has source \(x\) and target \(z\). We pause here to note that composition will be given in ``diagrammatic order'' throughout the whole thesis, which is the opposite of the order of function composition yet the same as the order of the arrows as drawn above. This is chosen as it will be common for us to draw higher dimensional arrows in a diagram, and rare for us to consider categories where the higher arrows are given by functions. In an attempt to avoid confusion, we use an asterisk (\(*\)) to represent composition of arrows or cells in a higher category, and will use a circle (\(\circ\)) only for function composition.
 
-In two dimensions, there is no longer a singular composition operation. For \(2\)-cells \(\alpha : f \to g\) and \(\beta : g \to h\), the composite \(\alpha *_1 \beta\) can be formed as before:
+In two dimensions, there is no longer a unique composition operation. For \(2\)-cells \(\alpha : f \to g\) and \(\beta : g \to h\), the composite \(\alpha *_1 \beta\) can be formed as before:
 % https://q.uiver.app/#q=WzAsMixbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzAsMSwiZiIsMCx7ImN1cnZlIjotNH1dLFswLDEsImgiLDIseyJjdXJ2ZSI6NH1dLFswLDEsImciLDFdLFsyLDQsIlxcYWxwaGEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzQsMywiXFxiZXRhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dXQ==
 \[
   \begin{tikzcd}
-    x && y
+    \bullet && \bullet
     \arrow[""{name=0, anchor=center, inner sep=0}, "f"', curve={height=24pt}, from=1-1, to=1-3]
     \arrow[""{name=1, anchor=center, inner sep=0}, "h", curve={height=-24pt}, from=1-1, to=1-3]
     \arrow[""{name=2, anchor=center, inner sep=0}, "g"{description}, from=1-1, to=1-3]
@@ -135,7 +135,7 @@ In two dimensions, there is no longer a singular composition operation. For \(2\
   \end{tikzcd}
 \]
 
-We refer to this composition as \emph{vertical composition}. We can also compose cells \(\alpha\) and \(\beta\) in the following way:
+We refer to this composition as \emph{vertical composition}. The cells \(\gamma : f \to g\) and \(\delta : h \to i\) can also be composed in the following way:
 
 % https://q.uiver.app/#q=WzAsMyxbMCwwLCJ4Il0sWzEsMCwieSJdLFsyLDAsInoiXSxbMCwxLCIiLDAseyJjdXJ2ZSI6LTN9XSxbMCwxLCIiLDIseyJjdXJ2ZSI6M31dLFsxLDIsIiIsMix7ImN1cnZlIjotM31dLFsxLDIsIiIsMix7ImN1cnZlIjozfV0sWzMsNCwiXFxhbHBoYSIsMCx7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbNSw2LCJcXGJldGEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV1d
 \[
@@ -145,14 +145,14 @@ We refer to this composition as \emph{vertical composition}. We can also compose
     \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
     \arrow[""{name=2, anchor=center, inner sep=0}, "i", curve={height=-18pt}, from=1-2, to=1-3]
     \arrow[""{name=3, anchor=center, inner sep=0}, "h"', curve={height=18pt}, from=1-2, to=1-3]
-    \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
-    \arrow["\beta", shorten <=5pt, shorten >=5pt, Rightarrow, from=3, to=2]
+    \arrow["\gamma", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow["\delta", shorten <=5pt, shorten >=5pt, Rightarrow, from=3, to=2]
   \end{tikzcd}
 \]
 
-This composition is called the \emph{horizontal composition}, and is written \(\alpha *_0 \beta\). The subscript refers to the dimension of the shared boundary in the composition, with the \(1\)-cell \(g\) being the shared boundary in the vertical composition example and the \(0\)-cell \(y\) being the shared boundary in the horizontal composition example. The dimension of this shared boundary is the \emph{codimension} of the composition.
+This composition is called the \emph{horizontal composition}, and is written \(\gamma *_0 \delta\). The subscript refers to the dimension of the shared boundary in the composition, with the \(1\)-cell \(g\) being the shared boundary in the vertical composition example and the \(0\)-cell \(y\) being the shared boundary in the horizontal composition example. The dimension of this shared boundary is the \emph{codimension} of the composition.
 
-This pattern continues with \(3\)-cells, which can be composed at codimension \(0\), \(1\), or \(2\), as below:
+This pattern continues with \(3\)-cells, which can be composed at codimension \(0\), \(1\), or \(2\), as depicted below:
 
 % https://q.uiver.app/#q=WzAsNyxbMiwwLCJcXGJ1bGxldCJdLFswLDAsIlxcYnVsbGV0Il0sWzMsMCwiXFxidWxsZXQiXSxbNSwwLCJcXGJ1bGxldCJdLFs2LDAsIlxcYnVsbGV0Il0sWzcsMCwiXFxidWxsZXQiXSxbOCwwLCJcXGJ1bGxldCJdLFsxLDAsIiIsMCx7ImN1cnZlIjotM31dLFsxLDAsIiIsMix7ImN1cnZlIjozfV0sWzIsMywiIiwwLHsiY3VydmUiOi00fV0sWzIsMywiIiwyLHsiY3VydmUiOjR9XSxbMiwzXSxbNCw1LCIiLDAseyJjdXJ2ZSI6LTN9XSxbNCw1LCIiLDIseyJjdXJ2ZSI6M31dLFs1LDYsIiIsMix7ImN1cnZlIjotM31dLFs1LDYsIiIsMix7ImN1cnZlIjozfV0sWzgsNywiIiwyLHsib2Zmc2V0IjotNSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs4LDcsIiIsMCx7Im9mZnNldCI6NSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs4LDcsIiIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTAsMTEsIiIsMix7Im9mZnNldCI6LTQsInNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTAsMTEsIiIsMCx7Im9mZnNldCI6NCwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsxMSw5LCIiLDEseyJvZmZzZXQiOi00LCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzExLDksIiIsMSx7Im9mZnNldCI6NCwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsxMywxMiwiIiwyLHsib2Zmc2V0IjotMywic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsxMywxMiwiIiwwLHsib2Zmc2V0IjozLCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzE1LDE0LCIiLDIseyJvZmZzZXQiOi0zLCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzE1LDE0LCIiLDAseyJvZmZzZXQiOjMsInNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTYsMTgsIlxcZ2FtbWEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzE4LDE3LCJcXGRlbHRhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsyMSwyMiwiXFxnYW1tYSIsMCx7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTksMjAsIlxcZGVsdGEiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzIzLDI0LCJcXGdhbW1hIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsyNSwyNiwiXFxkZWx0YSIsMCx7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XV0=
 \[
@@ -178,25 +178,25 @@ This pattern continues with \(3\)-cells, which can be composed at codimension \(
     \arrow[""{name=17, anchor=center, inner sep=0}, shift right=3, shorten <=5pt, shorten >=5pt, Rightarrow, from=6, to=5]
     \arrow[""{name=18, anchor=center, inner sep=0}, shift left=3, shorten <=5pt, shorten >=5pt, Rightarrow, from=8, to=7]
     \arrow[""{name=19, anchor=center, inner sep=0}, shift right=3, shorten <=5pt, shorten >=5pt, Rightarrow, from=8, to=7]
-    \arrow["\gamma", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=9, to=11]
-    \arrow["\delta", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=11, to=10]
-    \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, nfold=3, from=14, to=15]
-    \arrow["\delta", shorten <=3pt, shorten >=3pt, Rightarrow, nfold=3, from=12, to=13]
-    \arrow["\gamma", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=16, to=17]
-    \arrow["\delta", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=18, to=19]
+    \arrow["", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=9, to=11]
+    \arrow["", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=11, to=10]
+    \arrow["", shorten <=3pt, shorten >=3pt, Rightarrow, nfold=3, from=14, to=15]
+    \arrow["", shorten <=3pt, shorten >=3pt, Rightarrow, nfold=3, from=12, to=13]
+    \arrow["", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=16, to=17]
+    \arrow["", shorten <=2pt, shorten >=2pt, Rightarrow, nfold=3, from=18, to=19]
   \end{tikzcd}
 \]
 
 For every \(n\)-cell \(x\), there is an \((n+1)\)-cell \(\id(x) : x \to x\), called the \emph{identity morphism}.
 
-As with 1-categories, \(\infty\)-categories need to satisfy certain equalities, which fall into 3 groups: associativity, unitality, and interchange. The associativity laws are the same as for 1-categories, only now a law is needed for each composition (every dimension and codimension).
+Similarly to 1-categories, \(\infty\)-categories need to satisfy certain laws, which fall into 3 groups: associativity, unitality, and interchange. These laws can hold strictly, meaning that they hold up to equality, or weakly, meaning that they hold up to a higher dimensional isomorphism. We delay the discussion of weak \(\infty\)-categories to \cref{sec:weak}, and begin with the discussion of strict \(\infty\)-categories.
 
-Unitality is again similar to the case for 1-categories, except we again need unitality laws for each composition. We note that for lower codimension compositions, an iterated identity is needed. For example given a \(2\)-cell \(\alpha : f \to g\), the appropriate equation for left unitality of horizontal composition is:
+In these strict categories, associativity laws are the same as for 1-categories, only now a law is needed for each composition (every dimension and codimension). Unitality is again similar to the case for 1-categories, except we again need unitality laws for each composition. We note that for lower codimension compositions, an iterated identity is needed. For example given a \(2\)-cell \(\alpha : f \to g\), the appropriate equation for left unitality of horizontal composition is:
 \[ \id(\id(x)) *_0 \alpha = \alpha \]
 In general for a unit to be cancelled, it must be iterated a number of times equal to the difference between the dimension and codimension of the composition.
 
 Interchange laws do not appear in 1-categories, and specify how compositions of different dimensions interact. The first interchange law states that for suitable \(2\)-cells \(\alpha\), \(\beta\), \(\gamma\), and \(\delta\), that:
-\[ (\alpha *_0 \gamma) *_1 (\beta *_0 \delta) = (\alpha *_1 \beta) *_0 ()\]
+\[ (\alpha *_0 \gamma) *_1 (\beta *_0 \delta) = (\alpha *_1 \beta) *_0 (\gamma *_1 \delta)\]
 This can be diagrammatically depicted as:
 \newsavebox{\innertop}
 \savebox{\innertop}{
@@ -296,7 +296,7 @@ In a globular set, the source and target of any cell must be parallel, meaning t
     \mathbf{s}_{n+1} \circ \mathbf{t}_n &= \mathbf{t}_{n+1} \circ \mathbf{t}_n
   \end{align*}
 
-The category of globular sets \(\mathbf{Glob}\), is the presheaf category \([\mathbf{G}, \mathbf{Set}]\).
+The category of globular sets \(\mathbf{Glob}\), is the presheaf category \([\mathbf{G}^{\mathrm{op}}, \mathbf{Set}]\).
  \end{definition}
 
 Unwrapping this definition, a globular set \(G\) consists of sets \(G(n)\) for each \(n \in \mathbb{N}\), with source and target maps \(s_n, t_n : G(n+1) \to G(n)\), forming the following diagram:
@@ -319,7 +319,7 @@ Given a globular set \(G\), we will call the elements of \(G(n)\) the \(n\)-cell
 
 \begin{example}
   \label{ex:disc}
-  The \(n\)-disc \(D^n\) is a finite globular set given by \(Y(n)\), where \(Y\) is the Yoneda functor \(\mathbf{G} \to \mathbf{Glob}\). \(D^n\), has no \(k\)-cells for \(k > n\), a single \(n\)-cell \(d_n\), and two \(m\)-cells \(d_m^-\) and \(d_m^+\) for \(m < n\). Every \((m+1)\)-cell of \(D^n\) has source \(d_m^-\) and target \(d_m^+\). The first few discs are depicted in \cref{fig:discs}. The Yoneda lemma tells us that a map of globular sets \(D^n \to G\) is the same as an \(n\)-cell of \(G\). For an \(n\)-cell \(x\) of \(G\), we let \(\{x\}\) be the unique map \(D^n \to G\) which sends \(d_n\) to \(x\).
+  The \(n\)-disc \(D^n\) is a finite globular set given by \(Y(n)\), where \(Y\) is the Yoneda functor \(\mathbf{G} \to \mathbf{Glob}\). \(D^n\) has no \(k\)-cells for \(k > n\), a single \(n\)-cell \(d_n\), and two \(m\)-cells \(d_m^-\) and \(d_m^+\) for \(m < n\). Every \((m+1)\)-cell of \(D^n\) has source \(d_m^-\) and target \(d_m^+\). The first few discs are depicted in \cref{fig:discs}. The Yoneda lemma tells us that a map of globular sets \(D^n \to G\) is the same as an \(n\)-cell of \(G\). For an \(n\)-cell \(x\) of \(G\), we let \(\{x\}\) be the unique map \(D^n \to G\) which sends \(d_n\) to \(x\).
 \end{example}
 
 \begin{figure}[h]
@@ -356,10 +356,10 @@ Given a globular set \(G\), we will call the elements of \(G(n)\) the \(n\)-cell
   Globular sets are not the only natural extension of the data of a 1-category. The form of this data in a definition of a higher category is referred to as the \emph{shape} of the cells. Notable alternatives to globular sets include simplicial sets, opetopic sets, and cubical sets.
 \end{remark}
 
-We can now give the definition of a (strict) \(\infty\)-category.
+We can now give the definition of a strict \(\infty\)-category.
 
 \begin{definition}
-  A (strict) \(\infty\)-category is a globular set \(G\) with operations:
+  A \emph{strict \(\infty\)-category} is a globular set \(G\) with the following operations:
   \begin{itemize}
   \item For \(m < n\), a composition \(*_m\) taking \(n\)-cells \(f\) and \(g\) with \(\delta_m^+(f) = \delta_m^-(g)\) and giving an \(n\)-cell \(f *_m g\) with:
     \begin{align*}
@@ -372,7 +372,7 @@ We can now give the definition of a (strict) \(\infty\)-category.
         t(f) *_m t(g)&\text{otherwise}
       \end{cases*}
     \end{align*}
-  \item For \(n\)-cell \(x\), an identity \((n+1)\)-cell \(\id(x) : x \to x\).
+  \item For any \(n\)-cell \(x\), an identity \((n+1)\)-cell \(\id(x) : x \to x\).
   \end{itemize}
   and satisfying equalities:
   \begin{itemize}
@@ -395,9 +395,9 @@ We can now give the definition of a (strict) \(\infty\)-category.
   A morphism of \(\infty\) categories is a morphism of the underlying globular sets which preserves composition and identities.
 \end{definition}
 
-There is a clear forgetful functor from the category of strict infinity categories to the category of globular sets, which has a left adjoint given by taking the free strict infinity category over a globular set.
+There is a clear forgetful functor from the category of strict \(\infty\)-categories to the category of globular sets, which has a left adjoint given by taking the free strict \(\infty\)-category over a globular set.
 
-We end this section with an example of a non-trivial application of the axioms of an infinity category, known as the Eckmann-Hilton argument. The argument show's that any two scalars (morphisms from the identity to the identity) commute.
+We end this section with an example of a non-trivial application of the axioms of an \(\infty\)-category, known as the Eckmann-Hilton argument. The argument shows that any two scalars (morphisms from the identity to the identity) commute.
 
 \begin{proposition}[Eckmann-Hilton]
   \label{prop:eh}
@@ -547,11 +547,11 @@ We give a more graphical representation of the proof in \cref{fig:eh}. In this p
 
 The definition of \(\infty\)-categories given in the previous section is close in spirit to the the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:weak}, that these sort of definitions do not scale well to our eventual setting of weak higher categories.
 
-There is a special class of (finite) globular sets known as \emph{pasting diagrams} (sometimes known as pasting schemes). The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by a pasting diagram and a map from this pasting diagram into \(G\). To do this, it must be possible to obtain a canonical composite from each pasting diagram.
+There is a special class of (finite) globular sets known as \emph{pasting diagrams}, sometimes known as pasting schemes. The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by a pasting diagram equipped with a map into \(G\). To do this, it must be possible to obtain a canonical composite from each pasting diagram.
 
 Informally, we can define a \(n\)-dimensional pasting diagram to be a finite globular set which admits a unique full composite of dimension \(n\), where a full composite of a globular set \(G\) is an element of the free \(\infty\)-category over \(G\) which uses all the maximal elements. This functions as the primary intuition on the role of pasting diagrams.
 
-Pasting diagrams were used directly by \citeauthor{batanin1998monoidal}~\cite{batanin1998monoidal} to give a defintion of weak \(\infty\)-categories, and will be pivotal in \cref{sec:weak} to define the variety of higher categories that \Catt is based on. A more indepth discussion of pasting diagrams, representations of free strict \(\infty\)-categories using them, and their use in the definition of weak higher categories can be found in \citetitle{leinster2004higher}~\cite{leinster2004higher}.
+Pasting diagrams were used directly by \citeauthor{batanin1998monoidal}~\cite{batanin1998monoidal} to give a definition of weak \(\infty\)-categories, and will be pivotal in \cref{sec:weak} to define the variety of \(\infty\)-categories that \Catt is based on. A more in-depth discussion of pasting diagrams, representations of free strict \(\infty\)-categories using them, and their use in the definition of weak \(\infty\)-categories can be found in \citetitle{leinster2004higher}~\cite{leinster2004higher}.
 
 Before giving a more formal definition of pasting diagrams, we explore some examples and non-examples. In contrast to \citeauthor{leinster2004higher}, we consider pasting diagrams as a full subcategory of globular sets, rather than a separate category with a function sending each pasting diagram to a globular set.
 
@@ -649,7 +649,7 @@ Non-examples of pasting diagrams roughly fall into two groups: those that do not
     \arrow["\alpha", shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
   \end{tikzcd}}
 \]
-The globular set with a single \(0\)-cell \(x\), and a single \(1\)-cell \(f : x \to x\) has too many composites: \(f\) and \(f *_0 f\) need not be equal in an infinity category.
+The globular set with a single \(0\)-cell \(x\), and a single \(1\)-cell \(f : x \to x\) has too many composites: \(f\) and \(f *_0 f\) need not be equal in an \(\infty\)-category.
 
 To describe the free \(\infty\)-category in terms of pasting diagrams we need to be able to extract a composite from a pasting diagram, and construct a pasting diagram from an arbitrary composite. Each pasting diagram having a unique composite solves the former issue.
 
@@ -677,7 +677,7 @@ To be able to construct a pasting diagram from a composite, we wish to equip our
   A \emph{globular extension} is a globular category where all globular sums exist, and a morphism of globular extensions is a functor of the underlying categories commuting with the disc functors and preserving globular sums.
 \end{definition}
 
-We can finally give our first definition of a pasting diagram.
+We can now give our first definition of a pasting diagram.
 
 \begin{definition}
   The category \(\mathbf{Glob}\) is a globular category with functor \(\mathbf{G} \to \mathbf{Glob}\) given by the Yoneda embedding. The category of \emph{pasting diagrams}, \(\mathbf{Pd}\), is the full subcategory containing the globular sets which are globular sums.
@@ -704,7 +704,7 @@ We finish this section with one larger example.
       \arrow["\gamma", shorten <=3pt, shorten >=3pt, Rightarrow, from=4, to=2]
     \end{tikzcd}
   \]
-  which has the following globular sum decomposition:
+  This has the following globular sum decomposition:
   % https://q.uiver.app/#q=WzAsMTMsWzAsMCwieCJdLFsyLDAsInkiXSxbOCwwLCJ6Il0sWzEwLDAsInciXSxbMywxLCJ5Il0sWzQsMCwieSJdLFs2LDAsInoiXSxbNywxLCJ6Il0sWzksMF0sWzEwLDEsInoiXSxbMTIsMSwidyJdLFsxMiwwLCJ6Il0sWzE0LDAsInciXSxbMCwxLCJnIiwwLHsiY3VydmUiOi0zfV0sWzAsMSwiZiIsMix7ImN1cnZlIjozfV0sWzIsMywiaSIsMix7ImN1cnZlIjo0fV0sWzIsMywiaiIsMV0sWzUsNiwiaCIsMl0sWzQsMSwiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzQsNSwiIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzksMTAsImoiLDFdLFsxMSwxMiwiaiIsMV0sWzExLDEyLCJrIiwxLHsiY3VydmUiOi00fV0sWzcsNiwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzcsMiwiIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn19fV0sWzE0LDEzLCJcXGFscGhhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsxNSwxNiwiXFxiZXRhIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFsyMSwyMiwiXFxnYW1tYSIsMCx7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMjAsMywiIiwxLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwfSwibGV2ZWwiOjEsInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFsyMCwxMSwiIiwxLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwfSwibGV2ZWwiOjEsInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dXQ==
   \[
     \begin{tikzcd}[column sep=small, row sep = small]
@@ -729,23 +729,22 @@ We finish this section with one larger example.
       \arrow[shorten <=6pt, dashed, from=4, to=1-13]
     \end{tikzcd}
   \]
-  The source and target of the diagram are given by:
+  The source and target of the diagram are given by the isomorphic pasting diagrams:
   \[
-    \begin{tikzcd}
-      x & y & z & w
-      \arrow["g", curve={height=-18pt}, from=1-1, to=1-2]
-      \arrow["h", from=1-2, to=1-3]
-      \arrow["k", curve={height=-24pt}, from=1-3, to=1-4]
-    \end{tikzcd}
-    \qquad\text{and}\qquad
     \begin{tikzcd}
       x & y & z & w
       \arrow["f"', curve={height=18pt}, from=1-1, to=1-2]
       \arrow["h", from=1-2, to=1-3]
       \arrow["i"', curve={height=24pt}, from=1-3, to=1-4]
     \end{tikzcd}
+    \qquad\text{and}\qquad
+    \begin{tikzcd}
+      x & y & z & w
+      \arrow["g", curve={height=-18pt}, from=1-1, to=1-2]
+      \arrow["h", from=1-2, to=1-3]
+      \arrow["k", curve={height=-24pt}, from=1-3, to=1-4]
+    \end{tikzcd}
   \]
-  which are isomorphic pasting diagrams.
 \end{example}
 
 \subsection{Weak higher categories}
@@ -846,7 +845,8 @@ Surprisingly, these two equations are enough to give full coherence. For the exa
 
 \paragraph{Weak \(\infty\)-categories} To move from weak \(2\)-categories to weak \(3\)-categories, new coherence cells for interchangers are added to replace the interchanger equalities, and new equalities must be added to specify the interaction between the interchangers and other coherence morphisms. Furthermore, the triangle and pentagon equation from \(2\)-categories will become an isomorphisms in a weak \(3\)-category, causing more coherence equations to be added.
 
-As we move up in dimension, the number of coherence morphisms and equalities required increases exponentially. Whereas a bicategory has 11 operations (1-identity, 2-identity, 1-composition, vertical composition, horizontal composition, left unitor (and inverse), right unitor (and inverse), and associator (and inverse)), where as a fully weak tricategory already has around 51 operations~\cite{gurski2006algebraic}\footnote{The number here is obtained by unwrapping various subdefinitions and should be treated as approximate.}. Comparisons between the size of partially weak definitions can be found in \cite{bar2017data}.
+As we move up in dimension, the number of coherence morphisms and equalities required increases exponentially. Whereas a bicategory has 11 operations (1-identity, 2-identity, 1-composition, vertical composition, horizontal composition, left unitor (and inverse), right unitor (and inverse), and associator (and inverse)), where as a fully weak tricategory already has around 51 operations~\cite{gurski2006algebraic}. These numbers are obtained by unwrapping various subdefinitions and should be treated as approximate. Comparisons between the size of partially weak definitions can be found in~\cite{bar2017data}.
+
 
 Because of this complexity, we look for more uniform ways to represent the operations and axioms of an \(\infty\)-category. In this thesis, we will work with the type theory \Catt, which is based on a definition of \(\infty\)-categories due to \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck}, which is itself based on a definition of \(\infty\)-groupoid by \citeauthor{PursuingStacks}~\cite{PursuingStacks}. We will sketch the ideas behind these definitions here, and give a definition of \Catt in \cref{sec:type-theory-catt}.
 
@@ -936,7 +936,7 @@ To recover the proof in a weak setting, the intermediate composites must be comp
 \subsection{Computads}
 \label{sec:computads}
 
-A free group is generated by a set, and a free category is generated by a directed graph, and so it is a natural question what the generating data for a free higher category is. We have already seen that a free higher category can be generated by a globular set, but free \(\infty\)-categories can also be generated by data that does not form a globular set.
+A free group is generated by a set, and a free category is generated by a directed graph, and so it is a natural question what the generating data for a free \(\infty\)-category is. We have already seen that a free \(\infty\)-category can be generated by a globular set, but free \(\infty\)-categories can also be generated by data that does not form a globular set.
 
 Consider the minimum data needed to to state the Eckmann-Hilton principle (see \cref{prop:eh}). We require a single \(0\)-cell \(x\), and two \(2\)-cells \(\alpha, \beta : \id(x) \to \id(x)\). This data does not form a globular set as, for example, the source of the \(2\)-cell \(\alpha\) is not in the generating data, but is rather an operation applied to the data. We could try to remedy this by adding a new \(1\)-cell \(f\) to the data to represent \(\id(x)\), but then the connection between \(\id(x)\) and \(f\) would be lost and \(f\) and \(\id(x)\) would be distinct in any free \(\infty\)-category generated on this data.
 
@@ -957,7 +957,7 @@ In this section we give an overview of the dependent type theory \Catt~\cite{fin
 \begin{itemize}
 \item Contexts contain a list of variables with an associated type. We can consider contexts as finite computads, the generating data for a weak \(\infty\)-category (see \cref{sec:computads}). It is alternatively valid to consider contexts in \Catt as finitely generated \(\infty\)-categories. The set of contexts contains all globular sets (and hence all pasting diagrams).
 \item Terms over a context \(\Gamma\) correspond to the operations from \cref{sec:weak}. Terms can either be a variable, which corresponds to the operations which pick a single cell out of a globular set, or those generated by the unique constructor \(\mathsf{coh}\), which correspond to the operations generated by lifting. A term over a context \(\Gamma\) can also be seen as a element of the free \(\infty\)-category generated from \(\Gamma\).
-\item Types over a context \(\Gamma\) consist of a collection of terms over the same context, and contain the boundary information for a term. Types either take the form of the constructor \(*\), the type of \(0\)-cells (which have no boundary data), or an arrow type \(\arr s A t\), where \(s\) and \(t\) are terms giving the source and target of the boundary and the type \(A\) gives lower dimensional boundary information\footnote{This can be viewed as a directed version of the equality type \(s =_A t\) from Martin-L\"of type theory}.
+\item Types over a context \(\Gamma\) consist of a collection of terms over the same context, and contain the boundary information for a term. Types either take the form of the constructor \(*\), the type of \(0\)-cells (which have no boundary data), or an arrow type \(\arr s A t\), where \(s\) and \(t\) are terms giving the source and target of the boundary and the type \(A\) gives lower dimensional boundary information. This can be viewed as a directed version of the equality type \(s =_A t\) from Martin-L\"of type theory.
 \item Substitutions from a context \(\Gamma\) to a context \(\Delta\) are a mapping from variables of \(\Gamma\) to terms of \(\Delta\). These play the role of functors between the \(\infty\)-categories generated by \(\Gamma\) and \(\Delta\) and are also syntactically crucial for forming compound composites in the theory.
 \end{itemize}
 
@@ -1070,7 +1070,7 @@ We will see later (\cref{item:supp-tm-char-2}) that for well-formed terms \(t\) 
 
 We lastly define the \emph{dimension} of types, contexts, and terms. For types this is defined recursively:
 \[ \dim(\star) = 0 \qquad \dim(\arr s A t) = 1 + \dim(A) \]
-For contexts we define \(\dim(\Gamma)\) to be the maximum of the dimension of each type in \(\Gamma\). For coherences \(\Coh \Gamma A \sigma\), the dimension is given by \(\dim(A)\), and for variables the dimension is given by the dimension of the associatiated type in the context.
+For contexts we define \(\dim(\Gamma)\) to be the maximum of the dimension of each type in \(\Gamma\). For coherences \(\Coh \Gamma A \sigma\), the dimension is given by \(\dim(A)\), and for variables the dimension is given by the dimension of the associated type in the context.
 
 \subsection{Ps-contexts}
 \label{sec:ps-contexts}
@@ -1079,16 +1079,16 @@ We need to be able to describe pasting diagrams within the theory \Catt. As cont
 
 \[ \Delta \vdash_{\mathsf{ps}} x : A \qquad \text{and}\qquad \Delta \vdash_{\mathsf{ps}} \]
 
-If the first judgement holds, then \(\Delta\) is a pasting diagram for which a disc can be attached to the variable \(x\), called a \emph{dangling variable}, which has type \(A\). The contexts \(\Delta\) for which the second judgement holds are fully formed pasting diagrams, which we call \emph{Ps-contexts} (short for pasting scheme contexts). The rules for these judgements are given in \cref{fig:ps-context}.
+If the first judgement holds, then \(\Delta\) is a pasting diagram for which a disc can be attached to the variable \(x\), called a \emph{dangling variable}, which has type \(A\). The contexts \(\Delta\) for which the second judgement holds are fully formed pasting diagrams, which we call \emph{ps-contexts} (short for pasting scheme contexts). The rules for these judgements are given in \cref{fig:ps-context}.
 
-We note that these rules do not just specify which globular sets are pasting diagrams, but they also specify an ordering on the elements of the pasting diagram, ensuring that there is a unique Ps-context for each pasting diagram. For example, the following judgement holds:
+We note that these rules do not just specify which globular sets are pasting diagrams, but they also specify an ordering on the elements of the pasting diagram, ensuring that there is a unique ps-context for each pasting diagram. For example, the following judgement holds:
 \begin{equation}
   \label[judgement]{judg:ps}
   (x : \star), (y : \star), (f : \arr x \star y), (z: \star), (g : \arr y \star z) \vdash_{\mathsf{ps}}
 \end{equation}
 However, the context:
 \[(y : \star), (z : \star), (g : \arr y \star z), (x : \star), (f : \arr x \star y)\]
-represents the same globular set but is not a Ps-context.
+represents the same globular set but is not a ps-context.
 
 \begin{figure}[ht]
   \centering
@@ -1101,7 +1101,7 @@ represents the same globular set but is not a Ps-context.
     \and
     \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \star}{\Gamma \vdash_{\mathsf{ps}}} {(\textsc{ps})}
   \end{mathpar}
-  \caption{Rules for Ps-contexts}
+  \caption{Rules for ps-contexts}
   \label{fig:ps-context}
 \end{figure}
 
@@ -1117,18 +1117,18 @@ represents the same globular set but is not a Ps-context.
     \infer1[(\textsc{ps})]{(x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \vdash_{\mathsf{ps}}}
   \end{prooftree}\]
 
-The applications of (\textsc{pse}) allow new variables to be added to the context, by adding a fresh variable, and attaching a variable from the dangling variable to the new fresh variable. The rule (\textsc{psd}) encodes that if we can attach a variable to \(f : x \to y\), then we can also attach a variable to \(y\). Finally, the rule (\textsc{ps}) forces as many (\textsc{psd}) rules to be applied as possible before completing the derivation, ensuring that derivations of Ps-contexts are unique.
+The applications of (\textsc{pse}) allow new variables to be added to the context, by adding a fresh variable, and attaching a variable from the dangling variable to the new fresh variable. The rule (\textsc{psd}) encodes that if we can attach a variable to \(f : x \to y\), then we can also attach a variable to \(y\). The rule (\textsc{ps}) forces as many (\textsc{psd}) rules to be applied as possible before completing the derivation, ensuring that derivations of ps-contexts are unique.
 \end{example}
 
-We now state the following theorem, which follows immediately from \cite[Theorem~53]{benjamin2021globular}.
+We now state the following theorem, which follows immediately from~\cite[Theorem~53]{benjamin2021globular}.
 
 \begin{theorem}
-  The set of Ps-contexts is in bijection with the set of pasting diagrams.
+  The set of ps-contexts is in bijection with the set of pasting diagrams.
 \end{theorem}
 
-In order to use Ps-contexts as our notion of pasting diagram, we need to be able to identify the source and target variables of each Ps-context. This will be done by specifying the dimension \(i\) source and target of each pasting context.
+In order to use ps-contexts as our notion of pasting diagram, we need to be able to identify the source and target variables of each ps-context. This will be done by specifying the dimension \(i\) source and target of each pasting context.
 
-More precisely, for each Ps-context \(\Gamma\) and \(i \in \mathbb{N}\), we define a Ps-context \(\bound i \Gamma\) and subcontext inclusions:
+More precisely, for each ps-context \(\Gamma\) and \(i \in \mathbb{N}\), we define a ps-context \(\bound i \Gamma\) and subcontext inclusions:
 \[ \incbd i - \Gamma : \bound i \Gamma \to \Gamma \qquad \text{and}\qquad \incbd i + \Gamma : \bound i \Gamma \to \Gamma\]
 Intuitively, the context \(\bound i \Gamma\) can be constructed by removing any variables of dimension greater than \(i\) from \(\Gamma\), and quotienting the dimension \(i\) variables by the (symmetric transitive closure of the) relation \(x \sim y\) if there exists an \(f : x \to y\). The inclusions then send this quotiented variable to the variable appearing first in the equivalence class for the source inclusion, and the variable appearing last in the class for the target inclusion.
 
@@ -1153,9 +1153,9 @@ where \(\epsilon \in \{-,+\}\) and \(\replace(\langle \sigma, s \rangle, t) = \l
 \[\incbd {} \epsilon \Gamma = \incbd {\dim(\Gamma) - 1} \epsilon \Gamma\]
 when \(\dim(\Gamma)\) is not zero.
 
-In the original \Catt paper, these inclusion substitutions are not given and instead the source and target variables are given directly as subcontexts. It can be easily checked that the free variables of the inclusions are equal to the subcontexts, and that the free variable sets of these inclusions are downwards closed. It is known, e.g. from \cite[Lemma~55]{benjamin2021globular}, that these constructions agree with the constructions of the source and target pasting diagrams in \cref{sec:pasting-diagrams}.
+In the original \Catt paper, these inclusion substitutions are not given and instead the source and target variables are given directly as subcontexts. It can be easily checked that the free variables of the inclusions are equal to the subcontexts, and that the free variable sets of these inclusions are downwards closed. It is known, e.g.\ from~\cite[Lemma~55]{benjamin2021globular}, that these constructions agree with the constructions of the source and target pasting diagrams in \cref{sec:pasting-diagrams}.
 
-We finally state the following well-known result (see \cite{finster2017type}) about isomorphisms between pasting contexts.
+We state the following well-known result (see~\cite{finster2017type}) about isomorphisms between pasting contexts.
 
 \begin{proposition}
   \label{prop:ps-context-iso}
@@ -1165,7 +1165,7 @@ We finally state the following well-known result (see \cite{finster2017type}) ab
 \subsection{Typing for \Catt}
 \label{sec:typing-catt}
 
-We now have all the prerequisites in place to state the typing rules for \Catt. These take the form of 4 judgements (not including the judgements for Ps-contexts introduced in \cref{sec:ps-contexts}):
+We now have all the prerequisites in place to state the typing rules for \Catt. These take the form of 4 judgements (not including the judgements for ps-contexts introduced in \cref{sec:ps-contexts}):
 \begin{alignat*}{2}
   &\Gamma \vdash&\qquad&\text{\(\Gamma \in \Ctx\) is a well-formed context.}\\
   &\Gamma \vdash A&&\text{\(A \in \Type_\Gamma\) is a well-formed type in context \(\Gamma\).}\\
@@ -1200,9 +1200,9 @@ The typing rules for these judgements are then given in \cref{fig:catt-typing}. 
   \label{fig:catt-typing}
 \end{figure}
 
-There are two rules given for typing coherence, corresponding to the two guiding principles for categories from \cref{sec:weak}. The first rule allows composites to be typed and the second allows equivalences to be typed. In both, the Ps-context \(\Delta\) corresponds to the pasting diagram \(P\), the terms \(s\) and \(t\) correspond to the operations \(f\) and \(g\) over \(P\) (with the judgement \(\Delta \vdash \arr s A t\) enforcing that they are parallel), and the conditions involving support give the remaining side conditions.
+There are two rules given for typing coherence, corresponding to the two guiding principles for categories from \cref{sec:weak}. The first rule allows composites to be typed and the second allows equivalences to be typed. In both, the ps-context \(\Delta\) corresponds to the pasting diagram \(P\), the terms \(s\) and \(t\) correspond to the operations \(f\) and \(g\) over \(P\) (with the judgement \(\Delta \vdash \arr s A t\) enforcing that they are parallel), and the conditions involving support give the remaining side conditions.
 
-By a straightforward mutual induction we can prove that application of substitution to terms, types, and other substitutions preserves typing. Therefore, the \emph{syntactic category} of \Catt can be formed, which contains well-formed contexts as objects and well-formed substitutions between these contexts as morphisms, which by abuse of notation we also call \Catt. There is a full subcategory \(\Catt^{\mathsf{ps}}\), which only contains the contexts which are Ps-contexts.
+By a straightforward mutual induction we can prove that application of substitution to terms, types, and other substitutions preserves typing. Therefore, the \emph{syntactic category} of \Catt can be formed, which contains well-formed contexts as objects and well-formed substitutions between these contexts as morphisms, which by abuse of notation we also call \Catt. There is a full subcategory \(\Catt^{\mathsf{ps}}\), which only contains the contexts which are ps-contexts.
 
 \begin{theorem}
   The category \(\Catt^{\mathsf{ps}}\) is a coherator for \(\infty\)-categories.
@@ -1216,18 +1216,18 @@ Thus, we immediately get that a presheaf over \(\Catt^{\mathsf{ps}}\) which pres
 \subsection{Basic constructions}
 \label{sec:basic-constructions}
 
-We now introduce some examples of basic categorical operations in order to give some early examples. Suppose we have terms \(a : \arr s \star t\) and \(b : \arr t \star u\) in some context \(\Gamma\). Then the Ps-context
+We now introduce some examples of basic categorical operations in order to give some early examples. Suppose we have terms \(a : \arr s \star t\) and \(b : \arr t \star u\) in some context \(\Gamma\). Then the ps-context
 \[ \Delta = (x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \]
 from \cref{judg:ps} can be used to form the 1-composite:
 \[ a *_0 b = \Coh \Delta {\arr x \star z} {\langle s, t, a, u, b \rangle}\]
 It is often not necessary to give all the terms in a substitution, especially when the substitution is from a pasting diagram (or more generally a globular set). In these cases it is sufficient to give terms for the \emph{locally maximal} variables of the context, those that do not appear as the source or target of another variable. For \(\Delta\), the locally maximal variables are \(f\) and \(g\), and so it suffices to give the substitution above as \(\langle a , b \rangle\), with the rest of the terms being inferable.
 
-The disc contexts \(D^n\) can be formed in \Catt as the analogue of the disc globular sets given in \cref{ex:disc} and satisfy the property that a substitution from a disc context \(D^n\) contains the same data as a term and \(n\)-dimensional type. Given a term \(t\) of type \(A\) in context \(\Gamma\), we write this substitution \(\{A,t\} : D^{\dim(A)} \to \Gamma\). All disc contexts are Ps-contexts.
+The disc contexts \(D^n\) can be formed in \Catt as the analogue of the disc globular sets given in \cref{ex:disc} and satisfy the property that a substitution from a disc context \(D^n\) contains the same data as a term and \(n\)-dimensional type. Given a term \(t\) of type \(A\) in context \(\Gamma\), we write this substitution \(\{A,t\} : D^{\dim(A)} \to \Gamma\). All disc contexts are ps-contexts.
 
 Using these, the identity can be formed on a term \(t\) of type \(A\) in \(\Gamma\):
 \[\id(A,t) = \Coh {D^n} {\arr {d_n} {} {d_n}} {\{A, t\}}\]
 where \(\dim(A) = n\), which is typed using the rule for equivalences. The structure of this term changes for different values of \(n\), and we will relate these different terms in \cref{sec:suspension}. As before, the non-locally maximal elements of a substitution
-can be inferred, and so we may write \(\id(t)\) or \(\{t\}\) when the type \(A\) is inferable\footnote{In \Catt, all types are inferable, though later it may be necessary to specify the exact type we are using up to syntactic equality.}.
+can be inferred, and so we may write \(\id(t)\) or \(\{t\}\) when the type \(A\) is inferable. In \Catt, all types are inferable, though later when we consider semistrict variations of \Catt it may be necessary to specify the exact type we are using up to syntactic equality.
 
 \paragraph{Standard coherences}
 The composite and identity above form part of a more general collection of coherences, which we call \emph{standard coherences}.
@@ -1275,7 +1275,7 @@ and the horizontal composite of \(2\)-cells is the standard composite over:
 Noting that the standard type over the above diagram has source \(f * h\) and target \(g * i\), themselves being standard compositions demonstrating the mutual recursive behaviour of these constructions.
 
 \begin{remark}
-  Above we gave two Ps-contexts by drawing a diagram of the globular set that they represent. Ps-contexts fix the order that variables occur in and as such the mapping from Ps-contexts to globular sets is injective. The use of diagrams to define Ps-contexts is therefore unambiguous.
+  Above we gave two ps-contexts by drawing a diagram of the globular set that they represent. Ps-contexts fix the order that variables occur in and as such the mapping from ps-contexts to globular sets is injective. The use of diagrams to define ps-contexts is therefore unambiguous.
 \end{remark}
 
 \paragraph{Further examples}
@@ -1330,7 +1330,7 @@ This construction extends to all computads~\cite{benjamin2024duamity}, and can b
 where \(x\) is a variable of \(\Gamma\).
 \end{definition}
 
-The dimension shift of suspension is driven by the cases for types, especially the case for the base type \(\star\), which returns a type of dimension \(1\), namely \(\arr N \star S\), using the two new variables \(N\) and \(S\). We note the suspension of any Ps-context is also a Ps-context, and in general the suspension of any piece of well-formed \Catt syntax can be well-formed. These results are given in \cite[Section~3.2]{benjamin2020type}, but will be proved in \cref{sec:ruleset} in more generality.
+The dimension shift of suspension is driven by the cases for types, especially the case for the base type \(\star\), which returns a type of dimension \(1\), namely \(\arr N \star S\), using the two new variables \(N\) and \(S\). We note the suspension of any ps-context is also a ps-context, and in general the suspension of any piece of well-formed \Catt syntax can be well-formed. These results are given in \cite[Section~3.2]{benjamin2020type}, but will be proved in \cref{sec:ruleset} in more generality.
 
 We can now investigate the action of suspension on the operations we have already defined. Take the context:
 \[ (x : \star), (y : \star), (f : \arr x \star y), (z : \star), (g : \arr y \star z) \]
@@ -1354,7 +1354,7 @@ The suspension of each disc context \(D^n\) is (up to \(\alpha\)-renaming) \(D^{
   \[\Sigma(\stdcoh \Delta n) = \stdcoh {\Sigma(\Delta)} {n+1}\qquad
     \Sigma(\stdtm \Delta n) = \stdtm {\Sigma(\Delta)} {n+1}\qquad
     \Sigma(\stdty \Delta n) = \stdty {\Sigma(\Delta)} {n+1}\]
-  for all Ps-contexts \(\Delta\) and \(n \in \mathbb{N}\).
+  for all ps-contexts \(\Delta\) and \(n \in \mathbb{N}\).
 \end{proposition}
 
 The proof of these results is delayed to \cref{sec:operations-catt}, where we will have more tools for dealing with theses constructions.
@@ -1373,7 +1373,7 @@ A dependency graph of the formalisation is given in \cref{fig:dep-graph}, and an
 \section{Extended substitution}
 \label{sec:extend-subst}
 
-\Cattr uses the same syntax as \Catt with one exception. In \Cattr we make a natural generalisation to substitutions, which will allow more operations to be defined for working with the suspension operation introduced in \cref{sec:suspension}. Unfortunately, the full utility of this generalisation will not be realised until \cref{sec:structured-terms}, but we choose to introduce it here as it forms a core part of the syntax, and requires very little modification to the rules of the type theory.
+\Cattr uses the same syntax as \Catt with one exception. In \Cattr we make a natural generalisation to substitutions, which will allow more operations to be defined for working with the suspension operation introduced in \cref{sec:suspension}. Unfortunately, the full utility of this generalisation will not be realised until \cref{sec:structured-terms}, but we choose to introduce it here as it forms a core part of the syntax, and requires little modification to the rules of the type theory.
 
 We recall that the suspension operation \(\Sigma\) acts on contexts, substitutions, types, and terms. Given a substitution \(\sigma : \Delta \to \Gamma\), its substitution \(\Sigma(\sigma)\) has domain \(\Sigma(\Delta)\) and codomain \(\Sigma(\Gamma)\). When we define trees and tree labellings in \cref{sec:operations-catt}, which will be used to define the insertion operation in \cref{sec:insertion}, we will need to be able to define substitutions from suspended contexts to arbitrary contexts. More generally, we would like to be able to describe substitutions of the form:
 \[ \Sigma^n(\Delta) \to \Gamma\]
@@ -1390,7 +1390,7 @@ This one change to the application of substitution to types is sufficient to for
 We modify the syntax of \Catt as follows, and will refer to these extended substitutions simply as substitutions, as extended substitutions are a direct generalisation of substitutions, and the notion of substitution is still recoverable by setting the type part to \(\star\):
 \begin{itemize}
 \item Substitutions will now be fibred over a type of their codomain context, which we will write \(\sigma : \arr \Delta A \Gamma\) where \(A \in \Type_\Gamma\). We note that this allows us to specify that \(\sigma\) is a regular substitutions by writing \(\sigma : \arr \Delta \star \Gamma\).
-\item The constructor \(\langle\rangle\) is removed, and is replaced by the constructor \(\langle A \rangle : \arr \emptyset A \Gamma\), where \(A \in \Type_\Gamma\). Adding a term to a substitution preserves the type of the substiution. As before we may write a substitution \(\langle \langle \langle A \rangle, s \rangle, t \rangle\) as \(\langle A , s, t\rangle\). We let \(\FV(\langle A \rangle) = \FV(A)\).
+\item The constructor \(\langle\rangle\) is removed, and is replaced by the constructor \(\langle A \rangle : \arr \emptyset A \Gamma\), where \(A \in \Type_\Gamma\). Adding a term to a substitution preserves the type of the substitution. As before we may write a substitution \(\langle \langle \langle A \rangle, s \rangle, t \rangle\) as \(\langle A , s, t\rangle\). We let \(\FV(\langle A \rangle) = \FV(A)\).
 \item An operation \(\ty(\sigma)\) is introduced that returns the type portion of a substitution. For \(\sigma : \arr \Delta A \Gamma\), we have \(\ty(\sigma) = A\).
 \item Coherences \(\Coh \Delta A \sigma \in \Term_\Gamma\) are restricted so that \(\sigma\) is a regular substitution. In other words \(\ty(\sigma)\) must be \(\star\) for \(\sigma\) to appear in a substitution. While this condition could be dropped, it is convenient to keep the same operations as \Catt.
 \end{itemize}
@@ -1430,7 +1430,7 @@ We can now define an inverse to the unrestriction operation.
   Inversely to the unrestrict operation, the restrict operation moves two terms into the type part of the substitution.
 \end{definition}
 
-As restriction and unrestriction cancel eachother, the suspension of the substitution \(\sigma : \arr \Delta \star \Gamma\) can be factored into \((\unrestrict \circ (\restrict \circ \Sigma)) (\sigma)\). We observe that the second part of this composition, \(\restrict \circ \Sigma\), is the operation that simply applies the suspension to each term in the substitution as well as the type of the substitution. This motivates the final definition of this section.
+As restriction and unrestriction cancel each other, the suspension of the substitution \(\sigma : \arr \Delta \star \Gamma\) can be factored into \((\unrestrict \circ (\restrict \circ \Sigma)) (\sigma)\). We observe that the second part of this composition, \(\restrict \circ \Sigma\), is the operation that simply applies the suspension to each term in the substitution as well as the type of the substitution. This motivates the final definition of this section.
 
 \begin{definition}
   Let the \emph{restricted suspension} of a substitution \(\sigma : \arr \Delta A \Gamma\) be a substitution
@@ -1529,7 +1529,7 @@ This proposition proves that the syntax of \Cattr forms a category, which we wil
 \paragraph{Discs}
 We finish our discussion of the syntax of \Cattr by giving formal definitions of disc and sphere contexts, some constructions on these and their properties. This will allow these to be used as examples in following sections, and preempts the use of discs in the first two equality rules that we will introduce, disc removal and endo-coherence removal.
 
-We begin with the defintions of discs, spheres, and sphere types, which can be found in \module{Catt.Discs} as \func{Catt.Discs}{Disc}, \func{Catt.Discs}{Sphere}, and \func{Catt.Discs}{sphere-type}. We write the sphere type as \(U^n\), which is intentionally close to the notation of the standard type \(\mathcal{U}_\Delta^n\), as it will turn out that these coincide.
+We begin with the definitions of discs, spheres, and sphere types, which can be found in \module{Catt.Discs} as \func{Catt.Discs}{Disc}, \func{Catt.Discs}{Sphere}, and \func{Catt.Discs}{sphere-type}. We write the sphere type as \(U^n\), which is intentionally close to the notation of the standard type \(\mathcal{U}_\Delta^n\), as it will turn out that these coincide.
 
 \begin{definition}
   We mutually define the disc contexts \(D^n\), sphere contexts \(S^n\), and sphere type \(U^n \in \Type_{S^n}\).
@@ -1677,7 +1677,7 @@ We draw attention to the typing premise of \textsc{rule}. If we know that the un
 \afterpage{%
     \clearpage% flush all other floats
     \ifodd\value{page}
-    \else% uncomment this else to get odd/even instead of even/odd
+    \else%
       \expandafter\afterpage% put it on the next page if this one is odd
     \fi
     {%
@@ -1909,7 +1909,7 @@ We note that when representing variable sets as a list of booleans, these defini
     \FV(A \sub \sigma) &= \FV(A) \sub \sigma \\
     \FV(\tau \bullet \sigma) &= \FV(\tau) \sub \sigma
   \end{align*}
-  and hence \(\Var(\Delta) \sub \sigma = \FV(\id_\Delta) \sub \sigma = \FV(\id_\Delta \bullet \sigma) = \FV(\sigma)\). Finally, for any variable set \(V \subseteq \Var(\Theta)\) we have:
+  and hence \(\Var(\Delta) \sub \sigma = \FV(\id_\Delta) \sub \sigma = \FV(\id_\Delta \bullet \sigma) = \FV(\sigma)\). For any variable set \(V \subseteq \Var(\Theta)\) we have:
   \[ V \sub {\id_\Theta} = V \qquad V \sub {\tau \bullet \sigma} = V \sub \tau \sub \sigma \]
   for \(\tau : \Theta \to \Delta\) and \(\sigma : \Delta \to \Gamma\).
 \end{proposition}
@@ -2120,7 +2120,7 @@ To aid readability when reasoning about typing and equality with multiple distin
 \[ \Gamma \vdash_{\mathcal{R}} t : A \]
 and the corresponding judgement for the equality of two terms \(s\) and \(t\) as
 \[ \Gamma \vdash_{\mathcal{R}} s = t \]
-Equality rule sets can also be subsets of eachother, leading to the following lemma.
+Equality rule sets can also be subsets of each other, leading to the following lemma.
 
 \begin{lemma}
   \label{lem:subset-lem}
@@ -2194,7 +2194,7 @@ For the weakening operation to be well-formed, meaning that the weakening of a w
 The following proposition is immediately provable by mutual induction on typing and equality. Its proof is given in \module{Catt.Typing.Properties.Weakening}.
 
 \begin{proposition}
-  Let \(\mathcal{R}\) satisify the weakening condition. Then the following inference rules are admissible in \Cattr.
+  Let \(\mathcal{R}\) satisfy the weakening condition. Then the following inference rules are admissible in \Cattr.
   \begin{mathpar}
     \inferrule{\Gamma \vdash B}{\Gamma, (x : A) \vdash \wk(A)} \and
     \inferrule{\Gamma \vdash s : B}{\Gamma, (x : A) \vdash \wk(s) : \wk(B)} \and
@@ -2269,7 +2269,7 @@ We end this section with the following \lcnamecref{prop:dr-weak}.
   when \(n = \dim(A)\). By \cref{item:disc-prop-wk}, \(\wk(\{A,t\}) \equiv \{ \wk(A), \wk(t)\}\) and so the triple above is clearly contained in \dr.
 \end{proof}
 
-The semistrict type theories \Cattsu and \Cattsua (which will be introduced in \cref{sec:cattsu,sec:cattsua}) will be generated by equality rule sets that are the union of multiple smaller rulesets (including disc removal). Since the weakening condition is clearly preserved under unions, we will be able to show that the rule sets generating \Cattsu and \Cattsua satisfy the weakening condition by showing that it is satisfied by each individual component.
+The semistrict type theories \Cattsu and \Cattsua (which will be introduced in \cref{sec:cattsu,sec:cattsua}) will be generated by equality rule sets that are the union of multiple smaller rule sets (including disc removal). Since the weakening condition is clearly preserved under unions, we will be able to show that the rule sets generating \Cattsu and \Cattsua satisfy the weakening condition by showing that it is satisfied by each individual component.
 
 \paragraph{Suspension condition}
 
@@ -2379,7 +2379,7 @@ We also prove that application of substitution respects equality in its second a
   for substitutions \(\sigma : \arr \Delta A \Gamma\), \(\tau : \arr \Delta B \Gamma\), and \(\mu : \arr \Theta C \Delta\), term \(s : \Term_\Delta\), and type \(A : \Type_\Delta\).
 \end{proposition}
 
-This allows us to finally define a category of well-formed syntax in \Cattr. which is well defined by the two preceding definitions.
+This allows us to define a category of well-formed syntax in \Cattr. which is well defined by the two preceding definitions.
 
 \begin{definition}
   Suppose \(\mathcal{R}\) satisfies the substitution and weakening conditions. Then we can define the \emph{syntactic category} of \Cattr, which by an abuse of notation we also call \Cattr, to have:
@@ -2389,7 +2389,7 @@ This allows us to finally define a category of well-formed syntax in \Cattr. whi
   \item The identity morphism \(\Gamma \to \Gamma\) given by \(\id_\Gamma\).
   \item Composition is given by \(\tau \circ \sigma = \sigma \bullet \tau\).
   \end{itemize}
-  By \cref{cor:id-sub-ty}, the identity substitution is a well-defined morphism, and the above two propositions prove that compostition is well defined., Composition satisfies associativity and unitality by \cref{prop:categorical}.
+  By \cref{cor:id-sub-ty}, the identity substitution is a well-defined morphism, and the above two propositions prove that composition is well defined., Composition satisfies associativity and unitality by \cref{prop:categorical}.
 \end{definition}
 
 By taking the weakening of the identity substitution \(\id_\Gamma : \Gamma \to \Gamma\) we get a substitution:
@@ -2423,7 +2423,7 @@ We lastly show that \dr also satisfies the substitution condition.
 
 \paragraph{Tameness}
 
-We can finally define tameness.
+We can define tameness.
 
 \begin{definition}
   An equality rule set \(\mathcal{R}\) is tame if it satisfies the weakening, substitution, and suspension conditions. An operation set \(\mathcal{O}\) is tame if it is suspendable and contains the standard operations. A theory generated by \(\mathcal{R}\) and \(\mathcal{O}\) is tame if both \(\mathcal{R}\) and \(\mathcal{O}\) are.
@@ -2774,17 +2774,17 @@ This chapter will investigate some more involved constructions that can be given
 For this chapter we will assume that we are working in a tame theory, as described in \cref{sec:tame-theories}. This means that all proofs in this section will hold in any variant of \Cattr such that the equality set \(\mathcal{R}\) satisfies the weakening, substitution, and suspension conditions, and the set of operations \(\mathcal{O}\) is suspendable and contains the standard operations. We will also use all the relevant proofs from \cref{sec:catt-with-equality}, without explaining exactly what condition of the set \(\mathcal{R}\) is being
 used.
 
-The formalisation in commonly more specific when specifying which conditions are necessary for each module, for example omitting the suspension condition when it is not needed for a specific construction, but for the body of this text we ignore these distinctions and simply that every theory we work with will be tame, as will be case for all theories introduced in \cref{cha:cattstrict}.
+The formalisation in commonly more specific when specifying which conditions are necessary for each module, for example omitting the suspension condition when it is not needed for a specific construction, but for the body of this text we ignore these distinctions and simply assume that every theory we work with will be tame, as will be case for all theories introduced in \cref{cha:cattstrict}.
 
 This chapter builds up to the following two constructions, that can be viewed as meta-operations on \Cattr.
 \begin{itemize}
 \item The \emph{pruning} operation will be introduced in \cref{sec:pruning} and is main component of the type theory \Cattsu, defined in \cref{sec:cattsu}, a type theory for strictly unital \(\infty\)-categories. Pruning removes unnecessary identities from a term, simplifying the resulting term in the process.
-\item The \emph{insertion} operation will be introduced in \cref{sec:insertion}. It powers the type theory \Cattsua, a type theory for strictly unital and associative \(\infty\)-categories. Insertion merges certain arguments to a coherence into the body of the coherence itself, effectively ``inserting'' the argument into the head term. It can be viewed as a generalisation of pruning, but is a far more complex construction.
+\item The \emph{insertion} operation will be introduced in \cref{sec:insertion}. It powers the type theory \Cattsua, a type theory for strictly unital and associative \(\infty\)-categories. Insertion merges certain arguments to a coherence into the body of the coherence itself, effectively ``inserting'' the argument into the head term. It can be viewed as a generalisation of pruning, but is a more complex construction.
 \end{itemize}
 
 Both pruning and insertion perform more radical modifications to the structure of a term that disc removal and endo-coherence removal, the equality rules we have seen so far. Both pruning and insertion modify the pasting diagram in the coherence at the head of the term they act on. In this chapter, more combinatorial descriptions of pasting diagrams will be introduced to enable the pasting diagrams involved in these constructions to be constructed by induction.
 
-The pruning construction identifies locally maximal arguments of a coherence that are syntactically identities, and removes these arguments from term, while also removing the component of the pasting diagram in the coherence for which corresponded to this argument. Pruning could be applied to the term \(f * g * \id\), a ternary composite, to remove the identity argument and convert the ternary composite to a binary composite, returning the term \(f*g\).
+The pruning construction identifies locally maximal arguments of a coherence that are syntactically identities, and removes these arguments from the term, while also removing the component of the pasting diagram in the coherence for which correspond to this argument. Pruning could be applied to the term \(f * g * \id\), a ternary composite, to remove the identity argument and convert the ternary composite to a binary composite, returning the term \(f*g\).
 
 Insertion does not just simply remove parts of a term, but flattens the structure of a term, moving data from a locally maximal argument into the head term. The motivating example for insertion is the term \(f * (g * h)\), a binary composite where one of the locally maximal arguments is itself a binary composite. Under insertion, the inner composite \(g * h\) is merged with the outer binary composite to form a single ternary composite \(f * g * h\).
 
@@ -2794,23 +2794,23 @@ Insertion again performs more radical changes to the head coherence of the term 
 
 Although the definition of these trees is simple, to be able to use them effectively we must be able to describe their relationship to the \Catt contexts they represent. It will also be necessary to describe the morphisms between these trees, which correspond to substitutions between the underlying contexts, and the composition of such morphisms.
 
-Certain constructions on trees will not compute nicely with the presentation of the syntax in \Catt. We therefore introduce a new notion of \emph{structured term}, an alternative syntax for \Catt which allows more complex representations of terms over contexts derived from trees. Structured terms effectively retain more information about how they are constructed, allowing constructions to compute on them in ways that is not possible on the raw syntax of \Catt. This representation of terms will be crucial in the formalisation, as it aids the proof assistant in simplifying various constructions. These structured terms are defined in \cref{sec:structured-terms}.
+Certain constructions on trees will not compute nicely with the syntax in \Catt. We therefore introduce a new notion of \emph{structured term}, an alternative syntax for \Catt which allows more complex representations of terms over contexts derived from trees. Structured terms effectively retain more information about how they are constructed, allowing constructions to compute on them in ways that is not possible on the raw syntax of \Catt. This representation of terms will be crucial in the formalisation, as it aids the proof assistant in simplifying various constructions. These structured terms are defined in \cref{sec:structured-terms}.
 
 Finally, \cref{sec:insertion} defines the constructions used in the insertion operation, using the structured syntax form the preceding section. In this section, many properties of insertion are stated, including a universal property that is satisfied by insertion.
 
 \section{Pruning}
 \label{sec:pruning}
 
-Pruning drives the strictly unital behaviour of \Cattsu. Unitality in \(\infty\)-categories is the property that the identity acts as a unit with respect to composition, so that composing with the unit is equivalent to doing nothing at all. If an \(\infty\)-category is strictly unital, then it exhibits this behaviour up to equality rather than equivalence.
+Pruning drives the strictly unital behaviour of \Cattsu. Unitality in \(\infty\)-categories is the property that the identity acts as a unit with respect to composition, so that composing with the unit is definitionally equivalent to the original term. If an \(\infty\)-category is strictly unital, then it exhibits this behaviour up to equality rather than equivalence.
 
 For \Catt, strict unitality means that a composition containing a identity as one of its arguments should be definitionally equal to the same composition but with this argument removed. Pruning is the operation that removes an argument from a composition, taking a term such as \(f * g * \id\) to \(f * g\), or \(\id * f\) to the unary composite on \(f\). In the presence of strict units, it is also desirable to simplify the higher dimensional data that witnessed the (weak) unitality in \Catt. For example, the left unitor on \(f\), given by the term:
 \[ \Coh {(x : \star), (y : \star), (f : \arr x \star y)} {\arr {\id(x) * f} {} {f}} {\id} \]
 which witnesses that composing on the left with an identity is equivalent to the original term, can be simplified to the identity on \(f\), and the triangle equations which govern the coherence laws for the unitors can also trivialise. For this reason, pruning is defined to be able to apply to any term which has identities as a locally maximal argument. We review the definition of a locally maximal argument below.
 
 \begin{definition}
-  In a context \(\Gamma\), a \emph{locally maximal variable} is a variable \(x\) of \(\Gamma\) that does not appear in the source or target of any other variable of \(\Gamma\). Alternatively, \(x\) is locally maximal when:
+  In a context \(\Gamma\), a \emph{locally maximal variable} is a variable \(x\) of \(\Gamma\) that does not appear in the source or target of any other variable of \(\Gamma\). Equivalently, \(x\) is locally maximal when:
   \[ x \not\in \Supp(y) \]
-  for any \(y \neq x \in \Var(\Gamma)\). Given a substitution \(\sigma : \Delta \to \Gamma\), a \emph{locally maxixal argument} of \(\sigma\) is a term \(x \sub \sigma\) where \(x\) is a locally maximal variable of \(\Delta\).
+  for any \(y \neq x \in \Var(\Gamma)\). Given a substitution \(\sigma : \Delta \to \Gamma\), a \emph{locally maximal argument} of \(\sigma\) is a term \(x \sub \sigma\) where \(x\) is a locally maximal variable of \(\Delta\).
 \end{definition}
 
 \begin{example}
@@ -2967,7 +2967,7 @@ The Dyck words presented in this section can be viewed as a more direct syntax f
 Equipped with Dyck words, and a classification of locally maximal variables as peaks, we are now able to define each of the constructions used in the pruning operation.
 
 \begin{definition}
-  Let \(\mathcal{D} : \Dyck_d\) be a dyck word, and \(p : \Peak_{\mathcal{D}}\) be a peak of \(\mathcal{D}\). The pruned Dyck word \(\mathcal{D} \sslash p : \Dyck_d\) and substitution \(\pi_p : \lfloor \mathcal{D}\rfloor \to \lfloor \mathcal{D} \sslash p \rfloor\) are then defined inductively on the peak \(p\) by the following equations:
+  Let \(\mathcal{D} : \Dyck_d\) be a Dyck word, and \(p : \Peak_{\mathcal{D}}\) be a peak of \(\mathcal{D}\). The pruned Dyck word \(\mathcal{D} \sslash p : \Dyck_d\) and substitution \(\pi_p : \lfloor \mathcal{D}\rfloor \to \lfloor \mathcal{D} \sslash p \rfloor\) are then defined inductively on the peak \(p\) by the following equations:
   \begin{align*}
     \mathcal{D} \Uparrow\, \Downarrow \sslash \mathcal{D} \UDPeak &= \mathcal{D}\\
     \mathcal{D} \Uparrow \sslash p \UpPeak &= (\mathcal{D} \sslash p) \Uparrow \\
@@ -3026,7 +3026,7 @@ When a peak is pruned the locally maximal variable and its target are removed fr
   which is the unary composite on \(f\). In the presence of disc removal, this term could further simplify to the variable \(f\).
 \end{example}
 
-With these constructions, we can finally define the pruning rule.
+With these constructions, we can define the pruning rule.
 
 \begin{definition}
   A term \(t\) \emph{is an identity} if \(t \equiv \id(A,s)\) for some type \(A\) and some term \(s\). The \emph{pruning rule set}, \prune, is the set consisting of the triples:
@@ -3126,7 +3126,7 @@ We now turn our attention to proving that the pruning equality set satisfies all
   \label{prop:prune-tame}
   For all \(\mathcal{D} : \Dyck_d\) and peaks \(p : \Peak_{\mathcal{D}}\), and substitutions \(\sigma : \lfloor \mathcal{D} \rfloor \to \Delta\) and \(\tau : \Delta \to \Gamma\) the following equality holds:
   \[ (\sigma \sslash p) \bullet \tau \equiv (\sigma \bullet \tau) \sslash p \]
-  Hence, the set \prune satisfies the \(\mathcal{R}\)-substitution condition for any equality set \(\mathcal{R}\), and so also satisfies the weakenening condition.
+  Hence, the set \prune satisfies the \(\mathcal{R}\)-substitution condition for any equality set \(\mathcal{R}\), and so also satisfies the weakening condition.
 
   Furthermore, the following equalities hold:
   \[\Sigma(\mathcal{D}) \sslash \Sigma(p) = \Sigma(\mathcal{D} \sslash p) \qquad \pi_{\Sigma(p)} \equiv \Sigma(\pi_p) \qquad \Sigma(\sigma \sslash p) \equiv \Sigma(\sigma) \sslash \Sigma(p)\]
@@ -3428,7 +3428,7 @@ We lastly give a version of the wedge sum construction for variable sets.
 \subsection{Tree contexts}
 \label{sec:tree-contexts}
 
-We have now defined suspensions and wedge sums, and shown that both operations preserve ps-contexts. This allows us to finally define the context generated by a tree.
+We have now defined suspensions and wedge sums, and shown that both operations preserve ps-contexts. This allows us to define the context generated by a tree.
 
 \begin{definition}
   For a tree \(T\), the context $\lfloor T \rfloor$ generated from it is defined recursively by:
@@ -3496,7 +3496,7 @@ We now turn our attention to substitutions from a tree context \(\sigma : \lfloo
   If \(T = [T_0,\dots,T_n]\), then there are natural projections \( L_i :T_i \to \Gamma\) given by \(L_i(p) = L(i :: p)\) and \(\ty(L) = \arr {L[i]} {\ty(L)} {L[i+1]}\) for \(0 \leq i \leq n\).
 \end{definition}
 
-For labellings to play the role of substitutions, a substitution \(\lfloor L \rfloor : \arr {\lfloor T \rfloor} {\ty(L)} \Gamma\) will be defined for each term-labelling \(L : T \to \Gamma\). A natural way to define this substitution is by induction on the tree \(T\), which finally motivates the use of extended substitutions. Suppose we start with a labelling \(L : \arr {[T_0,\dots,T_n]} \star \Gamma\). To proceed, we will apply the inductive hypothesis to obtain a substitutions:
+For labellings to play the role of substitutions, a substitution \(\lfloor L \rfloor : \arr {\lfloor T \rfloor} {\ty(L)} \Gamma\) will be defined for each term-labelling \(L : T \to \Gamma\). A natural way to define this substitution is by induction on the tree \(T\), which motivates the use of extended substitutions. Suppose we start with a labelling \(L : \arr {[T_0,\dots,T_n]} \star \Gamma\). To proceed, we will apply the inductive hypothesis to obtain a substitutions:
 \[ \lfloor L_i \rfloor : \arr {\lfloor T_i \rfloor} {\arr {L[i]} {A} {L[i+1]}} {\Gamma} \]
 These substitutions are not regular (non-extended) substitutions, even though \(L\) has associated type \(\star\), and hence corresponds to a regular substitution.
 
@@ -3880,7 +3880,7 @@ and define two labels to be equal exactly when their action on maximal paths is 
 
   Now suppose that \(S = [S_0,\dots,S_n]\). By inductive hypothesis, the following judgements hold for each \(i \in \{0,\dots,n\}\):
   \[ \U \vdash L_i = M_i \qquad \U \vdash \arr {L[i]} {\ty(L)} {L[i+1]} = \arr {M[i]} {\ty(M)} {M[i+1]}\]
-  From the equalities on types, we immediately get that \(\U \vdash \ty(L) = \ty(M)\) as is required for the admissibility of the second rule, and also get that \(\U \vdash L[i] = M[i]\) for each \(0 \leq i \leq n+1\), which along with equality on (sub-)labellings above is sufficient to prove that:
+  From the equalities on types, we immediately get that \(\U \vdash \ty(L) = \ty(M)\) as is required for the admissibility of the second rule, and also get that \(\U \vdash L[i] = M[i]\) for each \(0 \leq i \leq n+1\), which along with equality on (sub)labellings above is sufficient to prove that:
   \[ \U \vdash L = M\]
   which witnesses the admissibility of the first rule.
 \end{proof}
@@ -3935,7 +3935,7 @@ This definition also allows simple inductive proofs that the boundary inclusions
   If instead \(n \geq \dep(T)\), then \(\bound n T \equiv T\) and \(\incbd n \epsilon T \equiv \id_T\).
 \end{proposition}
 
-Further, these constructions commute with suspension: \(\Sigma(\bound n T) \equiv \bound {n+1} {\Sigma(T)}\) and \(\Sigma(\incbd n \epsilon T) \equiv \incbd {n+1} \epsilon {\Sigma(T)}\) by definition.
+Further, these constructions commute with suspension: The equalities \(\Sigma(\bound n T) \equiv \bound {n+1} {\Sigma(T)}\) and \(\Sigma(\incbd n \epsilon T) \equiv \incbd {n+1} \epsilon {\Sigma(T)}\) hold by definition.
 
 We now recall the definitions of standard type, standard coherence, and standard term for a tree \(T\), which are given by mutual induction:
 \begin{itemize}
@@ -4035,7 +4035,7 @@ The second lemma gives a globularity condition for the standard type.
   which completes the proof.
 \end{proof}
 
-We can now finally state and prove the typing properties of standard constructions.
+We can now state and prove the typing properties of standard constructions.
 
 \begin{proposition}
   \label{prop:standard-typing}
@@ -4618,8 +4618,8 @@ We next state two factorisation properties for the interior and exterior labelli
 \begin{lemma}
   \label{lem:ins-comm-max}
   For insertion redex \((S,P,T,\U,L,M)\), the following hold:
-  \[ \iota_{S,P,T} \circ (\insertion L P M) \equiv M \qquad \kappa_{S,P,T} \circ (\insertion L PM) \equiv^{\mathsf{max}} L \]
-  Hence the maps \(L\) and \(M\) factor through the labellings \(\kappa\) and \(\iota\) repsectively.
+  \[ \iota_{S,P,T} \circ (\insertion L P M) \equiv M \qquad \kappa_{S,P,T} \circ (\insertion L PM) \equiv^{\max} L \]
+  Hence the maps \(L\) and \(M\) factor through the labellings \(\kappa\) and \(\iota\) respectively.
 \end{lemma}
 \begin{proof}
   See \func{Catt.Tree.Insertion.Properties}{ι-comm} and \func{Catt.Tree.Insertion.Properties}{κ-comm} in \module{Catt.Tree.Insertion.Properties}.
@@ -4668,7 +4668,7 @@ We can now proceed with the proof of \cref{thm:univ-prop}.
       \arrow["\lfloor \insertion L P M \rfloor"{description}, from=2-2, to=3-3]
     \end{tikzcd}
   \]
-  Finally, the uniqueness of this morphism follows from the observation that every path of \(\insertion S P T\) is either of the form \(\iota(p)\) for some \(p : \Path_T\) or \(\kappa(q)\) for some \(q: \Path_S\).
+  The uniqueness of this morphism follows from the observation that every path of \(\insertion S P T\) is either of the form \(\iota(p)\) for some \(p : \Path_T\) or \(\kappa(q)\) for some \(q: \Path_S\).
 \end{proof}
 
 From this result we will be able to show that having insertion in a theory implies the existence of pruning. The plan will be to show that pruning satisfies a similar universal property.
@@ -4747,7 +4747,7 @@ We now prove that the insertion rule set given in \cref{sec:insertion-rule} sati
 
 \begin{proposition}
   \label{prop:insert-tame}
-  The insertion rule set, \insert, satisifies the suspension condition. It further satisfies the \(\mathcal{R}\)-substitution condition for any rule set \(\mathcal{R}\), and so also satisfies the weakening condition.
+  The insertion rule set, \insert, satisfies the suspension condition. It further satisfies the \(\mathcal{R}\)-substitution condition for any rule set \(\mathcal{R}\), and so also satisfies the weakening condition.
 \end{proposition}
 \begin{proof}
   Let \((S,P,T,\Gamma,L,M)\) be an insertion redex and \(A\) a structured type of \(S\), such that:
@@ -5124,9 +5124,9 @@ These results appear in the next lemma.
 \begin{lemma}
   \label{lem:pruned-bp}
   Suppose \(S\) has branch \(P\) with \(\lh(P) - \bh(P) \geq 2\). Then \(\iota_{S,P,D^{\lh(P) - 1}} \equiv \{ \olsi {P'} \} \). Further suppose that \((S,P,T)\) is an insertion point. Then if the (tame) rule set \(\mathcal{R}\) has disc removal and endo-coherence removal we get:
-  \[\insertion {(S \sslash P)} {P'} T = \insertion S P T \qquad \U \vdash_{\mathcal{R}} \pi_P \bullet \kappa_{S \sslash P,P',T} =^{\mathsf{max}} \kappa_{S,P,T} \]
+  \[\insertion {(S \sslash P)} {P'} T = \insertion S P T \qquad \U \vdash_{\mathcal{R}} \pi_P \bullet \kappa_{S \sslash P,P',T} =^{\max} \kappa_{S,P,T} \]
   If we further have that \((S,P,T,\U,L,M)\) is an insertion redex then:
-  \[\insertion {(\insertion {L} P {(\{\stdcoh T {\lh(P) - 1}\} \bullet M)})} {P'} {M} \equiv^{\mathsf{max}} \insertion L P M\]
+  \[\insertion {(\insertion {L} P {(\{\stdcoh T {\lh(P) - 1}\} \bullet M)})} {P'} {M} \equiv^{\max} \insertion L P M\]
 \end{lemma}
 \begin{proof}
   See the functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-pruned-branch}, \func{Catt.Tree.Insertion.Properties}{pruned-branch-prop}, and \func{Catt.Tree.Insertion.Properties}{label-from-pruned-branch} in formalisation module \module{Catt.Tree.Insertion.Properties}, and \func{Catt.Typing.Insertion.Equality}{pruned-branch-κ} in \module{Catt.Typing.Insertion.Equality}
@@ -5403,7 +5403,7 @@ We now examine the universal property of parallel insertion. This is given by th
 \]
 Here, the top pushout square is given by the insertion along \(P\), and the bottom square is given by the insertion along \(\insertion Q P T\), noting that:
 \[ \{ \olsi Q \} \bullet \kappa_{S,P,T} \equiv \{ \olsi {\insertion Q P T}\}\]
-The construction is therefore given by the colimit of the top-left border of the diagram. By a symmetric argument, it can be seen that performing the insertions in the opposite order also leads to a colimit of the same diagram. We finally state the lemma that formally states these ideas.
+The construction is therefore given by the colimit of the top-left border of the diagram. By a symmetric argument, it can be seen that performing the insertions in the opposite order also leads to a colimit of the same diagram. We state the lemma that formally states these ideas.
 
 \begin{lemma}
   \label{lem:insertion-different}
@@ -5612,7 +5612,7 @@ Both of the further conditions in \cref{lem:insertion-bd-2} imply that \(n > \bh
 One of these conditions must always hold for any \(n\) and insertion point \((S,P,T)\), and hence one of \cref{lem:insertion-bd-1,lem:insertion-bd-2} can always be applied.
 
 \begin{remark}
-  The further conditions in each of \cref{lem:insertion-bd-1,lem:insertion-bd-2} could be dropped in favour of weakening the syntactic equalities to definitional equalitie in a theory with disc removal, as this would remove the distinction between standard terms and standard coherences. It was however more convenient to take this approach in the formalisation, and although the extra side conditions may seem arbitrary, the key result is that one of the above lemmas always holds.
+  The further conditions in each of \cref{lem:insertion-bd-1,lem:insertion-bd-2} could be dropped in favour of weakening the syntactic equalities to definitional equalities in a theory with disc removal, as this would remove the distinction between standard terms and standard coherences. It was however more convenient to take this approach in the formalisation, and although the extra side conditions may seem arbitrary, the key result is that one of the above lemmas always holds.
 \end{remark}
 
 \paragraph{Insertion into standard constructions.}
@@ -5666,7 +5666,7 @@ We can then proceed to the main theorem of this section.
                                           &= \SCoh {\insertion S P T} {\stdty {\insertion S P T} n} {\id}&\text{by inductive hypothesis}\\
                                           &\equiv \stdcoh {\insertion S P T} n
   \end{align*}
-  Finally, the equality for standard terms follows from the equality for standard coherences, using \cref{thm:std-dr}.
+  The equality for standard terms follows from the equality for standard coherences, using \cref{thm:std-dr}.
 \end{proof}
 
 \begin{corollary}
@@ -5685,7 +5685,7 @@ We can then proceed to the main theorem of this section.
 
 \paragraph{Chained insertion.}
 
-We finally explore the situation where a term \(s\) has a locally maximal argument \(t\) which can be inserted, and this term \(t\) admits an insertion itself. For the argument \(t\) to be insertable, it must be a standard coherence, and by \cref{cor:standard-coh-insert}, if \(t = t'\) by insertion, then \(t'\) will be equal to a standard coherence over some tree \(T\). For the term \(t'\) to be insertable, \(T\) must have sufficient trunk height. Conditions for this are given in the following lemma.
+We explore the situation where a term \(s\) has a locally maximal argument \(t\) which can be inserted, and this term \(t\) admits an insertion itself. For the argument \(t\) to be insertable, it must be a standard coherence, and by \cref{cor:standard-coh-insert}, if \(t = t'\) by insertion, then \(t'\) will be equal to a standard coherence over some tree \(T\). For the term \(t'\) to be insertable, \(T\) must have sufficient trunk height. Conditions for this are given in the following lemma.
 
 \begin{lemma}
   \label{lem:insert-lin-height}
@@ -5964,7 +5964,7 @@ We can also consider the universal property of the tree generated by first inser
     \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=3-2, to=2-1]
   \end{tikzcd}
 \]
-The left hand pushout square is given by the insertion of \(U\) into \(T\) along \(Q\). The morphism \(\{\stdcoh T n\} \bullet \kappa_{T,Q,U}\) which runs vertically through the center of the diagram is then equal to \(\{\stdcoh {\insertion T Q U} n\}\) by \cref{cor:standard-coh-insert}, allowing for the right hand pushout square to be formed as the insertion of \(\insertion T Q U\) into \(S\) along \(P\). By common properties of colimits, both of these constructions then arise as colimits of the same diagram, the shared top left boundary of both constructions. The results of this section are stated in the following lemma.
+The left hand pushout square is given by the insertion of \(U\) into \(T\) along \(Q\). The morphism \(\{\stdcoh T n\} \bullet \kappa_{T,Q,U}\) which runs vertically through the centre of the diagram is then equal to \(\{\stdcoh {\insertion T Q U} n\}\) by \cref{cor:standard-coh-insert}, allowing for the right hand pushout square to be formed as the insertion of \(\insertion T Q U\) into \(S\) along \(P\). By common properties of colimits, both of these constructions then arise as colimits of the same diagram, the shared top left boundary of both constructions. The results of this section are stated in the following lemma.
 
 \begin{lemma}
   \label{lem:inserted-insertion}
@@ -5991,7 +5991,7 @@ The left hand pushout square is given by the insertion of \(U\) into \(T\) along
 \chapter{Semistrict variants of \Catt}
 \label{cha:cattstrict}
 
-The type theories \Cattsu, a type theory for strictly unital \(\infty\)-categories, and \Cattsua, a type theory for strictly associative and unital \(\infty\)-categories, can finally be introduced in this chapter, where we will define both theories and explore some of the metatheory and properties of each type theory in detail.
+The type theories \Cattsu, a type theory for strictly unital \(\infty\)-categories, and \Cattsua, a type theory for strictly associative and unital \(\infty\)-categories, can be introduced in this chapter, where we will define both theories and explore some of the metatheory and properties of each type theory in detail.
 
 The results in this chapter will heavily depend on the theory developed in the previous chapters. Both type theories will be defined as instances of \Cattr, which was introduced in \cref{sec:catt-with-equality}, and much of the initial metatheory can be immediately derived by demonstrating that the equality rule sets that generate \Cattsu and \Cattsua satisfy the various conditions given in \cref{sec:ruleset}. The theory \Cattsu is primarily generated by pruning, which was introduced in \cref{sec:pruning}, and the theory \Cattsua depends on the insertion operation, which was introduced in \cref{sec:insertion}.
 
@@ -6004,7 +6004,7 @@ The term \(\N(t)\) is called the \emph{normal form} of \(t\). Such an algorithm 
 
 In \cref{sec:cattsu,sec:cattsua}, the normalisation algorithm is defined by giving a reduction relation on syntax of the type theory, which we show to be terminating, meaning that there is no infinite reduction sequence and confluent, meaning that any two reduction paths converge to a common reduct. The normal form of a term can then be obtained by reducing it until there are no further reductions possible. In \cref{sec:reduction}, these notions are recalled, and we demonstrate that the resulting normalisation algorithm satisfies the two properties stated above. This section also introduces a method for obtaining a reduction scheme from an arbitrary equality rule set \(\mathcal{R}\).
 
-Such a normalisation procedure allows a type checking algorithm can be implemented, creating an interpreter for the language. This allows us to write larger terms, and it can be automatically verified whether they are well-formed. In \cref{sec:towards-nbe}, we introduce our implementation of \Catt, \Cattsu, and \Cattsua, written in rust. This implementation supports features such as implicit arguments to terms, implicit suspension, and native support for trees and tree labellings. We will explain how the tool can be used, and use it to give larger examples of \Cattsua terms, including proofs of Eckmann-Hilton (see \cref{fig:eh}) and its higher dimensional coherence condition, the Syllepsis.
+Such a normalisation procedure allows a type checking algorithm can be implemented, creating an interpreter for the language. This allows us to write larger terms, and it can be automatically verified whether they are well-formed. In \cref{sec:towards-nbe}, we introduce our implementation of \Catt, \Cattsu, and \Cattsua, written in rust. This implementation supports features such as implicit arguments to terms, implicit suspension, and native support for trees and tree labellings. We will explain how the tool can be used, and use it to give larger examples of \Cattsua terms, including proofs of Eckmann-Hilton (see \cref{fig:eh}) and its higher dimensional coherence condition, the syllepsis.
 
 The implementation uses an approach closer to normalisation by evaluation for type-checking terms in the theory. \cref{sec:towards-nbe} explores this algorithm and presents some perspectives on applying normalisation by evaluation to semistrict versions of \Catt. The correctness of the tool is still dependent on the metatheoretic results derived using reduction schemes.
 
@@ -6324,7 +6324,7 @@ We note that for an arbitrary rule set \(\mathcal{R}\), it may not be decidable 
 \section{\texorpdfstring{\Cattsu}{Cattsu}}
 \label{sec:cattsu}
 
-We are finally ready to define \Cattsu, the type theory for strictly unital \(\infty\)-categories. \Cattsu is a variant of \Cattr for which the equality is built from three classes of equalities:
+We are ready to define \Cattsu, the type theory for strictly unital \(\infty\)-categories. \Cattsu is a variant of \Cattr for which the equality is built from three classes of equalities:
 \begin{itemize}
 \item Pruning: The pruning operation was introduced in \cref{sec:pruning}. Pruning is the key operation in \Cattsu and drives the strict unitality of the theory. The operation ``prunes'' identity that appear as locally maximal arguments to other terms, simplifying the overall structure of a term by removing unnecessary units.
 \item Endo-coherence removal: This operation was introduced in \cref{sec:ecr}. Endo-coherence removal converts ``fake identities'', terms which are morally identities yet have the wrong syntactic form, into true identities. These converted identities can then be further removed from terms by pruning.
@@ -6396,7 +6396,7 @@ In \Cattsu, this term can be typed as follows:
 \[ \Gamma \vdash \mathsf{EH}_{\alpha,beta} : \alpha *_1 \beta \to \beta *_1 \alpha\]
 and so witnesses the Eckmann-Hilton argument.
 
-We note that there is a clear inverse of the Eckmann Hilton term, which immediately gives rise to two morphisms \(\alpha *_1 \beta \to \beta *_1 \alpha\): the original term \(\mathsf{EH}_{\alpha,\beta}\) and the term \(\mathsf{EH}_{\beta,\alpha}^{-1}\). These two terms manoeuvre  \(\alpha\) and \(\beta\) round eachother in opposite directions, and are not in general equivalent.
+We note that there is a clear inverse of the Eckmann Hilton term, which immediately gives rise to two morphisms \(\alpha *_1 \beta \to \beta *_1 \alpha\): the original term \(\mathsf{EH}_{\alpha,\beta}\) and the term \(\mathsf{EH}_{\beta,\alpha}^{-1}\). These two terms manoeuvre  \(\alpha\) and \(\beta\) round each other in opposite directions, and are not in general equivalent.
 
 However, we can instead apply Eckmann-Hilton to terms \(\phi\) and \(\psi\) of type \(\id^2(x) \to \id^(x)\), which is done by suspending the Eckmann-Hilton term. By an abuse of notation we define this term to be (only giving the locally maximal arguments of the substitution):
 \[\mathsf{EH}_{\phi,\psi} = \Sigma(\mathsf{swap}) \sub{\langle \phi, \psi \rangle}\]
@@ -6495,7 +6495,7 @@ We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and onl
   \end{align*}
   Now as \(s\) is well-formed we have \(\Gamma \vdash \{A,\id(B,a)\} : D^n\) and so by \cref{lem:disc-typing}, \(\Gamma \vdash \id(B,a) : A\) and hence by \cref{cor:id-typing} and uniqueness of typing:
   \[ \arr a {B} a = A \equiv \arr b {A'} c\]
-  and so \(a = b\) and \(B = A'\) and hence \(s \equiv \id(A', b) = \id(B,a) \equiv t\). Finally, since \(\dim(a) = \dim(B) < \dim(s)\), we get \(t =_{\dim(s)} u\) as required.
+  and so \(a = b\) and \(B = A'\) and hence \(s \equiv \id(A', b) = \id(B,a) \equiv t\). Since \(\dim(a) = \dim(B) < \dim(s)\), we get \(t =_{\dim(s)} u\) as required.
 
   \textbf{Endo coherence removal:} Suppose \(s \red t\) is an endo-coherence removal reduction. Then:
   \[ s \equiv \Coh {\Delta} {\arr a A a} {\sigma} \red \id(A \sub \sigma, a \sub \sigma) \equiv t\]
@@ -6534,7 +6534,7 @@ We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and onl
   \[\Coh {\lfloor \mathcal{D} \sslash p \rfloor} {B \sub {\pi_p}} {\sigma \sslash p}\]
   but \(t\) also reduces to this term by \cref{prop:red-sub}.
 
-  Finally, let \(s \red u\) be a second pruning reduction, at a different peak \(q : \Peak_{\mathcal{D}}\). By \cref{prop:prune-conf}, there is a common reduct:
+  Let \(s \red u\) be a second pruning reduction, at a different peak \(q : \Peak_{\mathcal{D}}\). By \cref{prop:prune-conf}, there is a common reduct:
   \[ \Coh {\lfloor (\mathcal{D} \sslash p) \sslash q_p \rfloor} {A \sub {\pi_p} \sub{\pi_{q_p}}} {(\sigma \sslash p) \sslash q_p} \]
   which both reduce to by pruning if \(\lfloor q_p \rfloor\) and \(\lfloor p_q \rfloor\) are identities. However:
   \[\lfloor q_p \rfloor \equiv \lfloor q \rfloor \sub {\pi_p}\]
@@ -6543,7 +6543,7 @@ We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and onl
   Any remaining cases follow by symmetry, completing the proof.
 \end{proof}
 
-\subsection{Disc trivalisation}
+\subsection{Disc trivialisation}
 \label{sec:properties-cattsu}
 
 We take a brief moment to explore the theory \Cattsu in its entirety. For this section we will further assume that we take the set of operations \(\mathcal{O}\) to be the regular operations.
@@ -6561,7 +6561,7 @@ We now state and prove disc trivialisation, recalling the definition of an itera
 \begin{proof}
   Without loss of generality, we may assume that \(t\) is in \Cattsu normal form, and proceed to prove that \(t\) is an iterated canonical identity. We proceed by induction on subterms of the term \(t\). If \(t\) is a variable then we are done. Otherwise, we assume \(t\) is a coherence term \(\Coh \Delta U \sigma\).
 
-  We now show that \(\Delta\) must be a disc context by contradiction. We therefore assume that \(\Delta\) is not a disc, and hence \(t\) is not an identity. By induction on subterms, we must have that each term in \(\sigma\) is an iterated canonical identity on a variable. No locally maximal argument of can be an identity, as otherwise pruning could be performed and \(t\) would not be in normal form, and so every locally maximal argument is a variable. Suppose there is some variable \(x\) such that \(x \sub\sigma\) is an identity, and let \(x\) be be a variable of maximal dimension with this property. As \(x\) cannot be locally maximal, there must either be the source or target of a variable \(y\), but this variable \(y\) must be sent to a variable of \(D^n\), which cannot have an identity as its source or target. Therefore the substitution \(\sigma\) is variable to variable.
+  We now show that \(\Delta\) must be a disc context by contradiction. We therefore assume that \(\Delta\) is not a disc, and hence \(t\) is not an identity. By induction on subterms, we must have that each term in \(\sigma\) is an iterated canonical identity on a variable. No locally maximal argument can be an identity, as otherwise pruning could be performed and \(t\) would not be in normal form, and so every locally maximal argument is a variable. Suppose there is some variable \(x\) such that \(x \sub\sigma\) is an identity, and let \(x\) be be a variable of maximal dimension with this property. As \(x\) cannot be locally maximal, there must either be the source or target of a variable \(y\), but this variable \(y\) must be sent to a variable of \(D^n\), which cannot have an identity as its source or target. Therefore the substitution \(\sigma\) is variable to variable.
 
   We now let \(\Gamma\) be the smallest ps-context prefix of \(\Delta\) such that \(\Gamma\) is not a disc. We must have:
   \[ \Gamma \equiv D^k, (y : A), (f : \arr x A y)\]
@@ -6642,11 +6642,11 @@ As before, when we do not specify an operation set, it should be assumed that th
   The rule set \sua is tame and satisfies the support condition. If \(\mathcal{O}\) supports insertion, then \sua also satisfies the preservation condition.
 \end{theorem}
 \begin{proof}
-  By \cref{prop:dr-weak,prop:dr-susp,prop:dr-sub,prop:ecr-props,prop:insert-tame}, each of the disc removal, endo-coherence removal, and insertion sets satisfy the weakening, suspension, and \(\sua\)-substitution conditions. It follows that \(\sua\) satisfies the weakening, suspension, and substiutiton conditions. Hence, \sua is tame.
+  By \cref{prop:dr-weak,prop:dr-susp,prop:dr-sub,prop:ecr-props,prop:insert-tame}, each of the disc removal, endo-coherence removal, and insertion sets satisfy the weakening, suspension, and \(\sua\)-substitution conditions. It follows that \(\sua\) satisfies the weakening, suspension, and substitution conditions. Hence, \sua is tame.
 
-  To prove that the support condition holds for \sua, we use the strategy introduced in \cref{sec:further-conditions} and instead show that \sua satisfies the \(\sua_{\mathsf{S}}\)-support condition. By \cref{lem:supp-sat-conds}, the equality rule set \(\sua_{\mathsf{S}}\), the restriction of \sua to support preserving equalities, is also tame. As it trivially satisfies the support condition, we have by \cref{prop:dr-supp,item:ecr-supp,prop:insert-supp} that disc removal, endo-coherence removal, and insertion satisfy the \(\sua_{\mathsf{S}}\)-support condition. Therefore, \sua satisfies the \(\sua_{\mathsf{S}}\)-support condition and so by \cref{lem:proof-strat-supp} \sua satisfises the support condition.
+  To prove that the support condition holds for \sua, we use the strategy introduced in \cref{sec:further-conditions} and instead show that \sua satisfies the \(\sua_{\mathsf{S}}\)-support condition. By \cref{lem:supp-sat-conds}, the equality rule set \(\sua_{\mathsf{S}}\), the restriction of \sua to support preserving equalities, is also tame. As it trivially satisfies the support condition, we have by \cref{prop:dr-supp,item:ecr-supp,prop:insert-supp} that disc removal, endo-coherence removal, and insertion satisfy the \(\sua_{\mathsf{S}}\)-support condition. Therefore, \sua satisfies the \(\sua_{\mathsf{S}}\)-support condition and so by \cref{lem:proof-strat-supp} \sua satisfies the support condition.
 
-  Finally, the \sua-preservation condition is satisfied by disc removal (by \cref{prop:dr-preserve}) and endo-coherence removal (by \cref{item:ecr-preserve}). If \(\mathcal{O}\) supports insertion, then insertion also satisfies the \sua-preservation condition by \cref{prop:insert-preserve}. Therefore \sua satisfises the preservation condition, completing the proof.
+  The \sua-preservation condition is satisfied by disc removal (by \cref{prop:dr-preserve}) and endo-coherence removal (by \cref{item:ecr-preserve}). If \(\mathcal{O}\) supports insertion, then insertion also satisfies the \sua-preservation condition by \cref{prop:insert-preserve}. Therefore \sua satisfies the preservation condition, completing the proof.
 \end{proof}
 
 While the groupoidal operation set trivially supports insertion, we have not yet proven that the regular operation set, \Reg, supports insertion. This is done now using \cref{thm:sua-conds}.
@@ -6678,10 +6678,10 @@ As with \Cattsu, we can not directly use the reduction \(\red_\su\) directly, as
 
 Although these restrictions are sufficient to ensure termination, we choose to further restrict the set of insertion reductions, in order to streamline the proof of confluence. Firstly, we only allow insertions of a locally maximal argument when that argument is either an identity or a standard composition. The motivation for this restriction is that identities and standard compositions are the only standard coherence that can be in normal form. Moreover, not allowing the insertion of endo-coherences avoids a difficult insertion/argument endo-coherence removal confluence case.
 
-Finally we also disallow insertions into a unary composite and insertions of a unary composite, as we already seen in \cref{sec:further-properties} that discs act as a left and right unit for insertion, and so these two insertion reductions are subsumed by disc removal. Further, disallowing the insertion of discs removes another case where an insertable standard coherence is not in normal form. We now define the resulting reduction scheme.
+We also disallow insertions into a unary composite and insertions of a unary composite, as we already seen in \cref{sec:further-properties} that discs act as a left and right unit for insertion, and so these two insertion reductions are subsumed by disc removal. Further, disallowing the insertion of discs removes another case where an insertable standard coherence is not in normal form. We now define the resulting reduction scheme.
 
 \begin{definition}
-  Define the reduction \(\red_{\sua'}\) to be the reductino generated by the equality rule set \(\sua'\) where:
+  Define the reduction \(\red_{\sua'}\) to be the reduction generated by the equality rule set \(\sua'\) where:
   \[\sua' = \dr \cup \ecr' \cup \insert'\]
   where \(\ecr'\) is the endo-coherence removal set without the identity-to-identity reductions, and \(\insert'\) is the insertion rule set restricted to insertion redexes \((S,P,T,\Gamma,L,M)\) where and types \(A\) such that \(\SCoh S A L\) is not an identity or a unary composite, and \(L(\olsi P) \equiv \stdcoh T {\lh(P)}\) is an identity or a standard composite which is not a unary composite.
 \end{definition}
@@ -6921,7 +6921,7 @@ Since each term in \(\insertion {L} P {M}\) is a term of \(L\) or a term of \(M\
 
 \paragraph{Other reduction on the inserted argument \(\bm{L(\olsi P)}\):}
 
-The argument \(L(\olsi P)\) is either a standard composite which is not unary or an identity. Therefore, the type contained in the coherence is in normal form and hence a cell reduction cannot be applied. Further, disc removal cannot be applied, as \(L(\olsi P)\) is not a unary composite, and endo-coherence removal cannot be applied as if \(L(\olsi P)\) is an endo-coherence then it is an identity. Hence, there are no other reductinos that can be applied to the inserted argument and so this case is vacuous.
+The argument \(L(\olsi P)\) is either a standard composite which is not unary or an identity. Therefore, the type contained in the coherence is in normal form and hence a cell reduction cannot be applied. Further, disc removal cannot be applied, as \(L(\olsi P)\) is not a unary composite, and endo-coherence removal cannot be applied as if \(L(\olsi P)\) is an endo-coherence then it is an identity. Hence, there are no other reductions that can be applied to the inserted argument and so this case is vacuous.
 
 \paragraph{Reduction of non-inserted argument:}
 Suppose \(L \leadsto L'\) along an argument which is not \(\olsi P\) and \(c \equiv \Coh S A {L'}\). Then as \(L'(\olsi P) \equiv \mathcal{C}_T^{\lh(P)}\), an insertion can still be performed on \(c\) to get:
@@ -6938,7 +6938,7 @@ Suppose \(A \equiv \arr s B s\) and \(a \red c\) by endo-coherence removal. In t
 \[ b \equiv \Coh {\insertion S P T} {(\arr s B s) \sub {\kappa_{S,P,T}}} {\insertion L P M}\]
 which reduces by endo-coherence removal to:
 \[b' \equiv \id(A, s) \sub {\kappa_{S,P,T} \bullet (\insertion L P M)}\]
-Finally, by \cref{lem:ins-comm-max}, we have that \(\kappa_{S,P,T} \circ (\insertion L P M) =_{\dim(S)} L\) and so \(b' = _{\dim(S)} c\) and since \(\dim(S) \leq \dim(a)\), we get \(b' =_{\dim(a)} c\) as required.
+By \cref{lem:ins-comm-max}, we have that \(\kappa_{S,P,T} \circ (\insertion L P M) =_{\dim(S)} L\) and so \(b' = _{\dim(S)} c\) and since \(\dim(S) \leq \dim(a)\), we get \(b' =_{\dim(a)} c\) as required.
 
 \paragraph{Cell reduction:}
 
@@ -7090,3 +7090,7 @@ By the above and \cref{lem:insertion-different}, \(b' =_{\dim(a)} c'\). This com
 \printbibliography
 
 \end{document}
+
+% Local Variables:
+% jinx-local-words: "CollegeShields ps"
+% End:
