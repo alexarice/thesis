@@ -60,7 +60,226 @@
 %% Thesis body:
 %%
 \chapter{Introduction}
-Things to go in introduction:
+
+The study of higher dimensional structures is becoming more prevalent in both mathematics and computer science. A central tool for studying these structures are \emph{higher categories}~\cite{leinster2004higher,riehl2022elements}, a broad term for many different generalisations of the notion category which capture the higher dimensional properties of these structures. The ``higher'' nature of these categories usually corresponds to the existence of morphisms whose source and target may be other morphisms, instead of just objects. A common method of organising this data is by giving a set of \(n\)-cells for each \(n \in \mathbb{N}\). A \(0\)-cell then corresponds to the objects of an ordinary category, and the source and target of an \((n+1)\)-cell are given by \(n\)-cells.
+
+These higher categories present in many forms, and have been characterised into a periodic table of categories~\cite{Baez1995}. Of particular interest are the \((n,k)\)-categories for \(n,k \in \mathbb{N} \cup \{\infty\}\), higher categories which contain \(m\)-cells for \(m \leq n\), and whose \(m\)-cells are invertible for \(m < k\). In mathematics, the study of \((\infty,0)\)-categories, known as \(\infty\)-groupoids, is motivated by the study of the homotopy structure of topological spaces~\cite{Bourbaki2016}, where \(n\)-cells are given by paths in the topological space, with higher cells forming homotopies between lower cells. In computer science, many applications have been found for \((n,n)\)-categories for lower \(n\), more commonly referred to as \(n\)-categories, including quantum computing~\cite{Heunen2019-jt}, logic~\cite{Barr1991,mellies2009categorical}, physics~\cite{Baez1995}, and game theory~\cite{ghani2018compositional}, among others~\cite{Street2012}.
+
+The composition of \(1\)-cells in an \(n\)-category functions identically to the composition of morphisms in a \(1\) category; two morphisms \(f : x \to y\) and \(g : y \to z\) can be composed to form another \(1\)-cell \(f * g : x \to z\). However, there are two distinct ways of composing \(2\)-cells, depicted by the diagrams below:
+% https://q.uiver.app/#q=WzAsNSxbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzQsMCwiXFxidWxsZXQiXSxbNSwwLCJcXGJ1bGxldCJdLFs2LDAsIlxcYnVsbGV0Il0sWzAsMSwiIiwwLHsiY3VydmUiOi01fV0sWzAsMSwiIiwyLHsiY3VydmUiOjV9XSxbMCwxXSxbMiwzLCIiLDEseyJjdXJ2ZSI6LTN9XSxbMiwzLCIiLDEseyJjdXJ2ZSI6M31dLFszLDQsIiIsMSx7ImN1cnZlIjotM31dLFszLDQsIiIsMSx7ImN1cnZlIjozfV0sWzcsNSwiXFxhbHBoYSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbNiw3LCJcXGJldGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzksOCwiXFxnYW1tYSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTEsMTAsIlxcZGVsdGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV1d
+\[
+  \begin{tikzcd}
+    \bullet && \bullet && \bullet & \bullet & \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-5, to=1-6]
+    \arrow[""{name=4, anchor=center, inner sep=0}, curve={height=18pt}, from=1-5, to=1-6]
+    \arrow[""{name=5, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-6, to=1-7]
+    \arrow[""{name=6, anchor=center, inner sep=0}, curve={height=18pt}, from=1-6, to=1-7]
+    \arrow["\beta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+    \arrow["\alpha"', shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
+    \arrow["\gamma"', shorten <=5pt, shorten >=5pt, Rightarrow, from=4, to=3]
+    \arrow["\delta"', shorten <=5pt, shorten >=5pt, Rightarrow, from=6, to=5]
+  \end{tikzcd}
+\]
+These diagrams mirror the concept of commutative diagrams for \(1\)-categories, where spaces in the diagram representing an equality have been replaced by \(2\)-cell arrows. The first of these composites composes two \(2\)-cells \(\alpha\) and \(\beta\) along a shared \(1\)-cell boundary creating the vertical composite \(\alpha \star_1 \beta\). The second composes the \(2\)-cells \(\gamma\) and \(\delta\) along a \(0\)-cell boundary and creates the horizontal composite \(\gamma \star_0 \delta\). In higher dimensions, the pattern continues of having \(n\) different ways of composing two \(n\)-cells. For each \(n\)-cell, there is also a identity \(n+1\)-cell.
+
+Similarly to \(1\)-categories, \(n\)-categories must satisfy various laws concerning their operations. These can be roughly organised into 3 groups:
+\begin{itemize}
+\item Associativity laws: Each of the composition operations in an \(n\)-category is associative.
+\item Unitality laws: The identity morphisms are a left and right unit for the appropriate composition operations.
+\item Interchange laws: These laws govern the relation between different compositions on the same cells. Given four \(2\)-cells that form the following diagram:
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzYsMF0sWzQsMCwiXFxidWxsZXQiXSxbMCwxLCIiLDAseyJjdXJ2ZSI6LTV9XSxbMCwxLCIiLDIseyJjdXJ2ZSI6NX1dLFswLDFdLFsxLDMsIiIsMix7ImN1cnZlIjotNX1dLFsxLDMsIiIsMix7ImN1cnZlIjo1fV0sWzEsM10sWzYsNCwiXFxiZXRhIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs1LDYsIlxcYWxwaGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzgsOSwiXFxnYW1tYSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbOSw3LCJcXGRlbHRhIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dXQ==
+\[\begin{tikzcd}
+	\bullet && \bullet && \bullet && {}
+	\arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-3]
+	\arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-3]
+	\arrow[""{name=2, anchor=center, inner sep=0}, from=1-1, to=1-3]
+	\arrow[""{name=3, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-3, to=1-5]
+	\arrow[""{name=4, anchor=center, inner sep=0}, curve={height=30pt}, from=1-3, to=1-5]
+	\arrow[""{name=5, anchor=center, inner sep=0}, from=1-3, to=1-5]
+	\arrow["\beta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+	\arrow["\alpha"', shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
+	\arrow["\gamma"', shorten <=4pt, shorten >=4pt, Rightarrow, from=4, to=5]
+	\arrow["\delta"', shorten <=4pt, shorten >=4pt, Rightarrow, from=5, to=3]
+\end{tikzcd}\]
+  The two composites below are related:
+  \[ (\alpha \star_1 \beta) \star_0 (\gamma \star_1 \delta) \simeq (\alpha \star_0 \gamma) \star_1 (\beta \star_0 \delta)\]
+\end{itemize}
+These laws can be combined to create non-trivial emergent behaviour in a form not seen in the theory of \(1\)-categories. One critical example of this is known as the \emph{Eckmann-Hilton} argument, which states that the composition of two scalars, morphisms from the identity to the identity, commute. The argument proceeds by moving the two scalars around each other, as depicted in \cref{fig:eh}. This crucially uses both the interchange and unitality laws.
+\newsavebox{\ehalpha}
+\savebox{\ehalpha}{\adjustbox{scale=0.8}{
+  \begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=10pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=10pt}, from=1-2, to=1-3]
+    \arrow["\alpha"', color=Diag1, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+    \arrow["\id"', shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=2]
+  \end{tikzcd}}}
+\newsavebox{\ehbeta}
+\savebox{\ehbeta}{\adjustbox{scale=0.8}{
+  \begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=10pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=10pt}, from=1-2, to=1-3]
+    \arrow["\id"',  shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+    \arrow["\beta"', color=Diag2, shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=2]
+  \end{tikzcd}}}
+\newsavebox{\ehlefttop}
+\savebox{\ehlefttop}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+     \bullet \& \bullet
+     \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
+     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+     \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+     \arrow["\alpha", color=Diag1, shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+     \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+   \end{tikzcd}}}
+\newsavebox{\ehrighttop}
+\savebox{\ehrighttop}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+    \arrow["\beta", color=Diag2, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+  \end{tikzcd}}}
+\newsavebox{\ehleftbot}
+\savebox{\ehleftbot}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+    \arrow["\alpha", color=Diag1, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+  \end{tikzcd}}}
+\newsavebox{\ehrightbot}
+\savebox{\ehrightbot}{
+  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
+    \bullet \& \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
+    \arrow["\beta", color=Diag2, shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
+    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+  \end{tikzcd}}}
+
+\begin{figure}[ht]
+  \centering
+
+  \[
+    \begin{tikzcd}[ampersand replacement=\&,column sep=small]
+      \bullet \&\& \bullet \& \simeq \& \bullet \&\&\&\&\& \bullet \& \simeq \& \bullet \&\&\& \bullet \&\&\& \bullet \\
+      \\
+      \&\&\&\&\&\&\&\&\&\&\&\&\&\& \simeq \\
+      \\
+      \bullet \&\& \bullet \& \simeq \& \bullet \&\&\&\&\& \bullet \& \simeq \& \bullet \&\&\& \bullet \&\&\& \bullet
+      \arrow[""{name=0, anchor=center, inner sep=0}, "\id", curve={height=-24pt}, from=1-1, to=1-3]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "\id"', curve={height=24pt}, from=1-1, to=1-3]
+      \arrow[""{name=2, anchor=center, inner sep=0}, "\id"{description}, from=1-1, to=1-3]
+      \arrow[""{name=3, anchor=center, inner sep=0}, draw=none, controls=+(90:1.8) and +(90:1.8), from=1-5, to=1-10]
+      \arrow[""{name=4, anchor=center, inner sep=0}, draw=none, controls=+(90:-1.8) and +(90:-1.8), from=1-5, to=1-10]
+      \arrow[""{name=5, anchor=center, inner sep=0}, from=1-5, to=1-10]
+      \arrow[""{name=6, anchor=center, inner sep=0}, draw=none, controls=+(90:1.8) and +(90:1.8), from=5-5, to=5-10]
+      \arrow[""{name=7, anchor=center, inner sep=0}, draw=none, controls=+(90:-1.8) and +(90:-1.8), from=5-5, to=5-10]
+      \arrow[""{name=8, anchor=center, inner sep=0}, from=5-5, to=5-10]
+      \arrow[""{name=9, anchor=center, inner sep=0}, "\id", curve={height=-24pt}, from=5-1, to=5-3]
+      \arrow[""{name=10, anchor=center, inner sep=0}, "\id"', curve={height=24pt}, from=5-1, to=5-3]
+      \arrow[""{name=11, anchor=center, inner sep=0}, "\id"{description}, from=5-1, to=5-3]
+      \arrow[""{name=12, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=1-12, to=1-15]
+      \arrow[""{name=13, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-12, to=1-15]
+      \arrow[""{name=14, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=1-15, to=1-18]
+      \arrow[""{name=15, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-15, to=1-18]
+      \arrow[""{name=16, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=5-12, to=5-15]
+      \arrow[""{name=17, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=5-12, to=5-15]
+      \arrow[""{name=18, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=5-15, to=5-18]
+      \arrow[""{name=19, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=5-15, to=5-18]
+      \arrow["\alpha"', color=Diag1, shorten <=3pt, shorten >=5pt, Rightarrow, from=1, to=2]
+      \arrow["\beta"', color=Diag2, shorten <=5pt, shorten >=3pt, Rightarrow, from=2, to=0]
+      \arrow["\beta"', color=Diag2, shorten <=3pt, shorten >=5pt, Rightarrow, from=10, to=11]
+      \arrow["\alpha"', color=Diag1, shorten <=5pt, shorten >=3pt, Rightarrow, from=11, to=9]
+      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=4, to=5]
+      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=5, to=3]
+      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=7, to=8]
+      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=8, to=6]
+      \arrow["\usebox{\ehlefttop}"{description,inner sep = 0,xshift = -1.3pt, yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=13, to=12]
+      \arrow["\usebox{\ehrighttop}"{description,inner sep = 0,xshift = -1.3pt,yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=15, to=14]
+      \arrow["\usebox{\ehleftbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=17, to=16]
+      \arrow["\usebox{\ehrightbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=19, to=18]
+      \arrow[controls=+(90:1.8) and +(90:1.8), from=1-5, to=1-10]
+      \arrow[controls=+(90:-1.8) and +(90:-1.8), from=1-5, to=1-10]
+      \arrow[controls=+(90:1.8) and +(90:1.8), from=5-5, to=5-10]
+      \arrow[controls=+(90:-1.8) and +(90:-1.8), from=5-5, to=5-10]
+      \arrow[controls=+(80:1.5) and +(100:1.5), from=1-12, to=1-15]
+      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-12, to=1-15]
+      \arrow[controls=+(80:1.5) and +(100:1.5), from=1-15, to=1-18]
+      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-15, to=1-18]
+      \arrow[controls=+(80:1.5) and +(100:1.5), from=5-12, to=5-15]
+      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=5-12, to=5-15]
+      \arrow[controls=+(80:1.5) and +(100:1.5), from=5-15, to=5-18]
+      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=5-15, to=5-18]
+    \end{tikzcd}
+  \]
+  \caption{The Eckmann-Hilton argument}
+  \label{fig:eh}
+\end{figure}
+
+\paragraph{Semistrict higher categories}
+
+While we have given the types of laws that must hold in \(n\)-categories, we have not yet stated the full nature of these laws. By taking each of these laws to hold up to equality, one obtains the notion of a \emph{strict} \(n\)-category. It is often the case in category theory that equality is the incorrect notion of which to compare objects, with the coarser relation of isomorphism being preferable. In the presence of higher dimensional cells, arrows themselves can be compared up to isomorphism. This allows the laws for an \(n\)-category to be stated with isomorphism replacing equality, giving rise to the notion of \emph{weak} \(n\)-category.
+
+In such a weak \(n\)-category, each law is given by a set of isomorphisms, which are given as part of the data of the category. For the associativity law of three \(1\)-cells \(f\), \(g\), and \(h\), a \(2\)-cell known as the \emph{associator} must be given, which takes the following form:
+\[ \alpha_{f,g,h} : (f * g) * h \to f * (g * h)\]
+Similarly the unit law for a \(1\)-cell \(f\) is given by the \emph{left unitor} \(\lambda_f\) and the \emph{right unitor} \(\rho_f\) which take the following forms:
+\[ \lambda_f : \id \star f \to f \qquad \rho_f : f \star \id \to f\]
+Whereas two morphsims being equal is a property of those morphisms, an isomorphism between the same morphisms is a form of data, and the choice of isomorphism may not be unique. Weak higher categories therefore contain higher \emph{coherence laws} which govern the interaction of these isomorphisms. These coherence laws can also be given as isomorphisms instead of equalities, and must satisfy their own coherence laws, leading to an tower of coherence laws. The amount of data needed to define an \(n\)-category therefore increases exponentially as \(n\) increases.
+
+In addition to the difficulty in defining a weak \(n\)-category, it is also more difficult to give proofs in a weak environment, due to the bureaucracy of working around the various coherence isomorphisms. Consider the proof of Eckmann-Hilton given in \cref{fig:eh}. In a weak environment, we would hope to be able to simply replace each equality by the appropriate isomorphism, however doing so for the first equality in the proof would require us to give a isomorphism:
+\[ \alpha \cong \alpha * \id\]
+Each side of this isomorphism has a different source and target, and hence no such isomorphism can be given in the globular setting used in this thesis. A full proof of Eckmann-Hilton is still possible but far more involved.
+
+Weak categories are a more general notion than their strict counterparts, with every strict \(n\)-category generating a corresponding weak category by letting every coherence isomorphism be given by the identity morphism. For \(2\)-categories, the converse is in fact possible; every weak \(2\)-category is equivalent to a strict \(2\)-category, allowing proofs for weak \(2\)-categories to be given by instead proving the same property for strict \(2\)-categories.
+
+\todo[inline]{For 3-categories and above this doesn't work}
+\todo[inline]{Point to topological spaces}
+\todo[inline]{Point to Eckmann Hilton}
+\todo[inline]{Motivates the search for semistrict definitions}
+\todo[inline]{Weak unit version}
+\todo[inline]{Conjecture about dropping one}
+\todo[inline]{Grey-categories}
+\todo[inline]{Lack of definitions - let alone equiv}
+\todo[inline]{Link to string diagrams}
+\paragraph{Type theory and higher categories}
+\todo[inline]{Move to type theory}
+\todo[inline]{MLTT identity type}
+\todo[inline]{Proof relevance}
+\todo[inline]{Groupoid model}
+\todo[inline]{Hott}
+\todo[inline]{Hott contains a lot more}
+\todo[inline]{infty topos}
+\todo[inline]{Brunerei definition}
+\todo[inline]{All groupoidal}
+\todo[inline]{Definition of Catt}
+\todo[inline]{Link to maltsiniotis/grothendieck}
+\todo[inline]{Reference Thibaut}
+\todo[inline]{Catt unusual, no computation}
+\todo[inline]{We leverage this in current work}
+\todo[inline]{Adding equality unifies operations, creating a semistrict theory}
+\todo[inline]{Introduce cattsu cattsua, prove metatheoretic results}
+\todo[inline]{Believe cattsua to be the first definition of a strictly unital and associative infinity category}
+\paragraph{Overview}
+
+\paragraph{Statement of authorship}
+
+
+
 \begin{itemize}
 \item Motivation for higher categories
 \item Motivation for semistrictness
@@ -75,14 +294,14 @@ Things to go in introduction:
 \chapter{Background}
 \label{sec:background}
 
-We begin with an overview of the important concepts required for the rest of the thesis. Throughout, we will assume knowledge of various basic concepts from computer science, as well as a basic knowledge of category theory (including functor categories, presheaves, and (co)limits) and type theory. The following sections introduce a form of globular higher categories and give a definition of the type theory \Catt which is close to the original definition.
+We begin with an overview of the important concepts required for the rest of the thesis. Throughout, we will assume knowledge of various basic concepts from computer science, as well as a basic knowledge of category theory (including functor categories, presheaves, and (co)limits) and type theory. The primary purpose of the following sections is to introduce weak \(\infty\)-categories. While there are many differing definitions of \(\infty\)-categories (see \cite{leinster2001survey}), we focus here on models of the type theory \Catt~\cite{finster2017type}, which are known to be equivalent to a definition of \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck} based off an earlier definition by \citeauthor{PursuingStacks}~\cite{PursuingStacks}, which we introduce in \cref{sec:weak}. In \cref{sec:type-theory-catt}, we give a definition of the type theory \Catt which is close to the original definition.
 
 This section additionally serves as a place to introduce various syntax and notations which will be used throughout the rest of the thesis.
 
 \section{Higher categories}
 \label{sec:higher-categories}
 
-A higher category is a generalisation of the ordinary notion of a category to allow higher dimensional structure. This manifests in the form of allowing arrows or morphisms to have their source or target be another morphism instead of an object. In this thesis, we are primarily concerned with \(\infty\)-categories, which are equipped with the notion of an \(n\)-cell for each \(n \in \mathbb{N}\), where each \((n+1)\)-cell has a source and target \(n\)-cell, and \(0\)-cells play the role of objects in an ordinary category. There are many differing definitions of \(\infty\)-categories (see \cite{leinster2001survey}), some of which use different shapes of cell. The \(\infty\)-categories we study here will be globular, and in particular will be those defined by the type theory \Catt~\cite{finster2017type}, which are known to be equivalent to a definition of \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck} based off an earlier definition by \citeauthor{PursuingStacks}~\cite{PursuingStacks}, which we introduce in \cref{sec:weak}.
+A higher category is a generalisation of the ordinary notion of a category to allow higher dimensional structure. This manifests in the form of allowing arrows or morphisms to have their source or target be another morphism instead of an object. In this thesis, we are primarily concerned with \(\infty\)-categories, which are equipped with the notion of an \(n\)-cell for each \(n \in \mathbb{N}\), where each \((n+1)\)-cell has a source and target \(n\)-cell, and \(0\)-cells play the role of objects in an ordinary category.
 
 The role of objects is played by \(0\)-cells, with \(1\)-cells as the morphisms between these objects. For \(0\)-cells \(x\) and \(y\), a \(1\)-cell \(f\) with source \(x\) and target \(y\) will be drawn as:
 \[
@@ -417,130 +636,7 @@ We end this section with an example of a non-trivial application of the axioms o
   Where \(i = \id(\id(x))\).
 \end{proof}
 
-We give a more graphical representation of the proof in \cref{fig:eh}. In this proof the \(\alpha\) is moved to the left of \(\beta\), though we equally could have moved it round the right, and the choice made was arbitrary.
-
-\newsavebox{\ehalpha}
-\savebox{\ehalpha}{\adjustbox{scale=0.8}{
-  \begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
-    \bullet \& \bullet \& \bullet
-    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=10pt}, from=1-1, to=1-2]
-    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-2, to=1-3]
-    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=10pt}, from=1-2, to=1-3]
-    \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
-    \arrow["\id"', shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=2]
-  \end{tikzcd}}}
-\newsavebox{\ehbeta}
-\savebox{\ehbeta}{\adjustbox{scale=0.8}{
-  \begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
-    \bullet \& \bullet \& \bullet
-    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=10pt}, from=1-1, to=1-2]
-    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-10pt}, from=1-2, to=1-3]
-    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=10pt}, from=1-2, to=1-3]
-    \arrow["\id"',  shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
-    \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=2]
-  \end{tikzcd}}}
-\newsavebox{\ehlefttop}
-\savebox{\ehlefttop}{
-  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
-     \bullet \& \bullet
-     \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
-     \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
-     \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-     \arrow["\alpha", color= blue, shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
-     \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
-   \end{tikzcd}}}
-\newsavebox{\ehrighttop}
-\savebox{\ehrighttop}{
-  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
-    \bullet \& \bullet
-    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
-    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
-    \arrow["\beta", color=red, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
-  \end{tikzcd}}}
-\newsavebox{\ehleftbot}
-\savebox{\ehleftbot}{
-  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
-    \bullet \& \bullet
-    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7),, from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
-    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
-    \arrow["\alpha", color=blue, shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
-  \end{tikzcd}}}
-\newsavebox{\ehrightbot}
-\savebox{\ehrightbot}{
-  \adjustbox{scale=1}{\begin{tikzcd}[ampersand replacement=\&,column sep=small,cramped]
-    \bullet \& \bullet
-    \arrow[""{name=0, anchor=center, inner sep=0}, controls=+(80:0.7) and +(100:0.7), from=1-1, to=1-2]
-    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=0}, from=1-1, to=1-2]
-    \arrow[""{name=2, anchor=center, inner sep=0}, controls=+(100:-0.7) and +(80:-0.7),, from=1-1, to=1-2]
-    \arrow["\beta", color=red, shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=1]
-    \arrow["\id", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
-  \end{tikzcd}}}
-
-\begin{figure}[h]
-  \centering
-
-  \[
-    \begin{tikzcd}[ampersand replacement=\&,column sep=small]
-      \bullet \&\& \bullet \& = \& \bullet \&\&\&\&\& \bullet \& = \& \bullet \&\&\& \bullet \&\&\& \bullet \\
-      \\
-      \&\&\&\&\&\&\&\&\&\&\&\&\&\& = \\
-      \\
-      \bullet \&\& \bullet \& = \& \bullet \&\&\&\&\& \bullet \& = \& \bullet \&\&\& \bullet \&\&\& \bullet
-      \arrow[""{name=0, anchor=center, inner sep=0}, "\id", curve={height=-24pt}, from=1-1, to=1-3]
-      \arrow[""{name=1, anchor=center, inner sep=0}, "\id"', curve={height=24pt}, from=1-1, to=1-3]
-      \arrow[""{name=2, anchor=center, inner sep=0}, "\id"{description}, from=1-1, to=1-3]
-      \arrow[""{name=3, anchor=center, inner sep=0}, draw=none, controls=+(90:1.8) and +(90:1.8), from=1-5, to=1-10]
-      \arrow[""{name=4, anchor=center, inner sep=0}, draw=none, controls=+(90:-1.8) and +(90:-1.8), from=1-5, to=1-10]
-      \arrow[""{name=5, anchor=center, inner sep=0}, from=1-5, to=1-10]
-      \arrow[""{name=6, anchor=center, inner sep=0}, draw=none, controls=+(90:1.8) and +(90:1.8), from=5-5, to=5-10]
-      \arrow[""{name=7, anchor=center, inner sep=0}, draw=none, controls=+(90:-1.8) and +(90:-1.8), from=5-5, to=5-10]
-      \arrow[""{name=8, anchor=center, inner sep=0}, from=5-5, to=5-10]
-      \arrow[""{name=9, anchor=center, inner sep=0}, "\id", curve={height=-24pt}, from=5-1, to=5-3]
-      \arrow[""{name=10, anchor=center, inner sep=0}, "\id"', curve={height=24pt}, from=5-1, to=5-3]
-      \arrow[""{name=11, anchor=center, inner sep=0}, "\id"{description}, from=5-1, to=5-3]
-      \arrow[""{name=12, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=1-12, to=1-15]
-      \arrow[""{name=13, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-12, to=1-15]
-      \arrow[""{name=14, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=1-15, to=1-18]
-      \arrow[""{name=15, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=1-15, to=1-18]
-      \arrow[""{name=16, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=5-12, to=5-15]
-      \arrow[""{name=17, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=5-12, to=5-15]
-      \arrow[""{name=18, anchor=center, inner sep=0}, draw=none, controls=+(80:1.5) and +(100:1.5), from=5-15, to=5-18]
-      \arrow[""{name=19, anchor=center, inner sep=0}, draw=none, controls=+(100:-1.5) and +(80:-1.5), from=5-15, to=5-18]
-      \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=3pt, shorten >=5pt, Rightarrow, from=1, to=2]
-      \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=5pt, shorten >=3pt, Rightarrow, from=2, to=0]
-      \arrow["\beta"', color={rgb,255:red,204;green,0;blue,14}, shorten <=3pt, shorten >=5pt, Rightarrow, from=10, to=11]
-      \arrow["\alpha"', color={rgb,255:red,0;green,24;blue,204}, shorten <=5pt, shorten >=3pt, Rightarrow, from=11, to=9]
-      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=4, to=5]
-      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=5, to=3]
-      \arrow["\usebox{\ehbeta}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=7, to=8]
-      \arrow["\usebox{\ehalpha}"{description,inner sep = 0,xshift = -1.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=8, to=6]
-      \arrow["\usebox{\ehlefttop}"{description,inner sep = 0,xshift = -1.3pt, yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=13, to=12]
-      \arrow["\usebox{\ehrighttop}"{description,inner sep = 0,xshift = -1.3pt,yshift = 0.2pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=15, to=14]
-      \arrow["\usebox{\ehleftbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=17, to=16]
-      \arrow["\usebox{\ehrightbot}"{description,inner sep = 0,xshift = -1.3pt}, shorten <=3pt, shorten >=3pt, Rightarrow, from=19, to=18]
-      \arrow[controls=+(90:1.8) and +(90:1.8), from=1-5, to=1-10]
-      \arrow[controls=+(90:-1.8) and +(90:-1.8), from=1-5, to=1-10]
-      \arrow[controls=+(90:1.8) and +(90:1.8), from=5-5, to=5-10]
-      \arrow[controls=+(90:-1.8) and +(90:-1.8), from=5-5, to=5-10]
-      \arrow[controls=+(80:1.5) and +(100:1.5), from=1-12, to=1-15]
-      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-12, to=1-15]
-      \arrow[controls=+(80:1.5) and +(100:1.5), from=1-15, to=1-18]
-      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=1-15, to=1-18]
-      \arrow[controls=+(80:1.5) and +(100:1.5), from=5-12, to=5-15]
-      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=5-12, to=5-15]
-      \arrow[controls=+(80:1.5) and +(100:1.5), from=5-15, to=5-18]
-      \arrow[controls=+(100:-1.5) and +(80:-1.5), from=5-15, to=5-18]
-    \end{tikzcd}
-  \]
-  \caption{The Eckmann-Hilton argument}
-  \label{fig:eh}
-\end{figure}
+We give a more graphical representation of the proof in \cref{fig:eh}, which appeared in the introduction. In this proof the \(\alpha\) is moved to the left of \(\beta\), though we equally could have moved it round the right, and the choice made was arbitrary.
 
 \subsection{Pasting diagrams}
 \label{sec:pasting-diagrams}
