@@ -63,7 +63,7 @@
 
 The study of higher dimensional structures is becoming more prevalent in both mathematics and computer science. A central tool for studying these structures are \emph{higher categories}~\cite{leinster2004higher,riehl2022elements}, a broad term for many different generalisations of the notion category which capture the higher dimensional properties of these structures. The ``higher'' nature of these categories usually corresponds to the existence of morphisms whose source and target may be other morphisms, instead of just objects. A common method of organising this data is by giving a set of \(n\)-cells for each \(n \in \mathbb{N}\). A \(0\)-cell then corresponds to the objects of an ordinary category, and the source and target of an \((n+1)\)-cell are given by \(n\)-cells.
 
-These higher categories present in many forms, and have been characterised into a periodic table of categories~\cite{Baez1995}. Of particular interest are the \((n,k)\)-categories for \(n,k \in \mathbb{N} \cup \{\infty\}\), higher categories which contain \(m\)-cells for \(m \leq n\), and whose \(m\)-cells are invertible for \(m < k\). In mathematics, the study of \((\infty,0)\)-categories, known as \(\infty\)-groupoids, is motivated by the study of the homotopy structure of topological spaces~\cite{Bourbaki2016}, where \(n\)-cells are given by paths in the topological space, with higher cells forming homotopies between lower cells. In computer science, many applications have been found for \((n,n)\)-categories for lower \(n\), more commonly referred to as \(n\)-categories, including quantum computing~\cite{Heunen2019-jt}, logic~\cite{Barr1991,mellies2009categorical}, physics~\cite{Baez1995}, and game theory~\cite{ghani2018compositional}, among others~\cite{Street2012}.
+These higher categories present in many forms, and have been characterised into a periodic table of categories~\cite{cheng2007periodic,cheng2007periodic2}. Of particular interest are the \((n,k)\)-categories for \(n,k \in \mathbb{N} \cup \{\infty\}\), higher categories which contain \(m\)-cells for \(m \leq n\), and whose \(m\)-cells are invertible for \(m < k\). In mathematics, the study of \((\infty,0)\)-categories, known as \(\infty\)-groupoids, is motivated by the study of the homotopy structure of topological spaces~\cite{Bourbaki2016}, where \(n\)-cells are given by paths in the topological space, with higher cells forming homotopies between lower cells. In computer science, many applications have been found for \((n,n)\)-categories for lower \(n\), more commonly referred to as \(n\)-categories, including quantum computing~\cite{Heunen2019-jt}, logic~\cite{Barr1991,mellies2009categorical}, physics~\cite{Baez1995}, and game theory~\cite{ghani2018compositional}, among others~\cite{Street2012}.
 
 The composition of \(1\)-cells in an \(n\)-category functions identically to the composition of morphisms in a \(1\) category; two morphisms \(f : x \to y\) and \(g : y \to z\) can be composed to form another \(1\)-cell \(f * g : x \to z\). However, there are two distinct ways of composing \(2\)-cells, depicted by the diagrams below:
 % https://q.uiver.app/#q=WzAsNSxbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzQsMCwiXFxidWxsZXQiXSxbNSwwLCJcXGJ1bGxldCJdLFs2LDAsIlxcYnVsbGV0Il0sWzAsMSwiIiwwLHsiY3VydmUiOi01fV0sWzAsMSwiIiwyLHsiY3VydmUiOjV9XSxbMCwxXSxbMiwzLCIiLDEseyJjdXJ2ZSI6LTN9XSxbMiwzLCIiLDEseyJjdXJ2ZSI6M31dLFszLDQsIiIsMSx7ImN1cnZlIjotM31dLFszLDQsIiIsMSx7ImN1cnZlIjozfV0sWzcsNSwiXFxhbHBoYSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbNiw3LCJcXGJldGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzksOCwiXFxnYW1tYSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMTEsMTAsIlxcZGVsdGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV1d
@@ -247,49 +247,39 @@ Each side of this isomorphism has a different source and target, and hence no su
 
 Weak categories are a more general notion than their strict counterparts, with every strict \(n\)-category generating a corresponding weak category by letting every coherence isomorphism be given by the identity morphism. For \(2\)-categories, the converse is in fact possible; every weak \(2\)-category is equivalent to a strict \(2\)-category, allowing proofs for weak \(2\)-categories to be given by instead proving the same property for strict \(2\)-categories.
 
-\todo[inline]{For 3-categories and above this doesn't work}
-\todo[inline]{Point to topological spaces}
-\todo[inline]{Point to Eckmann Hilton}
-\todo[inline]{Motivates the search for semistrict definitions}
-\todo[inline]{Weak unit version}
-\todo[inline]{Conjecture about dropping one}
-\todo[inline]{Grey-categories}
-\todo[inline]{Lack of definitions - let alone equiv}
-\todo[inline]{Link to string diagrams}
-\paragraph{Type theory and higher categories}
-\todo[inline]{Move to type theory}
-\todo[inline]{MLTT identity type}
-\todo[inline]{Proof relevance}
-\todo[inline]{Groupoid model}
-\todo[inline]{Hott}
-\todo[inline]{Hott contains a lot more}
-\todo[inline]{infty topos}
-\todo[inline]{Brunerei definition}
-\todo[inline]{All groupoidal}
-\todo[inline]{Definition of Catt}
-\todo[inline]{Link to maltsiniotis/grothendieck}
-\todo[inline]{Reference Thibaut}
-\todo[inline]{Catt unusual, no computation}
-\todo[inline]{We leverage this in current work}
-\todo[inline]{Adding equality unifies operations, creating a semistrict theory}
-\todo[inline]{Introduce cattsu cattsua, prove metatheoretic results}
-\todo[inline]{Believe cattsua to be the first definition of a strictly unital and associative infinity category}
+This is no longer possible in \(n\)-categories where \(n \geq 3\). It is shown by \citeauthor{simpson1998homotopy}~\cite{simpson1998homotopy} that strict \(n\)-categories do not model the homotopy structure of all topological spaces, with the topological space \(S^2\) having no interpretation. More concretely, we consider the morphism \(\mathsf{EH}_{\alpha,\beta} : \alpha \star_1 \beta \to \beta \star_1 \alpha\) generated by the Eckmann-Hilton argument for scalars \(\alpha\) and \(\beta\). In a strict \(3\)-category, this morphism is given by the identity and so:
+\[ \mathsf{EH}_{\alpha,\beta} \star_2 \mathsf{EH}_{\beta,\alpha} = \id\]
+This equality does not hold in a general weak \(3\)-category (even up to isomorphism), contradicting that each weak \(3\)-category is equivalent to a strict \(3\)-category.
+
+This motivates the search for semistrict definitions of \(n\)-category: definitions where some of the operations are strict, yet do not lose the expressivity of weak \(n\)-categories. For \(3\)-categories, two such definitions have been proposed:
+\begin{itemize}
+\item \citeauthor{joyal2006weak}~\cite{joyal2006weak,joyalcoherence} define a monoidal \(2\)-category (which can be seen as a \(3\)-category with a single \(0\)-cell) which only has weak units and unitors, and is otherwise strict. They prove that all braided monoidal categories (weak \(3\)-categories with a unique \(0\)-cell and unique \(1\)-cell) can be interpreted in this setting as the category of endomorphisms on the weak unit morphism.
+\item Gray-categories are a form of semistrict \(3\)-categories for which all structure is strict except the the interchanger, the isomorphism witnessing the interchange law. \citeauthor{gordon1995coherence}~\cite{gordon1995coherence} prove that every weak \(3\)-category is equivalent to a Gray-category.
+\end{itemize}
+It is non-trivial to even define such a notion of semistrict \(n\)-category for \(n > 3\), let alone prove that it loses no expressivity over its weak counterpart. Simpson conjectures~\cite{simpson1998homotopy} that having only the unit laws weak is sufficient to model all homotopy groupoids, \(\infty\)-groupoids arising from the homotopy of topological spaces, though it is unclear if such a definition has been given. \citeauthor{hadzihasanovic2019representable}~\cite{hadzihasanovic2019representable} defines weak higher categories based on \emph{diagrammatic sets}. It could be argued that such a definition can model strict interchange, though the classes of diagrams that can be composed in this theory are restricted to those that are \emph{spherical}, which disallows horizontal composites in the form stated above and makes comparison difficult. \citeauthor{Batanin2013}~\cite{Batanin2013} define a notion of \(\infty\)-category with strict units based on the language of operads. A key axiom in this theory is \emph{disc reduction} which states that composites trivialise over certain configurations of cells known as discs.
+
+Definitions of semistrict \(n\)-categories which are strictly unital and associative have also been defined, primarily inspired by the graphical language of \emph{string diagrams}. \citeauthor{bar2017data}~\cite{bar2017data} define \emph{quasi-strict \(4\)-categories}, where the associativity and unitality laws hold strictly up to equality. \citeauthor{dorn2018associative}~\cite{dorn2018associative} defines \emph{associative \(n\)-categories}: a definition of strictly associative and unital \(n\)-category similarly based on geometric principles. Associative \(n\)-categories are further studied by Heidemann, Reutter, Tataru, and Vicary~\cite{reutter2019high,heidemann2022zigzag,tataru2024theory}, which has recently lead to the construction of the graphical proof assistant \textsf{homotopy.io}~\cite{corbyn2024homotopy} for manipulating higher dimensional string diagrams. Similarly to the case for diagrammatic sets, the composition operations in these theories have a different form to those of strict \(n\)-categories, making comparison difficult. The connection between these definitions and geometry is studied by \citeauthor{dorn2021framed}~\cite{dorn2021framed} and \citeauthor{heidemann2023framed}~\cite{heidemann2023framed}.
+
+\paragraph{Type theory and higher categories.}
+
+Deep links exist between higher category theory and type theory. The identity type in Martin-Löf type theory (\textsc{Mltt})~\cite{MARTINLOF197573} naturally leads to higher dimensional structure; the identity type \(s =_A t\) can be formed for any two terms \(s\) and \(t\) of type \(A\), but this construction can be iterated since the identity type is a type itself, leading to higher identity types \(p =_{s =_A t} q\) for \(p, q: s =_A t\). Operations on this type are generated by the J-rule, an induction principle for the identity type. Independent proofs by \citeauthor{lumsdaine2010weak}~\cite{lumsdaine2010weak} and \citeauthor{garner2011types}~\cite{garner2011types} show that the J-rule is sufficient to equip identity types with the appropriate operations to form a weak \(\infty\)-groupoid.
+
+Terms of the identity type \(s =_A t\) correspond to witnesses of the fact that \(s\) and \(t\) are equal, or can even be viewed as proofs of the equality. The study of these proofs as objects of study in their own right is known as \emph{proof relevance}. Although the axiom of uniqueness of identity proofs (UIP), which states that any two terms of the identity type are themselves equal, is consistent with \textsc{Mltt}, it was shown that it is not provable by \citeauthor{hofmannstreicher}, who constructed a model of \textsc{Mltt} where types are interpreted as \(1\)-groupoids, and identity types are non-trivial.
+
+The \(\infty\)-groupoidal nature of \textsc{Mltt} is embraced in Homotopy type theory (\textsc{Hott})~\cite{hottbook}, where types are interpreted as topological spaces. The key component of \textsc{Hott}, the \emph{univalence axiom}, which is incompatible with UIP, states that the identities between types are given by equivalences between these types, which need not be unique.
+
+The models of \textsc{Hott} are equipped with more structure than is present in an \(\infty\)-groupoid, and are given by \(\infty\)-toposes~\cite{shulman2019all}. In the appendices of his thesis~\cite{brunerie2016homotopy}, \citeauthor{brunerie2016homotopy} defines a type theory for \(\infty\)-groupoids by removing all structure from \textsc{Mltt} which does not concern the identity type. This theory constructs the identity type similarly to \textsc{Mltt}, but replaces the J-rule with a rule stating that all terms over \emph{contractible contexts} are equal. \citeauthor{finster2017type} further refine this idea to produce the type theory \Catt~\cite{finster2017type}, a type theory for weak \(\infty\)-categories, using techniques from a definition of weak \(\infty\)-categories due to  \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck} which itself is based on an earlier definition of \(\infty\)-groupoids which was given by \citeauthor{PursuingStacks}~\cite{PursuingStacks}. It was later shown~\cite{benjamin2021globular} that type-theoretic models of \Catt coincide with \(\infty\)-categories defined by \citeauthor{maltsiniotis2010grothendieck}.
+
+The type theory \Catt is unusual, due to having no computation or equality rules. In the current work we leverage this to define new notions of semistrict \(\infty\)-category, by adding definitional equality to \Catt. This equality unifies certain terms, which correspond to operations in a weak \(\infty\)-category, causing the semistrict behaviour of the resulting theories. This thesis develops a framework for working with equality relations in \Catt, and uses this to define two new type theories, \Cattsu and \Cattsua:
+\begin{itemize}
+\item \Cattsu is a version of \Catt which is strictly unital. It is primarily generated by the \emph{pruning} reduction, a computation rule which removes unnecessary identities from more complex terms.
+\item \Cattsua is \Catt with strict unitors and associators . In this theory, pruning is replaced by a more general reduction which we call \emph{insertion}, which merges multiple composites into a single composite, flattening the structure of terms in the theory. We claim to give the first algebraic definition of an \(\infty\)-category where the unitality and associativity laws hold strictly as models of \Cattsua.
+\end{itemize}
+The majority of the technical content of this thesis is concerned with proving standard metatheoretic properties of these type theories. This includes defining a notion of computation for each theory, given by demonstrating the existence of a confluent and terminating reduction scheme, which allows these theories to be implemented. This is used to produce interpreters for both theories, allowing complex constructions to be checked mechanically. We demonstrate the utility of this by formalising a proof of the \emph{syllepsis}, a \(5\)-dimensional term witnessing a naturality property of the Eckmann-Hilton argument.
+
 \paragraph{Overview}
 
 \paragraph{Statement of authorship}
-
-
-
-\begin{itemize}
-\item Motivation for higher categories
-\item Motivation for semistrictness
-\item Introduce 3 classes of coherences
-\item Ideas of semistrictness
-\item Existing 3-dimensional semistrictness results
-\item Link to graphical ideas
-\item Story behind Catt - HoTT - Brunerei
-\item Link to Grothedieck higher cats
-\end{itemize}
 
 \chapter{Background}
 \label{sec:background}
