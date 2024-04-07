@@ -278,9 +278,32 @@ The type theory \Catt is unusual, due to having no computation or equality rules
 The majority of the technical content of this thesis is concerned with proving standard metatheoretic properties of these type theories. This includes defining a notion of computation for each theory, given by demonstrating the existence of a confluent and terminating reduction scheme, which allows these theories to be implemented. This is used to produce interpreters for both theories, allowing complex constructions to be checked mechanically. We demonstrate the utility of this by formalising a proof of the \emph{syllepsis}, a \(5\)-dimensional term witnessing a commutativity property of the Eckmann-Hilton argument.
 
 \clearpage
-\paragraph{Overview}
+\paragraph{Overview.} We now give an overview of the content contained in each of the following chapters of the thesis.
+\begin{itemize}
+\item \cref{sec:background} gives an introduction to \(\infty\)-category theory. It defines strict \(\infty\)-categories and continues to define the definition of weak \(\infty\)-categories due to Maltsiniotis. The chapter ends by giving a definition of the type theory \Catt, as defined by \citeauthor{finster2017type}, and describing some preliminary well-known constructions in \Catt.
+\item \cref{cha:gener-pres-catt} introduces a general framework for studying variants of \Catt with definitional equality relations, which we name \Cattr. The chapter also states various properties concerning the metatheory of \Cattr, including specifying conditions on the set of equality rules \(\mathcal{R}\), under which the theory is well-behaved. The description of \Catt in this chapter is comprehensive and self-contained, although lacks some of the exposition of the previous chapter. The type theory \Cattr is accompanied by an Agda formalisation, which is introduced in this chapter.
+\item \cref{sec:operations-catt} takes an arbitrary well-behaved variant of \Cattr, and explores various constructions that can be formed in this setting. The primary purpose of this chapter is to introduce the \emph{pruning operation}, which is done in \cref{sec:pruning}, and the \emph{insertion operation}, which is introduced in \cref{sec:insertion}. \cref{sec:trees,sec:structured-terms} build up theory about a certain class of contexts represented by trees, and terms that appear in these contexts. This theory is vital for a complete understanding of insertion.
+\item In \cref{cha:cattstrict}, the type theories \Cattsu and \Cattsua are finally defined in \cref{sec:cattsu,sec:cattsua}, as variants of the framework \Cattr. Preliminary results about both theories are proved, primarily by compiling results that have been stated in the the previous two chapters. The main technical contribution of this section involves giving reduction schemes for both theories, and giving proofs that these reductions schemes are strongly terminating and globally confluent, hence making equality in these theories decidable.
 
-\paragraph{Statement of authorship}
+  In \cref{sec:towards-nbe}, the decidablity of equality is used to implement a type-checker for both theories \Cattsu and \Cattsua. The type-checker uses \emph{normalisation by evaluation} (NbE) to reduce terms to their a canonical form where they can be checked for equality. The section discusses the interaction of NbE with the \Catt, as well as discussing limitations of this approach in this setting.
+
+  \cref{sec:models} discusses some properties of the models of these type theories, introducing a technique which we call \emph{rehydration}, which ``pads out'' terms of the semistrict theory with the necessary coherences to produce a term of \Catt which is equivalent to the original term. Rehydration can be seen as a conservativity result for the semistrict theories introduced at the start of the chapter. A proof of rehydration is given for the restricted case of terms over a certain class of context known as ps-contexts. This partial rehydration result is sufficient to determine that the semistrictness defined by \Cattsu and \Cattsua is a property, a model of \Catt can be a model of \Cattsu or \Cattsua in at most one way. We further explore some of the obstructions to rehydration in a generic context.
+
+  The thesis ends with \todo[inline]{Do this}
+\end{itemize}
+Although results of later chapters depend on definitions and results of the preceding chapters, a linear reading of this thesis is not essential. A reader who is already familiar with the type theory \Catt can safely skip \cref{sec:background}, and a reader who is only interested in the type theory \Cattsu could read \cref{cha:gener-pres-catt} followed by \cref{sec:pruning,sec:cattsu}. Similarly, a reader only interested in \Cattsua can ignore any content on the pruning construction. \cref{sec:towards-nbe} may be of interest to a reader who is purely interested in the type-theoretic techniques used, and not the type theory \Catt itself.
+
+\paragraph{Statement of authorship.}
+The type theory \Cattsu was originally developed in collaboration with Eric Finster, David Reutter, and Jamie Vicary, and was presented by the author at the Logic in Computer Science conference in 2022~\cite{finster2022type}. The authors main contribution to this project was the proof that the definitional equality of the theory preserves support, which lead to the development of the proof strategy given in \cref{sec:further-conditions}, and reworking the presentation of \Cattsu to allow this proof strategy to be employed, eventually leading to the development of \Cattr.
+
+This thesis contains a new proof of termination for \Cattsu, reusing the technique developed for \Cattsua, and a new proof of confluence which avoids defining the reduction strategy referred to as standard reduction in the \Cattsu paper. \cref{sec:models}, which discusses the models of \Cattsu (and \Cattsua) and details the rehydration procedure over pasting diagrams is mostly unchanged with the exception of an omission in the original proof, that is remedied by \cref{cor:supp-ps} which gives a novel proof of the current author for a property of \Catt that has long been conjectured to hold, but has up until now eluded proof.
+
+\Cattsua originally appeared in the preprint~\cite{finster2023strictly} and was developed in collaboration with Eric Finster and Jamie Vicary. The author of this thesis was responsible for the technical development in this paper, including being solely responsible for the proof of confluence that is given in \cref{sec:confluence-cattsua}.
+
+The author claims the development of the framework \Cattr and its accompanying Agda formalisation as individual contribution, as well as the implementation of \Cattsu and \Cattsua which appears in \cref{sec:towards-nbe}.
+
+
+
 
 \chapter{Background}
 \label{sec:background}
@@ -1035,7 +1058,7 @@ A modern approach to computads for weak \(\infty\)-categories is given by \citea
 \section{The type theory \Catt}
 \label{sec:type-theory-catt}
 
-In this section we give an overview of the dependent type theory \Catt~\cite{finster2017type}. \Catt serves as a definition of weak \(\infty\)-categories, by defining a weak \(\infty\)-category to be a model of the type theory (e.g. using categories with families~\cite{MR1474535}). In \cref{cha:gener-pres-catt}, we give a more general and comprehensive presentation of \Catt, allowing the addition of equality relations to the type theory, preempting \cref{cha:cattstrict}. In contrast this section presents the version of \Catt closer to the one found in the literature, and compares its various constructions to the ideas introduced in \cref{sec:weak}.
+In this section we give an overview of the dependent type theory \Catt~\cite{finster2017type}. \Catt serves as a definition of weak \(\infty\)-categories, by defining a weak \(\infty\)-category to be a model of the type theory (e.g. using categories with families~\cite{cwf}). In \cref{cha:gener-pres-catt}, we give a more general and comprehensive presentation of \Catt, allowing the addition of equality relations to the type theory, preempting \cref{cha:cattstrict}. In contrast this section presents the version of \Catt closer to the one found in the literature, and compares its various constructions to the ideas introduced in \cref{sec:weak}.
 
 \subsection{Syntax of \Catt}
 \label{sec:syntax-catt}
@@ -1392,7 +1415,7 @@ The remainder of the operations for a 2-category can be defined similarly, as ea
 \subsection{Suspension}
 \label{sec:suspension}
 
-To end this section, we describe the meta-operation of \emph{suspension}, as described by \citeauthor{benjamin2020type}~\cite{benjamin2020type}. Suspension takes any piece of syntax as input and produces one with a dimension one higher. It can be used as an aid to defining operations in \Catt, but will also form a key part of the formal development of the constructions described in \cref{sec:operations-catt}.
+To end this section, we introduce the meta-operation of \emph{suspension}, as described for \Catt by \citeauthor{benjamin2020type}~\cite{benjamin2020type}. Suspension takes any piece of syntax as input and produces one with a dimension one higher. It can be used as an aid to defining operations in \Catt, but will also form a key part of the formal development of the constructions described in \cref{sec:operations-catt}.
 
 Suspension is inspired by the identically named operation on topological spaces. Given a topological space \(X\), its suspension \(\Sigma X\) is formed by quotienting the space \(X \times [0,1]\) by the relation that identifies all points of the form \((x,0)\) for \(x \in X\) and identifies points \((x,1)\) for \(x \in X\).
 
@@ -6064,7 +6087,7 @@ The left hand pushout square is given by the insertion of \(U\) into \(T\) along
   for any \(L : S \to \U\), \(M : T \to \U\), and \(N : U \to \U\).
 \end{lemma}
 \begin{proof}
-  See functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-inserted-branch} and \func{Catt.Tree.Insertion.Properties}{label-from-inserted-branch} in module \module{Catt.Tree.Insertion.Properties}, and \func{Catt.Typing.Insertion.Equality}{κ-inserted-branch} in module \module{Catt.Typing.Insertion.Equality}.
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-inserted-branch} and \func{Catt.Tree.Insertion.Properties}{label-from-inserted-branch} in the formalisation module \module{Catt.Tree.Insertion.Properties}, and \func{Catt.Typing.Insertion.Equality}{κ-inserted-branch} in module \module{Catt.Typing.Insertion.Equality}.
 \end{proof}
 
 
@@ -6683,6 +6706,7 @@ Disc trivialisation allows us to prove the following results concerning terms an
 Since any \Catt term is also a \Cattsu term, we get the following corollary.
 
 \begin{corollary}
+  \label{cor:supp-ps}
   If \(\Gamma \vdash t : A\) in \Catt, and \(\Gamma\) is a ps-context, then \(\Supp(t)\) is a ps-context.
 \end{corollary}
 
