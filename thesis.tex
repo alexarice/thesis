@@ -285,7 +285,7 @@ The majority of the technical content of this thesis is concerned with proving s
 \item \cref{sec:operations-catt} takes an arbitrary well-behaved variant of \Cattr, and explores various constructions that can be formed in this setting. The primary purpose of this chapter is to introduce the \emph{pruning operation}, which is done in \cref{sec:pruning}, and the \emph{insertion operation}, which is introduced in \cref{sec:insertion}. \cref{sec:trees,sec:structured-terms} build up theory about a certain class of contexts represented by trees, and terms that appear in these contexts. This theory is vital for a complete understanding of insertion.
 \item In \cref{cha:cattstrict}, the type theories \Cattsu and \Cattsua are finally defined in \cref{sec:cattsu,sec:cattsua}, as variants of the framework \Cattr. Preliminary results about both theories are proved, primarily by compiling results that have been stated in the the previous two chapters. The main technical contribution of this section involves giving reduction schemes for both theories, and giving proofs that these reductions schemes are strongly terminating and globally confluent, hence making equality in these theories decidable.
 
-  In \cref{sec:towards-nbe}, the decidablity of equality is used to implement a type-checker for both theories \Cattsu and \Cattsua. The type-checker uses \emph{normalisation by evaluation} (NbE) to reduce terms to their a canonical form where they can be checked for equality. The section discusses the interaction of NbE with the \Catt, as well as discussing limitations of this approach in this setting.
+  In \cref{sec:towards-nbe}, the decidablity of equality is used to implement a typechecker for both theories \Cattsu and \Cattsua. The typechecker uses \emph{normalisation by evaluation} (NbE) to reduce terms to their a canonical form where they can be checked for equality. The section discusses the interaction of NbE with the \Catt, as well as discussing limitations of this approach in this setting.
 
   \cref{sec:models} discusses some properties of the models of these type theories, introducing a technique which we call \emph{rehydration}, which ``pads out'' terms of the semistrict theory with the necessary coherences to produce a term of \Catt which is equivalent to the original term. Rehydration can be seen as a conservativity result for the semistrict theories introduced at the start of the chapter. A proof of rehydration is given for the restricted case of terms over a certain class of context known as ps-contexts. This partial rehydration result is sufficient to determine that the semistrictness defined by \Cattsu and \Cattsua is a property, a model of \Catt can be a model of \Cattsu or \Cattsua in at most one way. We further explore some of the obstructions to rehydration in a generic context.
 
@@ -6116,7 +6116,7 @@ In \cref{sec:cattsu,sec:cattsua}, the normalisation algorithm is defined by givi
 
 Such a normalisation procedure allows a type checking algorithm can be implemented, creating an interpreter for the language. This allows us to write larger terms, and it can be automatically verified whether they are well-formed. In \cref{sec:towards-nbe}, we introduce our implementation of \Catt, \Cattsu, and \Cattsua, written in rust. This implementation supports features such as implicit arguments to terms, implicit suspension, and native support for trees and tree labellings. We will explain how the tool can be used, and use it to give larger examples of \Cattsua terms, including proofs of Eckmann-Hilton (see \cref{fig:eh}) and its higher dimensional coherence condition, the syllepsis.
 
-The implementation uses an approach closer to normalisation by evaluation for type-checking terms in the theory. \cref{sec:towards-nbe} explores this algorithm and presents some perspectives on applying normalisation by evaluation to semistrict versions of \Catt. The correctness of the tool is still dependent on the metatheoretic results derived using reduction schemes.
+The implementation uses an approach closer to normalisation by evaluation for typechecking terms in the theory. \cref{sec:towards-nbe} explores this algorithm and presents some perspectives on applying normalisation by evaluation to semistrict versions of \Catt. The correctness of the tool is still dependent on the metatheoretic results derived using reduction schemes.
 
 \todo[inline]{Describe further sections}
 \todo[inline]{Include models section?}
@@ -6212,7 +6212,7 @@ The identity term was not present in the premise of the reduction, and the term 
 
 To prove termination, we will exploit that although each reduction creates new subterms, these subterms are all of a lower dimension that the dimension of the term that is being reduced. In the example above, the dimension of \(\Coh \Delta {\arr s A s} \sigma\) is greater than the dimension of the term \(s\), and so the reduction has still made progress towards a normal form by decreasing the complexity of the term in dimension \(\dim(A)+1\), even though it may introduce arbitrary complexity at \(\dim(A)\) and below.
 
-To this end we define the following notion of complexity for each class of syntax, which assigns an ordinal number to each term, which we its \emph{syntactic complexity}. As the ordinal numbers are well-founded, we aim to prove that our reduction is terminating by proving that each single-step reduction reduces the complexity of the term. To define syntactic complexity, we will need to use ordinal numbers up to \(\omega^\omega\). We will also need a construction known as the natural sum of ordinals, \(\alpha \+ \beta\), which is associative, commutative, and strictly monotone in both of its arguments~\cite{lipparini16_infin_natur_sum}.
+To this end we define the following notion of complexity for each class of syntax, which assigns an ordinal number to each term, which we its \emph{syntactic complexity}. As the ordinal numbers are well-founded, we aim to prove that our reduction is terminating by proving that each single-step reduction reduces the complexity of the term. To define syntactic complexity, we will need to use ordinal numbers up to \(\omega^\omega\). We will also need a construction known as the natural sum of ordinals, \(\alpha \+ \beta\), which is associative, commutative, and strictly monotone in both of its arguments~\cite{lipparini16}.
 
 \begin{definition}
   For all terms \(t\), types \(A\), and substitutions \(\sigma\), the \emph{syntactic complexity} \(\sc(t)\), \(\sc(A)\), and \(\sc(\sigma)\) are mutually defined as follows:
@@ -7106,27 +7106,103 @@ By the above and \cref{lem:insertion-different}, \(b' =_{\dim(a)} c'\). This com
 \section{Towards normalisation by evaluation}
 \label{sec:towards-nbe}
 
-\todo[inline]{Cite rust implementation}
-\todo[inline]{Explain purpose high level}
-\todo[inline]{Uses an nbe style}
-\todo[inline]{Evaluate terms that may not be closed}
-\todo[inline]{Cite modal type theory paper as inspiration}
-\todo[inline]{Quick overview of the 3 classes of syntax}
-\todo[inline]{Diagram}
-\todo[inline]{expression level syntax - represents the written text}
-\todo[inline]{term level syntax - similarities to structured syntax}
-\todo[inline]{In term level syntax, operations in catt are represented as constructors}
-\todo[inline]{Normal form syntax - closest to catt syntax}
-\todo[inline]{eval globally evaluates to normal form, primarily not via reduction}
-\todo[inline]{Typechecking takes expression to term level syntax}
-\todo[inline]{We assume all term level and normal form syntax is well-typed.}
+In this section, the rust implementation of \Catt, \Cattsu, and \Cattsua is introduced and can be found at \todo{Cite implementation}. This implementation takes the form of an interpreter, allowing terms of \Catt to be written in a convenient syntax which can be mechanically checked. The implementation aids the user in writing \Catt terms with features such as automatically constructing standard composites, allowing terms to be bound to top level syntax, implicitly suspending terms, automatically filling arguments which are not locally maximal, and providing informative error messages to the user when typechecking fails.
+
+We highlight three points of our implementation:
+\begin{itemize}
+\item The typechecker uses \emph{bidirectional typing}~\cite{10.1145/3450952} to mix ``inference'' and ``checking'' rules. Although types for \Catt can always be inferred, we find ourselves in the unusual situation where in some cases the context a term lives in can be inferred, and in some cases it must be provided. We expand on this type system in \cref{sec:typechecking}.
+\item Tree contexts (see \cref{sec:trees}) are given an explicit representation in the tool. The syntax in the theory is then split into syntax over a tree context and syntax over an arbitrary context. Syntax over a tree context can then use paths instead of de Bruijn levels to reference positions in the context, and substitutions from tree contexts can be given by labellings. We explore this syntax in \cref{sec:nbe-syntax}.
+\item During typechecking, the equality between types must be checked, which is done by syntactically comparing the normal form of each type. In this implementation, an approach inspired by \emph{normalisation by evaluation} is taken, as opposed to the reduction based approaches used in the previous sections.
+\end{itemize}
+
+Normalisation by evaluation (NbE) (see \cite{abel2013normalization} for an introduction), can be viewed as a method of evaluating terms with ``unknowns'', which are given by the variables of the term. Equivalently, NbE defines a semantic model of the theory, and interprets each constructor of the type theory in this semantics. When equipped with a method for transforming elements of this model back to terms of the type theory (referred to as \emph{quoting}), the normal form of a term can be calculated directly by recursion on its structure. Compared to the reduction based approach taken in the previous sections, which simplifies the term via a series of locally applied reduction rules, NbE takes a more global approach, deconstructing the original term and using it to synthesise a normal form.
+
+The form of NbE implemented in the tool is largely inspired by the paper \citetitle{gratzer2019implementing}~\cite{gratzer2019implementing}, although we note that the form of the theory \Catt is vastly different to the modal type theory they present; \Catt does not have lambda abstraction or application in the usual sense, which makes adapting NbE techniques from the literature difficult. Nevertheless, the overall form of the evaluation is similar.
+
+\begin{figure}[ht]
+  \centering
+  % https://q.uiver.app/#q=WzAsMyxbMCwwLCJcXHRleHR7UmF3IHN5bnRheH0iXSxbMCwyLCJcXHRleHR7Q2hlY2tlZCBzeW50YXh9Il0sWzAsNCwiXFx0ZXh0e05vcm1hbC1mb3JtIHN5bnRheH0iXSxbMCwxLCJcXG1hdGhzZntjaGVja30iLDAseyJjdXJ2ZSI6LTR9XSxbMCwxLCJcXG1hdGhzZntpbmZlcn0iLDIseyJjdXJ2ZSI6NH1dLFsxLDAsIlxcbWF0aHNme3RvXFxfcmF3fSIsMV0sWzEsMiwiXFxtYXRoc2Z7ZXZhbH0iLDAseyJjdXJ2ZSI6LTR9XSxbMiwxLCJcXG1hdGhzZntxdW90ZX0iLDAseyJjdXJ2ZSI6LTR9XV0=
+\begin{tikzcd}
+	{\text{Raw syntax}} \\
+	\\
+	{\text{Core syntax}} \\
+	\\
+	{\text{Normal-form syntax}}
+	\arrow["{\mathsf{check}}", curve={height=-24pt}, from=1-1, to=3-1]
+	\arrow["{\mathsf{infer}}"', curve={height=24pt}, from=1-1, to=3-1]
+	\arrow["{\mathsf{to\_raw}}"{description}, from=3-1, to=1-1]
+	\arrow["{\mathsf{eval}}", curve={height=-24pt}, from=3-1, to=5-1]
+	\arrow["{\mathsf{quote}}", curve={height=-24pt}, from=5-1, to=3-1]
+\end{tikzcd}
+  \caption{Implementation overview}
+  \label{fig:overview}
+\end{figure}
+
+A high-level overview of the implementation is given in \cref{fig:overview}. We pause to explain the purpose of each component:
+\begin{itemize}
+\item The \emph{raw syntax} is the syntax that the user of the tool interacts with. We maintain no invariants over the well-formedness of the raw syntax, and it allows the user to omit arbitrary arguments. The primary purpose of the raw syntax is to be the target of parsing, and conversely to facilitate the pretty printing of terms. We also specify a command language.
+\item The \emph{core syntax} is the result of the typechecking procedure. Syntax of this form is known to be well-formed, and all implicit arguments have been filled in at this point. The terms of this syntax resemble the structured terms of \cref{sec:structured-terms}, with various common operations of \Catt being defined as constructors. In contrary to previous representations of \Catt in this thesis, the application of substitution is treated as a term former, instead of an operation.
+\item The \emph{normal-form syntax} represents the normal forms of each of the type theories \Cattsua, \Cattsu, and \Catt itself. This syntax is also always assumed to be well-formed, and is the closest to original syntax of \Catt.
+\item The \textsf{eval} and \textsf{quote} functions convert syntax between core syntax and normal-form syntax. For each constructor in the core syntax, evaluation computes the result of the corresponding operation, quotienting by the rules of \Cattsu or \Cattsua when applicable. We note that despite \Catt itself having no computation, evaluation must still process operations such as suspension and substitution application. Quotation converts normal-form syntax back to core syntax, and in our case is a trivial inclusion.
+\item The \textsf{infer} and \textsf{check} functions perform typechecking while converting raw syntax into core syntax. Both functions are mutually dependent on each other, and also may need to convert types to normal-form syntax to check equality. The \textsf{to\_raw} functions ``forgets'' that a piece of core syntax is well-formed, returning a piece of raw syntax, and can optionally remove all non-locally maximal arguments from terms.
+\end{itemize}
+In the following subsections, we expand on these points, fully defining each class of syntax, and describing the typechecking and evaluation procedures.
 
 \subsection{Syntax}
 \label{sec:nbe-syntax}
 
-\todo[inline]{Give all syntactic constructions}
-\todo[inline]{Syntax for trees/tree labellings}
-\todo[inline]{Explain span information}
+Before defining each of the syntactic classes in the tool, we introduce some common notation that will be used in the definitions below:
+\begin{itemize}
+\item The letter \(v\) will be used to represent \emph{names} in the syntax: strings that represent a valid identifier.
+\item A \(\mathsf{Maybe}(x)\) is either of the form \(\mathsf{Some}(x)\) or \(\mathsf{None}\).
+\item The notation \(\mathsf{Tree}(x)\) represents a tree structure which is given by a list of \(x\)'s which we call the \emph{elements} and a list of trees, which we call the \emph{branches}, whose length is one less than the list of elements. These resemble labellings from \cref{sec:tree-contexts}, but will allow trees to be labelled with arbitrary objects.
+\end{itemize}
+We begin our study of the syntax with the raw syntax, which is defined by the following grammar:
+\begin{alignat*}{4}
+  &(\text{Terms})&\quad&s,t &\ \ &{}::={}&\ \ &{v} \mid \mathsf{coh}[T:A] \mid \_ \mid \mathsf{id} \mid \mathsf{comp} \mid \mathsf{inc}_n^m(s) \mid s \sub \sigma \mid \Sigma(s)\\
+  &(\text{Types})&&A&&{}::={}&& \star \mid \arr s {\mathsf{Maybe}(A)} t \mid \_ \mid A \sub \sigma \mid \Sigma(A)\\
+  &(\text{Arguments})&&\sigma&&{}::={}&& (\mathsf{Tree}(\mathsf{Maybe}(s)), \mathsf{Maybe}(A)) \mid ((\mathsf{Maybe}(A,)s_0,\dots,s_n))\\
+  &(\text{Contexts})&&\Gamma&&{}::={}&& T \mid (v_0, A_0), \dots, (v_n : A_n)\\
+  &(\text{Tree Contexts})&&T&&{}::={}&& \mathsf{Tree}(\mathsf{Maybe}(v))
+\end{alignat*}
+
+The primary purpose of the raw syntax is to accurately represent the written plaintext syntax. For most cases, each constructor is written in plaintext exactly how it is written above, apart from a few cases:
+\begin{itemize}
+\item The application of substitution \(s \sub \sigma\) and \(A \sub \sigma\) is simply written \(s\ \sigma\) and \(A\ \sigma\) respectively.
+\item The constructor \(\mathsf{inc}_n^m\) is not parsed and is used as an internal operation for defining the external substitution (see \cref{sec:insertion}). It is displayed as \(\mathsf{inc}\verb|<n-m>|\).
+\item The suspension can be given by the characters \(\Sigma\) or \(S\), to avoid the user being forced to type unicode characters.
+\item The type \(\arr s {\mathsf{None}} t\) is written simply as \(s \to t\), and the type \(\arr s {\mathsf{Some}(A)} t\) is written as \(A \mid s \to t\), where the symbol \(\to\) can be replaced by \verb|->| in either case.
+\item For the construction \(\mathsf{Maybe}\), \(\mathsf{Some}(s)\) is printed the same as \(s\), and \(\mathsf{None}\) is printed as the empty string.
+\item We provide two ways to write trees:
+  \begin{itemize}
+  \item The curly bracket notation from \cref{sec:trees} can be used. The string:
+    \[ s_0\{T_0\}s_1\cdots\{T_n\}s_{n+1}\]
+    is parsed as a tree with elements given by (the parse of) \(s_0\) to \(s_{n+1}\) and branches given by the parse of \(T_0\) to \(T_n\).
+  \item We provide a notation for specifying the locally maximal arguments of a tree. We parse the string:
+    \[ [a_1,a_2,\dots,a_n]\]
+    As a tree that has \(\mathsf{None}\) as each of elements branches by given by each of the \(a_i\), where if \(a_i\) does not recursively parse as a tree, it is parsed as an element and wrapped in a singleton tree.
+  \end{itemize}
+  To compare these two notations, the two trees below are equal:
+  \[ \{f\}\{\{a\}\{b\}\} = [f,[a,b]]\]
+  When using the full (curly bracket) notation to specify a labelling, it must be wrapped in angle brackets to avoid parse ambiguity.
+\end{itemize}
+
+We also provide a command language on top of the raw syntax for \Catt, which allows the user to perform various operations on terms, such as binding them to a top-level name, or normalising them. These commands are given by the following syntax:
+\[ \mathsf{def} v = s \mid \mathsf{def} v \Gamma = s \mid \mathsf{def} v \Gamma : A = s \]
+
+
+In the implementation, each piece of syntax is paired with a piece of span information, which specifies where in the source file it originated. This is done by making the raw syntax generic over a type \(S\) of spans. When obtaining the raw syntax from parsing, this \(S\) is given by a range \(n<m\) specifying the start and end indices of where the syntax appeared in the text. When the syntax is obtained from the \(\mathsf{to\_raw}\) functions, \(S\) is given by the unit type.
+
+The span information allows more informative error messages to be given. These error messages are formatted using the \href{https://docs.rs/ariadne/latest/ariadne/}{ariadne} crate. An example error message is given below:
+\begin{Verbatim}[baselinestretch=0.8,commandchars=\\\{\},frame=lines]
+\textcolor{Diag2}{Error}: Given term "\textcolor{Diag2}{x}" does not match inferred term "\textcolor{Diag1}{y}"
+    ╭─[examples/test.catt:19:34]
+    │
+ 19 │ def error_test x\{f\}y = comp <x\{f\}\textcolor{Diag2}{x}>
+    │                                  \textcolor{Diag2}{┬}
+    │                                  \textcolor{Diag2}{╰──} Given term
+────╯
+\end{Verbatim}
 
 \todo[inline]{Term level syntax}
 \todo[inline]{Semantic interpretation?}
