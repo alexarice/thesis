@@ -7161,7 +7161,7 @@ We begin our study of the syntax with the raw syntax, which is defined by the fo
 \begin{alignat*}{4}
   &(\text{Terms})&\quad&s,t &\ \ &{}::={}&\ \ &{v} \mid \mathsf{coh}[T:A] \mid \_ \mid \mathsf{id} \mid \mathsf{comp} \mid \mathsf{inc}_n^m(s) \mid s \sub \sigma \mid \Sigma(s)\\
   &(\text{Types})&&A&&{}::={}&& \star \mid \arr s {\mathsf{Maybe}(A)} t \mid \_ \mid A \sub \sigma \mid \Sigma(A)\\
-  &(\text{Arguments})&&\sigma&&{}::={}&& (\mathsf{Tree}(\mathsf{Maybe}(s)), \mathsf{Maybe}(A)) \mid ((\mathsf{Maybe}(A,)s_0,\dots,s_n))\\
+  &(\text{Arguments})&&\sigma&&{}::={}&& (\mathsf{Tree}(\mathsf{Maybe}(s)), \mathsf{Maybe}(A)) \mid (\mathsf{Maybe}(A,)s_0,\dots,s_n)\\
   &(\text{Contexts})&&\Gamma&&{}::={}&& T \mid (v_0, A_0), \dots, (v_n : A_n)\\
   &(\text{Tree Contexts})&&T&&{}::={}&& \mathsf{Tree}(\mathsf{Maybe}(v))
 \end{alignat*}
@@ -7188,30 +7188,81 @@ The primary purpose of the raw syntax is to accurately represent the written pla
 \end{itemize}
 
 We also provide a command language on top of the raw syntax for \Catt, which allows the user to perform various operations on terms, such as binding them to a top-level name, or normalising them. These commands are given by the following syntax:
-\[ \mathsf{def} v = s \mid \mathsf{def} v \Gamma = s \mid \mathsf{def} v \Gamma : A = s \]
+\begin{alignat*}{3}
+  &\mathsf{def}\ v = s &&{}\mathrel{\big\vert} \mathsf{def}\ v\ \Gamma = s &&{}\mathrel{\big\vert} \mathsf{def}\ v\ \Gamma : A = s \\
+  \mathrel{\big\vert}{}&\mathsf{normalise}\ s\ \mathsf{in}\ \Gamma &&{}\mathrel{\big\vert} \mathsf{assert}\ s = t\ \mathsf{in}\ \Gamma &&{}\mathrel{\big\vert} \mathsf{size}\ s\ \mathsf{in}\ \Gamma\\
+  \mathrel{\big\vert}{}&\mathsf{import}\ \mathtt{filename}
+\end{alignat*}
+The first three commands define the name \(v\) to be given by the term \(s\), where the context \(\Gamma\) and type \(A\) can optionally be given, determining whether the term \(s\) will be inferred or checked. The next three commands take a context \(\Gamma\) and respectively calculate the normal form of \(s\) in \(\Gamma\), assert that \(s\) and \(t\) are equal in \(\Gamma\), or count the number of coherence constructors in \(s\). The last command parses the file \texttt{filename} and runs the commands it contains.
 
 
 In the implementation, each piece of syntax is paired with a piece of span information, which specifies where in the source file it originated. This is done by making the raw syntax generic over a type \(S\) of spans. When obtaining the raw syntax from parsing, this \(S\) is given by a range \(n<m\) specifying the start and end indices of where the syntax appeared in the text. When the syntax is obtained from the \(\mathsf{to\_raw}\) functions, \(S\) is given by the unit type.
 
-The span information allows more informative error messages to be given. These error messages are formatted using the \href{https://docs.rs/ariadne/latest/ariadne/}{ariadne} crate. An example error message is given below:
+The span information allows more informative error messages to be given, which are formatted using the \href{https://docs.rs/ariadne/latest/ariadne/}{ariadne} crate. An example error message is given below:
 \begin{Verbatim}[baselinestretch=0.8,commandchars=\\\{\},frame=lines]
 \textcolor{Diag2}{Error}: Given term "\textcolor{Diag2}{x}" does not match inferred term "\textcolor{Diag1}{y}"
     ╭─[examples/test.catt:19:34]
     │
- 19 │ def error_test x\{f\}y = comp <x\{f\}\textcolor{Diag2}{x}>
+ 19 │ def error_test x\{f\}y = comp ⟨x\{f\}\textcolor{Diag2}{x}⟩
     │                                  \textcolor{Diag2}{┬}
     │                                  \textcolor{Diag2}{╰──} Given term
 ────╯
 \end{Verbatim}
+In the above example, the span attached to the erroneous term \(x\) is used to identify the line of the code which should be displayed and determine where the ``Given term'' label should point to.
 
-\todo[inline]{Term level syntax}
-\todo[inline]{Semantic interpretation?}
+We now move on to the core syntax of the tool. The overall form of the core syntax is similar to that of the raw syntax with the following differences:
+\begin{itemize}
+\item Span information is no longer included in the core syntax.
+\item Terms that were optional in the raw syntax (as specified using the \textsf{Maybe} construction) are no longer optional. The hole constructor is also removed.
+\item The syntax is generic over a type \(P\) of positions. In practice, the type \(P\) is either the type of de Bruijn levels, for terms over a standard context, or paths, for terms over a tree context. Both of these types implement the \(\mathsf{Position}\) trait, allowing us to call the required functions that depend on the type of positions.
+\item The constructor for variables \(v\) in the raw syntax is replaced by two separate constructions, a constructor \(\mathsf{var}_p\) for local variables, where \(p : P\), and \(\mathsf{top\_lvl}(v, s)\) for a top-level symbol \(v\) which is bound to term \(s\).
+\item Application of substitutions and labellings are now separate constructors. This is primarily due to a limitation of the rust type system which doesn't allow an \textsf{App} constructor to existentially quantify over the type of positions in the input term.
+\item The \(\mathsf{comp}\) constructor now records the tree it is composing over, and will be written \(\mathsf{comp}_T\). Similarly the \(\mathsf{id}\) constructor becomes \(\mathsf{id}_n\), with \(n\) recording the dimension of the term the identity is applied to.
+\end{itemize}
+The core syntax is defined by the following grammar. Following \cite{gratzer2019implementing}, a different colour is used for each of the three categories of syntax.
+\begin{alignat*}{4}
+  &(\text{Terms})&\quad&\color{Diag1}s,t &\ \ &{}::={}&\ \ &{\color{Diag1}\mathsf{var}_p} \mid {\color{Diag1}\mathsf{top\_lvl}(v,s)} \mid {\color{Diag1}\mathsf{coh}[T:A]} \mid \\
+  &&&&&&&{\color{Diag1}\mathsf{id}_n} \mid {\color{Diag1}\mathsf{comp}_T} \mid {\color{Diag1}\mathsf{inc}_n^m(s)} \mid {\color{Diag1}s \sub \sigma} \mid {\color{Diag1}s \sub L} \mid {\color{Diag1}\Sigma(s)}\\
+  &(\text{Types})&&{\color{Diag1}A}&&{}::={}&& {\color{Diag1}\star} \mid {\color{Diag1}\arr s {A} t} \mid {\color{Diag1}A \sub \sigma} \mid {\color{Diag1}A \sub L} \mid {\color{Diag1}\Sigma(A)}\\
+  &(\text{Substitutions})&&{\color{Diag1}\sigma}&&{}::={}&&{\color{Diag1}(A,s_0,\dots,s_n)}\\
+  &(\text{Labellings})&&{\color{Diag1}L}&&{}::={}&&{\color{Diag1}(\mathsf{Tree}(s), A)}\\
+  &(\text{Contexts})&&{\color{Diag1}\Gamma}&&{}::={}&& {\color{Diag1}(v_0, A_0), \dots, (v_n : A_n)}\\
+  &(\text{Tree Contexts})&&{\color{Diag1}T}&&{}::={}&& {\color{Diag1}\mathsf{Tree}(\mathsf{Maybe}(v))}
+\end{alignat*}
+The above classes of syntax are parameterised by the type of positions \(P\). We enforce that for the application of substitution \(s \sub \sigma\) that the term \(s\) is a term with \(P = \mathsf{usize}\), the type of de Bruijn levels, and for \(s \sub L\), the application of a labelling, that \(s\) is a term with \(P = \mathsf{Path}\). The type of paths is given by a non-empty list of natural numbers, as in \cref{sec:trees}.
 
-\todo[inline]{Normal form syntax}
-\todo[inline]{Id and comp prioritised because of role in cattsua}
+The type of positions must satisfy the \(\mathsf{Position}\) trait, which provides:
+\begin{itemize}
+\item An associated \(\mathsf{Ctx}\) type, given by contexts for \(\mathsf{usize}\) and tree contexts for \(\mathsf{Path}\).
+\item An associated container type \(\mathsf{Container}\) which can be indexed by \(P\). This is given by \(\mathsf{Vec}\) for levels and \(\mathsf{Tree}\) for paths. This container type defines the form of substitutions and labellings respectively.
+\item A function \(\mathsf{to\_name}\), which gives a canonical name to each \(p : P\), used when converting back to a raw term.
+\end{itemize}
+In the core syntax, all the variable names have been replaced by an index into the context, with all the original variable names being moved to the context. The \(\mathsf{to\_raw}\) function then takes a piece of syntax and a context and simply undo this, mapping a \(\mathsf{var}_p\) to \(v\), where \(p\) maps to \(v\) in the supplied context. The context argument of \(\mathsf{to\_raw}\) is optional as the context is not always available, for instance with the term \(s \sub \sigma\), we do not know the context that \(s\) should live in. When the context is not available, or no name is known for \(p\) in the context, \(\mathsf{var}_p\) is mapped to \(\mathsf{to\_name}(p)\).
+
+For the remainder of the syntax, \(\mathsf{to\_raw}\) removes extra information that was obtained during typechecking, such as the tree associated to a \(\mathsf{comp}\), the dimension of an \(\mathsf{id}\), or the term associated to a top-level binding. We also accept a boolean parameter declaring whether implicit arguments should be kept; if this is true then the \(\mathsf{Some}\) constructor of the maybe type is used whenever possible, otherwise only locally maximal arguments are kept, replacing the rest with the \(\mathsf{None}\) constructor.
+
+Lastly, we introduce the normal-form syntax. This is the simplest of the three categories of syntax and is closest to the base syntax of \Catt. It is given by the following grammar:
+\begin{alignat*}{4}
+  &(\text{Head})&\quad&\color{Diag2}H &\ \ &{}::={}&\ \ &{\color{Diag2}\mathsf{coh}[T:A]} \mid {\color{Diag2}\mathsf{id}_n} \mid {\color{Diag2}\mathsf{comp}_T}\\
+  &(\text{Terms})&&\color{Diag2}s,t&&{}::={}&&{\color{Diag2}\mathsf{var}_p} \mid {\color{Diag2}H \sub L}\\
+  &(\text{Labellings})&&\color{Diag2}L&&{}::={}&&{\color{Diag2}\mathsf{Tree}(s)}\\
+  &(\text{Types})&&{\color{Diag2}A}&&{}::={}&& {\color{Diag2}[(s_0,t_0),\dots,(s_n,t_n)]}\\
+ &(\text{Tree Contexts})&&{\color{Diag2}T}&&{}::={}&& {\color{Diag2}\mathsf{Tree}(\mathsf{Maybe}(v))}
+\end{alignat*}
+As with the core syntax, we parameterise by a type of positions \(P\). In the normal-form syntax, application of substitution is removed, and labellings can no longer be applied to an arbitrary term, but only to a head term, which is a single coherence, composite, or identity. These constructions are prioritised as head terms due to the role they play in \Cattsua, being the only insertable arguments.
+
+Many of the extra operations such as suspension are not present in the normal form syntax. In particular, the syntax for types is far simpler, allowing them to be represented by a vector of pairs of terms. A type \({\color{Diag2}[(s_0,t_0),\dots,(s_n,t_n)]}\) represents the type \({\color{Diag2}s_n} \to {\color{Diag2}t_n}\), with the start of the list giving the lower dimensional part of the type. The type \(\star\) is represented by the empty list.
 
 \subsection{Evaluation}
 \label{sec:evaluation}
+
+We now describe the core technical part of the tool, the evaluation of a piece of core syntax to its normal form, which is crucial in checking the equality of types. Following the NbE style we have already introduced, we define \emph{(semantic) environments}, which are required to evaluate a term to a normal form.
+
+\begin{definition}
+  For a type of positions \(P\), an \emph{environment} takes the form of a \(P\)-\textsf{Container} of normal-form terms, along with a normal form type. More concretely this is given by a tree of terms when \(P = \mathsf{Path}\) and a vector of terms when \(P = \mathsf{usize}\).
+\end{definition}
+
+For an environment \(\rho\), we write \(\ty(\rho)\) for the type associated with \(\rho\) and \(\rho(p)\) for the \(p^{\text{th}}\) element of the container, where \(p : P\). This mirrors the syntax used for a term-labelling in \cref{sec:trees}, as environments are simply an abstraction over labellings and substitutions.
 
 \subsection{Typechecking}
 \label{sec:typechecking}
