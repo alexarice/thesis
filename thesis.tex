@@ -7131,8 +7131,8 @@ The form of NbE implemented in the tool is largely inspired by the paper \citeti
 	\arrow["{\mathsf{check}}", curve={height=-24pt}, from=1-1, to=3-1]
 	\arrow["{\mathsf{infer}}"', curve={height=24pt}, from=1-1, to=3-1]
 	\arrow["{\mathsf{to\_raw}}"{description}, from=3-1, to=1-1]
-	\arrow["{\mathsf{eval}}", curve={height=-24pt}, from=3-1, to=5-1]
-	\arrow["{\mathsf{quote}}", curve={height=-24pt}, from=5-1, to=3-1]
+	\arrow["{\eval}", curve={height=-24pt}, from=3-1, to=5-1]
+	\arrow["{\quote}", curve={height=-24pt}, from=5-1, to=3-1]
 \end{tikzcd}
   \caption{Implementation overview}
   \label{fig:overview}
@@ -7229,11 +7229,11 @@ The core syntax is defined by the following grammar. Following \cite{gratzer2019
   &(\text{Contexts})&&{\color{Diag1}\Gamma}&&{}::={}&& {\color{Diag1}(v_0, A_0), \dots, (v_n : A_n)}\\
   &(\text{Tree Contexts})&&{\color{Diag1}T}&&{}::={}&& {\color{Diag1}\mathsf{Tree}(\mathsf{Maybe}(v))}
 \end{alignat*}
-The above classes of syntax are parameterised by the type of positions \(P\). We enforce that for the application of substitution \(s \sub \sigma\) that the term \(s\) is a term with \(P = \mathsf{usize}\), the type of de Bruijn levels, and for \(s \sub L\), the application of a labelling, that \(s\) is a term with \(P = \mathsf{Path}\). The type of paths is given by a non-empty list of natural numbers, as in \cref{sec:trees}.
+The above classes of syntax are parameterised by the type of positions \(P\). We enforce that for the application of substitution \(s \sub \sigma\) that the term \(s\) is a term with \(P = \mathbb{N}\), the type of de Bruijn levels, and for \(s \sub L\), the application of a labelling, that \(s\) is a term with \(P = \mathsf{Path}\). The type of paths is given by a non-empty list of natural numbers, as in \cref{sec:trees}.
 
 The type of positions must satisfy the \(\mathsf{Position}\) trait, which provides:
 \begin{itemize}
-\item An associated \(\mathsf{Ctx}\) type, given by contexts for \(\mathsf{usize}\) and tree contexts for \(\mathsf{Path}\).
+\item An associated \(\mathsf{Ctx}\) type, given by contexts for \(\mathbb{N}\) and tree contexts for \(\mathsf{Path}\).
 \item An associated container type \(\mathsf{Container}\) which can be indexed by \(P\). This is given by \(\mathsf{Vec}\) for levels and \(\mathsf{Tree}\) for paths. This container type defines the form of substitutions and labellings respectively.
 \item A function \(\mathsf{to\_name}\), which gives a canonical name to each \(p : P\), used when converting back to a raw term.
 \end{itemize}
@@ -7251,18 +7251,93 @@ Lastly, we introduce the normal-form syntax. This is the simplest of the three c
 \end{alignat*}
 As with the core syntax, we parameterise by a type of positions \(P\). In the normal-form syntax, application of substitution is removed, and labellings can no longer be applied to an arbitrary term, but only to a head term, which is a single coherence, composite, or identity. These constructions are prioritised as head terms due to the role they play in \Cattsua, being the only insertable arguments.
 
-Many of the extra operations such as suspension are not present in the normal form syntax. In particular, the syntax for types is far simpler, allowing them to be represented by a vector of pairs of terms. A type \({\color{Diag2}[(s_0,t_0),\dots,(s_n,t_n)]}\) represents the type \({\color{Diag2}s_n} \to {\color{Diag2}t_n}\), with the start of the list giving the lower dimensional part of the type. The type \(\star\) is represented by the empty list.
+Many of the extra operations such as suspension are not present in the normal form syntax. In particular, the syntax for types is far simpler, allowing them to be represented by a vector of pairs of terms. A type \({\color{Diag2}[(s_0,t_0),\dots,(s_n,t_n)]}\) represents the type \({\color{Diag2}s_0} \to {\color{Diag2}t_0}\), with the tail of the list giving the lower dimensional part of the type. The type \(\star\) is represented by the empty list.
 
 \subsection{Evaluation}
 \label{sec:evaluation}
 
-We now describe the core technical part of the tool, the evaluation of a piece of core syntax to its normal form, which is crucial in checking the equality of types. Following the NbE style we have already introduced, we define \emph{(semantic) environments}, which are required to evaluate a term to a normal form.
+We now describe the core technical part of the tool, the evaluation of a piece of core syntax to its normal form, which is crucial in checking the equality of types. Various pieces of reduction can be configured in the evaluation process:
+\begin{itemize}
+\item Disc removal can be turned off or on.
+\item Endo-coherence removal can be enabled or disabled.
+\item Insertion can be set to never happen, only allow insertion of identities, or allow insertion of identities and standard composites.
+\end{itemize}
+
+Following the NbE style we have already introduced, we define \emph{(semantic) environments}, which are required to evaluate a term to a normal form.
 
 \begin{definition}
-  For a type of positions \(P\), an \emph{environment} takes the form of a \(P\)-\textsf{Container} of normal-form terms, along with a normal form type. More concretely this is given by a tree of terms when \(P = \mathsf{Path}\) and a vector of terms when \(P = \mathsf{usize}\).
+  For a type of positions \(P\), a \(P\)-\emph{environment} takes the form of a \(P\)-\textsf{Container} of normal-form terms, along with a normal form type. More concretely this is given by a tree of terms when \(P = \mathsf{Path}\) and a vector of terms when \(P = \mathbb{N}\).
 \end{definition}
 
-For an environment \(\rho\), we write \(\ty(\rho)\) for the type associated with \(\rho\) and \(\rho(p)\) for the \(p^{\text{th}}\) element of the container, where \(p : P\). This mirrors the syntax used for a term-labelling in \cref{sec:trees}, as environments are simply an abstraction over labellings and substitutions.
+For an environment \(\rho\), we write \(\ty(\rho)\) for the type associated with \(\rho\) and \(\rho(p)\) for the \(p^{\text{th}}\) element of the container, where \(p : P\). This mirrors the syntax used for a term-labelling in \cref{sec:trees}, as environments are simply an abstraction over labellings and substitutions. Due to this similarity, the \emph{restriction} of an environment can be defined, similarly to its definition for substitutions. An \(\mathsf{Path}\)-environment can be repeatedly \emph{unrestricted} until the contained type is \(\star\), returning a labelling.
+
+\begin{definition}
+  We define the restricted environment \(\restrict \rho\) for each \(P\)-environment \(\rho\). For \(P = \mathbb{N}\), we let \(\ty(\restrict \rho) = (\rho(0),\rho(1)):: \ty(\rho)\) and \(\restrict \rho(n) = \rho(n+2)\). For \(P = \mathsf{Path}\), we let \(\ty(\restrict \rho) = (\rho([0]), \rho([1])) :: \ty(\rho)\) and \(\unrestrict \rho(p) = \rho(0::p)\).
+
+  If \(\rho\) is a \(\mathsf{Path}\)-environment, then there is a labelling \(\unrestrict \rho\), obtained by popping pairs of terms \((s,t)\) from \(\ty(\rho)\) and pushing them to the bottom of the tree contained in \(\rho\) (applying the map \(T \mapsto s\{T\}t\)) until \(\ty(\rho) = \star\). Lastly, for the same \(\rho\), its inclusion \(\rho_n^m\) can be defined letting \(\ty(\rho_n^m) = \ty(\rho)\) and if the tree part of \(\rho\) is given by:
+  \[s_0\{T_0\}\cdots s_n\{T_n\}\cdots \{T_{m-1}\}s_m\cdots \{T_k\}s_{k+1}\]
+  then the tree part of \(\rho_n^m\) is given by \(s_n\{T_n\} \cdots \{T_{m-1}\}s_m\).
+\end{definition}
+
+There are also identity environments, that play the role of the identity substitution and identity labelling.
+
+\begin{definition}
+  From a (core) context \(\Gamma\), an \(\mathbb{N}\)-environment \(\id_\Gamma\) can be formed with type \(\star\) and \(\id_\Gamma(i) = {\color{Diag2}\mathsf{var}_i}\) for each \(i < \len(\Gamma)\). For each tree \(T\), a \(\mathsf{Path}\)-environment \(\id_T\) can be formed again with type \(\star\) such that \(\id_T(p) = {\color{Diag2}\mathsf{var}_p}\) for each path \(p\) of \(T\).
+\end{definition}
+
+We can now define the functions \(\eval_\rho\), which takes a piece of syntax and evaluates it in the environments \(\rho\) to a normal-form, and \(\quote\) which includes normal-forms back into core syntax. Intuitively, \(\eval_\rho(s)\) computes the normal form of \(s \sub \rho\).
+
+We begin by defining \(\eval_\rho(s)\), \(\eval_\rho(A)\), \(\eval_\rho(\sigma)\), \(\eval_\rho(L)\), which respectively produce a normal-form term, a normal-form type, a \(\mathbb{N}\)-environment, and a \(\mathsf{Path}\)-environment. We proceed by case analysis, giving the easier cases below.
+\begin{mathpar}
+  \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{var}_p}) = {\color{Diag2}\rho(p)} \and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{top\_lvl}(v,s)}) = \eval_{\color{Diag2}\rho}({\color{Diag1}s})\and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{id}_n}) = {\color{Diag2}\mathsf{id}_n \sub {\unrestrict \rho}}\and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{inc}_n^m(s)}) = \eval_{{\color{Diag2}\rho_n^m}}({\color{Diag1}s}) \and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}s \sub \sigma}) = \eval_{\eval_{\color{Diag2}\rho}({\color{Diag1}\sigma})}({\color{Diag1}s})\and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}s \sub L}) = \eval_{\eval_{\color{Diag2}\rho}({\color{Diag1}L})}({\color{Diag1}s})\and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}\Sigma(s)}) = \eval_{\color{Diag2}\restrict\rho}({\color{Diag1}s}) \\
+  \eval_{\color{Diag2}\rho}({\color{Diag1}\star}) = {\color{Diag2}\ty(\rho)} \and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}\arr s A t}) = (\eval_{\color{Diag2}\rho}({\color{Diag1}s}), \eval_{\color{Diag2}\rho}({\color{Diag1}t})) :: \eval_{\color{Diag2}\rho}({\color{Diag1}A})\and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}A \sub \sigma}) = \eval_{\eval_{\color{Diag2}\rho}({\color{Diag1}\sigma})}({\color{Diag1}A})\and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}A \sub L}) = \eval_{\eval_{\color{Diag2}\rho}({\color{Diag1}L})}({\color{Diag1}A})\and
+  \eval_{\color{Diag2}\rho}({\color{Diag1}\Sigma(A)}) = \eval_{\color{Diag2}\restrict\rho}({\color{Diag1}A})
+\end{mathpar}
+The environments \(\eval_{\color{Diag2}\rho}({\color{Diag1}\sigma})\) and \(\eval_{\color{Diag2}\rho}({\color{Diag1}L})\) are then obtained by evaluating the type and all the terms in \(\sigma\) and \(L\) respectively. We note that suspension is evaluated by restricting the environment, and does not require a full traversal of the term, demonstrating the further utility of the extended substitution introduced in \cref{sec:extend-subst}.
+
+This leaves the cases for the \({\color{Diag1}\mathsf{coh}}\) and \({\color{Diag1}\mathsf{comp}}\) terms. For these cases, we need definitions of the standard type of dimension \(n\) over a tree \(S\) and the exterior labelling for an insertion point \((S,P,T)\), which we define as the core syntax \({\color{Diag1}\stdty T n}\) and \({\color{Diag1}\kappa_{S,P,T}}\). We omit the definitions of these, as they are similar to those given in \cref{sec:insertion}, using the \({\color{Diag1}\mathsf{inc}}\) and \({\color{Diag1}\Sigma}\) constructors in place of the \(\Inc\) constructor of structured terms. For (labelled) trees \(S\) and \(T\) such that \((S,P,T)\) is an insertion point, we also define the inserted (labelled) tree \(\insertion S P T\) identically to the inserted labelling.
+
+We now proceed with the case for \({\color{Diag1}\mathsf{coh}[S : A]}\), assuming we are evaluating it in environment \({\color{Diag2}\rho}\). We begin by letting \(d = \dim({\color{Diag2}\ty(\rho)})\) and obtaining the labelling \({\color{Diag2}L = \unrestrict \rho}\). The number \(d\) represents the number of times the term must be suspended, and so \(S\) and \({\color{Diag1}A}\) are each suspended \(d\) times, where the type \({\color{Diag1}A}\) is suspended by applying a \({\color{Diag1}\Sigma}\) constructor, and \(S\) is suspended by replacing it with the tree \(\mathsf{None}\{S\}\mathsf{None}\).
+
+We now search for insertion redexes in the labelling \({\color{Diag2}L}\), splitting on the type of insertion that is enabled:
+\begin{itemize}
+\item If no insertion is enabled, this phase is skipped.
+\item If insertion of identities is enabled, and there is a locally maximal argument given by branch \(P\) (where we take \(P\) to be the branch of minimal branching height) that is of the form \({\color{Diag2}\mathsf{id}_n\sub{M}}\), we return the insertion redex \((S,P,D^n,\_,{\color{Diag2}L}, {\color{Diag2}M})\), where the target of \({\color{Diag2}L}\) and \({\color{Diag2}M}\) is unspecified.
+\item If full insertion is enabled, and there is a locally maximal argument given by branch \(P\) that is of the form \({\color{Diag2}\mathsf{comp}_T \sub M}\), where \(\bh(P) > \lh(T)\), we return the insertion redex \((S,P,T,\_,{\color{Diag2}L}, {\color{Diag2}M})\).
+\end{itemize}
+If an insertion redex \((S,P,T,\_,{\color{Diag2}L}, {\color{Diag2}M})\) is found, then \(S\) is replaced by \(\insertion S P T\), \({\color{Diag2}L}\) is replaced by \(\insertion {\color{Diag2}L} P {\color{Diag2}M}\), and \(\color{Diag1}A\) is replaced by \(\color{Diag1}A \sub {\kappa_{S,P,T}}\). This step is then repeated until no insertion redexes are found.
+
+\begin{remark}
+  At this critical step, the evaluation proceeds in a fashion closer to reduction than NbE, with insertions repeatedly applied by searching for redexes and applying reductions to the head term. This seems unavoidable; even if one could define a parallel insertion which inserted all insertable arguments at once, it is not clear how to deal with locally maximal arguments that are iterated identities. Despite this, we still claim that the overall structure of the evaluation follows an NbE style, especially in regards to the treatment of suspension and application of substitutions and labellings.
+\end{remark}
+
+We next obtain the type \({\color{Diag2}B} = \eval_{\color{Diag2}\id_S}({\color{Diag1}A})\), and split into cases:
+\begin{itemize}
+\item If endo-coherence removal is enabled, and \(\color{Diag2}B\) is of the form \(\color{Diag2}(s,s) :: B'\), then we let \({\color{Diag1}\arr t C t} = \quote{\color{Diag2}B}\), interpret \(\color{Diag2}L\) as an environment by letting \({\color{Diag2}\ty(L)} = {\color{Diag2}\star}\) and let:
+  \[ \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{coh}[S : A]}) = {\color{Diag2}\mathsf{id}_{\dim(B')}} \sub {\{\eval_{\color{Diag2}L}({\color{Diag1}C}), \eval_{\color{Diag2}L}({\color{Diag1}t})\}}\]
+  where the labelling \(\{\_,\_\}\) from a disc can be trivially constructed by deconstructing the type.
+\item Suppose endo-coherence removal is disabled, \(S\) is a disc \(D^n\), and \(\color{Diag2}B\) is of the form \(\color{Diag2}(\mathsf{var}_{p^n}, \mathsf{var}_{p^n}) :: B'\), where we recall the path \(p^n\) is the unique locally maximal variable of \(D^n\), then we let:
+  \[ \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{coh}[S : A]}) = {\color{Diag2}\mathsf{id}_n \sub {L}}\]
+\item If disc-removal is enabled, \(S = D^n\), and \(\color{Diag2}B\) is equal to the standard type of dimension \(n\), then:
+  \[ \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{coh}[S : A]}) = {\color{Diag2}L(p^n)}\]
+\item If none of the above cases hold, and \(\color{Diag2}B\) is equal to the standard type of dimension \(\dim(S)\), then:
+  \[ \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{coh}[S : A]}) = {\color{Diag2}\mathsf{comp} \sub L}\]
+\item If none of the above cases hold, then:
+  \[ \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{coh}[S : A]}) = {\color{Diag2}\mathsf{coh}[S : B] \sub L}\]
+\end{itemize}
+
+The \(\color{Diag1}\mathsf{comp}_T\) case is treated in much the same way, removing any step involving \(\color{Diag1}A\) and instead setting \({\color{Diag2}B} = \eval_{\color{Diag2}\id_T}({\color{Diag1}\stdty T n})\), where \(n\) is given by the dimension of \(T\) before any insertion was performed. This completes all cases for the evaluation function.
+
+In contrast, the \(\quote\) function is defined completely trivially by recursion, converting head terms and normal-form terms to core terms, normal-form labellings to core labellings, and converting normal-form types to an iterated arrow type in the obvious way. We note that this is unusual for NbE, where the \(\quote\) function is often mutually defined with evaluation, and performs a significant portion of the work of converting terms to normal-form.
 
 \subsection{Typechecking}
 \label{sec:typechecking}
@@ -7270,6 +7345,8 @@ For an environment \(\rho\), we write \(\ty(\rho)\) for the type associated with
 \subsection{Examples}
 \label{sec:examples}
 
+\todo[inline]{Use content from sua paper}
+\todo[inline]{Show off implicit suspension}
 
 \section{Models}
 \label{sec:models}
@@ -7331,4 +7408,5 @@ For an environment \(\rho\), we write \(\ty(\rho)\) for the type associated with
 
 % Local Variables:
 % jinx-local-words: "CollegeShields ps"
+% TeX-engine: xetex
 % End:
