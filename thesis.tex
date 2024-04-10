@@ -294,13 +294,39 @@ The majority of the technical content of this thesis is concerned with proving s
 Although results of later chapters depend on definitions and results of the preceding chapters, a linear reading of this thesis is not essential. A reader who is already familiar with the type theory \Catt can safely skip \cref{sec:background}, and a reader who is only interested in the type theory \Cattsu could read \cref{cha:gener-pres-catt} followed by \cref{sec:pruning,sec:cattsu}. Similarly, a reader only interested in \Cattsua can ignore any content on the pruning construction. \cref{sec:towards-nbe} may be of interest to a reader who is purely interested in the type-theoretic techniques used, and not the type theory \Catt itself.
 
 \paragraph{Statement of authorship.}
-The type theory \Cattsu was originally developed in collaboration with Eric Finster, David Reutter, and Jamie Vicary, and was presented by the author at the Logic in Computer Science conference in 2022~\cite{finster2022type}. The authors main contribution to this project was the proof that the definitional equality of the theory preserves support, which lead to the development of the proof strategy given in \cref{sec:further-conditions}, and reworking the presentation of \Cattsu to allow this proof strategy to be employed, eventually leading to the development of \Cattr.
+The type theory \Cattsu was originally developed in collaboration with
+Eric Finster, David Reutter, and Jamie Vicary, and was presented by
+the author at the Logic in Computer Science conference in
+2022~\cite{finster2022type}. The author's main contribution to this
+project was the proof that the definitional equality of the theory
+preserves support, which lead to the development of the proof strategy
+given in \cref{sec:further-conditions}, and reworking the presentation
+of \Cattsu to allow this proof strategy to be employed, eventually
+leading to the development of \Cattr.
 
-This thesis contains a new proof of termination for \Cattsu, reusing the technique developed for \Cattsua, and a new proof of confluence which avoids defining the reduction strategy referred to as standard reduction in the \Cattsu paper. \cref{sec:models}, which discusses the models of \Cattsu (and \Cattsua) and details the rehydration procedure over pasting diagrams is mostly unchanged with the exception of an omission in the original proof, that is remedied by \cref{cor:supp-ps} which gives a novel proof of the current author for a property of \Catt that has long been conjectured to hold, but has up until now eluded proof. The discussion of models of the semistrict theories is nevertheless included for completeness.
+This thesis contains a new proof of termination for \Cattsu, reusing
+the technique developed for \Cattsua, and a new proof of confluence
+which avoids defining the reduction strategy referred to as standard
+reduction in the \Cattsu paper. \cref{sec:models}, which discusses the
+models of \Cattsu (and \Cattsua) and details the rehydration procedure
+over pasting diagrams is mostly unchanged with the exception of an
+omission in the original proof, that is remedied by
+\cref{cor:supp-ps}. This corollary, due to the current author, gives a
+novel proof for a property of \Catt that has long been conjectured to
+hold, but has up until now eluded proof. The discussion of models of
+the semistrict theories is nevertheless included for completeness.
 
-\Cattsua originally appeared in the preprint~\cite{finster2023strictly} and was developed in collaboration with Eric Finster and Jamie Vicary. The author of this thesis was responsible for the technical development in this paper, including being solely responsible for the proof of confluence that is given in \cref{sec:confluence-cattsua}.
+\Cattsua originally appeared in the
+preprint~\cite{finster2023strictly} and was developed in collaboration
+with Eric Finster and Jamie Vicary. The author of this thesis was
+responsible for the a large amount of the technical development in
+this paper, including being solely responsible for the proof of
+confluence that is given in \cref{sec:confluence-cattsua}.
 
-The author claims the development of the framework \Cattr and its accompanying Agda formalisation as individual contribution, as well as the implementation of \Cattsu and \Cattsua which appears in \cref{sec:towards-nbe}.
+The author claims the development of the framework \Cattr and its
+accompanying Agda formalisation as individual contribution, as well as
+the implementation of \Cattsu and \Cattsua which appears in
+\cref{sec:towards-nbe}.
 
 
 
