@@ -2227,19 +2227,19 @@ The groupoidal operation set clearly contains the standard operations, and the r
   Both \((D^{n+1}, d_n^-, d_n^+)\) and \((D^n, d_n, d_n)\) are in \(\Std\) for each \(n\).
 \end{corollary}
 
-\subsection{Invertible generators}
-\label{sec:invertibility}
+% \subsection{Invertible generators}
+% \label{sec:invertibility}
 
-\todo[inline]{Ideas about invertibility here?}
+% \todo[inline]{Ideas about invertibility here?}
 
-\todo[inline]{New type generator}
+% \todo[inline]{New type generator}
 
-\todo[inline]{Limitation of this generator}
+% \todo[inline]{Limitation of this generator}
 
-\todo[inline]{Some variations on support schemes}
+% \todo[inline]{Some variations on support schemes}
 
-\todo[inline]{Explain results you would want to prove}
-\todo[inline]{Pasting contexts vs Contractible contexts}
+% \todo[inline]{Explain results you would want to prove}
+% \todo[inline]{Pasting contexts vs Contractible contexts}
 
 \section[The set of equality rules \texorpdfstring{\(\mathcal{R}\)}{R}]{The set of equality rules \texorpdfstring{\boldmath\(\mathcal{R}\)}{R}}
 \label{sec:ruleset}
@@ -2896,9 +2896,9 @@ The set \ecr satisfies all the conditions introduced in this chapter, as proven 
 
 \begin{figure}[t]
   \centering
-  \label{fig:dep-graph}
   \includegraphics[height=\textheight - 25pt]{test.pdf}
   \caption{Dependency graph of Agda formalisation}
+  \label{fig:dep-graph}
 \end{figure}
 
 
@@ -7132,7 +7132,7 @@ By the above and \cref{lem:insertion-different}, \(b' =_{\dim(a)} c'\). This com
 \section{Towards normalisation by evaluation}
 \label{sec:towards-nbe}
 
-In this section, the rust implementation of \Catt, \Cattsu, and \Cattsua is introduced and can be found at \todo{Cite implementation}. This implementation takes the form of an interpreter, allowing terms of \Catt to be written in a convenient syntax which can be mechanically checked. The implementation aids the user in writing \Catt terms with features such as automatically constructing standard composites, allowing terms to be bound to top level syntax, implicitly suspending terms, automatically filling arguments which are not locally maximal, and providing informative error messages to the user when typechecking fails.
+In this section, the Rust implementation of \Catt, \Cattsu, and \Cattsua is introduced and can be found at \todo{Cite implementation}. This implementation takes the form of an interpreter, allowing terms of \Catt to be written in a convenient syntax which can be mechanically checked. The implementation aids the user in writing \Catt terms with features such as automatically constructing standard composites, allowing terms to be bound to top level syntax, implicitly suspending terms, automatically filling arguments which are not locally maximal, and providing informative error messages to the user when typechecking fails.
 
 We highlight three points of our implementation:
 \begin{itemize}
@@ -7242,7 +7242,7 @@ We now move on to the core syntax of the tool. The overall form of the core synt
 \item Terms that were optional in the raw syntax (as specified using the \textsf{Maybe} construction) are no longer optional. The hole constructor is also removed.
 \item The syntax is generic over a type \(P\) of positions. In practice, the type \(P\) is either the type of de Bruijn levels, for terms over a standard context, or paths, for terms over a tree context. Both of these types implement the \(\mathsf{Position}\) trait, allowing us to call the required functions that depend on the type of positions.
 \item The constructor for variables \(v\) in the raw syntax is replaced by two separate constructions, a constructor \(\mathsf{var}_p\) for local variables, where \(p : P\), and \(\mathsf{top\_lvl}(v, s)\) for a top-level symbol \(v\) which is bound to term \(s\).
-\item Application of substitutions and labellings are now separate constructors. This is primarily due to a limitation of the rust type system which doesn't allow an \textsf{App} constructor to existentially quantify over the type of positions in the input term.
+\item Application of substitutions and labellings are now separate constructors. This is primarily due to a limitation of the Rust type system which doesn't allow an \textsf{App} constructor to existentially quantify over the type of positions in the input term.
 \item The \(\mathsf{comp}\) constructor now records the tree it is composing over, and will be written \(\mathsf{comp}_T\). Similarly the \(\mathsf{id}\) constructor becomes \(\mathsf{id}_n\), with \(n\) recording the dimension of the term the identity is applied to.
 \end{itemize}
 The core syntax is defined by the following grammar. Following \cite{gratzer2019implementing}, a different colour is used for each of the three categories of syntax.
@@ -7260,7 +7260,7 @@ The above classes of syntax are parameterised by the type of positions \(P\). We
 The type of positions must satisfy the \(\mathsf{Position}\) trait, which provides:
 \begin{itemize}
 \item An associated \(\mathsf{Ctx}\) type, given by contexts for \(\mathbb{N}\) and tree contexts for \(\mathsf{Path}\).
-\item An associated container type \(\mathsf{Container}\) which can be indexed by \(P\). This is given by \(\mathsf{Vec}\) for levels and \(\mathsf{Tree}\) for paths. This container type defines the form of substitutions and labellings respectively.
+\item An associated container type \(\mathsf{Container}\) which can be indexed by \(P\). This is given by \(\mathsf{Vec}\) (Rust's dynamically sized array type) for levels and \(\mathsf{Tree}\) for paths. This container type defines the form of substitutions and labellings respectively.
 \item A function \(\mathsf{to\_name}\), which gives a canonical name to each \(p : P\), used when converting back to a raw term.
 \end{itemize}
 In the core syntax, all the variable names have been replaced by an index into the context, with all the original variable names being moved to the context. The \(\mathsf{to\_raw}\) function then takes a piece of syntax and a context and simply undo this, mapping a \(\mathsf{var}_p\) to \(v\), where \(p\) maps to \(v\) in the supplied context. The context argument of \(\mathsf{to\_raw}\) is optional as the context is not always available, for instance with the term \(s \sub \sigma\), we do not know the context that \(s\) should live in. When the context is not available, or no name is known for \(p\) in the context, \(\mathsf{var}_p\) is mapped to \(\mathsf{to\_name}(p)\).
@@ -7399,35 +7399,39 @@ Our bidirectional typing system will be based on the following judgements, letti
 \end{alignat*}
 for each judgement, the syntax to the left of \(\rightsquigarrow\) are the inputs to the judgements, and the syntax to the right are the outputs.
 
+\newcommand{\ruleone}{\alpha}
+\newcommand{\ruletwo}{\beta}
+\newcommand{\rulethree}{\gamma}
+\newcommand{\rulefour}{\delta}
+\newcommand{\rulefive}{\varepsilon}
+
 The typing rules for all judgements of this system are given in \cref{fig:bidirectional}. In this figure, \(D^n\) always refers to the linear tree of depth \(n\), rather than the disc context, and that \(\emptyset\) refers to the empty context, and \(\emp\) refers to the singleton tree. In the final rules, \(i\) should be treated as if it is universally quantified. We pause to highlight some of these rules:
 \begin{itemize}
-\item \todo[inline]{Comp rule}
-\item \todo[inline]{Sub rule}
-\item \todo[inline]{From sub}
-\item \todo[inline]{Support}
-\item \todo[inline]{Labelling application}
+\item In the rule for coherences, marked \(\ruleone\), the support conditions are checked. This is done using the normal form syntax for the type, due to the simplicity of this syntax. The variable sets of a term can easily be collected by recursion, and in the implementation are stored in a hash set, using Rust's \textsf{HashSet} type.
+\item The rule for composites, marked \(\ruletwo\), is crucially a checking rule as there is no way to infer the tree \(T\) for the term \(\color{Diag1}\mathsf{comp}_T\).
+\item For the rule for the application of labellings, marked \(\rulethree\), the premise for the typing of the term is given by a checking judgement instead of an inferring judgement, as the tree \(T\) can be inferred form the labelling. This is in contrast to the corresponding rule for application of substitutions, where the context must be inferred from the inner term before the substitution can be checked. Combined with the point above, this allows a labelling applied to a \(\mathsf{comp}\) term to be checked.
+\item The rule marked \(\rulefour\) allows a substitution to be applied to a term over a tree context, by converting the substitution to a labelling. This is mainly a convenience feature, as given a \(s\) where we can infer that the context of \(s\) is a tree \(T\), it can be easier to give the locally maximal arguments for \(s\) as a list rather than describing the labelling.
+\item Lastly, we explain each component of the rule for the typing of a substitution, marked \(\rulefive\). We note that the first type in any \Catt context, which in the rule is given by the type \(\color{Diag1}A_0\), is always \(\star\). Therefore the type of the first term in a substitution \(\sigma\) should be equal to \(\star \sub \sigma \equiv \ty(\sigma)\). In the rule, the type of the first term is given by \(\color{Diag1}B_0\), explaining it's presence as the type of the substitution that gets evaluated to \(\color{Diag2}\rho\). We further note that \(\color{Diag2}\ty(\rho)\) is simply the evaluation of \(\color{Diag1}B_0\), which is why \(X\) is checked against it.
+
+  Due to the choice to use de Bruijn levels instead of indices, weakening a term is the identity, and so \(s \sub \sigma \equiv s \sub {\langle \sigma,t \rangle}\) for any \(t\). Therefore, by inspecting the typing rules for substitutions in \Catt, it can be proven that to type \(\Gamma \vdash \sigma : \Delta\), it is sufficient to show that \(\Gamma \vdash x \sub \sigma : A \sub \sigma\) for all \((x : A) \in \Delta\). Observing the rule \(\rulefive\), this translates to proving that \(A_i \sub {(B_0,t_0,\dots,t_n)} = B_i\) recalling that \(B_0\) is the core syntax version of the type of the substitution. These equations can be shown by proving that the evaluation of each side is the same, but the evaluation of the left hand side is given by \(\eval_{\color{Diag2}\rho}({\color{Diag1}A_i})\) for each \(i\), and so for efficiency we factor out the calculation of \(\color{Diag2}\rho\).
 \end{itemize}
-\todo[inline]{Rules translate easily to implementation}
-\todo[inline]{Must check some implicit equalities in rules}
-\todo[inline]{Mention errors again}
 
-
-\begin{figure}[t]
+\begin{figure}[p]
   \centering
   \begin{mathpar}
     \inferrule{\Psi(v) = ({\color{Diag1}\U}, {\color{Diag1}t}, {\color{Diag1}A})}{v \rightsquigarrow {\color{Diag1}\U} \vdash {\color{Diag1}\mathsf{top\_lvl}(v,t)} : {\color{Diag1}A}}\and
-    \inferrule{{\color{Diag1}T} \vdash A \rightsquigarrow {\color{Diag1}B} = {\color{Diag2}C} \\ (T, \src({\color{Diag2}C}), \tgt({\color{Diag2}C})) \in \mathcal{O}}{\mathsf{coh}[T : A] \rightsquigarrow {\color{Diag1}T} \vdash {\color{Diag1}\mathsf{coh}[T : B]} : {\color{Diag1}B}}\and
+    \inferrule{{\color{Diag1}T} \vdash A \rightsquigarrow {\color{Diag1}B} = {\color{Diag2}C} \\ (T, \src({\color{Diag2}C}), \tgt({\color{Diag2}C})) \in \mathcal{O}}{\mathsf{coh}[T : A] \rightsquigarrow {\color{Diag1}T} \vdash {\color{Diag1}\mathsf{coh}[T : B]} : {\color{Diag1}B}}\ \ruleone\and
     \inferrule{ }{\mathsf{id} \rightsquigarrow {\color{Diag1}D^1} \vdash {\color{Diag1}\mathsf{id}_0} : {\color{Diag1}\arr {\mathsf{var}_{[0]}} {\star} {\mathsf{var}_{[0]}}}}\and
     \inferrule{s \rightsquigarrow {\color{Diag1}\U} \vdash {\color{Diag1}t} : {\color{Diag1}A}}{\Sigma(s) \rightsquigarrow {\color{Diag1}\Sigma(\U)} \vdash {\color{Diag1}\Sigma(t)}: {\color{Diag1}\Sigma(A)}}\\
 
     \inferrule{s \rightsquigarrow {\color{Diag1}T} \vdash {\color{Diag1}t} : {\color{Diag1}A}}{{\color{Diag1}T} \vdash s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A}}\and
     \inferrule{{\color{Diag1}\U}(i) = (v : {\color{Diag1}A})}{{\color{Diag1}\U} \vdash v \rightsquigarrow {\color{Diag1}\mathsf{var}_i} : {\color{Diag1}A}}\and
     \inferrule{ }{{\color{Diag1}D^n} \vdash \mathsf{id} \rightsquigarrow {\color{Diag1}\mathsf{id}_n} : {\color{Diag1}\stdty {D^n} {n + 1}}}\and
-    \inferrule{ }{{\color{Diag1}T} \vdash \mathsf{comp} \rightsquigarrow {\color{Diag1}\mathsf{comp}_T} : {\color{Diag1}\stdty T n}}\and
+    \inferrule{ }{{\color{Diag1}T} \vdash \mathsf{comp} \rightsquigarrow {\color{Diag1}\mathsf{comp}_T} : {\color{Diag1}\stdty T n}}\ \ruletwo\and
     \inferrule{s \rightsquigarrow {\color{Diag1}\Gamma} : {\color{Diag1}t} : {\color{Diag1}A} \\ {\color{Diag1}\U} \vdash \sigma : {\color{Diag1}\Gamma} \rightsquigarrow {\color{Diag1}\tau}\\
     {\color{Diag1}\U} \vdash \ty(\sigma) = {\color{Diag2}B} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash s \sub \sigma \rightsquigarrow {\color{Diag1}t \sub \tau} : {\color{Diag1}A \sub \tau}}\and
-    \inferrule{{\color{Diag1}T} \vdash s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A} \\ {\color{Diag1}\U} \vdash \mathsf{from\_sub}_T(\sigma) : {\color{Diag1}T} \rightsquigarrow {\color{Diag1}M} : {\color{Diag2}B}\\ {\color{Diag1}\U} \vdash \ty(\sigma) = {\color{Diag2}B} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash s \sub \sigma \rightsquigarrow {\color{Diag1}t \sub M} : {\color{Diag1}A \sub M}}\and
-    \inferrule{{\color{Diag1}T} : s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A} \\ {\color{Diag1}\U} \vdash L : T \rightsquigarrow {\color{Diag1}M} : {\color{Diag2}B}\\ {\color{Diag1}\U} \vdash \ty(L) = {\color{Diag2}B} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash s \sub L \rightsquigarrow {\color{Diag1}t \sub M} : {\color{Diag1}A \sub M}}\\
+    \inferrule{{\color{Diag1}T} \vdash s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A} \\ {\color{Diag1}\U} \vdash \mathsf{from\_sub}_T(\sigma) : {\color{Diag1}T} \rightsquigarrow {\color{Diag1}M} : {\color{Diag2}B}\\ {\color{Diag1}\U} \vdash \ty(\sigma) = {\color{Diag2}B} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash s \sub \sigma \rightsquigarrow {\color{Diag1}t \sub M} : {\color{Diag1}A \sub M}}\ \rulethree\and
+    \inferrule{{\color{Diag1}T} : s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A} \\ {\color{Diag1}\U} \vdash L : T \rightsquigarrow {\color{Diag1}M} : {\color{Diag2}B}\\ {\color{Diag1}\U} \vdash \ty(L) = {\color{Diag2}B} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash s \sub L \rightsquigarrow {\color{Diag1}t \sub M} : {\color{Diag1}A \sub M}}\ \rulefour\\
 
 
     \inferrule{ }{{\color{Diag1}\U} \vdash \_ = {\color{Diag2}t} \rightsquigarrow ()}\and
@@ -7455,7 +7459,7 @@ The typing rules for all judgements of this system are given in \cref{fig:bidire
     \inferrule{\Gamma \vdash {} \rightsquigarrow {\color{Diag1}\Delta} \\ {\color{Diag1}\Delta} \vdash A \rightsquigarrow {\color{Diag1}B} = {\color{Diag2}C}}{\Gamma, (v : A) \vdash {} \rightsquigarrow {\color{Diag1}\Delta, (v : B)}}\\
 
     \inferrule{{\color{Diag1}\U} \vdash s_i \rightsquigarrow {\color{Diag1}t_i} : {\color{Diag1}B_i}\\ {\color{Diag2}\rho} := \eval_{\color{Diag2}\id_{\color{Diag1}\U}}({\color{Diag1}(B_0,t_0,\dots,t_n)})\\\\
-    \eval_{\color{Diag2}\id_{\color{Diag1}\U}}({\color{Diag1}B_i}) = \eval_{\color{Diag2}\rho}({\color{Diag1}A_i})\\ {\color{Diag1}\U} \vdash \mathsf{flatten}(X) = {\color{Diag2}\ty(\rho)} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash (X,s_0,\dots,s_n) : {\color{Diag1}(v_0:A_0),\dots,(v_n:A_n)} \rightsquigarrow {\color{Diag1}(B,t_0,\dots,t_n)} }\\
+    \eval_{\color{Diag2}\id_{\color{Diag1}\U}}({\color{Diag1}B_i}) = \eval_{\color{Diag2}\rho}({\color{Diag1}A_i})\\ {\color{Diag1}\U} \vdash \mathsf{flatten}(X) = {\color{Diag2}\ty(\rho)} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash (X,s_0,\dots,s_n) : {\color{Diag1}(v_0:A_0),\dots,(v_n:A_n)} \rightsquigarrow {\color{Diag1}(B,t_0,\dots,t_n)} }\ \rulefive\\
 
     \inferrule{{\color{Diag1}\U} \vdash \mathsf{flatten}(x) \rightsquigarrow {\color{Diag1}A}}{{\color{Diag1}\U} \vdash x : \emp \rightsquigarrow {\color{Diag1}t} : \eval_{\color{Diag2}\id_{\color{Diag1}\U}}({\color{Diag1}A})}\and
     \inferrule{{\color{Diag1}\U} \vdash L_i \rightsquigarrow {\color{Diag1}M_i} : {\color{Diag2}(s_i,s_{i+1})::A} \\ {\color{Diag1}\U} \vdash \mathsf{flatten}(x_i) = {\color{Diag2}s_i} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash x_0\{L_0\}\cdots\{L_n\}x_{n+1} \rightsquigarrow {\color{Diag1}s_0\{M_0\}\cdots\{M_n\}s_{n+1}} : {\color{Diag2}A}}
@@ -7463,6 +7467,10 @@ The typing rules for all judgements of this system are given in \cref{fig:bidire
   \caption{Bidirectional typing rules}
   \label{fig:bidirectional}
 \end{figure}
+
+The typing rules in \cref{fig:bidirectional} can easily be translated into an algorithm for mechanically checking each of these typing judgements. In some cases, some equalities of normal forms are left implicit, such as in the final rule concerning the typing of a non-singleton labelling, and must be made explicit in the final algorithm.
+
+Many of the choices for the general set up of these rules were made to improve the quality of error messages. Each of these rules can fail for a variety of reasons, at which point an error is created by converting the relevant syntax back to raw syntax using the \(\mathsf{to\_raw}\) functions so that it can be displayed to the user. The use of Rust's \textsf{Result} type, which allows each of these functions to return either the well-formed core syntax or an appropriate error message, is essential, and benefits greatly from the question mark syntax in Rust, which allows errors to easily be propagated through the code.
 
 \subsection{Examples}
 \label{sec:examples}
