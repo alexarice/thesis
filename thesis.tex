@@ -7332,7 +7332,7 @@ The environments \(\eval_{\color{Diag2}\rho}({\color{Diag1}\sigma})\) and \(\eva
 
 This leaves the cases for the \({\color{Diag1}\mathsf{coh}}\) and \({\color{Diag1}\mathsf{comp}}\) terms. For these cases, we need definitions of the standard type of dimension \(n\) over a tree \(S\) and the exterior labelling for an insertion point \((S,P,T)\), which we define as the core syntax \({\color{Diag1}\stdty T n}\) and \({\color{Diag1}\kappa_{S,P,T}}\). We omit the definitions of these, as they are similar to those given in \cref{sec:insertion}, using the \({\color{Diag1}\mathsf{inc}}\) and \({\color{Diag1}\Sigma}\) constructors in place of the \(\Inc\) constructor of structured terms. For (labelled) trees \(S\) and \(T\) such that \((S,P,T)\) is an insertion point, we also define the inserted (labelled) tree \(\insertion S P T\) identically to the inserted labelling.
 
-We now proceed with the case for \({\color{Diag1}\mathsf{coh}[S : A]}\), assuming we are evaluating it in environment \({\color{Diag2}\rho}\). We begin by letting \(d = \dim({\color{Diag2}\ty(\rho)})\) and obtaining the labelling \({\color{Diag2}L = \unrestrict \rho}\). The number \(d\) represents the number of times the term must be suspended, and so \(S\) and \({\color{Diag1}A}\) are each suspended \(d\) times, where the type \({\color{Diag1}A}\) is suspended by applying a \({\color{Diag1}\Sigma}\) constructor, and \(S\) is suspended by replacing it with the tree \(\mathsf{None}\{S\}\mathsf{None}\).
+We now proceed with the case for \({\color{Diag1}\mathsf{coh}[S : A]}\), assuming we are evaluating it in environment \({\color{Diag2}\rho}\). We begin by letting \(d = \dim({\color{Diag2}\ty(\rho)})\) and obtaining the labelling \({\color{Diag2}L} = {\color{Diag2}\unrestrict \rho}\). The number \(d\) represents the number of times the term must be suspended, and so \(S\) and \({\color{Diag1}A}\) are each suspended \(d\) times, where the type \({\color{Diag1}A}\) is suspended by applying a \({\color{Diag1}\Sigma}\) constructor, and \(S\) is suspended by replacing it with the tree \(\mathsf{None}\{S\}\mathsf{None}\).
 
 We now search for insertion redexes in the labelling \({\color{Diag2}L}\), splitting on the type of insertion that is enabled:
 \begin{itemize}
@@ -7367,6 +7367,102 @@ In contrast, the \(\quote\) function is defined completely trivially by recursio
 
 \subsection{Typechecking}
 \label{sec:typechecking}
+
+Now that the three classes of syntax and the evaluation function have been introduced, the bidirectional typechecking algorithm in the tool can be described. Bidirectional typing allows us to mix typing rules which ``check'' a term, and typing rules which ``infer'' the type for a term. In the implementation, this will determine which pieces of data are inputs to a procedure, and which pieces of data are outputs.
+
+By \cref{lem:ty-unique}, all \Catt terms \(s\) have a unique type, which is given by the canonical type \(\ty(s)\). However, for certain terms, such as the coherence term \(\mathsf{coh}[T : A]\), we will be able to further infer the context that a term lives in, which in this case is the tree context \(T\). In this case the pair of the inferred context and type is known as a \emph{principal typing}~\cite{10.1145/237721.237728}, which is not to be confused with a \emph{principal type} of a term in a fixed context.
+
+Due to our unique case where all types are inferable but the context in a judgement may or may not be inferable, we refer to judgements where the context is an input as \emph{checking} judgements and judgements where the context is output as \emph{inferring} judgements.
+
+\begin{remark}
+  We justify this choice of terminology by noting the similarity of the judgements \(\Gamma \vdash s : A\) and \(\cdot \vdash \Pi_{\Gamma}\,s : \Gamma \to A\) in a type theory with (dependent) function types, where inferring the type of the second judgement would infer the context of the first. Of course, \Catt does not have function types, yet the intuition can still apply.
+\end{remark}
+
+The typing system will be defined with respect to a \emph{Signature} \(\Psi\), which contains a mapping from names to triples \(({\color{Diag1}\U}, {\color{Diag1}t}, {\color{Diag1}A})\) where \(\color{Diag1}s\) is a term of type \(\color{Diag1}A\) in (tree) context \(\color{Diag1}\U\). In the implementation, the signature also stores all relevant settings for the tool: which reductions are active, the operation set \(\mathcal{O}\) (which can only be configured to the groupoidal or regular operation sets), and whether implicit variables should be kept in the \(\mathsf{to\_raw}\) functions. We write:
+\[ \Psi(v) = ({\color{Diag1}\U}, {\color{Diag1}t}, {\color{Diag1}A})\]
+if the signature \(\Psi\) maps \(v\) to the triple above.
+
+We further define the notation \({\color{Diag1}\U}(i) = (v : {\color{Diag1}A})\) to mean that at the \(i^{\text{th}}\) index of \(\color{Diag1}\U\) (with \(\color{Diag1}\U\) being a tree or a context), contains a variable name \(v\), which is given type \(\color{Diag1}A\) by \(\color{Diag1}\U\).
+
+Lastly we define two conversion functions: \(\mathsf{from\_sub}\) and \(\mathsf{flatten}\). The (partial) function \(\mathsf{from\_sub}\) takes a tree \(T\) and a substitution \(\sigma\) and creates a labelling \(\mathsf{from\_sub}_T(\sigma)\) by letting the locally maximal be given by the terms of \(\sigma\), if \(\sigma\) contains the correct number of terms. The function \(\mathsf{flatten}\) acts on the \(\mathsf{Maybe}\) construction applied to a term or type. It takes \(\mathsf{Some}(s)\) and \(\mathsf{Some}(t)\) to \(s\) and \(t\) respectively, and \(\mathsf{None}\) to \(\_\).
+
+Our bidirectional typing system will be based on the following judgements, letting \(\color{Diag1}\U\) refer to either a context or tree context:
+\begin{alignat*}{2}
+  &s \rightsquigarrow {\color{Diag1}\U} \vdash {\color{Diag1}t} : {\color{Diag1}A}&\qquad&\text{Convert \(s\) to \(\color{Diag1}t\) inferring its type \(\color{Diag1}A\) in inferred (tree) context \(\color{Diag1}\U\)}\\
+  &{\color{Diag1}\U} \vdash s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A} &&\text{Given \(\color{Diag1}\U\), convert \(s\) to \(\color{Diag1}t\) checking it has some type \(\color{Diag1}A\) in \(\color{Diag1}\U\)}\\
+  &{\color{Diag1}\U} \vdash s = {\color{Diag2}t} \rightsquigarrow () &&\text{In \(\color{Diag1}\U\), check \(s\) has normal form \(\color{Diag2}t\)}\\
+  &{\color{Diag1}\U} \vdash A \rightsquigarrow {\color{Diag1}B} = {\color{Diag2}C} &&\text{In \(\color{Diag1}\U\), convert \(A\) to \(\color{Diag1}B\), inferring its normal form \(\color{Diag2}C\)}\\
+  &{\color{Diag1}\U} \vdash A = {\color{Diag2}C} \rightsquigarrow () &&\text{In \(\color{Diag1}\U\), check \(A\) has normal form \(\color{Diag2}C\)}\\
+  &\Gamma \vdash{} \rightsquigarrow {\color{Diag1}\U}&&\text{Check \(\Gamma\), producing (tree) context \(\color{Diag1}\U\)}\\
+    &{\color{Diag1}\U} \vdash \sigma : {\color{Diag1}\Gamma} \rightsquigarrow {\color{Diag1}\tau} &&\text{Check \(\sigma\) is a substitution from \(\color{Diag1}\Gamma\) to \(\color{Diag1}\U\), producing \(\color{Diag1}\tau\)}\\
+  &{\color{Diag1}\U} \vdash L : T \rightsquigarrow {\color{Diag1}M} : {\color{Diag2}A}&&\text{Check labelling \(L\) in \(\color{Diag1}\U\), producing \(\color{Diag1}M\) with type \(\color{Diag2}A\)}
+\end{alignat*}
+for each judgement, the syntax to the left of \(\rightsquigarrow\) are the inputs to the judgements, and the syntax to the right are the outputs.
+
+The typing rules for all judgements of this system are given in \cref{fig:bidirectional}. In this figure, \(D^n\) always refers to the linear tree of depth \(n\), rather than the disc context, and that \(\emptyset\) refers to the empty context, and \(\emp\) refers to the singleton tree. In the final rules, \(i\) should be treated as if it is universally quantified. We pause to highlight some of these rules:
+\begin{itemize}
+\item \todo[inline]{Comp rule}
+\item \todo[inline]{Sub rule}
+\item \todo[inline]{From sub}
+\item \todo[inline]{Support}
+\item \todo[inline]{Labelling application}
+\end{itemize}
+\todo[inline]{Rules translate easily to implementation}
+\todo[inline]{Must check some implicit equalities in rules}
+\todo[inline]{Mention errors again}
+
+
+\begin{figure}[t]
+  \centering
+  \begin{mathpar}
+    \inferrule{\Psi(v) = ({\color{Diag1}\U}, {\color{Diag1}t}, {\color{Diag1}A})}{v \rightsquigarrow {\color{Diag1}\U} \vdash {\color{Diag1}\mathsf{top\_lvl}(v,t)} : {\color{Diag1}A}}\and
+    \inferrule{{\color{Diag1}T} \vdash A \rightsquigarrow {\color{Diag1}B} = {\color{Diag2}C} \\ (T, \src({\color{Diag2}C}), \tgt({\color{Diag2}C})) \in \mathcal{O}}{\mathsf{coh}[T : A] \rightsquigarrow {\color{Diag1}T} \vdash {\color{Diag1}\mathsf{coh}[T : B]} : {\color{Diag1}B}}\and
+    \inferrule{ }{\mathsf{id} \rightsquigarrow {\color{Diag1}D^1} \vdash {\color{Diag1}\mathsf{id}_0} : {\color{Diag1}\arr {\mathsf{var}_{[0]}} {\star} {\mathsf{var}_{[0]}}}}\and
+    \inferrule{s \rightsquigarrow {\color{Diag1}\U} \vdash {\color{Diag1}t} : {\color{Diag1}A}}{\Sigma(s) \rightsquigarrow {\color{Diag1}\Sigma(\U)} \vdash {\color{Diag1}\Sigma(t)}: {\color{Diag1}\Sigma(A)}}\\
+
+    \inferrule{s \rightsquigarrow {\color{Diag1}T} \vdash {\color{Diag1}t} : {\color{Diag1}A}}{{\color{Diag1}T} \vdash s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A}}\and
+    \inferrule{{\color{Diag1}\U}(i) = (v : {\color{Diag1}A})}{{\color{Diag1}\U} \vdash v \rightsquigarrow {\color{Diag1}\mathsf{var}_i} : {\color{Diag1}A}}\and
+    \inferrule{ }{{\color{Diag1}D^n} \vdash \mathsf{id} \rightsquigarrow {\color{Diag1}\mathsf{id}_n} : {\color{Diag1}\stdty {D^n} {n + 1}}}\and
+    \inferrule{ }{{\color{Diag1}T} \vdash \mathsf{comp} \rightsquigarrow {\color{Diag1}\mathsf{comp}_T} : {\color{Diag1}\stdty T n}}\and
+    \inferrule{s \rightsquigarrow {\color{Diag1}\Gamma} : {\color{Diag1}t} : {\color{Diag1}A} \\ {\color{Diag1}\U} \vdash \sigma : {\color{Diag1}\Gamma} \rightsquigarrow {\color{Diag1}\tau}\\
+    {\color{Diag1}\U} \vdash \ty(\sigma) = {\color{Diag2}B} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash s \sub \sigma \rightsquigarrow {\color{Diag1}t \sub \tau} : {\color{Diag1}A \sub \tau}}\and
+    \inferrule{{\color{Diag1}T} \vdash s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A} \\ {\color{Diag1}\U} \vdash \mathsf{from\_sub}_T(\sigma) : {\color{Diag1}T} \rightsquigarrow {\color{Diag1}M} : {\color{Diag2}B}\\ {\color{Diag1}\U} \vdash \ty(\sigma) = {\color{Diag2}B} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash s \sub \sigma \rightsquigarrow {\color{Diag1}t \sub M} : {\color{Diag1}A \sub M}}\and
+    \inferrule{{\color{Diag1}T} : s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A} \\ {\color{Diag1}\U} \vdash L : T \rightsquigarrow {\color{Diag1}M} : {\color{Diag2}B}\\ {\color{Diag1}\U} \vdash \ty(L) = {\color{Diag2}B} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash s \sub L \rightsquigarrow {\color{Diag1}t \sub M} : {\color{Diag1}A \sub M}}\\
+
+
+    \inferrule{ }{{\color{Diag1}\U} \vdash \_ = {\color{Diag2}t} \rightsquigarrow ()}\and
+    \inferrule{{\color{Diag1}\U} \vdash s \rightsquigarrow {\color{Diag1}t} : {\color{Diag1}A}}{{\color{Diag1}\U} \vdash s = {\eval_{\color{Diag2}\id_{\color{Diag1}\U}}({\color{Diag1}t})} \rightsquigarrow ()}\\
+
+    \inferrule{ }{{\color{Diag1}\U} \vdash \star \rightsquigarrow {\color{Diag1}\star} = {\color{Diag2}\emp}}\and
+    \inferrule{{\color{Diag1}\U} \vdash s \rightsquigarrow {\color{Diag1}s'} : {\color{Diag1}A} \\ {\color{Diag1}\U} \vdash t \rightsquigarrow {\color{Diag1}t'} : {\color{Diag1}B} \\ \eval_{\color{Diag2}\id_{\color{Diag1}\U}}{\color{Diag1}A} = \eval_{\color{Diag2}\id_{\color{Diag1}\U}}{\color{Diag1}B}}{{\color{Diag1}\U} \vdash \arr s {} t \rightsquigarrow {\color{Diag1}\arr {s'} {A} {t'}} = {\color{Diag2}(\eval_{\id_{\color{Diag1}\U}}{\color{Diag1}s'}, \eval_{\id_{\color{Diag1}\U}}{\color{Diag1}t'}) :: \eval_{\id_{\color{Diag1}\U}}{\color{Diag1}A}}}\and
+    \inferrule{{\color{Diag1}\U} \vdash s \rightsquigarrow {\color{Diag1}s'} : {\color{Diag1}B} \\
+      {\color{Diag1}\U} \vdash t \rightsquigarrow {\color{Diag1}t'} : {\color{Diag1}C} \\
+      {\color{Diag1}\U} \vdash A \rightsquigarrow {\color{Diag1}A'} = {\color{Diag2}A''}\\
+      {\color{Diag2}A''} = \eval_{\color{Diag2}\id_{\color{Diag1}\U}}{\color{Diag1}B} = \eval_{\color{Diag2}\id_{\color{Diag1}\U}}{\color{Diag1}C}}{{\color{Diag1}\U} \vdash \arr s {A} t \rightsquigarrow {\color{Diag1}\arr {s'} {A'} {t'}} = {\color{Diag2}(\eval_{\id_{\color{Diag1}\U}}{\color{Diag1}s'}, \eval_{\id_{\color{Diag1}\U}}{\color{Diag1}t'}) :: A''}}\\
+
+    \inferrule{{\color{Diag1}\U} \vdash A \rightsquigarrow {\color{Diag1}B} = {\color{Diag2}C}}{{\color{Diag1}\U} \vdash A = {\color{Diag2}C} \rightsquigarrow ()}\and
+    \inferrule{{\color{Diag1}\U} \vdash s = {\color{Diag2}s'} \rightsquigarrow ()\\
+      {\color{Diag1}\U} \vdash t = {\color{Diag2}t'} \rightsquigarrow ()
+    }{{\color{Diag1}\U} \vdash \arr s {} t = {\color{Diag2}\arr {s'} {A} {t'}} \rightsquigarrow ()}\and
+    \inferrule{{\color{Diag1}\U} \vdash s = {\color{Diag2}s'} \rightsquigarrow ()\\
+      {\color{Diag1}\U} \vdash t = {\color{Diag2}t'} \rightsquigarrow ()\\
+      {\color{Diag1}\U} \vdash A = {\color{Diag2}A'} \rightsquigarrow ()\\
+    }{{\color{Diag1}\U} \vdash \arr s {A} t = {\color{Diag2}\arr {s'} {A'} {t'}} \rightsquigarrow ()}\and
+    \inferrule{ }{{\color{Diag1}\U} \vdash \_ = {\color{Diag2}C} \rightsquigarrow ()}\\
+
+    \inferrule{ }{T \vdash {} \rightsquigarrow {\color{Diag1}T}}\and
+    \inferrule{ }{\emptyset \vdash {} \rightsquigarrow {\color{Diag1}\emptyset}}\and
+    \inferrule{\Gamma \vdash {} \rightsquigarrow {\color{Diag1}\Delta} \\ {\color{Diag1}\Delta} \vdash A \rightsquigarrow {\color{Diag1}B} = {\color{Diag2}C}}{\Gamma, (v : A) \vdash {} \rightsquigarrow {\color{Diag1}\Delta, (v : B)}}\\
+
+    \inferrule{{\color{Diag1}\U} \vdash s_i \rightsquigarrow {\color{Diag1}t_i} : {\color{Diag1}B_i}\\ {\color{Diag2}\rho} := \eval_{\color{Diag2}\id_{\color{Diag1}\U}}({\color{Diag1}(B_0,t_0,\dots,t_n)})\\\\
+    \eval_{\color{Diag2}\id_{\color{Diag1}\U}}({\color{Diag1}B_i}) = \eval_{\color{Diag2}\rho}({\color{Diag1}A_i})\\ {\color{Diag1}\U} \vdash \mathsf{flatten}(X) = {\color{Diag2}\ty(\rho)} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash (X,s_0,\dots,s_n) : {\color{Diag1}(v_0:A_0),\dots,(v_n:A_n)} \rightsquigarrow {\color{Diag1}(B,t_0,\dots,t_n)} }\\
+
+    \inferrule{{\color{Diag1}\U} \vdash \mathsf{flatten}(x) \rightsquigarrow {\color{Diag1}A}}{{\color{Diag1}\U} \vdash x : \emp \rightsquigarrow {\color{Diag1}t} : \eval_{\color{Diag2}\id_{\color{Diag1}\U}}({\color{Diag1}A})}\and
+    \inferrule{{\color{Diag1}\U} \vdash L_i \rightsquigarrow {\color{Diag1}M_i} : {\color{Diag2}(s_i,s_{i+1})::A} \\ {\color{Diag1}\U} \vdash \mathsf{flatten}(x_i) = {\color{Diag2}s_i} \rightsquigarrow ()}{{\color{Diag1}\U} \vdash x_0\{L_0\}\cdots\{L_n\}x_{n+1} \rightsquigarrow {\color{Diag1}s_0\{M_0\}\cdots\{M_n\}s_{n+1}} : {\color{Diag2}A}}
+  \end{mathpar}
+  \caption{Bidirectional typing rules}
+  \label{fig:bidirectional}
+\end{figure}
 
 \subsection{Examples}
 \label{sec:examples}
