@@ -7721,18 +7721,97 @@ The above result holds in particular for the equality rule sets \su and \sua, me
 \subsection{Towards generalised rehydration}
 \label{sec:towards-gener-rehydr}
 
-\todo[inline]{Explain original motivation}
+The rehydration result of the previous section can be viewed as a partial conservativity result, stating that in a pasting context, \Cattsu and \Cattsua have the same expressive power as \Catt. The original motivation of semistrictness was to strictify parts of the theory without losing the expressiveness of the fully weak setting. We would therefore hope that the rehydration results of \cref{sec:rehydration} extend to arbitrary contexts.
 
-\todo[inline]{Explain connection to equivalence}
+Such a result would be a powerful tool for constructing terms in a weak setting; a term could be constructed by constructing it in the semistrict setting, before applying rehydration to the resulting term to get term in the fully weak setting. Such a technique would allow a \Catt proof of Eckmann-Hilton to be constructed mechanically from the vastly simpler \Cattsu Eckmann-Hilton proof, or even give a proof of the Syllepsis in \Catt, for which no proof has been given as of writing.
 
-\todo[inline]{Same structure as for pasting diagrams}
-\todo[inline]{Need to form normalisers}
-\todo[inline]{core problem with rehydration}
+By observing the proof of \cref{thm:rehydration}, we see that the main part that would need replacing for a general rehydration result is the construction of the normalisers, as we can no longer rely on the source and target term of our normaliser living over a pasting diagram that allows the construction of a single coherence. A natural way to proceed is to attempt to build a normaliser \(\phi(t) : t \to R(N(t))\) by recursion on the reduction sequence \(t \red^* N(t)\). We consider a context with \(x : *\) and a scalar \(\alpha : \id(x) \to \id(x)\), and consider the reduction by pruning:
+\[ \alpha *_0 \id(x) \red (\alpha)\]
+where \((\alpha)\) is the unary composite on \(\alpha\). We immediately encounter two problems:
+\begin{itemize}
+\item For each individual reduction, the source and target of the reduction may not have the same type. In the example above, the source has type \(\id(x) * \id(x) \to \id(x) * \id(x)\), but the target has type \(\id(x) \to \id(x)\). A normaliser between these two terms can therefore not be directly constructed.
+\item If the source term is padded such that it has the same type as the target term, we can run into a separate problem. Consider the reduction given above again. The following normaliser can be formed:
+  \[ \Coh {D^2} {d_2 * \id(d_0^+) \to (d_2)} {\langle \{\alpha\} \rangle}\]
+  which has source given by the padded term:
+  \[
+    \begin{tikzcd}
+      x & x & x
+      \arrow[""{name=0, anchor=center, inner sep=0}, "{\id(x)}", curve={height=-12pt}, from=1-1, to=1-2]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "{\id(x)}"', curve={height=12pt}, from=1-1, to=1-2]
+      \arrow["{\id(x)}"', from=1-2, to=1-3]
+      \arrow[""{name=2, anchor=center, inner sep=0}, "{\id(x)}", controls=+(90:1.5) and +(90:1.5), from=1-1, to=1-3]
+      \arrow[""{name=3, anchor=center, inner sep=0}, "{\id(x)}"', controls=+(270:1.5) and +(270:1.5), from=1-1, to=1-3]
+      \arrow["\alpha"', shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
+      \arrow["{\rho_{\id(x)}}", shorten >=3pt, Rightarrow, from=1-2, to=3]
+      \arrow["{\rho_{\id(x)}}"', shorten >=3pt, Rightarrow, from=1-2, to=2]
+    \end{tikzcd}
+  \]
+  However this term is padded by the right unitor on each side, which is not the canonical normaliser from \(\id(x) * \id(x)\) to \(id(x)\), the unbiased unitor.
+\end{itemize}
 
+The reduction above was not only chosen to demonstrate both of these problems, but was chosen as it is the problematic reduction that is encountered if one tries to rehydrate the Eckmann-Hilton term in \Cattsu. To give a proof of Eckmann-Hilton, one reaches a critical point where a left unitor and right unitor on the identity must be cancelled out, highlighting the second of the two problems.
 
-\paragraph{Rehydration by dimension}
+To solve the second problem one could attempt to prove that for any two reductions paths from \(t\) to \(N(t)\), that there is a higher cell between the normalisers generated from each reduction path, critically relying on the confluence proof for the theory to modularise the problem into finding fillers for each confluence diamond. Such an approach seems infeasible for the following reasons: To find fillers for a confluence diamond, we presumably must already know the form of all rehydrations in the dimension below, which themselves could depend on filling confluence diamonds of the dimension below. This seems to necessitate rehydrating on a dimension by dimension basis, making the full rehydration problem infeasible. It is also likely that at some point it would be necessary to show that two different fillers of a confluence diamond have a higher cell between them, leading to some form of \(\infty\)-groupoid flavoured confluence problem. Such a problem also seems infeasible with the tools currently available to us.
 
-\paragraph{Rehydration by cylinders}
+An alternative approach could be to show that the ``space'' of all rehydrations is contractible. This can be made precise in the following way. Let \(t\) be a \Cattr term. Then consider the globular set whose \(0\)-cells are \Catt terms \(s\) which are equal to \(t\) in \Cattr, \(1\)-cells are given by \Catt terms \(f : s \to s'\) which are equal to \(\id(t)\) in \Cattr, in general \(n\)-cells given by \Catt terms that are equal to \(\id^n(t)\). The contractibility of such a globular set is exactly the property needed for rehydration, as it gives the existence of a \(0\)-cell \(s\) which gives the rehydration, and witnesses the essential uniqueness of this rehydration.
+
+Such a contractibility proof can be given when the term \(t\) is a term of a pasting diagram, as any higher cells can be given by a simple coherence. This allows us to fix the padding in the example above, observing that the right unitor is equivalent to the unbiased unitor. It is however unclear how such a contractibility proof could be extended to arbitrary contexts.
+
+We now turn out attention to the first problem presented above. One method for tackling this problem is to give normalisers as a \emph{cylindrical equivalence} instead of a regular equivalence. A cylindrical equivalence can be viewed as the canonical notion of equivalence between two objects of different types. We introduce the first few dimensions of cylinder terms. A \(0\)-cylinder is simply a \(1\)-dimensional term. A \(1\)-cylinder from a cylinder \(f : w \to x\) to a cylinder \(g : y \to z\) can be defined by the square:
+\[
+  \begin{tikzcd}
+    x & z \\
+    w & y
+    \arrow["f", from=2-1, to=1-1]
+    \arrow["g"', from=2-2, to=1-2]
+    \arrow["a"', from=2-1, to=2-2]
+    \arrow["a'", from=1-1, to=1-2]
+    \arrow[Rightarrow, from=2-2, to=1-1]
+  \end{tikzcd}
+\]
+where the central arrow has type \(a * g \to f * a'\). If such a cylinder was invertible, which is the case when \(a\), \(b\), and the two dimensional cell are invertible, then it would be a cylindrical equivalence and would witness the equivalence of \(f\) and \(g\). Suppose two \(1\)-cylinders \(\alpha : f \to g\) and \(\beta : g \to h\) as below:
+\[
+  \begin{tikzcd}
+    x & z & v \\
+    w & y & u
+    \arrow["f", from=2-1, to=1-1]
+    \arrow["g"{description}, from=2-2, to=1-2]
+    \arrow["a"', from=2-1, to=2-2]
+    \arrow["{a'}", from=1-1, to=1-2]
+    \arrow[Rightarrow,from=2-2, to=1-1]
+    \arrow["h"', from=2-3, to=1-3]
+    \arrow["b"', from=2-2, to=2-3]
+    \arrow["{b'}", from=1-2, to=1-3]
+    \arrow[Rightarrow,from=2-3, to=1-2]
+  \end{tikzcd}
+\]
+Then a composite cylinder \(f \to h\) could be formed by letting the front ``face'' be given by \(a * b\), the back ``face'' be given by \(a' * b'\) and the filler given by a combination of associators and whiskerings of the two fillers in the diagram. A \(2\)-cylinder could be given by the following diagram:
+% https://q.uiver.app/#q=WzAsNCxbMCwxLCJcXGJ1bGxldCJdLFsyLDEsIlxcYnVsbGV0Il0sWzIsMCwiXFxidWxsZXQiXSxbNCwwLCJcXGJ1bGxldCJdLFswLDEsIiIsMCx7ImN1cnZlIjotNX1dLFswLDEsIiIsMix7ImN1cnZlIjo1fV0sWzIsMywiIiwyLHsiY3VydmUiOi01fV0sWzIsMywiIiwwLHsiY3VydmUiOjV9XSxbMCwyXSxbMSwzXSxbNCw2LCIiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzUsNywiIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dXQ==
+\[\begin{tikzcd}
+	&& \bullet && \bullet \\
+	\bullet && \bullet
+	\arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-40pt}, from=2-1, to=2-3]
+	\arrow[""{name=1, anchor=center, inner sep=0}, curve={height=40pt}, from=2-1, to=2-3]
+	\arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-40pt}, from=1-3, to=1-5]
+	\arrow[""{name=3, anchor=center, inner sep=0}, curve={height=40pt}, from=1-3, to=1-5]
+	\arrow[from=2-1, to=1-3]
+	\arrow[from=2-3, to=1-5]
+	\arrow[shorten <=13pt, shorten >=13pt, Rightarrow, from=0, to=2]
+	\arrow[shorten <=13pt, shorten >=13pt, Rightarrow, from=1, to=3]
+	\arrow[shorten <=8pt, shorten >=8pt, Rightarrow, from=1, to=0]
+	\arrow[shorten <=8pt, shorten >=8pt, Rightarrow, from=3, to=2]
+\end{tikzcd}\]
+where the top and bottom faces of this diagram are \(1\)-cylinders, and the whole digram should be filled by a \(3\)-dimensional term with appropriate source and target. The shape of this diagram gives the name to this construction.
+
+When using cylinders to represent the normalisers in a rehydration process, the inductive step for coherences would require a cylinder to be generated from a cylindrical version of the substitution attached to the coherence. We have seen that this can be done when the coherence is given by \(1\)-composition, but achieving full rehydration would involve giving cylindrical versions of every operation in \Catt. No such proof has been given for any variety of globular weak \(\infty\)-categories.
+
+We offer an alternative solution which avoids defining cylinder composition, which we call \emph{rehydration by dimension}. From an equality rule set \(\mathcal{R}\), we can form the rule sets \(\mathcal{R}_n\) which consists of the rules in \((\Gamma,s,t) \in \mathcal{R}\) such that \(\dim(s) = \dim(t) \leq n\). Rehydration by dimension attempts to rehydrate an \(n\)-dimensional term \(t\) by constructing terms \(t_n,\dots,t_0\) such that \(t_i\) is a term which is well-formed in \(\Catt_{\mathcal{R_i}}\), creating a rehydration sequence:
+\[ \Catt_{\mathcal{R}_n} \to \Catt_{\mathcal{R}_{n-1}} \to \cdots \to \Catt_{\mathcal{R}_1} \to \Catt_{\mathcal{R}_0}\]
+The term \(t_n\) is given immediately by \(t\), and \(t_0\) is then a term of \(\Catt_{\mathcal{R_0}} = \Catt\), giving the rehydration of \(t\). The key insight of this method is that when generating the normaliser for a particular \(k\)-dimensional generating rule \(s \red t\), we know by the preservation property that the types of \(s\) and \(t\) are equal, and so are further equal in \(\Catt_{\mathcal{R}_{k-1}}\). By factoring through these partial rehydrations, the normaliser of a dimension \(k\) generating rule only has to be valid in \(\Catt_{\mathcal{R}_{k-1}}\), meaning that the normalisers can again be given by regular equivalences.
+
+Unfortunately, this method does not avoid the need to define new classes of operations in \Catt, as we could be required to prove that arbitrary \Catt operations are natural in their lower dimensional arguments. Consider terms \(f : x \to y\) and \(g : y \to z\) and suppose the \(\Catt_{\mathcal{R}_1}\) normal form of \(y\) is \(y'\) with normaliser \(\phi(y)\). Then, during a rehydration proof to \(\Catt_{\mathcal{R}_0}\), it may be required to give a normaliser from \(f * g\) to \((f * \phi(y)) * (\phi(y)^{-1} * g)\), effectively requiring us to prove that \(1\)-composition is natural in its central \(0\)-cell. Similarly to the case with cylinders, in this case for \(1\)-composition, such a normaliser can easily be given, but we possess no way of creating such naturality arguments on arbitrary coherences.
+
+\todo[inline]{Point to Eckmann hilton files}
 
 \section{Further theories}
 \label{sec:further-theories}
