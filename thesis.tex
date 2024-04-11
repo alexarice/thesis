@@ -7481,21 +7481,242 @@ Many of the choices for the general set up of these rules were made to improve t
 \section{Models}
 \label{sec:models}
 
-\todo[inline]{Define models}
+Despite claiming that the type theories \Cattsu and \Cattsua model semistrict \(\infty\)-categories, we are yet to discuss their models. In this section we recall the definition of a model for these theories, and discuss some properties of these models.
 
-\todo[inline]{Give free models as yoneda embedding}
-\todo[inline]{Can view contexts as \(\infty\)-categories}
+The definitions of \emph{globular category} and \emph{globular sum} were given in \cref{sec:background}. Any variant of \Cattr can be equipped with the structure of a globular category by choosing the disc objects to be the disc contexts and letting the source and target maps be given by the inclusions \(\lfloor \incbd  {n} \epsilon {D^{n+1}} \rfloor\) for \(\epsilon \in \{-,+\}\). We then define the category of models of \Cattsu and \Cattsua.
 
-\subsection{Rehydration for Pasting diagram}
+\begin{definition}
+  Recall that for any tame variant of \Cattr, the category \(\mathsf{Catt}_{\mathcal{R}}^{\mathsf{ps}}\) is defined to be the restriction of the syntactic category \(\mathsf{Catt}_{\mathcal{R}}\) to the ps-contexts. We define the category of models \(\mathcal{C}_{\mathcal{R}}\) to be the full subcategory of the presheaf category on \(\mathsf{Catt}_{\mathcal{R}}^{\mathsf{ps}}\) consisting of functors:
+  \[F : \left( \mathsf{Catt}_{\mathcal{R}}^{\mathsf{ps}} \right)^{\text{op}} \to \mathbf{Set}\]
+  such that \(F^{\text{op}}\) preserves globular sums.
+\end{definition}
+
+Each element of the category of models has the structure of a weak \(\infty\)-category. For a model \(F : \left( \mathsf{Catt}_{\mathcal{R}}^{\mathsf{ps}} \right)^{\text{op}} \to \mathbf{Set}\), the set of \(n\)-cells is given by \(F(D^n)\), with source and target maps given by the functions:
+\[ F(\lfloor \incbd {n-1} - {D^n} \rfloor), F(\lfloor \incbd {n-1} + {D^n} \rfloor) : F(D^n) \to F(D^{n-1})\]
+for which the globularity equations follow from the globularity of the inclusion maps. For each term over a ps-context in \Cattr, an operation on each of the models can be derived. We consider the action of the \(1\)-composition term, given by \(\stdcoh {[\emp,\emp]} 1\). For the model \(F\), this induces an operation:
+\[ F(\{\lfloor \stdcoh {[\emp, \emp]} 1 \rfloor\}) : F(D^1\vee D^1) \to F(D^1)\]
+Due the the preservation of globular sums, we have \(F(D^1 \vee D^1) = F(D^1) \times_{F(D^0)} F(D^1)\), which is exactly the set of composable \(1\)-cells, which the function above sends to their composition. Similarly the identity \(\id(d_0)\) induces a map \(F(D^0) \to F(D^1)\), giving the identity on each \(0\)-cell.
+
+These operations can be combined, to get a compound operation of the following form:
+\[
+  \begin{tikzcd}[column sep = large]
+    {F(D^1)} = {F(D^1) \times_{F(D^0)} F(D^0)} & {F(D^1) \times_{F(D^0)} F(D^1)} & {F(D^1)}
+    \arrow["{\id \times F(\id(d_0))}", from=1-1, to=1-2]
+    \arrow["{F(\{\stdcoh {[\emp,\emp]} 1\})}", from=1-2, to=1-3]
+  \end{tikzcd}
+\]
+By the functoriality of \(F\) (and preservation of globular sums), this composite should be equal to:
+\[ F(\{\stdcoh {[\emp,\emp]} 1\} \bullet \langle d_1 , \id_{d_0^+} \rangle) : F(D^1) \to F(D^1)\]
+Therefore, if \(F\) is further a \Cattsu model, then this operation must equal \(F(\id) = \id\), enforcing the semistrict properties of \Cattsu onto the model.
+
+Throughout the thesis, contexts in \Cattr have been viewed as semistrict \(\infty\)-categories themselves. This viewpoint can be made precise by the Yoneda embedding, as for each context \(\Gamma\) of \Cattr, we obtain the presheaf:
+\[Y(\Gamma) :  \mathsf{Catt}_{\mathcal{R}}^{\mathsf{op}} \to \mathbf{Set}\]
+which sends \(\Delta\) to \(\mathrm{Hom}(\Delta, \Gamma)\), the substitutions from \(\Delta\) to \(\Gamma\). This map preserves all colimits, so in particular preserves the globular sums, meaning it can be restricted to a model of \Cattr. Furthermore, the \(n\)-cells are given by substitutions \(D^n \to \Gamma\), which are precisely the \(n\)-dimensional terms of \(\Gamma\) up to definitional equality.
+
+Since every \Catt term is also a \Cattr term, there is an evident functor:
+\[ K_{\mathcal{R}} : \mathsf{Catt} \to \mathsf{Catt}_{\mathcal{R}}\]
+which sends each context and substitution to its equivalence class in \Cattr. This functor can be restricted to the functor:
+\[ K_{\mathcal{R}}^{\mathsf{ps}} : \mathsf{Catt}^{\mathsf{ps}} \to \mathsf{Catt}_{\mathcal{R}}^{\mathsf{ps}} \]
+which is the identity on objects. We now prove that this functor preserves globular sums. By \cite[Lemma 64]{benjamin2021globular}, the functor \(\mathbf{FinGlob} \to \mathsf{Catt}\) from the category of finite globular sets preserves globular sums, and so it suffices to show that the functor \(\mathbf{FinGlob} \to \mathsf{Catt}_{\mathcal{R}}\) preserves globular sum. By \cite[Lemmas 25 and 29]{benjamin2021globular}, it suffices to show that this functor preserves the initial object and preserves pushouts along the inclusion maps \(S^n \to D^n\). The empty context is clearly the initial object, and this is preserved by the above functor. For the second property it suffices to show that:
+\[
+  \begin{tikzcd}
+    {S^n} & \Gamma \\
+    {D^n} & {\Gamma, (x: A)}
+    \arrow["\{\wk(U^n)\}"', from=1-1, to=2-1]
+    \arrow["{\{A\}}", from=1-1, to=1-2]
+    \arrow["{\{A,x\}}"', from=2-1, to=2-2]
+    \arrow[from=1-2, to=2-2]
+  \end{tikzcd}\]
+is a pushout for each \(\Gamma \vdash A\) in \Cattr. Suppose there is context \(\Delta\) with substitutions \(\sigma : \Gamma \to \Delta\) and \(\{B,t\} : D^n \to \Delta\) such that:
+\[\{B\} \equiv \{\wk(U^n)\} \bullet \{B, t\} = \{A\} \bullet \sigma \equiv \{A \sub \sigma\}\]
+Then the universal map is given by \(\langle \sigma, t \rangle\), with this map being well formed as \(\Delta \vdash t : B\) and \(B = A \sub \sigma\). The uniqueness of this universal map is clear. Hence, the square above is cocartesian. From this we get the following proposition.
+
+\begin{proposition}
+  The functors \(K_{\mathcal{R}}\) and \(K_{\mathcal{R}}^{\mathsf{ps}}\) preserve globular sums.
+\end{proposition}
+\begin{proof}
+  As the maps \(\mathbf{FinGlob} \to \mathsf{Catt}\) and \(\mathbf{FinGlob} \to \mathsf{Catt}_{\mathcal{R}}\) preserve globular sums, the globular sums in both \(\mathsf{Catt}\) and \(\mathsf{Catt}_{\mathcal{R}}\) are given exactly by the ps-contexts. The two functors \(K_{\mathcal{R}}\) and \(K_{\mathcal{R}}^{\mathsf{ps}}\) are the identity on ps-contexts, and hence preserve globular sums.
+\end{proof}
+
+Due to this proposition, any model of \Cattr can be also seen as a model of \Catt, by precomposing with the functor \(K_{\mathcal{R}}^{\mathsf{ps}}\). This is to be expected, as intuitively every semistrict \(\infty\)-category should also be a weak \(\infty\)-category, where certain operations are given by identities.
+
+\subsection{Rehydration for pasting diagrams}
 \label{sec:rehydration}
 
-\todo[inline]{Can give conservativity result}
-\todo[inline]{Support is pasting diagram}
-\todo[inline]{Define rehydration, giving general structure}
+We have shown a way in which every model of \Cattr can be viewed as a model of \Catt. In this section we prove that this mapping from \Cattr models to \Catt models is injective. This implies that being semistrict is a \emph{property} of the model, a particular \Catt model can only arise from a unique \Cattr model, if such a \Cattr model exists.
 
-\todo[inline]{Semistrictness is property}
+We prove this result by demonstrating a partial conservativity result for \Cattr, which we call \emph{rehydration for pasting contexts}. Rehydration refers to the process of taking a term in the semistrict theory, and inserting the necessary coherence morphisms into the term such that it can be typed in \Catt. We discuss the difficulties involved with rehydrating an arbitrary term in \cref{sec:towards-gener-rehydr}, but for now we are only concerned with the simpler case of rehydrating a term \(t : \Term_\Gamma\) where \(\Gamma\) is a ps-context. We work towards the following theorem:
+\begin{theorem}
+  \label{thm:rehydration}
+  Let \(\mathcal{R}\) be a tame equality rule set that satisfies the support condition and has pruning, disc removal, and endo-coherence removal. Then for any ps-context \(\Delta\) and term \(t : \Term_\Delta\), there is a \Catt term \(s : \Term_\Delta\) such that \(\Delta \vdash s = t\) in \Cattr.
+\end{theorem}
 
-\todo[inline]{Functors of models?}
+We begin with an example for \Cattsu. Take the pasting context given by the following diagram:
+\[ \Delta =
+  \begin{tikzcd}
+    w & x & y & z
+    \arrow["f", from=1-1, to=1-2]
+    \arrow["g", from=1-2, to=1-3]
+    \arrow["h", from=1-3, to=1-4]
+  \end{tikzcd}
+\]
+The associator \(\alpha\) is a \Cattsu normal form term over \(\Delta\), and we can further define the term:
+\[ \eta : \id((f*g)*h) \to \alpha_{f,g,h} * \alpha_{f,g,h}^{-1}\]
+as a single coherence over \(\Delta\). This term is also a \Cattsu normal form. Finally the term:
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzQsMCwiXFxidWxsZXQiXSxbMCwxLCJcXGlkIiwyXSxbMSwyLCJcXGlkIiwyXSxbMCwxLCJcXGFscGhhICogXFxhbHBoYV57LTF9IiwwLHsiY3VydmUiOi00fV0sWzEsMiwiXFxhbHBoYSAqIFxcYWxwaGFeey0xfSIsMCx7ImN1cnZlIjotNH1dLFswLDIsIlxcYWxwaGEgKiBcXGFscGhhXnstMX0iLDIseyJjdXJ2ZSI6NX1dLFszLDUsIlxcZXRhIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs0LDYsIlxcZXRhIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs3LDEsIlxcZXRhXnstMX0iLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjB9fV1d
+\[
+  \begin{tikzcd}
+    \bullet && \bullet && \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, "\id"', from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "\id"', from=1-3, to=1-5]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "{\alpha * \alpha^{-1}}", curve={height=-24pt}, from=1-1, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "{\alpha * \alpha^{-1}}", curve={height=-24pt}, from=1-3, to=1-5]
+    \arrow[""{name=4, anchor=center, inner sep=0}, "{\alpha * \alpha^{-1}}"', curve={height=30pt}, from=1-1, to=1-5]
+    \arrow["\eta"', shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=2]
+    \arrow["\eta"', shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=3]
+    \arrow["{\eta^{-1}}"', shorten <=3pt, Rightarrow, from=4, to=1-3]
+  \end{tikzcd}
+\]
+is a \Cattsu normal form term over a pasting context, which is not well-formed in \Catt. Such a term can be rehydrated by inserting the equivalence \(\id \cong \id * \id\) into the centre of the term. Performing a similar construction with the interchanger instead of the associator creates a \Cattsua normal-form term over a pasting context which is not a \Catt term.
+
+We now proceed with the proof of \cref{thm:rehydration}. We introduce three operations, which are mutually defined on terms of \Cattr over pasting contexts.
+\begin{itemize}
+\item The \emph{rehydration} \(R(t)\) of a term \(t\) recursively rehydrates all subterms of \(t\), and then pads the resulting term. For any \Cattr term \(t\), the rehydration is a \Catt term over the same context. For any term \(t\), we call \(R(N(t))\) its \emph{rehydrated normal form}, where \(N\) is the function taking any term to its normal form. We similarly define the rehydration \(R(A)\) of a type \(A\) over a pasting context and \(R(\sigma)\) of a substitution \(\sigma\) who's domain and codomain are pasting contexts.
+\item The \emph{padding} \(P(t)\) of a \Catt term \(t\), which composes the term with coherences to ensure that its boundaries are in rehydrated normal form.
+\item The normaliser \(\phi(t)\), a coherence term from \(t\) to its rehydrated normal form \(R(N(t))\) for any \Catt term \(t\).
+\end{itemize}
+We give formal definitions for each of these, which we define mutually with proofs of the following statements, where we assume \(\Delta\) and \(\Gamma\) are pasting contexts:
+\begin{enumerate}
+\item Suppose \(\Delta \vdash_{\mathcal{R}} t : A\). Then \(\Delta \vdash R(t) : R(N(A))\). Similarly if \(\Delta \vdash_{\mathcal{R}} A\) or \(\Delta \vdash_{\mathcal{R}} \sigma : \Gamma\), then \(\Delta \vdash R(A)\) and \(\Delta \vdash R(\sigma) : \Gamma\).
+\item For a \Cattr well-formed term \(t\), type \(A\), and substitution \(\sigma\), we have \(\Delta \vdash t = R(t)\), \(\Delta \vdash A = R(A)\), and \(\Delta \vdash \sigma = R(\sigma)\) in \Cattr.
+\item Suppose \(\Delta \vdash t : A\) for a \Catt term \(t\), then \(P_k(t)\) is well-formed for \(k \leq \dim(t)\) and \(\Delta \vdash P(t) : R(N(A))\).
+\item Suppose \(t\) is a well-formed \Catt term. Then for each \(k \leq \dim(t)\), \(P_k(t) = t\).
+\item If \(\Delta \vdash t : R(N(A))\) in \Catt, then \(\Delta \vdash \phi(t) : \arr t A {R(N(t))}\).
+\item Let \(t\) be a well-formed \Catt term over a pasting context. Then \(\phi(t) = \id(t)\).
+\end{enumerate}
+Each of these definitions and proofs are given by an induction on dimension and subterms, ensuring that they are well-founded.
+
+We begin with the definition of the rehydrated term, type, and substitution.
+\begin{definition}
+  Let \(\Delta\) and \(\Gamma\) be a pasting context. For a term \(t\) or type \(A\) over \(\Delta\), or a substitution \(\sigma : \Gamma \to \Delta\), we define the rehydrations:
+  \[ R(t) : \Term_\Delta \qquad R(A) : \Type_\Delta \qquad R(\sigma) : \Gamma \to \Delta\]
+  by mutual recursion. For a variable \(x\), we let \(R(x) = x\), and for a coherence term we define:
+  \[ R(\Coh \Gamma A \sigma) = P(\Coh {\Gamma} {R(A)} {R(\sigma)})\]
+  For types and substitutions, we recursively apply the rehydration to all subterms.
+\end{definition}
+
+To define the padding, we need the composites over certain trees \(T_k^n\) for \(k < n\) which are defined by:
+\[ T_0^n = [\emp, D^{n-1}, \emp] \qquad T_{k+1}^{n+1} = \Sigma(T_k^n)\]
+As an example \(T_1^3\) produces the following context:
+% https://q.uiver.app/#q=WzAsMixbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzAsMSwiIiwwLHsiY3VydmUiOi0zfV0sWzAsMSwiIiwyLHsiY3VydmUiOjN9XSxbMCwxLCIiLDEseyJjdXJ2ZSI6LTV9XSxbMCwxLCIiLDEseyJjdXJ2ZSI6NX1dLFs1LDMsIiIsMSx7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMiw0LCIiLDAseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzMsMiwiIiwyLHsib2Zmc2V0IjotNSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFszLDIsIiIsMix7Im9mZnNldCI6NSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs4LDksIiIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XV0=
+\[
+  \begin{tikzcd}
+    \bullet && \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=18pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-40pt}, from=1-1, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=40pt}, from=1-1, to=1-3]
+    \arrow[shorten <=2pt, shorten >=2pt, Rightarrow, from=3, to=1]
+    \arrow[shorten <=2pt, shorten >=2pt, Rightarrow, from=0, to=2]
+    \arrow[""{name=4, anchor=center, inner sep=0}, shift left=5, shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow[""{name=5, anchor=center, inner sep=0}, shift right=5, shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow[shorten <=4pt, shorten >=4pt, Rightarrow, scaling nfold=3, from=4, to=5]
+  \end{tikzcd}
+\]
+The composite over this context allows us to ``fix'' the \(1\)-dimensional boundary of a \(3\)-dimensional term.
+
+\begin{definition}
+  Let \(t\) be an \(n\)-dimensional term of a pasting diagram \(\Delta\). Define its padding \(P(t)\) to be equal to \(P_n(t)\) where:
+  \[ P_0(t) = t \qquad P_{k+1}(t) = \stdcoh {T_{k}^{n}} n \sub {\langle \phi(\src_{k}(P_{k}(t)))^{-1}, P_{k}(t), \phi(\tgt_k(P_{k}(t))) \rangle}\]
+  where \(\src_k\) and \(\tgt_k\) give the \(k\) dimensional source and target of a term.
+\end{definition}
+
+Consider the term \(\alpha : \arr f {\arr x \star y} g\). As an example, we build the following sequence of paddings:
+\begin{center}
+  \begin{tabular}{P{3cm} P{9cm}}
+    \(P_0(\alpha)\)&{\begin{tikzcd}[ampersand replacement=\&]
+        x \& y
+        \arrow[""{name=0, anchor=center, inner sep=0}, "f"', curve={height=12pt}, from=1-1, to=1-2]
+        \arrow[""{name=1, anchor=center, inner sep=0}, "g", curve={height=-12pt}, from=1-1, to=1-2]
+        \arrow["\alpha"', shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
+      \end{tikzcd}}\\
+    \(P_1(\alpha)\)&{\begin{tikzcd}[ampersand replacement=\&]
+        {R(N(x))} \& x \& y \& {R(N(y))}
+        \arrow[""{name=0, anchor=center, inner sep=0}, "f"', curve={height=12pt}, from=1-2, to=1-3]
+        \arrow[""{name=1, anchor=center, inner sep=0}, "g", curve={height=-12pt}, from=1-2, to=1-3]
+        \arrow["{\phi(x)}"', from=1-2, to=1-1]
+        \arrow["{\phi(y)}", from=1-3, to=1-4]
+        \arrow["\alpha"', shorten <=3pt, shorten >=3pt, Rightarrow, from=0, to=1]
+      \end{tikzcd}}\\
+    \(P_2(\alpha)\)&{\begin{tikzcd}[ampersand replacement=\&]
+        {R(N(x))} \& x \& y \& {R(N(y))}
+        \arrow[""{name=0, anchor=center, inner sep=0}, "f"{description}, curve={height=12pt}, from=1-2, to=1-3]
+        \arrow[""{name=1, anchor=center, inner sep=0}, "g"{description}, curve={height=-12pt}, from=1-2, to=1-3]
+        \arrow["{\phi(x)}"', from=1-2, to=1-1]
+        \arrow["{\phi(y)}", from=1-3, to=1-4]
+        \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-60pt}, from=1-1, to=1-4]
+        \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=60pt}, from=1-1, to=1-4]
+        \arrow["\alpha"', shorten <=4pt, shorten >=3pt, Rightarrow, from=0, to=1]
+        \arrow["{\phi(\phi(x)^{-1} * g * \phi(y))}"{description}, shorten <=5pt, shorten >=3pt, Rightarrow, from=1, to=2]
+        \arrow["{\phi(\phi(x)^{-1}*f*\phi(y))}"{description}, shorten <=5pt, shorten >=3pt, Rightarrow, from=0, to=3]
+      \end{tikzcd}}
+  \end{tabular}
+\end{center}
+
+We lastly define the normaliser coherences. As these are each built from a coherence constructor with the rule for equivalences, they can all be inverted.
+
+\begin{definition}
+  Let \(t\) be a term of a pasting diagram \(\Delta\). By \cref{cor:supp-ps}, \(\Supp(t)\) is a pasting diagram, and we let \(i_t\) be the inclusion \(\Supp(t) \to \Delta\). Then we define the normaliser \(\phi(t)\):
+  \[ \phi(t) = \Coh {\Supp(t)} {t \to R(N(t))} {i_t}\]
+  By assumption, \(R(N(t)) = N(t) = t\) and so \(\Supp(R(N(t))) = \Supp(t)\), making the above term well-formed.
+\end{definition}
+
+We now prove the required properties, starting with statement 1. The statements for types and substitutions follow by a simple induction using the case for terms, as if \(A = B\) then \(R(N(A)) = R(N(B))\) (as \(N(A) = N(B)\)). The case for a variable is also trivial, so assume that:
+\[\Delta \vdash_{\mathcal{R}} \Coh \Gamma B \sigma : A\]
+Then it follows from induction on subterms that \(\Gamma \vdash R(B)\) and \(\Delta \vdash R(\sigma) : \Gamma\), and so:
+\[ \Delta \vdash \Coh \Gamma {R(B)} {R(\sigma)} : R(B) \sub {R(\sigma)}\]
+Then by induction on statement (3), we get:
+\[ \Delta \vdash P(\Coh \Gamma {R(B)} {R(\sigma)} : R(N(R(B) \sub {R(\sigma)})) \]
+By induction on statement (2), we have \(R(B) \sub {R(\sigma)} = B \sub \sigma\). By inspection of the original typing derivation, we have \(B \sub \sigma = A\), and so \(R(N(R(B) \sub {R(\sigma)})) \equiv R(N(A))\), as required.
+
+Now consider statement 2. The cases for types and substitutions follow by an easy induction from the result for terms. Since the case for variables is trivial, we restrict to the cases for the coherence terms, where we must prove that:
+\[ \Gamma \vdash_{\mathcal{R}} \Coh \Delta A \sigma = P(\Coh \Delta {R(A)} {R(\sigma)})\]
+By (1), \(\Coh \Delta {R(A)} {R(\sigma)}\) is a well-formed \Catt term, and so by (4) and induction on subterms we have:
+\[ P(\Coh \Delta {R(A)} {R(\sigma)}) = \Coh \Delta {R(A)} {R(\sigma)} = \Coh \Delta A \sigma\]
+
+For statement 3, we let \(\Delta \vdash t : A\) and prove for each \(k\) that \(P_k(t)\) is well-formed and that \(\src_m(P_k(t)) \equiv R(N(\src_m(t)))\) and \(\tgt_m(P_k(t)) \equiv R(N(\tgt_m(t)))\) for \(m \leq k\). We proceed by induction on \(k\). The case for \(k = 0\) is trivial, so we must prove that \(P_{k+1}(t)\) is well-formed, which is the term:
+\[\stdcoh {T_{k}^{n}} n \sub {\langle \phi(\src_{k}(P_{k}(t)))^{-1}, P_{k}(t), \phi(\tgt_k(P_{k}(t))) \rangle} \]
+By (5), noting that the inductive hypothesis on \(k\) implies that the types of \(\src_k(P_k(t))\) and \(\tgt_k(P_k(t))\) are in rehydrated normal form, we have that the normalisers are well-typed. Therefore \(P_{k+1}(t)\) is well-formed by the previous fact and the inductive hypothesis on \(k\). By simple calculation it follows that:
+\[\src_m(P_k(t)) \equiv \src_m(P_m(t)) \equiv \src(\phi(\src_m(t))^{-1}) \equiv R(N(\src_m(t)))\]
+with a similar equation holding for the target. It then follows that \(\Delta \vdash P(t) : R(N(A))\).
+
+Statement 4 holds by a simple induction on \(k\), using statement (6) to reduce each normaliser to an identity, and the using pruning and disc removal to get the equality:
+\[ \stdcoh {T_{k}^{n}} n \sub {\langle \id(\src_{k}(P_{k}(t))), P_{k}(t), \id(\tgt_k(P_{k}(t))) \rangle} = P_k(t) \]
+which along with the inductive hypothesis on \(k\) is sufficient.
+
+For statement 5, we assume \(\Delta \vdash t : R(N(A))\). Then, by (1) and the preservation rule, we have \(\Delta \vdash \Delta \vdash R(N(t)) : R(N(R(N(A)))) \equiv R(N(A))\), where the equality follows from (2) and the idempotency of the normal form functor. The typing for the normaliser then trivially follows, as \(t\) and \(R(N(t))\) are full in \(\Supp(t)\).
+
+For statement 6, we apply statement (1) to get that \(t = N(t) = R(N(t))\). Therefore:
+\begin{align*}
+  \phi(t) &\equiv \Coh {\Supp(t)} {t \to R(N(t))} {i_t}\\
+          &= \Coh {\Supp(t)} {t \to t} {i_t}\\
+          &= \id(t) \sub {i_t}&\text{by endo-coherence removal}\\
+          &\equiv \id(t)
+\end{align*}
+
+This completes all parts of the definitions and proofs. Then for any well-formed \Cattr term \(t\), \(R(N(t))\) is a well-formed \Catt term with \(R(N(t)) = t\) in \Cattr completing the proof of \cref{thm:rehydration}. Moreover, if \(t = t'\) then \(R(N(t)) \equiv R(N(t'))\), and so the rehydrated of \Cattr terms over pasting contexts can be chosen to respect \Cattr equality. From this we get the following corollary.
+
+\begin{corollary}
+  Semistrictness is a property. Let \(\mathcal{R}\) is a tame equality rule set satisfying the support and preservation conditions in addition to having pruning, disc removal, and endo-coherence removal. If \(F\) and \(G\) are \Cattr models such that: \[F \circ K_{\mathcal{R}}^{\mathsf{ps}}  = G \circ K_{\mathcal{R}}^{\mathsf{ps}}\]
+  then \(F = G\).
+\end{corollary}
+\begin{proof}
+  Since \(K_{\mathcal{R}}^{\mathsf{ps}}\) is the identity on objects, it follows that \(F\) and \(G\) must be equal on objects. Now let \(\Gamma\) and \(\Delta\) be pasting diagrams, and let \(\Gamma \vdash_{\mathcal{R}} \sigma : \Delta\). Then by \cref{thm:rehydration} we have, \(\Gamma \vdash R(\sigma) : \Delta\) and so:
+  \[ F(K_{\mathcal{R}}^{\mathsf{ps}}(R(\sigma))) = G(K_{\mathcal{R}}^{\mathsf{ps}}(R(\sigma))) \]
+  but \(K_{\mathcal{R}}^{\mathsf{ps}}\) is simply an inclusion, so \(F(R(\sigma)) = G(R(\sigma))\) and since \(R(\sigma) = \sigma\) in \Cattr, we have \(F(\sigma) = G(\sigma)\). The substitution \(\sigma\) was arbitrary, so \(F = G\) as required.
+\end{proof}
+
+The above result holds in particular for the equality rule sets \su and \sua, meaning that a model of \Catt can be a model of \Cattsu or \Cattsua in at most one way.
 
 \subsection{Towards generalised rehydration}
 \label{sec:towards-gener-rehydr}
