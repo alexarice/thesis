@@ -218,6 +218,21 @@ backrefstyle=two]%
 \usepackage{subcaption}
 \usepackage{float}
 \usepackage{afterpage}
+\usepackage{listings}
+\lstdefinestyle{cattstyle}{
+  keywordstyle=\color{Diag1},
+  keywordstyle=[2]\color{Diag2},
+  basicstyle=\ttfamily,
+  breaklines=true,
+  keepspaces=true,
+  belowskip=0pt,
+}
+\lstset{style=cattstyle}
+\lstdefinelanguage{Catt}{
+  keywords=[1]{def,normalise,assert,size,in},
+  keywords=[2]{coh,comp,id}
+}
+
 \usepackage{fontspec}
 \usepackage{fancyvrb}
 \setmonofont[Scale=0.8]{Hack Nerd Font Mono}

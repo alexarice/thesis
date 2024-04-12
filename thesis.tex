@@ -289,7 +289,7 @@ The majority of the technical content of this thesis is concerned with proving s
 
   \cref{sec:models} discusses some properties of the models of these type theories, introducing a technique which we call \emph{rehydration}, which ``pads out'' terms of the semistrict theory with the necessary coherences to produce a term of \Catt which is equivalent to the original term. Rehydration can be seen as a conservativity result for the semistrict theories introduced at the start of the chapter. A proof of rehydration is given for the restricted case of terms over a certain class of context known as ps-contexts. This partial rehydration result is sufficient to determine that the semistrictness defined by \Cattsu and \Cattsua is a property, a model of \Catt can be a model of \Cattsu or \Cattsua in at most one way. We further explore some of the obstructions to rehydration in a generic context.
 
-  The thesis ends with \todo[inline]{Do this}
+  The thesis ends with a discussion of further variants of \Catt and other options for future work.
 \end{itemize}
 Although results of later chapters depend on definitions and results of the preceding chapters, a linear reading of this thesis is not essential. A reader who is already familiar with the type theory \Catt can safely skip \cref{sec:background}, and a reader who is only interested in the type theory \Cattsu could read \cref{cha:gener-pres-catt} followed by \cref{sec:pruning,sec:cattsu}. Similarly, a reader only interested in \Cattsua can ignore any content on the pruning construction. \cref{sec:towards-nbe} may be of interest to a reader who is purely interested in the type-theoretic techniques used, and not the type theory \Catt itself.
 
@@ -1502,7 +1502,7 @@ The proof of these results is delayed to \cref{sec:operations-catt}, where we wi
 
 The main purpose of this chapter will be to define the family of type theories \Cattr, which extend the base type theory \Catt with a specified set \(\mathcal{R}\) of equality rules. These equality rules equate various terms of the theory, which unifies the corresponding operations in the models of these theories, allowing us to generate type theories that model semistrict categories in \cref{cha:cattstrict}, categories where some but not all structure is strictified.
 
-This chapter will also introduce the Agda\todo{citation} formalisation which accompanies this thesis, which compiles with Agda v2.6.4 and standard library v2.0. The formalisation implements the syntax and typing judgements of \Cattr, and contains proofs of most results in this chapter and \cref{sec:operations-catt}. By formalising \Cattr, instead of the more specific type theories \Cattsu and \Cattsua introduced in \cref{sec:cattsu,sec:cattsua}, the formalisation of many results can be applied to both type theories. This also allows these results to be applied to any future type theories that fit into this family.
+This chapter will also introduce the Agda formalisation\cite{alex_rice_2024_10964565} which accompanies this thesis, which compiles with Agda v2.6.4 and standard library v2.0. The formalisation implements the syntax and typing judgements of \Cattr, and contains proofs of most results in this chapter and \cref{sec:operations-catt}. By formalising \Cattr, instead of the more specific type theories \Cattsu and \Cattsua introduced in \cref{sec:cattsu,sec:cattsua}, the formalisation of many results can be applied to both type theories. This also allows these results to be applied to any future type theories that fit into this family.
 
 A dependency graph of the formalisation is given in \cref{fig:dep-graph}, and an online version of this graph can be found at \url{https://alexarice.github.io/catt-agda/dep-graph.svg} for which each node is a clickable link to an html version of the code.
 
@@ -6142,11 +6142,11 @@ In \cref{sec:cattsu,sec:cattsua}, the normalisation algorithm is defined by givi
 
 Such a normalisation procedure allows a type checking algorithm can be implemented, creating an interpreter for the language. This allows us to write larger terms, and it can be automatically verified whether they are well-formed. In \cref{sec:towards-nbe}, we introduce our implementation of \Catt, \Cattsu, and \Cattsua, written in rust. This implementation supports features such as implicit arguments to terms, implicit suspension, and native support for trees and tree labellings. We will explain how the tool can be used, and use it to give larger examples of \Cattsua terms, including proofs of Eckmann-Hilton (see \cref{fig:eh}) and its higher dimensional coherence condition, the syllepsis.
 
-The implementation uses an approach closer to normalisation by evaluation for typechecking terms in the theory. \cref{sec:towards-nbe} explores this algorithm and presents some perspectives on applying normalisation by evaluation to semistrict versions of \Catt. The correctness of the tool is still dependent on the metatheoretic results derived using reduction schemes.
+The implementation uses an approach closer to normalisation by evaluation for typechecking terms in the theory. \cref{sec:towards-nbe} explores this algorithm and presents some perspectives on applying normalisation by evaluation to semistrict versions of \Catt.
 
-\todo[inline]{Describe further sections}
-\todo[inline]{Include models section?}
+\cref{sec:models} provides a discussion of the models of the semistrict type theories \Cattsu and \Cattsua, demonstrating how they can be viewed as semistrict \(\infty\)-category. The section proves a partial conservativity result, which allows a proof that semistrictness is a property of a weak \(\infty\)-category, and not additional structure. A discussion is provided on some of the challenges that must be overcome to extend this partial conservativity result.
 
+The thesis ends with a review of avenues for future work in this area, including a discussion of further variants of \Catt which could be defined.
 
 \section{Reduction}
 \label{sec:reduction}
@@ -6686,7 +6686,7 @@ We take a brief moment to explore the theory \Cattsu in its entirety. For this s
 
 We begin by proving a property of terms over disc contexts, which we call \emph{disc trivialisation}. This is the following structure theorem: in a disc context \(D^n\), every term is either a variable, or the iterated identity on a variable, up to definitional equality. Restricting to those terms \(t : \Term_{D^n}\) that are full, that is \(\Supp(t) = \Var{D^n}\), then there is exactly one term (up to definitional equality) at each dimension \(k \geq n\). Hence, the type theory \Cattsu trivialises disc contexts.
 
-\todo[inline]{Link to other paper}
+This property relates the type theory \Cattsu to the definitional of strictly unital \(\infty\)-categories of \citeauthor{Batanin2013}~\cite{Batanin2013}, whose \emph{reduced operads} enforce that there is a unique term of each dimension over a linear tree.
 
 We now state and prove disc trivialisation, recalling the definition of an iterated canonical identity from \cref{def:canonical-id}.
 
@@ -7132,7 +7132,7 @@ By the above and \cref{lem:insertion-different}, \(b' =_{\dim(a)} c'\). This com
 \section{Towards normalisation by evaluation}
 \label{sec:towards-nbe}
 
-In this section, the Rust implementation of \Catt, \Cattsu, and \Cattsua is introduced and can be found at \todo{Cite implementation}. This implementation takes the form of an interpreter, allowing terms of \Catt to be written in a convenient syntax which can be mechanically checked. The implementation aids the user in writing \Catt terms with features such as automatically constructing standard composites, allowing terms to be bound to top level syntax, implicitly suspending terms, automatically filling arguments which are not locally maximal, and providing informative error messages to the user when typechecking fails.
+In this section, the Rust implementation of \Catt, \Cattsu, and \Cattsua is introduced and can be found at \cite{alex_rice_2024_10964705}. This implementation takes the form of an interpreter, allowing terms of \Catt to be written in a convenient syntax which can be mechanically checked. The implementation aids the user in writing \Catt terms with features such as automatically constructing standard composites, allowing terms to be bound to top level syntax, implicitly suspending terms, automatically filling arguments which are not locally maximal, and providing informative error messages to the user when typechecking fails.
 
 We highlight three points of our implementation:
 \begin{itemize}
@@ -7153,7 +7153,7 @@ The form of NbE implemented in the tool is largely inspired by the paper \citeti
 	\\
 	{\text{Core syntax}} \\
 	\\
-	{\text{Normal-form syntax}}
+	{\text{Normal form syntax}}
 	\arrow["{\mathsf{check}}", curve={height=-24pt}, from=1-1, to=3-1]
 	\arrow["{\mathsf{infer}}"', curve={height=24pt}, from=1-1, to=3-1]
 	\arrow["{\mathsf{to\_raw}}"{description}, from=3-1, to=1-1]
@@ -7166,11 +7166,11 @@ The form of NbE implemented in the tool is largely inspired by the paper \citeti
 
 A high-level overview of the implementation is given in \cref{fig:overview}. We pause to explain the purpose of each component:
 \begin{itemize}
-\item The \emph{raw syntax} is the syntax that the user of the tool interacts with. We maintain no invariants over the well-formedness of the raw syntax, and it allows the user to omit arbitrary arguments. The primary purpose of the raw syntax is to be the target of parsing, and conversely to facilitate the pretty printing of terms. We also specify a command language.
+\item The \emph{raw syntax} is the syntax that the user of the tool interacts with. We maintain no invariants over the well-formedness of the raw syntax, and it allows the user to omit arbitrary arguments. The primary purpose of the raw syntax is to be the target of parsing, and conversely to facilitate the pretty-printing of terms. We also specify a command language.
 \item The \emph{core syntax} is the result of the typechecking procedure. Syntax of this form is known to be well-formed, and all implicit arguments have been filled in at this point. The terms of this syntax resemble the structured terms of \cref{sec:structured-terms}, with various common operations of \Catt being defined as constructors. In contrary to previous representations of \Catt in this thesis, the application of substitution is treated as a term former, instead of an operation.
-\item The \emph{normal-form syntax} represents the normal forms of each of the type theories \Cattsua, \Cattsu, and \Catt itself. This syntax is also always assumed to be well-formed, and is the closest to original syntax of \Catt.
-\item The \textsf{eval} and \textsf{quote} functions convert syntax between core syntax and normal-form syntax. For each constructor in the core syntax, evaluation computes the result of the corresponding operation, quotienting by the rules of \Cattsu or \Cattsua when applicable. We note that despite \Catt itself having no computation, evaluation must still process operations such as suspension and substitution application. Quotation converts normal-form syntax back to core syntax, and in our case is a trivial inclusion.
-\item The \textsf{infer} and \textsf{check} functions perform typechecking while converting raw syntax into core syntax. Both functions are mutually dependent on each other, and also may need to convert types to normal-form syntax to check equality. The \textsf{to\_raw} functions ``forgets'' that a piece of core syntax is well-formed, returning a piece of raw syntax, and can optionally remove all non-locally maximal arguments from terms.
+\item The \emph{normal form syntax} represents the normal forms of each of the type theories \Cattsua, \Cattsu, and \Catt itself. This syntax is also always assumed to be well-formed, and is the closest to original syntax of \Catt.
+\item The \textsf{eval} and \textsf{quote} functions convert syntax between core syntax and normal form syntax. For each constructor in the core syntax, evaluation computes the result of the corresponding operation, quotienting by the rules of \Cattsu or \Cattsua when applicable. We note that despite \Catt itself having no computation, evaluation must still process operations such as suspension and substitution application. Quotation converts normal form syntax back to core syntax, and in our case is a trivial inclusion.
+\item The \textsf{infer} and \textsf{check} functions perform typechecking while converting raw syntax into core syntax. Both functions are mutually dependent on each other, and also may need to convert types to normal form syntax to check equality. The \textsf{to\_raw} functions ``forget'' that a piece of core syntax is well-formed, returning a piece of raw syntax, and can optionally remove all non-locally maximal arguments from terms.
 \end{itemize}
 In the following subsections, we expand on these points, fully defining each class of syntax, and describing the typechecking and evaluation procedures.
 
@@ -7212,6 +7212,8 @@ The primary purpose of the raw syntax is to accurately represent the written pla
   \[ \{f\}\{\{a\}\{b\}\} = [f,[a,b]]\]
   When using the full (curly bracket) notation to specify a labelling, it must be wrapped in angle brackets to avoid parse ambiguity.
 \end{itemize}
+
+We highlight the use of the extended substitution introduced in \cref{sec:extend-subst} in the raw syntax. This allows the tool to perform ``implicit suspension'', the automatic suspension of a term, by reducing it to a problem of type inference. These extended substitutions are converted to regular substitutions by the evaluation function introduced in \cref{sec:evaluation}, which applies the appropriate number of suspensions to the head term. An example of this is given in \cref{sec:examples}.
 
 We also provide a command language on top of the raw syntax for \Catt, which allows the user to perform various operations on terms, such as binding them to a top-level name, or normalising them. These commands are given by the following syntax:
 \begin{alignat*}{3}
@@ -7267,7 +7269,7 @@ In the core syntax, all the variable names have been replaced by an index into t
 
 For the remainder of the syntax, \(\mathsf{to\_raw}\) removes extra information that was obtained during typechecking, such as the tree associated to a \(\mathsf{comp}\), the dimension of an \(\mathsf{id}\), or the term associated to a top-level binding. We also accept a boolean parameter declaring whether implicit arguments should be kept; if this is true then the \(\mathsf{Some}\) constructor of the maybe type is used whenever possible, otherwise only locally maximal arguments are kept, replacing the rest with the \(\mathsf{None}\) constructor.
 
-Lastly, we introduce the normal-form syntax. This is the simplest of the three categories of syntax and is closest to the base syntax of \Catt. It is given by the following grammar:
+Lastly, we introduce the normal form syntax. This is the simplest of the three categories of syntax and is closest to the base syntax of \Catt. It is given by the following grammar:
 \begin{alignat*}{4}
   &(\text{Head})&\quad&\color{Diag2}H &\ \ &{}::={}&\ \ &{\color{Diag2}\mathsf{coh}[T:A]} \mid {\color{Diag2}\mathsf{id}_n} \mid {\color{Diag2}\mathsf{comp}_T}\\
   &(\text{Terms})&&\color{Diag2}s,t&&{}::={}&&{\color{Diag2}\mathsf{var}_p} \mid {\color{Diag2}H \sub L}\\
@@ -7275,7 +7277,7 @@ Lastly, we introduce the normal-form syntax. This is the simplest of the three c
   &(\text{Types})&&{\color{Diag2}A}&&{}::={}&& {\color{Diag2}[(s_0,t_0),\dots,(s_n,t_n)]}\\
  &(\text{Tree Contexts})&&{\color{Diag2}T}&&{}::={}&& {\color{Diag2}\mathsf{Tree}(\mathsf{Maybe}(v))}
 \end{alignat*}
-As with the core syntax, we parameterise by a type of positions \(P\). In the normal-form syntax, application of substitution is removed, and labellings can no longer be applied to an arbitrary term, but only to a head term, which is a single coherence, composite, or identity. These constructions are prioritised as head terms due to the role they play in \Cattsua, being the only insertable arguments.
+As with the core syntax, we parameterise by a type of positions \(P\). In the normal form syntax, application of substitution is removed, and labellings can no longer be applied to an arbitrary term, but only to a head term, which is a single coherence, composite, or identity. These constructions are prioritised as head terms due to the role they play in \Cattsua, being the only insertable arguments.
 
 Many of the extra operations such as suspension are not present in the normal form syntax. In particular, the syntax for types is far simpler, allowing them to be represented by a vector of pairs of terms. A type \({\color{Diag2}[(s_0,t_0),\dots,(s_n,t_n)]}\) represents the type \({\color{Diag2}s_0} \to {\color{Diag2}t_0}\), with the tail of the list giving the lower dimensional part of the type. The type \(\star\) is represented by the empty list.
 
@@ -7292,7 +7294,7 @@ We now describe the core technical part of the tool, the evaluation of a piece o
 Following the NbE style we have already introduced, we define \emph{(semantic) environments}, which are required to evaluate a term to a normal form.
 
 \begin{definition}
-  For a type of positions \(P\), a \(P\)-\emph{environment} takes the form of a \(P\)-\textsf{Container} of normal-form terms, along with a normal form type. More concretely this is given by a tree of terms when \(P = \mathsf{Path}\) and a vector of terms when \(P = \mathbb{N}\).
+  For a type of positions \(P\), a \(P\)-\emph{environment} takes the form of a \(P\)-\textsf{Container} of normal form terms, along with a normal form type. More concretely this is given by a tree of terms when \(P = \mathsf{Path}\) and a vector of terms when \(P = \mathbb{N}\).
 \end{definition}
 
 For an environment \(\rho\), we write \(\ty(\rho)\) for the type associated with \(\rho\) and \(\rho(p)\) for the \(p^{\text{th}}\) element of the container, where \(p : P\). This mirrors the syntax used for a term-labelling in \cref{sec:trees}, as environments are simply an abstraction over labellings and substitutions. Due to this similarity, the \emph{restriction} of an environment can be defined, similarly to its definition for substitutions. An \(\mathsf{Path}\)-environment can be repeatedly \emph{unrestricted} until the contained type is \(\star\), returning a labelling.
@@ -7311,9 +7313,9 @@ There are also identity environments, that play the role of the identity substit
   From a (core) context \(\Gamma\), an \(\mathbb{N}\)-environment \(\id_\Gamma\) can be formed with type \(\star\) and \(\id_\Gamma(i) = {\color{Diag2}\mathsf{var}_i}\) for each \(i < \len(\Gamma)\). For each tree \(T\), a \(\mathsf{Path}\)-environment \(\id_T\) can be formed again with type \(\star\) such that \(\id_T(p) = {\color{Diag2}\mathsf{var}_p}\) for each path \(p\) of \(T\).
 \end{definition}
 
-We can now define the functions \(\eval_\rho\), which takes a piece of syntax and evaluates it in the environments \(\rho\) to a normal-form, and \(\quote\) which includes normal-forms back into core syntax. Intuitively, \(\eval_\rho(s)\) computes the normal form of \(s \sub \rho\).
+We can now define the functions \(\eval_\rho\), which takes a piece of syntax and evaluates it in the environments \(\rho\) to a normal form, and \(\quote\) which includes normal forms back into core syntax. Intuitively, \(\eval_\rho(s)\) computes the normal form of \(s \sub \rho\).
 
-We begin by defining \(\eval_\rho(s)\), \(\eval_\rho(A)\), \(\eval_\rho(\sigma)\), \(\eval_\rho(L)\), which respectively produce a normal-form term, a normal-form type, a \(\mathbb{N}\)-environment, and a \(\mathsf{Path}\)-environment. We proceed by case analysis, giving the easier cases below.
+We begin by defining \(\eval_\rho(s)\), \(\eval_\rho(A)\), \(\eval_\rho(\sigma)\), \(\eval_\rho(L)\), which respectively produce a normal form term, a normal form type, a \(\mathbb{N}\)-environment, and a \(\mathsf{Path}\)-environment. We proceed by case analysis, giving the easier cases below.
 \begin{mathpar}
   \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{var}_p}) = {\color{Diag2}\rho(p)} \and
   \eval_{\color{Diag2}\rho}({\color{Diag1}\mathsf{top\_lvl}(v,s)}) = \eval_{\color{Diag2}\rho}({\color{Diag1}s})\and
@@ -7363,7 +7365,7 @@ We next obtain the type \({\color{Diag2}B} = \eval_{\color{Diag2}\id_S}({\color{
 
 The \(\color{Diag1}\mathsf{comp}_T\) case is treated in much the same way, removing any step involving \(\color{Diag1}A\) and instead setting \({\color{Diag2}B} = \eval_{\color{Diag2}\id_T}({\color{Diag1}\stdty T n})\), where \(n\) is given by the dimension of \(T\) before any insertion was performed. This completes all cases for the evaluation function.
 
-In contrast, the \(\quote\) function is defined completely trivially by recursion, converting head terms and normal-form terms to core terms, normal-form labellings to core labellings, and converting normal-form types to an iterated arrow type in the obvious way. We note that this is unusual for NbE, where the \(\quote\) function is often mutually defined with evaluation, and performs a significant portion of the work of converting terms to normal-form.
+In contrast, the \(\quote\) function is defined completely trivially by recursion, converting head terms and normal form terms to core terms, normal form labellings to core labellings, and converting normal form types to an iterated arrow type in the obvious way. We note that this is unusual for NbE, where the \(\quote\) function is often mutually defined with evaluation, and performs a significant portion of the work of converting terms to normal form.
 
 \subsection{Typechecking}
 \label{sec:typechecking}
@@ -7472,11 +7474,99 @@ The typing rules in \cref{fig:bidirectional} can easily be translated into an al
 
 Many of the choices for the general set up of these rules were made to improve the quality of error messages. Each of these rules can fail for a variety of reasons, at which point an error is created by converting the relevant syntax back to raw syntax using the \(\mathsf{to\_raw}\) functions so that it can be displayed to the user. The use of Rust's \textsf{Result} type, which allows each of these functions to return either the well-formed core syntax or an appropriate error message, is essential, and benefits greatly from the question mark syntax in Rust, which allows errors to easily be propagated through the code.
 
+We end this section by describing the function of each of the commands introduced in \cref{sec:nbe-syntax}. Each of these commands is run with a mutable reference to a signature \(\Psi\). The commands use this signature for typechecking, and may modify the signature.
+
+The three \(\mathsf{def}\) commands are used to add a new binding to the signature \(\Psi\). For the first command, which omits the context, the term \(s\) must be inferred, producing a core syntax context, term, and type, which is inserted into the signature with key \(v\) and printed to the user. The second command is given a raw context and so first checks this raw context to produce a core (possibly tree) context \(\color{Diag1}\U\), before checking the term \(s\) in this context. Checking the term then produces a core syntax term and type, which are inserted into the signature along with the context \(\Gamma\). The last \(\mathsf{def}\) command proceeds as before, checking the context to get a context \(\color{Diag1}\U\) and then checking the term in \(\color{Diag1}\U\), producing a core term \(\color{Diag1}t\) and type \(\color{Diag1}B\). The supplied type \(A\) is then checked against \(\eval_{\color{Diag2}\id_{\color{Diag1}\U}}({\color{Diag1}B})\). If this check succeeds, the key-value pair \((v, ({\color{Diag1}\U},{\color{Diag1}t},{\color{Diag1}B}))\) is added to the signature \(\Psi\), identically to the previous case.
+
+The \(\mathsf{normalise}\) command is used to print the normal form of a term \(s\). As with the final two \(\mathsf{def}\) cases, we begin by checking the context, and checking the term \(s\) in the resulting core context to get term \(\color{Diag1}t\) of type \(\color{Diag1}A\). Both \(\color{Diag1}t\) and \(\color{Diag1}A\) are then evaluated to normal form, quoted, and converted back to raw syntax, before being pretty-printed to the user. The \(\mathsf{size}\) command calculates a primitive estimate of the complexity of a term (which we note is not the same as the syntactic complexity given in \cref{sec:termination}) by counting the number of constructors in the normal form. To run this command, the term \(s\) is checked as before, and converted to a normal form term \(\color{Diag2}t\). The size \(\mathsf{size}({\color{Diag2}t})\) is then calculated by induction by the rules given in \cref{fig:size} and this size is printed to the user. The \(\mathsf{assert}\) command checks both input terms \(s\) and \(t\), and evaluates the resulting core syntax terms to normal form to check that they are equal. None of the \(\mathsf{normalise}\), \(\mathsf{size}\), or \(\mathsf{assert}\) commands modify the signature \(\Psi\).
+
+\begin{figure}[ht]
+  \centering
+  \begin{mathpar}
+  \mathsf{size}({\color{Diag2}\mathsf{coh}[T : A]}) = 1 + \mathsf{size}({\color{Diag2}A})\and
+  \mathsf{size}({\color{Diag2}\mathsf{id}_n}) = \mathsf{size}({\color{Diag2}\mathsf{comp}_T}) = 1 \and
+  \mathsf{size}({\color{Diag2}\mathsf{var}_p}) = 0 \and
+  \mathsf{size}({\color{Diag2}H \sub L}) = \mathsf{size}({\color{Diag2}H}) + \mathsf{size}({\color{Diag2}L})\and
+  \mathsf{size}({\color{Diag2}L}) = \sum_{p : \Path_T} \mathsf{size}({\color{Diag2}L(p)})\and
+  \mathsf{size}({\color{Diag2}[(s_0,t_0), \dots, (s_n,t_n)]}) = \sum_{i= 0}^n \left(\mathsf{size}({\color{Diag2}s_i}) + \mathsf{size}({\color{Diag2}t_i})\right)
+\end{mathpar}
+  \caption{Size of normal form syntax}
+  \label{fig:size}
+\end{figure}
+
+Finally, the \(\mathsf{import}\) command reads the contents of the supplied file, parses it as a list of commands, and runs each of these commands with the same signature. The tool has a command line interface, which allows files to be loaded at startup, as well as providing a REPL (read-eval-print loop) which parses one command at a time.
+
 \subsection{Examples}
 \label{sec:examples}
 
-\todo[inline]{Use content from sua paper}
-\todo[inline]{Show off implicit suspension}
+We now demonstrate the use of the tool with some examples. All the examples below can be found in the \texttt{/examples} directory of the implementation code base~\cite{alex_rice_2024_10964705}.
+
+We begin defining some of the standard operations that can be found in a monoidal category or bicategory, which can be found in the file \texttt{/examples/monoidal.catt}. We start by defining \(1\)-composition as a coherence:
+\begin{lstlisting}[language=Catt]
+  def comp1coh [f,g] = coh [ x{}{}z : x -> z ] (f,g)
+\end{lstlisting}
+This example demonstrates the two ways of giving a tree context: in the \(\mathsf{def}\) command we give the context using the square bracket notation, which only labels the maximal elements, and in the coherence it is given by the full labelling, as we require access to the variables \(x\) and \(z\) (we note that all other variables of the context have been omitted). This example further demonstrates that a substitution can be applied to a term over a tree context, where we have only specified the locally maximal arguments.
+
+This composite can of course also be given using the \(\mathsf{comp}\) construction.
+\begin{lstlisting}[language=Catt]
+  def comp1 [f,g] = comp
+  assert comp1coh(f,g) = comp1(f,g) in [f,g]
+\end{lstlisting}
+The tree for \(\mathsf{comp}\) is inferred from the labelling \texttt{[f,g]}. The assert statement ensures that these two ways of giving the \(1\)-composition are equal in the theory. The assert passes even with no reduction enabled, demonstrating the value of evaluation in the fully weak case. The horizontal and vertical composites of \(2\)-cells can be given similarly:
+\begin{lstlisting}[language=Catt]
+  def horiz [[a],[b]] = comp
+  def vert [[a,b]] = comp
+\end{lstlisting}
+As the vertical composite is the suspension of \(1\)-composition, it can also be given using implicit suspension:
+\begin{lstlisting}[language=Catt]
+  def vertsusp [[a,b]] = comp1[a,b]
+  assert vert(a,b) = vertsusp(a,b) in [[a,b]]
+\end{lstlisting}
+In this case, the labelling applied to \texttt{comp1} is a tree of depth \(1\) where the locally maximal arguments are given by \(2\)-dimensional terms. Type inference then deduces that the type component of this labelling should be \(1\)-dimensional, and hence evaluation causes the head term \texttt{comp1} to be suspended, making it equal to the composite \texttt{vert}, as demonstrated by the assertion.
+
+The unitors and associator are then given by the following coherences, using the \(\mathsf{id}\) builtin for the unitors:
+\begin{lstlisting}[language=Catt]
+  def unitor_l = coh [ x{f}y : comp1(id(x),f) -> f ]
+  def unitor_r = coh [ x{f}y : comp1(f, id(y)) -> f ]
+  def assoc    = coh [ {f}{g}{h} : comp1(comp1(f,g),h) -> comp1(f,comp1(g,h)) ]
+\end{lstlisting}
+which allows definitions to be given for terms which witness the triangle and pentagon equations of monoidal categories:
+\begin{lstlisting}[language=Catt]
+  def triangle = coh [ x{f}y{g}z
+                     : vert(assoc(f,id(y),g), horiz(id(f),unitor_l(g)))
+                       ->
+                       horiz(unitor_r(f),id(g))
+                     ]
+
+  def pentagon = coh [ v{f}w{g}x{h}y{i}z
+                     : vert(assoc(comp1(f,g),h,i),assoc(f,g,comp1(h,i)))
+                       ->
+                       comp [
+                         horiz(assoc(f,g,h),id(i)),
+                         assoc(f,comp1(g,h),i),
+                         horiz(id(f),assoc(g,h,i))
+                       ]
+                     ]
+\end{lstlisting}
+We note the direct use of the \(\mathsf{comp}\) constructor to easily provide a ternary composite without needing to give a new top-level definition. Using the \(\mathsf{normalise}\) command, it can be show that the triangle reduces to the identity with \Cattsu normalisation enabled, and the pentagon reduces to the identity with \Cattsua normalisation enabled.
+
+In the files \texttt{/examples/eh.catt} and \texttt{/examples/eh-cyll.catt}, we give two \Catt proofs of the Eckmann-Hilton argument (see \cref{prop:eh}). In \Cattsu, these both normalise to the following vastly smaller term:
+\begin{lstlisting}[language=Catt]
+  def swap = coh [ x{f{a}g}y{h{b}k}z
+                 : comp[comp [[a],h], comp[g,[b]]]
+                   ->
+                   comp[comp [f,[b]], comp[[a],k]]
+                 ]
+\end{lstlisting}
+The \(\mathsf{size}\) command demonstrates that the \Catt Eckmann-Hilton proof in \texttt{/examples/eh.catt} has size 1807 whereas its \Cattsu normalisation has a size of only 19. Due to the simplicity of Eckmann-Hilton in \Cattsu, we are able to give \Cattsu and \Cattsua proofs of the syllepsis (see \cref{sec:cattsu}) in \texttt{/examples/syllepsis-su.catt} and \texttt{/examples/syllepsis.catt} respectively. It can be verified that in \Cattsua, the \Cattsu proof of syllepsis, which has size 2745, reduces to the \Cattsua proof, which has size 1785.
+
+\subsection{Further work}
+\label{sec:further-work}
+
+\todo[inline]{Unification}
+\todo[inline]{Modules etc?}
+\todo[inline]{Unfolding}
+\todo[inline]{Lsp?}
 
 \section{Models}
 \label{sec:models}
@@ -7577,7 +7667,7 @@ as a single coherence over \(\Delta\). This term is also a \Cattsu normal form. 
     \arrow["{\eta^{-1}}"', shorten <=3pt, Rightarrow, from=4, to=1-3]
   \end{tikzcd}
 \]
-is a \Cattsu normal form term over a pasting context, which is not well-formed in \Catt. Such a term can be rehydrated by inserting the equivalence \(\id \cong \id * \id\) into the centre of the term. Performing a similar construction with the interchanger instead of the associator creates a \Cattsua normal-form term over a pasting context which is not a \Catt term.
+is a \Cattsu normal form term over a pasting context, which is not well-formed in \Catt. Such a term can be rehydrated by inserting the equivalence \(\id \cong \id * \id\) into the centre of the term. Performing a similar construction with the interchanger instead of the associator creates a \Cattsua normal form term over a pasting context which is not a \Catt term.
 
 We now proceed with the proof of \cref{thm:rehydration}. We introduce three operations, which are mutually defined on terms of \Cattr over pasting contexts.
 \begin{itemize}
@@ -7811,7 +7901,7 @@ The term \(t_n\) is given immediately by \(t\), and \(t_0\) is then a term of \(
 
 Unfortunately, this method does not avoid the need to define new classes of operations in \Catt, as we could be required to prove that arbitrary \Catt operations are natural in their lower dimensional arguments. Consider terms \(f : x \to y\) and \(g : y \to z\) and suppose the \(\Catt_{\mathcal{R}_1}\) normal form of \(y\) is \(y'\) with normaliser \(\phi(y)\). Then, during a rehydration proof to \(\Catt_{\mathcal{R}_0}\), it may be required to give a normaliser from \(f * g\) to \((f * \phi(y)) * (\phi(y)^{-1} * g)\), effectively requiring us to prove that \(1\)-composition is natural in its central \(0\)-cell. Similarly to the case with cylinders, in this case for \(1\)-composition, such a normaliser can easily be given, but we possess no way of creating such naturality arguments on arbitrary coherences.
 
-\todo[inline]{Point to Eckmann hilton files}
+The proofs of Eckmann-Hilton given in \cref{sec:examples} give an example of the result of each of these methods, with the proof in \texttt{/examples/eh.catt} proceeding by ``rehydration by dimension'', and the proof in \texttt{/examples/eh-cyll.catt} using cylinders. In both proofs, the only example of the second problem we encounter is proving that the left and right unitors on the identity are equivalent to the unbiased unitor. For the cylinder proof, the composition of \(1\)-cylinders is used and is given by the term \texttt{cyl\_comp}, which is then implicitly suspended by the tool. The rehydration by dimension proof needs a naturality move like the one described above, which is given by the term \texttt{compat\_move}.
 
 \section{Further theories}
 \label{sec:further-theories}
