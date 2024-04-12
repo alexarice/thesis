@@ -16,10 +16,10 @@
 \collegeshield{CollegeShields/Darwin}
 
 %% Submission date [optional]:
-\submissiondate{TODO}
+\submissiondate{18\textsuperscript{th} April 2024}
 
 %% Declaration date:
-\date{TODO}
+\date{18\textsuperscript{th} April 2024}
 
 %% PDF meta-info:
 \subjectline{Computer Science}
@@ -83,7 +83,7 @@ The composition of \(1\)-cells in an \(n\)-category functions identically to the
     \arrow["\delta"', shorten <=5pt, shorten >=5pt, Rightarrow, from=6, to=5]
   \end{tikzcd}
 \]
-These diagrams mirror the concept of commutative diagrams for \(1\)-categories, where spaces in the diagram representing an equality have been replaced by \(2\)-cell arrows. The first of these composites composes two \(2\)-cells \(\alpha\) and \(\beta\) along a shared \(1\)-cell boundary creating the vertical composite \(\alpha \star_1 \beta\). The second composes the \(2\)-cells \(\gamma\) and \(\delta\) along a \(0\)-cell boundary and creates the horizontal composite \(\gamma \star_0 \delta\). In higher dimensions, the pattern continues of having \(n\) different ways of composing two \(n\)-cells. For each \(n\)-cell, there is also a identity \(n+1\)-cell.
+These diagrams mirror the concept of commutative diagrams for \(1\)-categories, where spaces in the diagram representing an equality have been replaced by \(2\)-cell arrows. The first of these composites composes two \(2\)-cells \(\alpha\) and \(\beta\) along a shared \(1\)-cell boundary creating the vertical composite \(\alpha \star_1 \beta\). The second composes the \(2\)-cells \(\gamma\) and \(\delta\) along a \(0\)-cell boundary and creates the horizontal composite \(\gamma \star_0 \delta\). In higher dimensions, the pattern continues of having \(n\) different ways of composing two \(n\)-cells. For each \(n\)-cell, there is also an identity \(n+1\)-cell.
 
 Similarly to \(1\)-categories, \(n\)-categories must satisfy various laws concerning their operations. These can be roughly organised into 3 groups:
 \begin{itemize}
@@ -237,11 +237,11 @@ While we have given the types of laws that must hold in \(n\)-categories, we hav
 
 In such a weak \(n\)-category, each law is given by a set of isomorphisms, which are given as part of the data of the category. For the associativity law of three \(1\)-cells \(f\), \(g\), and \(h\), a \(2\)-cell known as the \emph{associator} must be given, which takes the following form:
 \[ \alpha_{f,g,h} : (f * g) * h \to f * (g * h)\]
-Similarly the unit laws for a \(1\)-cell \(f\) are given by the \emph{left unitor} \(\lambda_f\) and the \emph{right unitor} \(\rho_f\) which take the following form:
+Similarly, the unit laws for a \(1\)-cell \(f\) are given by the \emph{left unitor} \(\lambda_f\) and the \emph{right unitor} \(\rho_f\) which take the following form:
 \[ \lambda_f : \id \star f \to f \qquad \rho_f : f \star \id \to f\]
-Whereas two morphisms being equal is a property of those morphisms, an isomorphism between the same morphisms is a form of data, and the choice of isomorphism may not be unique. Weak higher categories therefore contain higher \emph{coherence laws} which govern the interaction of these isomorphisms. These coherence laws can also be given as isomorphisms instead of equalities, and must satisfy their own coherence laws, leading to an tower of coherence laws. The amount of data needed to define an \(n\)-category therefore increases exponentially as \(n\) increases.
+Whereas two morphisms being equal is a property of those morphisms, an isomorphism between the same morphisms is a form of data, and the choice of isomorphism may not be unique. Weak higher categories therefore contain higher \emph{coherence laws} which govern the interaction of these isomorphisms. These coherence laws can also be given as isomorphisms instead of equalities, and must satisfy their own coherence laws, leading to a tower of coherence laws. The amount of data needed to define an \(n\)-category therefore increases exponentially as \(n\) increases.
 
-In addition to the difficulty in defining a weak \(n\)-category, it is also more difficult to give proofs in a weak environment, due to the bureaucracy of working around the various coherence isomorphisms. Consider the proof of Eckmann-Hilton given in \cref{fig:eh}. In a weak environment, we would hope to be able to simply replace each equality by the appropriate isomorphism, however doing so for the first equality in the proof would require us to give a isomorphism:
+In addition to the difficulty in defining a weak \(n\)-category, it is also more difficult to give proofs in a weak environment, due to the bureaucracy of working around the various coherence isomorphisms. Consider the proof of Eckmann-Hilton given in \cref{fig:eh}. In a weak environment, we would hope to be able to simply replace each equality by the appropriate isomorphism, however doing so for the first equality in the proof would require us to give an isomorphism:
 \[ \alpha \cong \alpha * \id\]
 Each side of this isomorphism has a different source and target, and hence no such isomorphism can be given in the globular setting used in this thesis. A full proof of Eckmann-Hilton is still possible but far more involved.
 
@@ -254,11 +254,11 @@ This equality does not hold in a general weak \(3\)-category (even up to isomorp
 This motivates the search for semistrict definitions of \(n\)-category: definitions where some of the operations are strict, yet do not lose the expressivity of weak \(n\)-categories. For \(3\)-categories, two such definitions have been proposed:
 \begin{itemize}
 \item \citeauthor{joyal2006weak}~\cite{joyal2006weak,joyalcoherence} define a monoidal \(2\)-category (which can be seen as a \(3\)-category with a single \(0\)-cell) which only has weak units and unitors, and is otherwise strict. They prove that all braided monoidal categories (weak \(3\)-categories with a unique \(0\)-cell and unique \(1\)-cell) can be interpreted in this setting as the category of endomorphisms on the weak unit morphism.
-\item Gray-categories are a form of semistrict \(3\)-categories for which all structure is strict except the the interchanger, the isomorphism witnessing the interchange law. \citeauthor{gordon1995coherence}~\cite{gordon1995coherence} prove that every weak \(3\)-category is equivalent to a Gray-category.
+\item Gray-categories are a form of semistrict \(3\)-categories for which all structure is strict except the interchanger, the isomorphism witnessing the interchange law. \citeauthor{gordon1995coherence}~\cite{gordon1995coherence} prove that every weak \(3\)-category is equivalent to a Gray-category.
 \end{itemize}
 It is non-trivial to even define such a notion of semistrict \(n\)-category for \(n > 3\), let alone prove that it loses no expressivity over its weak counterpart. Simpson conjectures~\cite{simpson1998homotopy} that having only the unit laws weak is sufficient to model all homotopy groupoids, \(\infty\)-groupoids arising from the homotopy of topological spaces, though it is unclear if such a definition has been given. \citeauthor{hadzihasanovic2019representable}~\cite{hadzihasanovic2019representable} defines weak higher categories based on \emph{diagrammatic sets}. It could be argued that such a definition can model strict interchange, though the classes of diagrams that can be composed in this theory are restricted to those that are \emph{spherical}, which disallows horizontal composites in the form stated above and makes comparison difficult. \citeauthor{Batanin2013}~\cite{Batanin2013} define a notion of \(\infty\)-category with strict units based on the language of operads. A key axiom in this theory is \emph{disc reduction} which states that composites trivialise over certain configurations of cells known as discs.
 
-Definitions of semistrict \(n\)-categories which are strictly unital and associative have also been defined, primarily inspired by the graphical language of \emph{string diagrams}. \citeauthor{bar2017data}~\cite{bar2017data} define \emph{quasi-strict \(4\)-categories}, where the associativity and unitality laws hold strictly up to equality. \citeauthor{dorn2018associative}~\cite{dorn2018associative} defines \emph{associative \(n\)-categories}: a definition of strictly associative and unital \(n\)-category similarly based on geometric principles. Associative \(n\)-categories are further studied by Heidemann, Reutter, Tataru, and Vicary~\cite{reutter2019high,heidemann2022zigzag,tataru2024theory}, which has recently lead to the construction of the graphical proof assistant \textsf{homotopy.io}~\cite{corbyn2024homotopy} for manipulating higher dimensional string diagrams. Similarly to the case for diagrammatic sets, the composition operations in these theories have a different form to those of strict \(n\)-categories, making comparison difficult. The connection between these definitions and geometry is studied by \citeauthor{dorn2021framed}~\cite{dorn2021framed} and \citeauthor{heidemann2023framed}~\cite{heidemann2023framed}.
+Definitions of semistrict \(n\)-categories which are strictly unital and associative have also been defined, primarily inspired by the graphical language of \emph{string diagrams}. \citeauthor{bar2017data}~\cite{bar2017data} define \emph{quasi-strict \(4\)-categories}, where the associativity and unitality laws hold strictly up to equality. \citeauthor{dorn2018associative}~\cite{dorn2018associative} defines \emph{associative \(n\)-categories}: a definition of strictly associative and unital \(n\)-category similarly based on geometric principles. Associative \(n\)-categories are further studied by Heidemann, Reutter, Tataru, and Vicary~\cite{reutter2019high,heidemann2022zigzag,tataru2024theory}, which has recently led to the construction of the graphical proof assistant \textsf{homotopy.io}~\cite{corbyn2024homotopy} for manipulating higher dimensional string diagrams. Similarly to the case for diagrammatic sets, the composition operations in these theories have a different form to those of strict \(n\)-categories, making comparison difficult. The connection between these definitions and geometry is studied by \citeauthor{dorn2021framed}~\cite{dorn2021framed} and \citeauthor{heidemann2023framed}~\cite{heidemann2023framed}.
 
 \paragraph{Type theory and higher categories.}
 
@@ -283,9 +283,9 @@ The majority of the technical content of this thesis is concerned with proving s
 \item \cref{sec:background} gives an introduction to \(\infty\)-category theory. It defines strict \(\infty\)-categories and continues to define the definition of weak \(\infty\)-categories due to Maltsiniotis. The chapter ends by giving a definition of the type theory \Catt, as defined by \citeauthor{finster2017type}, and describing some preliminary well-known constructions in \Catt.
 \item \cref{cha:gener-pres-catt} introduces a general framework for studying variants of \Catt with definitional equality relations, which we name \Cattr. The chapter also states various properties concerning the metatheory of \Cattr, including specifying conditions on the set of equality rules \(\mathcal{R}\), under which the theory is well-behaved. The description of \Catt in this chapter is comprehensive and self-contained, although lacks some of the exposition of the previous chapter. The type theory \Cattr is accompanied by an Agda formalisation, which is introduced in this chapter.
 \item \cref{sec:operations-catt} takes an arbitrary well-behaved variant of \Cattr, and explores various constructions that can be formed in this setting. The primary purpose of this chapter is to introduce the \emph{pruning operation}, which is done in \cref{sec:pruning}, and the \emph{insertion operation}, which is introduced in \cref{sec:insertion}. \cref{sec:trees,sec:structured-terms} build up theory about a certain class of contexts represented by trees, and terms that appear in these contexts. This theory is vital for a complete understanding of insertion.
-\item In \cref{cha:cattstrict}, the type theories \Cattsu and \Cattsua are finally defined in \cref{sec:cattsu,sec:cattsua}, as variants of the framework \Cattr. Preliminary results about both theories are proved, primarily by compiling results that have been stated in the the previous two chapters. The main technical contribution of this section involves giving reduction schemes for both theories, and giving proofs that these reductions schemes are strongly terminating and globally confluent, hence making equality in these theories decidable.
+\item In \cref{cha:cattstrict}, the type theories \Cattsu and \Cattsua are finally defined in \cref{sec:cattsu,sec:cattsua}, as variants of the framework \Cattr. Preliminary results about both theories are proved, primarily by compiling results that have been stated in the previous two chapters. The main technical contribution of this section involves giving reduction schemes for both theories, and giving proofs that these reductions schemes are strongly terminating and globally confluent, hence making equality in these theories decidable.
 
-  In \cref{sec:towards-nbe}, the decidablity of equality is used to implement a typechecker for both theories \Cattsu and \Cattsua. The typechecker uses \emph{normalisation by evaluation} (NbE) to reduce terms to their a canonical form where they can be checked for equality. The section discusses the interaction of NbE with the \Catt, as well as discussing limitations of this approach in this setting.
+  In \cref{sec:towards-nbe}, the decidability of equality is used to implement a typechecker for both theories \Cattsu and \Cattsua. The typechecker uses \emph{normalisation by evaluation} (NbE) to reduce terms to a canonical form where they can be checked for equality. The section discusses the interaction of NbE with \Catt, as well as discussing limitations of this approach in this setting.
 
   \cref{sec:models} discusses some properties of the models of these type theories, introducing a technique which we call \emph{rehydration}, which ``pads out'' terms of the semistrict theory with the necessary coherences to produce a term of \Catt which is equivalent to the original term. Rehydration can be seen as a conservativity result for the semistrict theories introduced at the start of the chapter. A proof of rehydration is given for the restricted case of terms over a certain class of context known as ps-contexts. This partial rehydration result is sufficient to determine that the semistrictness defined by \Cattsu and \Cattsua is a property, a model of \Catt can be a model of \Cattsu or \Cattsua in at most one way. We further explore some of the obstructions to rehydration in a generic context.
 
@@ -309,7 +309,7 @@ the technique developed for \Cattsua, and a new proof of confluence
 which avoids defining the reduction strategy referred to as standard
 reduction in the \Cattsu paper. \cref{sec:models}, which discusses the
 models of \Cattsu (and \Cattsua) and details the rehydration procedure
-over pasting diagrams is mostly unchanged with the exception of an
+over pasting diagrams is mostly unchanged except for an
 omission in the original proof, that is remedied by
 \cref{cor:supp-ps}. This corollary, due to the current author, gives a
 novel proof for a property of \Catt that has long been conjectured to
@@ -319,7 +319,7 @@ the semistrict theories is nevertheless included for completeness.
 \Cattsua originally appeared in the
 preprint~\cite{finster2023strictly} and was developed in collaboration
 with Eric Finster and Jamie Vicary. The author of this thesis was
-responsible for the a large amount of the technical development in
+responsible for a large amount of the technical development in
 this paper, including being solely responsible for the proof of
 confluence that is given in \cref{sec:confluence-cattsua}.
 
@@ -359,7 +359,7 @@ or may be written as \(f: x \to y\). Two cells are \emph{parallel} if they have 
     \arrow["\alpha", shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=0]
   \end{tikzcd}
 \]
-where all unnamed \(0\)-cells are written as a \(\bullet\). A \(3\)-cell \(\gamma\) between parallel \(2\)-cells \(\alpha\) and \(\beta\) could be could be drawn as:
+where all unnamed \(0\)-cells are written as a \(\bullet\). A \(3\)-cell \(\gamma\) between parallel \(2\)-cells \(\alpha\) and \(\beta\) could be drawn as:
 \[
   \begin{tikzcd}
     \bullet && \bullet
@@ -681,7 +681,7 @@ We give a more graphical representation of the proof in \cref{fig:eh}, which app
 \subsection{Pasting diagrams}
 \label{sec:pasting-diagrams}
 
-The definition of \(\infty\)-categories given in the previous section is close in spirit to the the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:weak}, that these sort of definitions do not scale well to our eventual setting of weak higher categories.
+The definition of \(\infty\)-categories given in the previous section is close in spirit to the ordinary definitions of 1-categories and clearly demonstrates the different families of axioms present. However, we will see in \cref{sec:weak}, that these sorts of definitions do not scale well to our eventual setting of weak higher categories.
 
 There is a special class of (finite) globular sets known as \emph{pasting diagrams}, sometimes known as pasting schemes. The elements of the free strict \(\infty\)-category on a globular set \(G\) can instead be represented by a pasting diagram equipped with a map into \(G\). To do this, it must be possible to obtain a canonical composite from each pasting diagram.
 
@@ -886,7 +886,7 @@ We finish this section with one larger example.
 \subsection{Weak higher categories}
 \label{sec:weak}
 
-The \(\infty\)-categories we have defined so far have all been strict \(\infty\)-categories, meaning that the laws are required to hold up to equality. In ordinary \(1\)-category theory, isomorphism is usually preferred over equality for comparing objects. Similarly, when we have access to higher dimensional arrows, it follows that that we can also consider isomorphisms between morphisms, and therefore consider laws such as associativity up to isomorphism instead of equality.
+The \(\infty\)-categories we have defined so far have all been strict \(\infty\)-categories, meaning that the laws are required to hold up to equality. In ordinary \(1\)-category theory, isomorphism is usually preferred over equality for comparing objects. Similarly, when we have access to higher dimensional arrows, it follows that we can also consider isomorphisms between morphisms, and therefore consider laws such as associativity up to isomorphism instead of equality.
 
 Topological spaces provide one of the primary examples for where it is useful to consider weak laws. Given a topological space \(X\), we can define a globular set of paths and homotopies. Let the \(0\)-cells be given by points \(x\) of the topological space, let morphisms from \(x\) to \(y\) be given as paths \(I \to X\) (where \(I\) is the topological interval \([0,1]\)) which send \(0\) to \(x\) and \(1\) to \(y\), and let higher cells be given by homotopies. The natural composition of two paths \(p\) and \(q\) is the following path:
 \[
@@ -896,7 +896,7 @@ Topological spaces provide one of the primary examples for where it is useful to
     q(2i-1)&when \(i \geq 0.5\)
   \end{cases*}
 \]
-which effectively lines up the paths end to end. Given \(3\) paths \(p\), \(q\), and \(r\), the compositions \((p * q) * r\) and \(p * (q * r)\) are not identical but are equal up to homotopy, meaning the two compositions are isomorphic. Therefore in this case the composition \(p * q\) does not form a strict \(\infty\)-category structure, but rather a weak structure.
+which effectively lines up the paths end to end. Given \(3\) paths \(p\), \(q\), and \(r\), the compositions \((p * q) * r\) and \(p * (q * r)\) are not identical but are equal up to homotopy, meaning the two compositions are isomorphic. Therefore, in this case the composition \(p * q\) does not form a strict \(\infty\)-category structure, but rather a weak structure.
 
 \paragraph{Weak 2-categories} We start our exploration of weak higher categories by considering the lower dimension case of bicategories (weak \(2\)-categories). Here, interchange must still be given by a strict equality, as there are no non-trivial \(3\)-cells in a \(2\)-category. However, associativity and unitality can be given by isomorphisms known as associators and unitors:
 \begin{align*}
@@ -979,9 +979,9 @@ The pentagon equation identifies two ways of associating \(((f * g) * h) * k\) t
 
 Surprisingly, these two equations are enough to give full coherence. For the example of spans from \cref{ex:spans}, these two equations follow from the uniqueness of the universal morphism.
 
-\paragraph{Weak \(\infty\)-categories} To move from weak \(2\)-categories to weak \(3\)-categories, new coherence cells for interchangers are added to replace the interchanger equalities, and new equalities must be added to specify the interaction between the interchangers and other coherence morphisms. Furthermore, the triangle and pentagon equation from \(2\)-categories will become an isomorphisms in a weak \(3\)-category, causing more coherence equations to be added.
+\paragraph{Weak \(\infty\)-categories} To move from weak \(2\)-categories to weak \(3\)-categories, new coherence cells for interchangers are added to replace the interchanger equalities, and new equalities must be added to specify the interaction between the interchangers and other coherence morphisms. Furthermore, the triangle and pentagon equation from \(2\)-categories will become isomorphisms in a weak \(3\)-category, causing more coherence equations to be added.
 
-As we move up in dimension, the number of coherence morphisms and equalities required increases exponentially. Whereas a bicategory has 11 operations (1-identity, 2-identity, 1-composition, vertical composition, horizontal composition, left unitor (and inverse), right unitor (and inverse), and associator (and inverse)), where as a fully weak tricategory already has around 51 operations~\cite{gurski2006algebraic}. These numbers are obtained by unwrapping various subdefinitions and should be treated as approximate. Comparisons between the size of partially weak definitions can be found in~\cite{bar2017data}.
+As we move up in dimension, the number of coherence morphisms and equalities required increases exponentially. Whereas a bicategory has 11 operations (1-identity, 2-identity, 1-composition, vertical composition, horizontal composition, left unitor (and inverse), right unitor (and inverse), and associator (and inverse)), whereas a fully weak tricategory already has around 51 operations~\cite{gurski2006algebraic}. These numbers are obtained by unwrapping various subdefinitions and should be treated as approximate. Comparisons between the size of partially weak definitions can be found in~\cite{bar2017data}.
 
 
 Because of this complexity, we look for more uniform ways to represent the operations and axioms of an \(\infty\)-category. In this thesis, we will work with the type theory \Catt, which is based on a definition of \(\infty\)-categories due to \citeauthor{maltsiniotis2010grothendieck}~\cite{maltsiniotis2010grothendieck}, which is itself based on a definition of \(\infty\)-groupoid by \citeauthor{PursuingStacks}~\cite{PursuingStacks}. We will sketch the ideas behind these definitions here, and give a definition of \Catt in \cref{sec:type-theory-catt}.
@@ -1044,7 +1044,7 @@ Equivalences contain the various invertible laws of our \(\infty\)-categories su
   Let \(f\) and \(g\) be two parallel operations over a pasting diagram \(P\). If both \(f\) and \(g\) use all locally maximal variables of \(f\), then there is an operation over \(P\) with source \(f\) and target \(g\).
 \end{principle-category}
 
-Clearly any operations generated by this principle are invertible, as the extra condition imposed is symmetric. For compositions we introduce the following asymmetric principle, recalling that pasting diagrams are equipped with source and target inclusions, and letting \(\partial^-(P)\) and \(\partial^+(P)\) be the images of these inclusions:
+Clearly any operations generated by this principle are invertible, as the extra condition imposed is symmetric. For compositions, we introduce the following asymmetric principle, recalling that pasting diagrams are equipped with source and target inclusions, and letting \(\partial^-(P)\) and \(\partial^+(P)\) be the images of these inclusions:
 
 \begin{principle-category}[Composites]
   Let \(f\) and \(g\) are parallel operations over a (non-singleton) pasting diagram \(P\) such that \(f\) uses all locally maximal cells of \(\partial^-(P)\) and no cells outside of \(\partial^-(P)\) and \(g\) uses all locally maximal cells of \(\partial^+(P)\) and no cells outside of \(\partial^+(P)\). Then there is an operation over \(P\) with source \(f\) and target \(g\).
@@ -1058,7 +1058,7 @@ As with Grothendieck's definition, a coherator can be made by closing the globul
   We have claimed that a coherator can be formed by closing under adding lifts to parallel operations, though this is not precise and there are actually multiple ways of performing this closure that lead to different coherators. For example, one could add the lift for 1-composition twice, to get two distinct 1-composition operations, as long as one also added a lift between these now parallel operations. Grothendieck gives a general schema for producing coherators, and conjectures that any two coherators give rise to equivalent models of \(\infty\)-categories.
 \end{remark}
 
-We now turn our attention back to the proof of Eckmann-Hilton from \cref{fig:eh}. Given a \(0\)-cell \(x\) and two scalars \(\alpha, \beta : \id(x) \to \id(x)\), we expect the Eckmann-Hilton argument to give us an isomorphism in a weak higher category, rather than the equality obtained in the strict case. In fact we immediately see that equalities 2, 3, and 4 in the proof can be immediately replaced by isomorphisms (interchangers and unitors).
+We now turn our attention back to the proof of Eckmann-Hilton from \cref{fig:eh}. Given a \(0\)-cell \(x\) and two scalars \(\alpha, \beta : \id(x) \to \id(x)\), we expect the Eckmann-Hilton argument to give us an isomorphism in a weak higher category, rather than the equality obtained in the strict case. In fact, we immediately see that equalities 2, 3, and 4 in the proof can be immediately replaced by isomorphisms (interchangers and unitors).
 
 The first and last equalities however are more problematic, although at first we may believe that there should exist some horizontal unitor isomorphism, upon closer inspection the two compositions do not even have the same boundary and so are not parallel. The composition \(\alpha *_1 \beta\) has source and target \(\id(x)\), whereas the source of \(\alpha *_0 \id(\id(x))\) is \(\id(x) *_0 \id(x)\).
 
@@ -1074,7 +1074,7 @@ To recover the proof in a weak setting, the intermediate composites must be comp
 
 A free group is generated by a set, and a free category is generated by a directed graph, and so it is a natural question what the generating data for a free \(\infty\)-category is. We have already seen that a free \(\infty\)-category can be generated by a globular set, but free \(\infty\)-categories can also be generated by data that does not form a globular set.
 
-Consider the minimum data needed to to state the Eckmann-Hilton principle (see \cref{prop:eh}). We require a single \(0\)-cell \(x\), and two \(2\)-cells \(\alpha, \beta : \id(x) \to \id(x)\). This data does not form a globular set as, for example, the source of the \(2\)-cell \(\alpha\) is not in the generating data, but is rather an operation applied to the data. We could try to remedy this by adding a new \(1\)-cell \(f\) to the data to represent \(\id(x)\), but then the connection between \(\id(x)\) and \(f\) would be lost and \(f\) and \(\id(x)\) would be distinct in any free \(\infty\)-category generated on this data.
+Consider the minimum data needed to state the Eckmann-Hilton principle (see \cref{prop:eh}). We require a single \(0\)-cell \(x\), and two \(2\)-cells \(\alpha, \beta : \id(x) \to \id(x)\). This data does not form a globular set as, for example, the source of the \(2\)-cell \(\alpha\) is not in the generating data, but is rather an operation applied to the data. We could try to remedy this by adding a new \(1\)-cell \(f\) to the data to represent \(\id(x)\), but then the connection between \(\id(x)\) and \(f\) would be lost and \(f\) and \(\id(x)\) would be distinct in any free \(\infty\)-category generated on this data.
 
 The correct generating data for an \(\infty\)-category is a \emph{computad}. A version for 2-categories was introduced by \citeauthor{street1976limits}~\cite{street1976limits}, which allows a generating \(2\)-cell to have a composite or identity as its source or target. These were extended to strict \(\infty\)-categories by \citeauthor{burroni1993higher}~\cite{burroni1993higher} and weak \(\infty\)-categories by
 \citeauthor{batanin1998computads}~\cite{batanin1998computads}, which allow the source and target of an \(n\)-cell to be any \((n-1)\)-cell of the free \(\infty\)-category generated by the lower dimensional data.
@@ -1084,7 +1084,7 @@ A modern approach to computads for weak \(\infty\)-categories is given by \citea
 \section{The type theory \Catt}
 \label{sec:type-theory-catt}
 
-In this section we give an overview of the dependent type theory \Catt~\cite{finster2017type}. \Catt serves as a definition of weak \(\infty\)-categories, by defining a weak \(\infty\)-category to be a model of the type theory (e.g. using categories with families~\cite{cwf}). In \cref{cha:gener-pres-catt}, we give a more general and comprehensive presentation of \Catt, allowing the addition of equality relations to the type theory, preempting \cref{cha:cattstrict}. In contrast this section presents the version of \Catt closer to the one found in the literature, and compares its various constructions to the ideas introduced in \cref{sec:weak}.
+In this section we give an overview of the dependent type theory \Catt~\cite{finster2017type}. \Catt serves as a definition of weak \(\infty\)-categories, by defining a weak \(\infty\)-category to be a model of the type theory (e.g. using categories with families~\cite{cwf}). In \cref{cha:gener-pres-catt}, we give a more general and comprehensive presentation of \Catt, allowing the addition of equality relations to the type theory, preempting \cref{cha:cattstrict}. In contrast, this section presents the version of \Catt closer to the one found in the literature, and compares its various constructions to the ideas introduced in \cref{sec:weak}.
 
 \subsection{Syntax of \Catt}
 \label{sec:syntax-catt}
@@ -1092,7 +1092,7 @@ In this section we give an overview of the dependent type theory \Catt~\cite{fin
 \Catt has 4 classes of syntax: contexts, terms, types, and substitutions.
 \begin{itemize}
 \item Contexts contain a list of variables with an associated type. We can consider contexts as finite computads, the generating data for a weak \(\infty\)-category (see \cref{sec:computads}). It is alternatively valid to consider contexts in \Catt as finitely generated \(\infty\)-categories. The set of contexts contains all globular sets (and hence all pasting diagrams).
-\item Terms over a context \(\Gamma\) correspond to the operations from \cref{sec:weak}. Terms can either be a variable, which corresponds to the operations which pick a single cell out of a globular set, or those generated by the unique constructor \(\mathsf{coh}\), which correspond to the operations generated by lifting. A term over a context \(\Gamma\) can also be seen as a element of the free \(\infty\)-category generated from \(\Gamma\).
+\item Terms over a context \(\Gamma\) correspond to the operations from \cref{sec:weak}. Terms can either be a variable, which corresponds to the operations which pick a single cell out of a globular set, or those generated by the unique constructor \(\mathsf{coh}\), which correspond to the operations generated by lifting. A term over a context \(\Gamma\) can also be seen as an element of the free \(\infty\)-category generated from \(\Gamma\).
 \item Types over a context \(\Gamma\) consist of a collection of terms over the same context, and contain the boundary information for a term. Types either take the form of the constructor \(*\), the type of \(0\)-cells (which have no boundary data), or an arrow type \(\arr s A t\), where \(s\) and \(t\) are terms giving the source and target of the boundary and the type \(A\) gives lower dimensional boundary information. This can be viewed as a directed version of the equality type \(s =_A t\) from Martin-L\"of type theory.
 \item Substitutions from a context \(\Gamma\) to a context \(\Delta\) are a mapping from variables of \(\Gamma\) to terms of \(\Delta\). These play the role of functors between the \(\infty\)-categories generated by \(\Gamma\) and \(\Delta\) and are also syntactically crucial for forming compound composites in the theory.
 \end{itemize}
@@ -1183,7 +1183,7 @@ We next define the free variables of each piece of syntax. These will be used to
   \FV(\langle \sigma , t \rangle) &= \FV(\sigma) \cup \FV(t)
 \end{align*}
 
-The free variables of a term is often the wrong notion to use for testing algebraicity. For example in the context \(D^1\), the term \(d_1\) has free variables \(\{d_1\}\), whereas the unary composite of \(d_1\), \(\Coh {D_1} {\arr {d_0^-} \star {d_0^+}} {\id_{D^1}}\), has free variables \(\{d_0^-,d_0^+,d_1\}\). To remedy this, the original paper considers \(\FV(t) \cup \FV(A)\), for a term \(t\) of type \(A\). In this thesis we instead define the support of each piece of syntax, a purely syntactic construction.
+The free variables of a term are often the wrong notion to use for testing algebraicity. For example in the context \(D^1\), the term \(d_1\) has free variables \(\{d_1\}\), whereas the unary composite of \(d_1\), \(\Coh {D_1} {\arr {d_0^-} \star {d_0^+}} {\id_{D^1}}\), has free variables \(\{d_0^-,d_0^+,d_1\}\). To remedy this, the original paper considers \(\FV(t) \cup \FV(A)\), for a term \(t\) of type \(A\). In this thesis we instead define the support of each piece of syntax, a purely syntactic construction.
 
 \begin{definition}
   Fix a context \(\Gamma\). The subset \(V \subseteq \Var(\Gamma)\) is \emph{downwards closed} if for all \((x : A) \in \Gamma\) we have:
@@ -1383,7 +1383,7 @@ The composite and identity above form part of a more general collection of coher
   The standard type takes the standard term over each boundary of \(\Delta\), includes these all back into \(\Delta\) and assembles them into a type. When \(n = \dim(\Delta)\) we will refer to the standard coherence as the \emph{standard composite}.
 \end{definition}
 
-Intuitively, the standard coherence \(\stdcoh \Delta n\) is the canonical composite in dimension \(n\) of the pasting diagram \(\Delta\). To give this a type is needed to form the coherence, for which the standard type \(\stdty \Delta n\) is used. The standard term \(\stdtm \Delta n\) is used as a variant of the standard coherence which special cases disc contexts. This avoids the standard type containing unary composites and allows standard composites (of non disc-contexts) to be normal forms of the reduction schemes that will be described in \cref{cha:cattstrict}.
+Intuitively, the standard coherence \(\stdcoh \Delta n\) is the canonical composite in dimension \(n\) of the pasting diagram \(\Delta\). To give this a type is needed to form the coherence, for which the standard type \(\stdty \Delta n\) is used. The standard term \(\stdtm \Delta n\) is used as a variant of the standard coherence which special cases disc contexts. This avoids the standard type containing unary composites and allows standard composites (of non-disc contexts) to be normal forms of the reduction schemes that will be described in \cref{cha:cattstrict}.
 
 It is immediate that the composite \(a *_0 b\) is given by \(\stdcoh \Delta 1\sub{\langle a , b \rangle}\) and the identity on a term \(t\) of dimension \(n\) is given by \(\stdcoh {D^n} {n+1}\sub{\{t\}}\). This construction can be used to generate all the composites in the definition of a strict \(\infty\)-category. For example the vertical composite of \(2\)-cells is the standard composite over the context given by the diagram:
 \[
@@ -1431,7 +1431,7 @@ There are (at least) 3 ways to compose together the elements of this context. We
 \end{align*}
 Using the equivalence typing rule, we can relate these biased composite with the following term:
 \[ \alpha_{a,b,c} = \Coh \Gamma {\arr {(a * b) * c} {} {a * (b * c)}} {\id_\Gamma}\]
-which is the associator. Similarly for a term \(f : \arr x \star y\), unitors can be form over the disc context \(D^1\) using the equivalence rule:
+which is the associator. Similarly, for a term \(f : \arr x \star y\), unitors can be form over the disc context \(D^1\) using the equivalence rule:
 \begin{align*}
   \lambda_f &= \Coh {D^1} {\arr {\id(d_0^-) * d_1} {} {d_1}} {\{f\}}\\
   \rho_f &= \Coh {D^1}  {\arr {d_1 * \id(d_0^-)} {} {d_1}} {\{f\}}
@@ -1493,7 +1493,7 @@ The suspension of each disc context \(D^n\) is (up to \(\alpha\)-renaming) \(D^{
   for all ps-contexts \(\Delta\) and \(n \in \mathbb{N}\).
 \end{proposition}
 
-The proof of these results is delayed to \cref{sec:operations-catt}, where we will have more tools for dealing with theses constructions.
+The proof of these results is delayed to \cref{sec:operations-catt}, where we will have more tools for dealing with these constructions.
 
 
 
@@ -1504,7 +1504,7 @@ The main purpose of this chapter will be to define the family of type theories \
 
 This chapter will also introduce the Agda formalisation\cite{alex_rice_2024_10964565} which accompanies this thesis, which compiles with Agda v2.6.4 and standard library v2.0. The formalisation implements the syntax and typing judgements of \Cattr, and contains proofs of most results in this chapter and \cref{sec:operations-catt}. By formalising \Cattr, instead of the more specific type theories \Cattsu and \Cattsua introduced in \cref{sec:cattsu,sec:cattsua}, the formalisation of many results can be applied to both type theories. This also allows these results to be applied to any future type theories that fit into this family.
 
-A dependency graph of the formalisation is given in \cref{fig:dep-graph}, and an online version of this graph can be found at \url{https://alexarice.github.io/catt-agda/dep-graph.svg} for which each node is a clickable link to an html version of the code.
+A dependency graph of the formalisation is given in \cref{fig:dep-graph}, and an online version of this graph can be found at \url{https://alexarice.github.io/catt-agda/dep-graph.svg} for which each node is a clickable link to an HTML version of the code.
 
 \section{Extended substitution}
 \label{sec:extend-subst}
@@ -1521,11 +1521,11 @@ If we now consider a substitution \(\tau : \Sigma(\Sigma(\Delta)) \to \Gamma\), 
 
 We have not yet determined the typing conditions required on the substitution part of these extended substitutions. We return to the example of a substitution \(\tau : \Sigma^2(\Delta) \to \Gamma\), and suppose that \(\Delta\) has a variable \(x\) of type \(\star\). In \(\Sigma^2(\Delta)\), \(x\) has the type \(\arr {N'} {\arr N \star S} {S'}\), and so \(x\) should be sent to a term of type \(\arr u {\arr s \star t} v\), the type portion of the extended substitution. In a substitution \(\sigma : \Delta \to \Gamma\), \(x\) would be sent to a term of type \(\star \sub \sigma\), which suggests that \(\star \sub \sigma\) should be redefined to send \(\star\) to the type part of the extended substitution.
 
-This one change to the application of substitution to types is sufficient to form the generalisation to substitutions that was required. An extended substitutions \(\sigma : \Delta \to \Gamma\) then has the following intuition: The substitution part specifies where each variable in \(\Delta\) should be sent, and the type part specifies where the base type \(\star\) should be sent. The other cases for the application of substitution extend this to all terms, types, and (extended) substitutions as before. The extended substitution \(\sigma\) then represents a standard substitution \(\Sigma^n(\Delta)\) to \(\Gamma\), where \(n\) is the dimension of the type part of \(\sigma\). Hence, a regular substitution can be recovered as an extended substitution with type part \(\star\).
+This one change to the application of substitution to types is sufficient to form the generalisation to substitutions that was required. An extended substitution \(\sigma : \Delta \to \Gamma\) then has the following intuition: The substitution part specifies where each variable in \(\Delta\) should be sent, and the type part specifies where the base type \(\star\) should be sent. The other cases for the application of substitution extend this to all terms, types, and (extended) substitutions as before. The extended substitution \(\sigma\) then represents a standard substitution \(\Sigma^n(\Delta)\) to \(\Gamma\), where \(n\) is the dimension of the type part of \(\sigma\). Hence, a regular substitution can be recovered as an extended substitution with type part \(\star\).
 
 We modify the syntax of \Catt as follows, and will refer to these extended substitutions simply as substitutions, as extended substitutions are a direct generalisation of substitutions, and the notion of substitution is still recoverable by setting the type part to \(\star\):
 \begin{itemize}
-\item Substitutions will now be fibred over a type of their codomain context, which we will write \(\sigma : \arr \Delta A \Gamma\) where \(A \in \Type_\Gamma\). We note that this allows us to specify that \(\sigma\) is a regular substitutions by writing \(\sigma : \arr \Delta \star \Gamma\).
+\item Substitutions will now be fibred over a type of their codomain context, which we will write \(\sigma : \arr \Delta A \Gamma\) where \(A \in \Type_\Gamma\). We note that this allows us to specify that \(\sigma\) is a regular substitution by writing \(\sigma : \arr \Delta \star \Gamma\).
 \item The constructor \(\langle\rangle\) is removed, and is replaced by the constructor \(\langle A \rangle : \arr \emptyset A \Gamma\), where \(A \in \Type_\Gamma\). Adding a term to a substitution preserves the type of the substitution. As before we may write a substitution \(\langle \langle \langle A \rangle, s \rangle, t \rangle\) as \(\langle A , s, t\rangle\). We let \(\FV(\langle A \rangle) = \FV(A)\).
 \item An operation \(\ty(\sigma)\) is introduced that returns the type portion of a substitution. For \(\sigma : \arr \Delta A \Gamma\), we have \(\ty(\sigma) = A\).
 \item Coherences \(\Coh \Delta A \sigma \in \Term_\Gamma\) are restricted so that \(\sigma\) is a regular substitution. In other words \(\ty(\sigma)\) must be \(\star\) for \(\sigma\) to appear in a substitution. While this condition could be dropped, it is convenient to keep the same operations as \Catt.
@@ -1602,11 +1602,11 @@ This decision was made purely for convenience, by fibring over natural numbers i
 
 One place an explicit argument can be avoided is when defining the weakening of a piece of syntax, an operation witnessing that for a piece of syntax living in a context \(\Gamma\), there is a copy living in \(\Gamma , A\) for any \(A\). These operations are defined in \module{Catt.Syntax} and take the following form, where we reuse the name \(\wk\) here as an abuse of notation:
 \[ \funcn{Catt.Syntax}{wk-tm}{\wk} : \Term_{\Gamma} \to \Term_{\Gamma, A}\quad\funcn{Catt.Syntax}{wk-ty}{\wk} : \Type_{\Gamma} \to \Type_{\Gamma, A}\quad \funcn{Catt.Syntax}{wk-sub}{\wk} : (\arr \Gamma B \Delta) \to (\arr {\Gamma} {\wk(B)} {\Delta, A}) \]
-If terms are fibred over contexts then this type \(A\) must often be specified, though with the fibring over context length this is no longer necessary. When using de Bruijn indices, this operation is no longer the identity on terms, as each variable must be incremented due to the index in a variable counting from the end of the context. One might ask why de Bruijn levels (which index from the start of the context) were not used instead, but this would not solve our problem as \(\mathsf{Fin}_n\) is not a sub type of \(\mathsf{Fin}_{n+1}\) in Agda. Furthermore, using de Bruijn levels would cause the substitution application introduced in \cref{sec:syntax-catt} (and expanded in \cref{sec:extend-subst}) to compute poorly, due to the way substitutions are defined. The definition of weakening is given in \cref{fig:wk}.
+If terms are fibred over contexts then this type \(A\) must often be specified, though with the fibring over context length this is no longer necessary. When using de Bruijn indices, this operation is no longer the identity on terms, as each variable must be incremented due to the index in a variable counting from the end of the context. One might ask why de Bruijn levels (which index from the start of the context) were not used instead, but this would not solve our problem as \(\mathsf{Fin}_n\) is not a subtype of \(\mathsf{Fin}_{n+1}\) in Agda. Furthermore, using de Bruijn levels would cause the substitution application introduced in \cref{sec:syntax-catt} (and expanded in \cref{sec:extend-subst}) to compute poorly, due to the way substitutions are defined. The definition of weakening is given in \cref{fig:wk}.
 
-Weakening can be used to give a short inductive definition of the identity substitution, a substitution \(\id_\Gamma : \Gamma \to \Gamma\) which sends every variable to itself. On the inductive case \(\id_{\Gamma, (x : A)}\), it clear that the variable \(x\) should be sent to \(x\), but the constructor for substitutions also requires a substitution \(\Gamma \to \Gamma, (x : A)\). This can be obtained by weakening a recursive call to the identity on \(\Gamma\). Similarly, an inclusion \(\Gamma \to \Gamma, (x : A)\) can be defined as \(\wk(\id_\Gamma)\), and applying this substitution is the same operation as weakening.
+Weakening can be used to give a short inductive definition of the identity substitution, a substitution \(\id_\Gamma : \Gamma \to \Gamma\) which sends every variable to itself. On the inductive case \(\id_{\Gamma, (x : A)}\), it is clear that the variable \(x\) should be sent to \(x\), but the constructor for substitutions also requires a substitution \(\Gamma \to \Gamma, (x : A)\). This can be obtained by weakening a recursive call to the identity on \(\Gamma\). Similarly, an inclusion \(\Gamma \to \Gamma, (x : A)\) can be defined as \(\wk(\id_\Gamma)\), and applying this substitution is the same operation as weakening.
 
-To begin proving syntactic properties of \Cattr, we need a notion of syntactic equality. This will be written \(\Gamma \equiv \Delta\) for contexts \(\Gamma\) and \(\Delta\), and similarly for terms \(s\) and \(t\), types \(A\) and \(B\), and substitutions \(\sigma\) and \(\tau\). It is given by alpha equivalence, and so we would hope that the formalisation could leverage the use of de Bruijn indices to use the in-built equality type for syntactic equality. This is too restrictive however, there will be many times where we want to compare two terms of differing context length (in practice this context length will be propositionally equal, instead of definitionally equal).
+To begin proving syntactic properties of \Cattr, we need a notion of syntactic equality. This will be written \(\Gamma \equiv \Delta\) for contexts \(\Gamma\) and \(\Delta\), and similarly for terms \(s\) and \(t\), types \(A\) and \(B\), and substitutions \(\sigma\) and \(\tau\). It is given by alpha equivalence, and so we would hope that the formalisation could leverage the use of de Bruijn indices to use the in-built equality type for syntactic equality. This is too restrictive however, there will be many times when we want to compare two terms of differing context length (in practice this context length will be propositionally equal, instead of definitionally equal).
 
 Therefore, four syntactic equality relations are defined mutually inductively on the constructors of each piece of syntax in \module{Catt.Syntax.Properties}. These definitions can easily be heterogeneous, allowing two terms \(s : \Term_n\) and \(t : \Term_m\) to be compared. Unfortunately, using these comes at the cost of large amounts of boilerplate, as these inductively defined equalities do not come equipped with the J-rule, and so it must be manually proved that each operation respects syntactic equality. An example of such a function is \funcn{Catt.Syntax.Properties}{wk-tm-≃}{wk-tm-\(\simeq\)}, which states that the weakenings of two syntactically equal terms are syntactically equal.
 
@@ -1734,7 +1734,7 @@ The conversion rule is the only additional typing rule that must be added to \Ca
 \begin{mathpar}
   \inferrule {\Gamma \vdash s : A \and \Gamma \vdash A = B}{\Gamma \vdash s : B}\textsc{conv}
 \end{mathpar}
-allowing the type of any term to vary up to the definitional equality. This rule accounts for all of the semistrict behaviour in the theories we introduce in \cref{cha:cattstrict}.
+allowing the type of any term to vary up to the definitional equality. This rule accounts for all the semistrict behaviour in the theories we introduce in \cref{cha:cattstrict}.
 
 By adding this rule, and allowing the type of a term to vary up to definitional equality instead of syntactic equality, we allow more terms in the theory to become composable. Suppose we have terms \(f : x \to y\) and \(g : y' \to z\). In \Catt, we would not be able to form the vertical composition of these terms, as \(y\) and \(y'\) are not the same. If we now suppose that \(\Gamma \vdash y = y'\), then it will follow that \(\Gamma \vdash x \to y = x \to y'\), and so using the conversion rule we get:
 \begin{mathpar}
@@ -1742,13 +1742,13 @@ By adding this rule, and allowing the type of a term to vary up to definitional 
 \end{mathpar}
 We remark that adding definitional equality does not simply quotient the terms of the theory, but also allows new terms to be well-formed as above.
 
-The definitional equality judgements are given by the rules in \cref{fig:equality} and appear in the formalisation along side the typing rules in \module{Catt.Typing}. These are generated by the set of \emph{equality rules} \(\mathcal{R}\), which is a set of triples of the form \((\Gamma, s, t)\) where \(\Gamma\) is a context and \(s,t \in \Term_\Gamma\). The key inference rule for equality is then:
+The definitional equality judgements are given by the rules in \cref{fig:equality} and appear in the formalisation alongside the typing rules in \module{Catt.Typing}. These are generated by the set of \emph{equality rules} \(\mathcal{R}\), which is a set of triples of the form \((\Gamma, s, t)\) where \(\Gamma\) is a context and \(s,t \in \Term_\Gamma\). The key inference rule for equality is then:
 \begin{mathpar}
   \inferrule{\Gamma \vdash s : A \and (\Gamma,s,t) \in \mathcal{R}}{\Gamma \vdash s = t}\textsc{rule}
 \end{mathpar}
 which says that if a triple \((\Gamma, s, t)\) is in \(\mathcal{R}\), then \(\Gamma \vdash s = t\) if \(s\) is well-formed in \(\Gamma\). The typing prerequisite forces the definitions of equality and typing to be mutually defined, and ensures that we only apply our equality rules to well-behaved terms.
 
-We note the asymmetry of this rule, in that only the left hand side is required to be well-formed. Every rule introduced in this thesis will take the form of some reduction from the left hand side to the right hand side, and we will be able to prove that typing for the right hand side follows from typing for the left hand side for every equality we consider. The converse may not hold in general, necessitating the condition on the left hand side. This is similar to \(\beta\)-reduction in the \(\lambda\)-calculus, where an untyped term can reduce to a simply typed term.
+We note the asymmetry of this rule, in that only the left-hand side is required to be well-formed. Every rule introduced in this thesis will take the form of some reduction from the left-hand side to the right-hand side, and we will be able to prove that typing for the right-hand side follows from typing for the left-hand side for every equality we consider. The converse may not hold in general, necessitating the condition on the left-hand side. This is similar to \(\beta\)-reduction in the \(\lambda\)-calculus, where an untyped term can reduce to a simply typed term.
 
 The remainder of the inference rules for equality simply close under each constructor, reflexivity, symmetry, and transitivity. It is only necessary to give symmetry and transitivity rules for terms, and a reflexivity rule for variables, with these properties following for the other judgements by simple induction.
 
@@ -2117,7 +2117,7 @@ The regular operation set has more standard presentation.
 \begin{proof}
   Suppose \((\Delta, U, V) \in \Reg\). If \(U = \bdry {\dim(\Delta) - 1} - \Delta\) and \(V = \bdry {\dim(\Delta) - 1} + \Delta\), then \((\Delta , U ,V)\) is trivially in \Std by letting \(n = \dim(\Delta) - 1\). If instead \(U = V = \Var(\Delta)\), then \((\Delta, U , V) \in \Std\) by letting \(n = \dim(\Delta)\) and applying \cref{lem:bdry-full}.
 
-  Conversely, assume \((\Delta, U, V) \in \Std\). Then there is \(n \geq \dim(\Delta) - 1\) with \(U = \bdry n - \Delta\) and \(V = \bdry n + \Delta\). If \(n = \dim(\Delta) - 1\) then \((\Delta, U ,V)\) is trivially in \(\Reg\), and otherwise by \cref{lem:bdry-full} we have \(U = V = \Var(\Delta)\), and so \((\Delta,U,V)\) is again an element of \Reg. Hence \(\Reg = \Std\).
+  Conversely, assume \((\Delta, U, V) \in \Std\). Then there is \(n \geq \dim(\Delta) - 1\) with \(U = \bdry n - \Delta\) and \(V = \bdry n + \Delta\). If \(n = \dim(\Delta) - 1\) then \((\Delta, U ,V)\) is trivially in \(\Reg\), and otherwise by \cref{lem:bdry-full} we have \(U = V = \Var(\Delta)\), and so \((\Delta,U,V)\) is again an element of \Reg. Hence, \(\Reg = \Std\).
 \end{proof}
 
 This more uniform is sometimes easier to work with, and will be used to prove properties of \Reg in \cref{sec:operation-properties}.
@@ -2244,7 +2244,7 @@ The groupoidal operation set clearly contains the standard operations, and the r
 \section[The set of equality rules \texorpdfstring{\(\mathcal{R}\)}{R}]{The set of equality rules \texorpdfstring{\boldmath\(\mathcal{R}\)}{R}}
 \label{sec:ruleset}
 
-In \Cattr, the definitional equality relation is generated by a set of rules \(\mathcal{R}\) formed of triples of a contexts and two terms in the context which should be made equal. In this section we discuss some operations on these equality sets and properties that they may have.
+In \Cattr, the definitional equality relation is generated by a set of rules \(\mathcal{R}\) formed of triples of a context and two terms in the context which should be made equal. In this section we discuss some operations on these equality sets and properties that they may have.
 
 \begin{remark}
   In the formalisation the set of equality rules is defined similarly to the set of operations \(\mathcal{O}\). It is defined as a function that takes a context and two terms over that context and returns a type. It is therefore proof relevant in the same way as the operation sets.
@@ -2302,7 +2302,7 @@ An arbitrary set \(\mathcal{R}\) has very few restrictions on the equality relat
 
 To this end, we introduce certain conditions that these equality rule sets can satisfy. The first three of these conditions put certain closure properties on the set of rules \(\mathcal{R}\), and each allow various constructions to be well typed. We call theories that satisfy these three properties \emph{tame theories} and introduce these in \cref{sec:tame-theories}. In \cref{sec:further-conditions}, we introduce two more conditions which take the form of a property that the generated equality must satisfy.
 
-By introducing theses conditions, we can prove various metatheoretic properties about \Cattr in a modular and generic way. This will allow the reuse of many constructions and proofs about the properties of these constructions in \cref{cha:cattstrict}, where two distinct type theories for semistrict \(\infty\)-categories are given.
+By introducing these conditions, we can prove various metatheoretic properties about \Cattr in a modular and generic way. This will allow the reuse of many constructions and proofs about the properties of these constructions in \cref{cha:cattstrict}, where two distinct type theories for semistrict \(\infty\)-categories are given.
 
 In the following subsections, we will also show that the rule set for disc removal satisfies all these conditions. For all these conditions, we will have that if the condition holds on \(\mathcal{R}\) and on \(\mathcal{S}\) then it also holds on \(\mathcal{R}\cup \mathcal{S}\), and so these conditions can be proved individually for each rule set that is introduced. Further, the empty set will satisfy all of these conditions trivially, and so all proofs and constructions in the section apply to \Catt.
 
@@ -2515,7 +2515,7 @@ We also prove that application of substitution respects equality in its second a
   for substitutions \(\sigma : \arr \Delta A \Gamma\), \(\tau : \arr \Delta B \Gamma\), and \(\mu : \arr \Theta C \Delta\), term \(s : \Term_\Delta\), and type \(A : \Type_\Delta\).
 \end{proposition}
 
-This allows us to define a category of well-formed syntax in \Cattr. which is well defined by the two preceding definitions.
+This allows us to define a category of well-formed syntax in \Cattr. which is well-defined by the two preceding definitions.
 
 \begin{definition}
   Suppose \(\mathcal{R}\) satisfies the substitution and weakening conditions. Then we can define the \emph{syntactic category} of \Cattr, which by an abuse of notation we call \(\mathsf{Catt}_{\mathcal{R}}\), to have:
@@ -2525,7 +2525,7 @@ This allows us to define a category of well-formed syntax in \Cattr. which is we
   \item The identity morphism \(\Gamma \to \Gamma\) given by \(\id_\Gamma\).
   \item Composition is given by \(\tau \circ \sigma = \sigma \bullet \tau\).
   \end{itemize}
-  By \cref{cor:id-sub-ty}, the identity substitution is a well-defined morphism, and the above two propositions prove that composition is well defined., Composition satisfies associativity and unitality by \cref{prop:categorical}.
+  By \cref{cor:id-sub-ty}, the identity substitution is a well-defined morphism, and the above two propositions prove that composition is well-defined. Composition satisfies associativity and unitality by \cref{prop:categorical}.
 \end{definition}
 
 By taking the weakening of the identity substitution \(\id_\Gamma : \Gamma \to \Gamma\) we get a substitution:
@@ -2598,7 +2598,7 @@ The use of support instead of free variables in this definition is critical, as 
 \[ D^1 \vdash \Coh {D^1} {U^1} {\id_{D^1}} = d_1 \]
 given by disc removal, yet the free variables of each side are not equal (though the support of each side is).
 
-We also draw attention to typing premise. Without this, the left hand side of each equality rule is too unconstrained (at least with how the equality rules are currently presented), and this condition would fail to hold on the equality sets we introduce in this thesis. Having this typing premise come from a separate rule set \(\mathcal{R}'\) allows the support condition to be preserved by unions of equality sets, similar to the substitution condition.
+We also draw attention to typing premise. Without this, the left-hand side of each equality rule is too unconstrained (at least with how the equality rules are currently presented), and this condition would fail to hold on the equality sets we introduce in this thesis. Having this typing premise come from a separate rule set \(\mathcal{R}'\) allows the support condition to be preserved by unions of equality sets, similar to the substitution condition.
 
 From the support condition, we immediately get the following proposition, proved by mutual induction.
 
@@ -2627,7 +2627,7 @@ In traditional presentations of \Catt, \(\FV(t) \cup \FV(A)\) is used instead of
 \begin{proof}
   All properties are proven by a single mutual induction on the typing derivations in the premises.
   \begin{enumerate}[(i)]
-  \item Suppose \(\Gamma \vdash A\). If \(A \equiv \star\) then \(\Supp(A) = \FV(A) = \emptyset\). Instead suppose \(A \equiv \arr s B t\). Then we have that \(\Gamma \vdash B\), \(\Gamma \vdash s : B\), and \(\Gamma \vdash t : B\) and so:
+  \item Suppose \(\Gamma \vdash A\). If \(A \equiv \star\) then \(\Supp(A) = \FV(A) = \emptyset\). Instead, suppose \(A \equiv \arr s B t\). Then we have that \(\Gamma \vdash B\), \(\Gamma \vdash s : B\), and \(\Gamma \vdash t : B\) and so:
     \begin{align*}
       \Supp(A) &= \Supp(B) \cup \Supp(s) \cup \Supp(t)\\
                &= \FV(B) \cup (\FV(B) \cup \FV(s)) \cup (\FV(B) \cup \FV(t))&(*)\\
@@ -2677,9 +2677,9 @@ In traditional presentations of \Catt, \(\FV(t) \cup \FV(A)\) is used instead of
   for all \(V \subseteq \Var(\Delta)\); downwards closure commutes with the application of \(\sigma\) to variable sets.
 \end{corollary}
 \begin{proof}
-  Proceed by induction on \(\Delta\). If \(\Delta \equiv \emptyset\) then the equation is trivial. Therefore assume \(\Delta \equiv \Theta, (x : A)\) and so \(\sigma \equiv \langle \tau , t \rangle\) with \(\Gamma \vdash \tau : \Theta\) and \(\Gamma \vdash t : A \sub \tau\) by case analysis. We now split on whether \(x \in V\).
+  Proceed by induction on \(\Delta\). If \(\Delta \equiv \emptyset\) then the equation is trivial. Therefore, assume \(\Delta \equiv \Theta, (x : A)\) and so \(\sigma \equiv \langle \tau , t \rangle\) with \(\Gamma \vdash \tau : \Theta\) and \(\Gamma \vdash t : A \sub \tau\) by case analysis. We now split on whether \(x \in V\).
 
-  If \(x \not\in V\) then \(\DC_\Gamma(V \sub \sigma) = \DC_\Gamma(V \sub \tau) = \DC_\Theta(V) \sub \tau = \DC_\Delta(V) \sub \tau\) with the second equality due to inductive hypothesis. Otherwise \(x \in V\) and so letting \(U = V \setminus \{x\}\) we get the equality:
+  If \(x \not\in V\) then \(\DC_\Gamma(V \sub \sigma) = \DC_\Gamma(V \sub \tau) = \DC_\Theta(V) \sub \tau = \DC_\Delta(V) \sub \tau\) with the second equality due to inductive hypothesis. Otherwise, \(x \in V\) and so letting \(U = V \setminus \{x\}\) we get the equality:
   \begin{align*}
     \DC_\Gamma(V \sub \sigma) &= \DC_\Gamma(U \sub \tau \cup \FV(t))\\
                               &= \DC_\Gamma(U \sub \tau) \cup \Supp(t)\\
@@ -2700,7 +2700,7 @@ To prove the support condition for this case we need to show that:
 \[ \Supp(\{A,t\}) = t \]
 where we can assume that \(\Gamma \vdash t : A\). Intuitively this should hold, as the support of a substitution should be equal to the support of the locally maximal arguments, and if the derivation \(\Gamma \vdash t : A\) held in \Catt, we would be able to prove this. However, this proof (and intuition) relies on the derivation \(\Gamma \vdash_{\mathcal{R}} t : A\) holding in a theory generated by \(\mathcal{R}\) where \(\mathcal{R}\) already satisfies the support condition, without which the typing derivation offers little utility.
 
-We therefore introduce a proof strategy for showing that the support condition holds. The key insight of this strategy is to prove by induction that every equality and every typing derivation in the system is well-behaved with respect to support. Then, for the case of an equality \(\Gamma \vdash s = t\) arising from a rule \((\Gamma, s, t)\), we have \(\Gamma \vdash s : A\) as a premise and so by inductive hypothesis can assume that this typing derivation is well behaved with respect to support.
+We therefore introduce a proof strategy for showing that the support condition holds. The key insight of this strategy is to prove by induction that every equality and every typing derivation in the system is well-behaved with respect to support. Then, for the case of an equality \(\Gamma \vdash s = t\) arising from a rule \((\Gamma, s, t)\), we have \(\Gamma \vdash s : A\) as a premise and so by inductive hypothesis can assume that this typing derivation is well-behaved with respect to support.
 
 We formalise this with the following definition, called the \emph{supported rules} construction:
 \begin{definition}
@@ -2800,15 +2800,15 @@ When a rule set \(\mathcal{R}\) has all the properties presented in this section
   \end{alignat*}
   which imply the inference rules of the proposition are admissible (using the conversion rule for the second rule).
 
-  The only non trivial cases are for the statement for terms. We split on the equality derivation \(\Gamma \vdash s = t\). The cases for reflexivity on variables and transitivity are also trivial. The case for symmetry follows from the symmetry of the ``if and only if'' relation.
+  The only non-trivial cases are for the statement for terms. We split on the equality derivation \(\Gamma \vdash s = t\). The cases for reflexivity on variables and transitivity are also trivial. The case for symmetry follows from the symmetry of the ``if and only if'' relation.
 
   Now suppose the equality is of the form \(\Coh \Delta A \sigma = \Coh \Delta B \tau\) and is derived from the equality rule for coherences from equalities \(\Delta \vdash A = B\) and \(\Gamma \vdash \sigma = \tau\). We prove the first direction, with the second following symmetrically. We therefore assume we have a typing derivation \(\Gamma \vdash \Coh \Delta A \sigma : C\), and will induct on this derivation to construction a derivation of \(\Gamma \vdash \Coh \Delta B \tau : C\).
   \begin{itemize}
   \item If the derivation is constructed with the conversion rule from \(\Gamma \vdash \Coh \Delta A \sigma : D\) and \(\Gamma \vdash D = C\), then we get a derivation \(\Gamma \vdash \Coh \Delta B \tau : D\) by inductive hypothesis and can apply the conversion rule to get a derivation \(\Gamma \vdash \Coh \Delta B \tau : C\).
-  \item If instead the derivation is constructed with the coherence rule then \(C \equiv A \sub \sigma\) and  \(A \equiv \arr s {A'} t\) and therefore \(B \equiv \arr {u} {B'} {v}\) with \(\Delta \vdash s = u\) and \(\Delta \vdash t = v\). We also have that \(\Delta \vdash_{\mathsf{ps}}\), \((\Delta, \Supp(s), \Supp(t)) \in \mathcal{O}\), \(\Delta \vdash A\), and \(\Gamma \vdash \sigma : \Delta\). By the inductive hypothesis on the equality, we have \(\Delta \vdash B\) and \(\Gamma \vdash \tau : \Delta\). By \cref{prop:supp-prop}, \(\Supp(s) = \Supp(u)\) and \(\Supp(t) = \Supp(v)\) and so \((\Delta, \Supp(u), \Supp(v)) \in \mathcal{O}\). Hence by the coherence rule we have \(\Gamma \vdash \Coh \Delta B \tau : B \sub \tau\). By \cref{prop:sub-prop-1,prop:sub-prop-2}, \(\Gamma \vdash A \sub \sigma = B \sub \tau\) and so by the conversion rule we obtain a derivation \(\Gamma \vdash \Coh \Delta B \tau : C\).
+  \item If instead the derivation is constructed with the coherence rule then \(C \equiv A \sub \sigma\) and  \(A \equiv \arr s {A'} t\) and therefore \(B \equiv \arr {u} {B'} {v}\) with \(\Delta \vdash s = u\) and \(\Delta \vdash t = v\). We also have that \(\Delta \vdash_{\mathsf{ps}}\), \((\Delta, \Supp(s), \Supp(t)) \in \mathcal{O}\), \(\Delta \vdash A\), and \(\Gamma \vdash \sigma : \Delta\). By the inductive hypothesis on the equality, we have \(\Delta \vdash B\) and \(\Gamma \vdash \tau : \Delta\). By \cref{prop:supp-prop}, \(\Supp(s) = \Supp(u)\) and \(\Supp(t) = \Supp(v)\) and so \((\Delta, \Supp(u), \Supp(v)) \in \mathcal{O}\). Hence, by the coherence rule we have \(\Gamma \vdash \Coh \Delta B \tau : B \sub \tau\). By \cref{prop:sub-prop-1,prop:sub-prop-2}, \(\Gamma \vdash A \sub \sigma = B \sub \tau\) and so by the conversion rule we obtain a derivation \(\Gamma \vdash \Coh \Delta B \tau : C\).
   \end{itemize}
 
-  Finally suppose the equality is derived from \textsc{rule}, such that \((\Gamma, s,t) \in \mathcal{R}\) and \(\Gamma \vdash s : A\). If \(\Gamma \vdash s : B\), then the preservation condition gives a derivation \(\Gamma \vdash t : B\). Conversely, if \(\Gamma \vdash t : B\), then we need to show that \(\Gamma \vdash A = B\). By applying the preservation condition to the derivation \(\Gamma \vdash s : A\), we get a derivation \(\Gamma \vdash t : A\). Then by \cref{lem:ty-unique}, we have \(\Gamma \vdash A = B\) and so the proof is complete by applying the conversion rule to the derivation \(\Gamma \vdash s : A\).
+  Finally, suppose the equality is derived from \textsc{rule}, such that \((\Gamma, s,t) \in \mathcal{R}\) and \(\Gamma \vdash s : A\). If \(\Gamma \vdash s : B\), then the preservation condition gives a derivation \(\Gamma \vdash t : B\). Conversely, if \(\Gamma \vdash t : B\), then we need to show that \(\Gamma \vdash A = B\). By applying the preservation condition to the derivation \(\Gamma \vdash s : A\), we get a derivation \(\Gamma \vdash t : A\). Then by \cref{lem:ty-unique}, we have \(\Gamma \vdash A = B\) and so the proof is complete by applying the conversion rule to the derivation \(\Gamma \vdash s : A\).
 \end{proof}
 
 As with the other conditions, we end this section by showing that \dr satisfies the preservation condition.
@@ -2826,7 +2826,7 @@ As with the other conditions, we end this section by showing that \dr satisfies 
 \subsection{Endo-coherence removal}
 \label{sec:ecr}
 
-We conclude this chapter with a second example of a family of equality rules called \emph{endo-coherence removal}. As suggested by the name, these equalities simplify a class of terms known as a endo-coherences.
+We conclude this chapter with a second example of a family of equality rules called \emph{endo-coherence removal}. As suggested by the name, these equalities simplify a class of terms known as endo-coherences.
 
 \begin{definition}
   An \emph{endo-coherence} is a coherence term \(\Coh \Delta {\arr s A s} \sigma\).
@@ -2939,7 +2939,7 @@ Finally, \cref{sec:insertion} defines the constructions used in the insertion op
 
 Pruning drives the strictly unital behaviour of \Cattsu. Unitality in \(\infty\)-categories is the property that the identity acts as a unit with respect to composition, so that composing with the unit is definitionally equivalent to the original term. If an \(\infty\)-category is strictly unital, then it exhibits this behaviour up to equality rather than equivalence.
 
-For \Catt, strict unitality means that a composition containing a identity as one of its arguments should be definitionally equal to the same composition but with this argument removed. Pruning is the operation that removes an argument from a composition, taking a term such as \(f * g * \id\) to \(f * g\), or \(\id * f\) to the unary composite on \(f\). In the presence of strict units, it is also desirable to simplify the higher dimensional data that witnessed the (weak) unitality in \Catt. For example, the left unitor on \(f\), given by the term:
+For \Catt, strict unitality means that a composition containing an identity as one of its arguments should be definitionally equal to the same composition but with this argument removed. Pruning is the operation that removes an argument from a composition, taking a term such as \(f * g * \id\) to \(f * g\), or \(\id * f\) to the unary composite on \(f\). In the presence of strict units, it is also desirable to simplify the higher dimensional data that witnessed the (weak) unitality in \Catt. For example, the left unitor on \(f\), given by the term:
 \[ \Coh {(x : \star), (y : \star), (f : \arr x \star y)} {\arr {\id(x) * f} {} {f}} {\id} \]
 which witnesses that composing on the left with an identity is equivalent to the original term, can be simplified to the identity on \(f\), and the triangle equations which govern the coherence laws for the unitors can also trivialise. For this reason, pruning is defined to be able to apply to any term which has identities as a locally maximal argument. We review the definition of a locally maximal argument below.
 
@@ -2981,7 +2981,7 @@ To perform the pruning construction, we start with a coherence term \(\Coh \Delt
 \item A new set of arguments \(\sigma \sslash x\), consisting of the same terms as \(\sigma\) except those corresponding to \(x\) and its target.
 \item A projection substitution \(\pi_x : \Delta \to \Delta \sslash x\), from which a type \(A \sub {\pi_x} : \Type_{\Delta \sslash x}\) can be obtained. This projection sends the source of \(x\) to the identity on its source, the target of \(x\) to the source of \(x\), and every other variable to itself.
 \end{itemize}
-We note that the source and target of the locally maximal variable \(x\) are well defined as \(x\) must be sent by \(\sigma\) to an identity, which cannot be zero dimensional.
+We note that the source and target of the locally maximal variable \(x\) are well-defined as \(x\) must be sent by \(\sigma\) to an identity, which cannot be zero dimensional.
 
 \subsection{Dyck words}
 
@@ -2997,7 +2997,7 @@ To be able to easily reason about the structures involved in pruning, we wish th
   In any suffix of a Dyck word \(D : \Dyck_d\), the number of ``up'' moves (given by constructor \(\Uparrow\)) must be greater than or equal to the number of ``down'' moves (given by constructor \(\Downarrow\)). The difference between the number of each move is given by the trailing dimension \(d\).
 \end{definition}
 
-Dyck words can be given a visual interpretation as a \emph{mountain diagram}. To obtain such a diagram we start on the left hand side, and draw a continuous line by drawing an upwards sloping segment for each \(\Uparrow\) in the word, and a downwards sloping line for each \(\Downarrow\) in the word. An example of such a diagram is given in \cref{fig:mountain}.
+Dyck words can be given a visual interpretation as a \emph{mountain diagram}. To obtain such a diagram we start on the left-hand side, and draw a continuous line by drawing an upwards sloping segment for each \(\Uparrow\) in the word, and a downwards sloping line for each \(\Downarrow\) in the word. An example of such a diagram is given in \cref{fig:mountain}.
 
 \begin{figure}[ht]
   \centering
@@ -3033,7 +3033,7 @@ The rules \(\circleddash\), \(\Uparrow\), and \(\Downarrow\) directly correspond
     \tm_{\mathcal{D}\Uparrow} &= f_{\mathcal{D}}\\
     \tm_{\mathcal{D}\Downarrow} &= \tgt(\ty_{\mathcal{D}})&\text{where }\tgt(\arr s A t) = t
   \end{align*}
-  The variable names given here are used to avoid ambiguity in the definition. As we consider contexts up to \(\alpha\)-equality, we may freely change these variable names. The \(\tgt\) and \(\base\) operations are well defined here as it may be checked by a simple induction that \(\dim(\ty_{\mathcal{D}}) = d\) for \(\mathcal{D} : \Dyck_d\), ensuring the we only apply \(\tgt\) and \(\base\) to types of strictly positive dimension.
+  The variable names given here are used to avoid ambiguity in the definition. As we consider contexts up to \(\alpha\)-equality, we may freely change these variable names. The \(\tgt\) and \(\base\) operations are well-defined here as it may be checked by a simple induction that \(\dim(\ty_{\mathcal{D}}) = d\) for \(\mathcal{D} : \Dyck_d\), ensuring that we only apply \(\tgt\) and \(\base\) to types of strictly positive dimension.
 \end{definition}
 
 The tight correspondence between the rules used to construct Dyck words and ps-contexts allow an easy proof that the contexts associated to Dyck words are in fact pasting diagrams.
@@ -3095,7 +3095,7 @@ We lastly show that a Dyck word can be suspended, which is expected as ps-contex
 The Dyck words presented in this section can be viewed as a more direct syntax for pasting contexts, which allow induction to be easily performed. For this reason, most of the properties of Dyck words follow from routine inductions, and hence are relegated to the formalisation. The key contribution of this (sub)section is the characterisation of locally maximal variables as peaks, which have an easy inductive definition due to the simplicity of Dyck words.
 
 \begin{remark}
-  All locally maximal variables of ps-contexts are identified with peaks, with the exception of the unique variable of the singleton context. This discrepancy will make no difference for pruning, as a \(0\)-dimensional variable could never have been sent to an identity and so would never have been a candidate for pruning.
+  All locally maximal variables of ps-contexts are identified with peaks, except for the unique variable of the singleton context. This discrepancy will make no difference for pruning, as a \(0\)-dimensional variable could never have been sent to an identity and so would never have been a candidate for pruning.
 \end{remark}
 
 \subsection{The pruning construction}
@@ -3190,7 +3190,7 @@ With start with the aim of proving that each construction involved in pruning sa
   for any peak \(p : \Peak_{\mathcal{D}}\) of \(\mathcal{D}\).
 \end{lemma}
 \begin{proof}
-  The proof proceeds by a induction on the peak \(p\), proving both equations simultaneously. Both equations hold by routine calculations given in \module{Catt.Dyck.Pruning.Properties} by the functions \func{Catt.Dyck.Pruning.Properties}{dyck-type-prune} and \func{Catt.Dyck.Pruning.Properties}{dyck-term-prune}.
+  The proof proceeds by an induction on the peak \(p\), proving both equations simultaneously. Both equations hold by routine calculations given in \module{Catt.Dyck.Pruning.Properties} by the functions \func{Catt.Dyck.Pruning.Properties}{dyck-type-prune} and \func{Catt.Dyck.Pruning.Properties}{dyck-term-prune}.
 \end{proof}
 
 This allows the main typing properties of this section to be given.
@@ -3244,7 +3244,7 @@ This allows the main typing properties of this section to be given.
   and the second follows similarly, completing the proof.
 \end{proof}
 
-We next show that pruning has the expected properties on the the Dyck words \(\mathcal{D}^n\), which correspond to disc contexts.
+We next show that pruning has the expected properties on the Dyck words \(\mathcal{D}^n\), which correspond to disc contexts.
 
 \begin{proposition}
   \label{prop:prune-disc}
@@ -3396,7 +3396,7 @@ The following proposition proves that both peaks of the Dyck word can be pruned,
 \section{Trees}
 \label{sec:trees}
 
-During the next sections we build up to defining the insertion operation. This operation performs larger modifications to pasting diagrams than the pruning operation, and we will again want to represent pasting diagrams in a different way to make the definition in \cref{sec:insertion} as natural as possible. It is well known that pasting diagrams correspond to planar rooted trees \cite{Weber2004,leinster2004higher,batanin1998monoidal}, which we will simply refer to as \emph{trees} and can be defined as follows.
+During the next sections we build up to defining the insertion operation. This operation performs larger modifications to pasting diagrams than the pruning operation, and we will again want to represent pasting diagrams differently to make the definition in \cref{sec:insertion} as natural as possible. It is well known that pasting diagrams correspond to planar rooted trees \cite{Weber2004,leinster2004higher,batanin1998monoidal}, which we will simply refer to as \emph{trees} and can be defined as follows.
 
 \begin{definition}
   A \emph{tree} \(T : \Tree\) is inductively defined to be a (possibly empty) list of trees.
@@ -3463,7 +3463,7 @@ A similar colimit can be formed in the syntactic category of \Cattr. Leveraging 
     \sigma \vee \langle A, s \rangle &= \sigma\\
     \sigma \vee \langle \tau, s \rangle &= \langle \sigma, s \rangle
   \end{align*}
-  We note that no extra property is needed to define this universal map, though to show it it well-formed we will need that \(\snd(\Gamma) \sub \sigma = \fst(\Delta) \sub \tau\).
+  We note that no extra property is needed to define this universal map, though to show it is well-formed we will need that \(\snd(\Gamma) \sub \sigma = \fst(\Delta) \sub \tau\).
 \end{definition}
 
 We firstly prove some basic properties required for \(\Gamma \vee \Delta\) to be the colimit of \cref{diag:wedge-colimit}.
@@ -3624,7 +3624,7 @@ We next introduces \emph{paths}, which can be thought of as the variables in a t
   We lastly define the set of \emph{maximal paths} \(\MaxPath_T\) of \(T\) to be paths \(p \doubleplus [0] \) such that \(T^p = \emp\). Such paths correspond to locally maximal variables of \(\lfloor T \rfloor\).
 \end{definition}
 
-We now turn our attention to substitutions from a tree context \(\sigma : \lfloor T \rfloor \to \Gamma\). A substitution can be viewed as a function from the variables of its source context to terms of the target context. Therefore a substitution \(\sigma : \lfloor T \rfloor \to \Gamma\) acts on variables of \(\lfloor T \rfloor\). However, we have seen that the more natural notion of a variable in a tree context is a path. This motivates the following definition.
+We now turn our attention to substitutions from a tree context \(\sigma : \lfloor T \rfloor \to \Gamma\). A substitution can be viewed as a function from the variables of its source context to terms of the target context. Therefore, a substitution \(\sigma : \lfloor T \rfloor \to \Gamma\) acts on variables of \(\lfloor T \rfloor\). However, we have seen that the more natural notion of a variable in a tree context is a path. This motivates the following definition.
 
 \begin{definition}
   A term-labelling \(L : T \to \Gamma\) from a tree \(T\) to context \(\Gamma\) is a pair containing a function \(\Path_T \to \Term_\Gamma\) and a type of \(\Gamma\). To apply the function component of a labelling to a path \(p\), we write \(L(p)\) or \(L[x_0,x_1,\dots]\) for a path \([x_0,x_1,\dots]\). The type component of the labelling is given by \(\ty(L)\).
@@ -3632,7 +3632,7 @@ We now turn our attention to substitutions from a tree context \(\sigma : \lfloo
   If \(T = [T_0,\dots,T_n]\), then there are natural projections \( L_i :T_i \to \Gamma\) given by \(L_i(p) = L(i :: p)\) and \(\ty(L) = \arr {L[i]} {\ty(L)} {L[i+1]}\) for \(0 \leq i \leq n\).
 \end{definition}
 
-For labellings to play the role of substitutions, a substitution \(\lfloor L \rfloor : \arr {\lfloor T \rfloor} {\ty(L)} \Gamma\) will be defined for each term-labelling \(L : T \to \Gamma\). A natural way to define this substitution is by induction on the tree \(T\), which motivates the use of extended substitutions. Suppose we start with a labelling \(L : \arr {[T_0,\dots,T_n]} \star \Gamma\). To proceed, we will apply the inductive hypothesis to obtain a substitutions:
+For labellings to play the role of substitutions, a substitution \(\lfloor L \rfloor : \arr {\lfloor T \rfloor} {\ty(L)} \Gamma\) will be defined for each term-labelling \(L : T \to \Gamma\). A natural way to define this substitution is by induction on the tree \(T\), which motivates the use of extended substitutions. Suppose we start with a labelling \(L : \arr {[T_0,\dots,T_n]} \star \Gamma\). To proceed, we will apply the inductive hypothesis to obtain the substitutions:
 \[ \lfloor L_i \rfloor : \arr {\lfloor T_i \rfloor} {\arr {L[i]} {A} {L[i+1]}} {\Gamma} \]
 These substitutions are not regular (non-extended) substitutions, even though \(L\) has associated type \(\star\), and hence corresponds to a regular substitution.
 
@@ -3693,13 +3693,13 @@ does not have nice computational properties. We examine two examples:
 \begin{itemize}
 \item Suppose \(t\) was of the form \(\lfloor p \rfloor\) for some path \(p\). We then have:
   \[ \lfloor p \rfloor \sub {\lfloor L \rfloor} \equiv L(p)\]
-  and would hope that this syntactic equality would fall out immediately, and that the left hand side would reduce to the right hand side in the formalisation. This is not the case however, and proving that such a syntactic equality holds is non trivial.
+  and would hope that this syntactic equality would fall out immediately, and that the left-hand side would reduce to the right-hand side in the formalisation. This is not the case however, and proving that such a syntactic equality holds is non-trivial.
 \item Suppose \(t \equiv \Sigma(s)\) and \(L = a\{L_1\}b : A\). Similar to the above case we would hope that the syntactic equality:
   \[ \Sigma(s) \sub {\lfloor a\{L_1\}b : A \rfloor} \equiv s \sub {\lfloor L_1 \rfloor}\]
   holds ``on the nose''. This however is not the case.
 \end{itemize}
 
-Structured terms alleviates these problems by recording that such a term \(t\) was generated from a path or generated using suspension. This allows the application of a labelling to a structured term to use this information, for example letting the two syntactic equalities above to hold by definition. If a labelling is the ``correct'' notion of substitution from a tree, then a structured term is the ``correct'' notion of term in a tree.
+Structured terms alleviate these problems by recording that such a term \(t\) was generated from a path or generated using suspension. This allows the application of a labelling to a structured term to use this information, for example letting the two syntactic equalities above to hold by definition. If a labelling is the ``correct'' notion of substitution from a tree, then a structured term is the ``correct'' notion of term in a tree.
 
 \begin{definition}
   Let \(\U\) be a member of \(\Ctx \uplus \Tree\), either some context \(\Gamma\) or some tree \(T\). We then define the \emph{structured syntax} classes \(\STerm_\U\) of \emph{structured terms}, \(\SType_\U\) of \emph{structured types}, and \emph{(\(\STerm\)-)labellings} \(\arr S A \U\) for some tree \(S\) and structured type \(A\). These syntax classes for structured terms and types are generated by the following rules:
@@ -3871,7 +3871,7 @@ This construction is an inverse to taking generating a substitution from a label
 
   Letting \(L : S \to \Gamma\) be a labelling. Then for any path \(p\):
   \[ \lceil \lfloor L \rfloor \rceil(p) \equiv \SOther(\lfloor p \rfloor \sub {\lfloor L \rfloor}) \equiv \SOther(\lfloor L(p) \rfloor) \]
-  and so \(\lfloor \lceil \lfloor L \rfloor \rceil(p) \rfloor \equiv \lfloor L(p) \rfloor\). Therefore \(L \equiv \lceil \lfloor L \rfloor \rceil\) by definition.
+  and so \(\lfloor \lceil \lfloor L \rfloor \rceil(p) \rfloor \equiv \lfloor L(p) \rfloor\). Therefore, \(L \equiv \lceil \lfloor L \rfloor \rceil\) by definition.
 \end{proof}
 
 \subsection{Typing and equality}
@@ -3998,7 +3998,7 @@ We end this section by giving alternative equality relations for labellings, whi
   L \equiv^{\max} M &\iff \forall (p : \MaxPath_T).\ L(p) \equiv M(p)\\
   \U \vdash L =^{\max} M &\iff \forall (p : \MaxPath_T).\ L(p) \equiv M(p)
 \end{align*}
-and define two labels to be equal exactly when their action on maximal paths is equal. The following theorem gives conditions for when the standard equality equality relation can be recovered from these.
+and define two labels to be equal exactly when their action on maximal paths is equal. The following theorem gives conditions for when the standard equality relation can be recovered from these.
 
 \begin{theorem}
   \label{thm:label-max-equality}
@@ -4193,7 +4193,7 @@ We can now state and prove the typing properties of standard constructions.
 
   For the standard coherence, we apply \cref{rule:scoh}, using the inductive hypothesis for types. To show that \((T, \src(\stdty T n), \tgt(\stdty T n)) \in \mathcal{O}\), we apply \cref{lem:std-supp}.
 
-  For the standard term, like previous proofs it is sufficient to consider the cases where it is defined differently to the standard coherence. For \(n = 0\) we must have \(T = \emp\) by the condition on the depth of \(T\). Hence \(\stdtm T n \equiv [0]\) which is well-formed as has type \(\star \equiv \stdty T n\) as required.
+  For the standard term, like previous proofs it is sufficient to consider the cases where it is defined differently to the standard coherence. For \(n = 0\) we must have \(T = \emp\) by the condition on the depth of \(T\). Hence, \(\stdtm T n \equiv [0]\) which is well-formed as has type \(\star \equiv \stdty T n\) as required.
 
   We now consider \(\stdtm {\Sigma(T)} {n+1} \equiv \Sigma (\stdtm T n)\). By inductive hypothesis on dimension, \(T \vdash \stdtm T n : \stdty T n\) and so we immediately have that:
   \[ \Sigma(T) \vdash \stdtm {\Sigma(T)} {n + 1} : \Sigma(\stdty T n)\]
@@ -4232,7 +4232,7 @@ These constructions all satisfy the expected typing judgements. More precisely t
 \end{mathpar}
 The admissibility of the above rules is routine to verify.
 
-Using these construction, we can recover structured term definitions of the unary composite of a (structured) term \(t\) of type \(A\) of dimension \(n\) as \( \stdcoh {D^n} n \sub {\{A,t\}}\) and can define the identity of the same term \(t\) as \(\stdcoh {D^n} {n+1} \sub {\{A,t\}}\). Therefore, the rules for disc removal and endo-coherence removal can be rephrased in terms of structured syntax to get the following rules:
+Using these constructions, we can recover structured term definitions of the unary composite of a (structured) term \(t\) of type \(A\) of dimension \(n\) as \( \stdcoh {D^n} n \sub {\{A,t\}}\) and can define the identity of the same term \(t\) as \(\stdcoh {D^n} {n+1} \sub {\{A,t\}}\). Therefore, the rules for disc removal and endo-coherence removal can be rephrased in terms of structured syntax to get the following rules:
 \begin{mathpar}
   \inferrule{\U : \Ctx \uplus \Tree\\ \U \vdash A \\ \U \vdash t : A \\ \dim(A) = n > 0}{ \U \vdash \stdcoh {D^n} n \sub {\{A,t\}} = t}\textsc{dr'}\\
   \inferrule{\U : \Ctx \uplus \Tree\\ T : \Tree \\ L : \arr S \star \U\\ n = \dim(A)\\\\ T \vdash A \\ T \vdash s : A \\ \Supp(s) = \Var(T) \\ \U \vdash L : T}{\U \vdash \SCoh T {\arr s A s} L = \stdcoh {D^n} {n+1} \sub { \{A, s\} \bullet L}}\textsc{ecr'}
@@ -4275,7 +4275,7 @@ Due to these two theorems, every standard term \(\stdtm T n\) with \(n \geq \dep
 \section{Insertion}
 \label{sec:insertion}
 
-We now introduce \emph{insertion}, the construction that powers the strictly associative behaviour of \Cattsua. Insertion incorporates part of the structure of an locally maximal argument term into the head coherence, simplifying the overall syntax of the term.
+We now introduce \emph{insertion}, the construction that powers the strictly associative behaviour of \Cattsua. Insertion incorporates part of the structure of a locally maximal argument term into the head coherence, simplifying the overall syntax of the term.
 
 Consider the composite \(f * (g * h)\). This term has two locally maximal arguments, \(f\) and \(g \cdot h\), the second of which is a (standard) coherence. Insertion allows us to merge these two composites into one by ``inserting'' the pasting diagram of the inner coherence into the pasting diagram of the outer coherence. In the case above we will get that the term \(f * (g * h)\) is equal to the ternary composite \(f * g * h\), a term with a single coherence. As the term \((f * g) * h\) also reduces by insertion to the ternary composite, we see that both sides of the associator become equal under insertion. The action of insertion on these contexts is shown in \cref{fig:insertion}.
 
@@ -4652,9 +4652,9 @@ The now proceed to prove that each of these constructions used to generate inser
   \[\SPath(\olsi P) \equiv  \Inc_k(\SPath(p)) \]
   and so supposing that \(S_k \vdash \SPath(p) : A\) (as every path is well-formed), we can obtain:
   \[\U \vdash \SPath(\olsi P) \sub L : \Sigma(A) \sub {\inc_k} \sub L\]
-  By \cref{prop:standard-typing}, \(\U \vdash \stdcoh T {\lh(P)} \sub M : \stdty T {\lh(P)} \sub M\). Therefore by uniqueness of types (using the syntactic equality from the insertion redex), we have:
+  By \cref{prop:standard-typing}, \(\U \vdash \stdcoh T {\lh(P)} \sub M : \stdty T {\lh(P)} \sub M\). Therefore, by uniqueness of types (using the syntactic equality from the insertion redex), we have:
   \[ \U \vdash \Sigma(A) \sub {\inc_k \bullet L} = \stdty T {\lh(P)} \sub M\]
-  By truncating both sides of of this equality \(\lh(P) - 1\) times we get:
+  By truncating both sides of this equality \(\lh(P) - 1\) times we get:
   \[ \U \vdash \Sigma(\star) \sub {\inc_k \bullet L} = \stdty T 1 \sub M\]
   which after expanding definitions on both sides gives the required equality.
 \end{proof}
@@ -4676,7 +4676,7 @@ The typing properties of each of the constructions involved in insertion are giv
   \begin{itemize}
   \item Let \(P = [k]\) and
     \[ T = [T_0,\dots,T_m] \qquad M = t_0\{M_0\}t_1 \cdots \{M_m\}t_{m+1} : B\]
-    By \(\U \vdash M : T\), we have that \(\U \vdash t_i : B\) and \(\U \vdash M_i : T_i\) for each \(i\). Applying \cref{lem:inserted-label-lem}, we have \(\U \vdash A = B\), \(\U \vdash s_k = t_0\), and \(\U \vdash s_{k+1} = t_{m+1}\). Therefore by applying the conversion rule, \(\U \vdash t_i : A\). To complete this case, we must show that for each \(i\):
+    By \(\U \vdash M : T\), we have that \(\U \vdash t_i : B\) and \(\U \vdash M_i : T_i\) for each \(i\). Applying \cref{lem:inserted-label-lem}, we have \(\U \vdash A = B\), \(\U \vdash s_k = t_0\), and \(\U \vdash s_{k+1} = t_{m+1}\). Therefore, by applying the conversion rule, \(\U \vdash t_i : A\). To complete this case, we must show that for each \(i\):
     \[ \U \vdash (\insertion L P M)_i : (\insertion S P T)_i\]
     For most \(i\) this is trivial, however there is a subtlety for \(i = k-1\) that \((\insertion L P M)_{k-1} \not\equiv L_{k-1}\), as:
     \[\ty((\insertion L P M)_{k-1}) \equiv \arr {s_{k-1}} A {t_0} \not\equiv \arr {s_{k-1}} A {s_k} \equiv \ty(L_{k-1})\]
@@ -4713,7 +4713,7 @@ We now end this section by formally giving the equality rule set for insertion.
 \subsection{Universal property of insertion}
 \label{sec:univ-prop-insert}
 
-As stated in the previous section, the constructions involved in insertion arise as a pushout square. In this section, we prove this result, which we state below. Throughout this section we assume we are working in a tame theory for which the support and preservation conditions hold. We further only the maximal arguments of substitutions from a disc, as we only work with well-formed syntax up to definitional equality and so the type will always be inferable.
+As stated in the previous section, the constructions involved in insertion arise as a pushout square. In this section, we prove this result, which we state below. Throughout this section we assume that we are working in a tame theory for which the support and preservation conditions hold. We further only give the maximal arguments of substitutions from a disc, as we only work with well-formed syntax up to definitional equality and so the type will always be inferable.
 
 \begin{theorem}
   \label{thm:univ-prop}
@@ -4755,7 +4755,7 @@ We next state two factorisation properties for the interior and exterior labelli
   \label{lem:ins-comm-max}
   For insertion redex \((S,P,T,\U,L,M)\), the following hold:
   \[ \iota_{S,P,T} \circ (\insertion L P M) \equiv M \qquad \kappa_{S,P,T} \circ (\insertion L PM) \equiv^{\max} L \]
-  Hence the maps \(L\) and \(M\) factor through the labellings \(\kappa\) and \(\iota\) respectively.
+  Hence, the maps \(L\) and \(M\) factor through the labellings \(\kappa\) and \(\iota\) respectively.
 \end{lemma}
 \begin{proof}
   See \func{Catt.Tree.Insertion.Properties}{ι-comm} and \func{Catt.Tree.Insertion.Properties}{κ-comm} in \module{Catt.Tree.Insertion.Properties}.
@@ -4789,7 +4789,7 @@ We can now proceed with the proof of \cref{thm:univ-prop}.
       \lceil \sigma \rceil(p)&otherwise
     \end{cases*}
   \]
-  by the equality above, \(L\) is well formed and \(\lfloor L \rfloor = \sigma\). We then get a well-formed map \(\lfloor \insertion L P M \rfloor\) from \(\lfloor \insertion S P T \rfloor\) to \(\Gamma\) such that the following diagram is commutative by \cref{lem:ins-comm-max}:
+  by the equality above, \(L\) is well-formed and \(\lfloor L \rfloor = \sigma\). We then get a well-formed map \(\lfloor \insertion L P M \rfloor\) from \(\lfloor \insertion S P T \rfloor\) to \(\Gamma\) such that the following diagram is commutative by \cref{lem:ins-comm-max}:
   \[
     \begin{tikzcd}[column sep = large, row sep = large]
       {D^{\lh(P)}} & \lfloor S \rfloor \\
@@ -4863,7 +4863,7 @@ It remains to show that the chosen universal map \(\sigma \sslash p\) is unique,
       \arrow["{\{ \lfloor p \rfloor \}}", from=1-2, to=2-3]
     \end{tikzcd}
   \]
-  has two pushouts, the one given by insertion, and the one given by pruning. Therefore we obtain an isomorphism \(\lfloor \insertion S P {D^n} \rfloor \cong \lfloor \mathcal{D} \sslash p \rfloor\). By \cref{prop:ps-context-iso}, this isomorphism must be the identity (as both pushouts exist in \textsf{Catt}), and so we can deduce that \(\pi_p = \kappa_{S,P,D^n}\) and \(\sigma \sslash p = \lfloor \insertion {\lceil \sigma \rceil} P {\{\lceil t \rceil\}}  \rfloor\). Therefore the above equality is given by an insertion along \(P\).
+  has two pushouts, the one given by insertion, and the one given by pruning. Therefore, we obtain an isomorphism \(\lfloor \insertion S P {D^n} \rfloor \cong \lfloor \mathcal{D} \sslash p \rfloor\). By \cref{prop:ps-context-iso}, this isomorphism must be the identity (as both pushouts exist in \textsf{Catt}), and so we can deduce that \(\pi_p = \kappa_{S,P,D^n}\) and \(\sigma \sslash p = \lfloor \insertion {\lceil \sigma \rceil} P {\{\lceil t \rceil\}}  \rfloor\). Therefore, the above equality is given by an insertion along \(P\).
 \end{proof}
 
 \subsection{The insertion rule}
@@ -4890,7 +4890,7 @@ We now prove that the insertion rule set given in \cref{sec:insertion-rule} sati
   \[ s \equiv \SCoh S A L \qquad t \equiv \SCoh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion L P T} \qquad (\Gamma, \lfloor s \rfloor, \lfloor t \rfloor) \in \insert\]
   To prove the suspension condition, we observe that \(0 :: P\) is a branch of \(\Sigma(S)\) such that \(\insertion {\Sigma(S)} {0::P} {\Sigma(T)} \equiv \Sigma(\insertion S P T)\) and \(\kappa_{\Sigma(S),0::P,\Sigma(T)} \equiv \Sigma(\kappa_{S,P,T})\) by definition. By applying \cref{lem:insertion-map} with \(f = \Sigma\), we get:
   \[ \insertion {\Sigma'(L)} {P} {\Sigma'(M)} \equiv \Sigma'(\insertion L P M)\]
-  and so by unwrapping definitions we obtain \(\insertion {\Sigma(L)} {0 :: P} {\Sigma(M)} \equiv \Sigma(\insertion L P M)\). Therefore we have:
+  and so by unwrapping definitions we obtain \(\insertion {\Sigma(L)} {0 :: P} {\Sigma(M)} \equiv \Sigma(\insertion L P M)\). Therefore, we have:
   \begin{align*}
     \Sigma(s) &\equiv \SCoh {\Sigma(S)} {\Sigma (A)} {\Sigma(L)} \\
     \Sigma(t) &\equiv \SCoh {\insertion {\Sigma(S)} {0::P} {\Sigma(T)}} {\Sigma(A) \sub {\kappa_{\Sigma(S),0::P,\Sigma(T)}}} {\insertion {\Sigma(L)} {0::P} {\Sigma(M)}}
@@ -5287,7 +5287,7 @@ We now begin to consider the interaction between insertion and itself. In contra
 \begin{definition}
   Let \((S, P, T)\) be an insertion point and let \(Q\) be a branch of \(S\) such that \(\olsi P \neq \olsi Q\). Then we define the branch \(\insertion Q P T\) of \(\insertion S P T\) by induction on \(P\) and \(Q\).
   \begin{itemize}
-  \item Suppose \(P = [k]\) and \(Q = j :: x\). Then if \(j < k\) we let \(\insertion Q P T = Q\). Otherwise we let:
+  \item Suppose \(P = [k]\) and \(Q = j :: x\). Then if \(j < k\) we let \(\insertion Q P T = Q\). Otherwise, we let:
     \[\insertion Q P T = (j + \len(T) - 1) :: x\]
   \item Suppose \(P = k :: P_2\) and \(Q = j :: x\). If \(j \neq k\) then let \(\insertion Q P T = Q\). Otherwise, both \(P_2\) and \(x\) are branches of \(S_k\) and so we let \[\insertion Q P T = k :: \insertion x {P_2} T\]
   \end{itemize}
@@ -5631,7 +5631,7 @@ When this condition holds, taking the \(n\)-boundary of \(T\) returns a linear t
 
   As well as knowing about the interaction of the boundary with the inserted tree, we also need to investigate the interaction of the inclusion maps with the exterior labelling. In this first case, we would hope to prove that:
   \[ \incbd d - S \bullet \kappa_{S,P,T} \equiv \incbd d - {\insertion S P T}\]
-  Now that \(\bound n {\insertion S P T} \equiv \bound n S\), there are two ways to encode the source inclusion \(\bound d S\) into \(\insertion S P T\). The right hand side of the above equation directly includes \(\bound d {\insertion S P T}\) into the source of \(\insertion S P T\), and the left hand side first includes \(\bound d S\) into the source of \(S\) and then projects \(S\) onto \(\insertion S P T\) via the exterior labelling.
+  Now that \(\bound n {\insertion S P T} \equiv \bound n S\), there are two ways to encode the source inclusion \(\bound d S\) into \(\insertion S P T\). The right-hand side of the above equation directly includes \(\bound d {\insertion S P T}\) into the source of \(\insertion S P T\), and the left-hand side first includes \(\bound d S\) into the source of \(S\) and then projects \(S\) onto \(\insertion S P T\) via the exterior labelling.
 
   There is a catch with proving this equality; The exterior labelling sends \(\olsi P\) to the standard coherence, and so if \(\incbd d - S\) has \(\olsi P\) in its image, the equality can not hold syntactically. We therefore further require that \(d < \lh(P)\), which ensures this cannot happen. We now state these results in the following lemma.
 
@@ -5720,7 +5720,7 @@ As \(\th(\bound n T) \geq \bh(P)\) when \(\th(T) \geq \bh(P)\) and \(n > \bh(P)\
 
 As with the previous case, we explore the interaction of the boundary inclusion labellings and the exterior labelling. We aim to give conditions under which:
 \[ \incbd n - S \bullet \kappa_{S,P,T} \equiv \kappa_{\bound n S,\bound n P,\bound n T} \bullet \incbd n - {\insertion S P T}\]
-We examine the action of each side of the equation on the path \(\olsi {\bound n P}\). On the right hand side, this path is sent by \(\kappa\) to a standard coherence, and so on the left hand side, \((\incbd n - S)(\olsi {\bound n P}) \) must also be sent to a standard coherence by \(\kappa\). If \((\incbd n - S)( \olsi {\bound n P})\) is a maximal path, which will always be the case when \(n \geq \lh(P)\), then it will be sent to a standard coherence. Alternatively, if \(n \leq \lh(P)\) then \(\lh(\bound n P) = n\) and if \(n > \th(T)\) then the standard term returned by \(\kappa_{S,P,T}\) will be a standard coherence. These conditions lead to the following lemma.
+We examine the action of each side of the equation on the path \(\olsi {\bound n P}\). On the right-hand side, this path is sent by \(\kappa\) to a standard coherence, and so on the left-hand side, \((\incbd n - S)(\olsi {\bound n P}) \) must also be sent to a standard coherence by \(\kappa\). If \((\incbd n - S)( \olsi {\bound n P})\) is a maximal path, which will always be the case when \(n \geq \lh(P)\), then it will be sent to a standard coherence. Alternatively, if \(n \leq \lh(P)\) then \(\lh(\bound n P) = n\) and if \(n > \th(T)\) then the standard term returned by \(\kappa_{S,P,T}\) will be a standard coherence. These conditions lead to the following lemma.
 
 \begin{lemma}
   \label{lem:insertion-bd-2}
@@ -5785,7 +5785,7 @@ We can then proceed to the main theorem of this section.
   \end{align*}
   where the last equality is due to the inductive hypothesis on terms.
 
-  We begin with the case for types. If \(n = 0\), then both sides of the equality are \(\star\). Instead consider the \(n + 1\) case, where we have:
+  We begin with the case for types. If \(n = 0\), then both sides of the equality are \(\star\). Instead, consider the \(n + 1\) case, where we have:
   \begin{alignat*}{3}
     \stdty S {n+1} \sub {\kappa_{S,P,T}} \equiv{} &\stdtm {\bound n S} n \sub {\incbd n - S} \sub {\kappa_{S,P,T}} &\qquad& \stdty {\insertion S P T} {n+1} \equiv{}&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n - {\insertion S P T}} \\
                                                   &\to_{\stdty S n \sub {\kappa_{S,P,T}}} &&&&\to_{\stdty {\insertion S P T} n}\\
@@ -5795,7 +5795,7 @@ We can then proceed to the main theorem of this section.
 
   We now consider the case for standard coherences, where we must prove that:
   \[ \SCoh S {\stdty S n} {\kappa_{S,P,T}} = \SCoh {\insertion S P T} {\stdty {\insertion S P T} n} {\id} \]
-  By \cref{lem:iota-kappa-comm}, \(\olsi P \sub \kappa_{S,P,T}\) is the standard coherence \(\stdcoh T {\lh(P)} \sub {\iota_{S,P,T}}\), and so the left hand side of the above equation admits an insertion. Therefore:
+  By \cref{lem:iota-kappa-comm}, \(\olsi P \sub \kappa_{S,P,T}\) is the standard coherence \(\stdcoh T {\lh(P)} \sub {\iota_{S,P,T}}\), and so the left-hand side of the above equation admits an insertion. Therefore:
   \begin{align*}
     \SCoh S {\stdty S n} {\kappa_{S,P,T}} &= \SCoh {\insertion S P T} {\stdty S n \sub {\kappa_{S,P,T}}} {\insertion {\kappa_{S,P,T}} P {\iota_{S,P,T}}}&\text{by insertion}\\
                                           &\equiv \SCoh {\insertion S P T} {\stdty S n \sub {\kappa_{S,P,T}}} {\id}&\text{by \cref{lem:kappa-iota-insert}}\\
@@ -5831,7 +5831,7 @@ We explore the situation where a term \(s\) has a locally maximal argument \(t\)
   See \func{Catt.Tree.Insertion.Properties}{insertion-trunk-height} in \module{Catt.Tree.Insertion.Properties}.
 \end{proof}
 
-If a tree \(S\) is not linear, then any branch of \(S\) has branch height greater than the trunk height of \(S\), and hence any insertion into \(S\) only modifies the tree above its trunk height, and so can only increase the trunk height. Therefore if \((S,P,T)\) and \(T, Q , U\) are insertion points, and \(T\) is not linear, then \((S, P, \insertion T Q U)\) is also an insertion point.
+If a tree \(S\) is not linear, then any branch of \(S\) has branch height greater than the trunk height of \(S\), and hence any insertion into \(S\) only modifies the tree above its trunk height, and so can only increase the trunk height. Therefore, if \((S,P,T)\) and \(T, Q , U\) are insertion points, and \(T\) is not linear, then \((S, P, \insertion T Q U)\) is also an insertion point.
 
 Conversely, it is possible to insert the argument directly into the head term, before performing the inner insertion, looking to perform the inner insertion afterwards. For this to be possible, a branch of the inserted tree must be given. This can again be done under a non-linearity condition.
 
@@ -5848,7 +5848,7 @@ Conversely, it is possible to insert the argument directly into the head term, b
 
 A simple inductive proof shows that:
 \[\olsi {\insertion S P Q} \equiv \olsi Q \sub{\iota_{S,P,T}}\]
-Now given insertion points \((S,P,T)\) and \((T, Q ,U)\) with \(T\) non-linear we have that the triple \((\insertion S P T, \insertion S P Q, U)\) is another insertion point. Therefore two ways of performing both insertions, which are depicted in \cref{fig:chained-insertion}.
+Now given insertion points \((S,P,T)\) and \((T, Q ,U)\) with \(T\) non-linear we have that the triple \((\insertion S P T, \insertion S P Q, U)\) is another insertion point. Therefore, two ways of performing both insertions, which are depicted in \cref{fig:chained-insertion}.
 
 \begin{figure}[ht]
   \centering
@@ -6100,7 +6100,7 @@ We can also consider the universal property of the tree generated by first inser
     \arrow["\lrcorner"{anchor=center, pos=0.125, rotate=180, scale=1.5}, draw=none, from=3-2, to=2-1]
   \end{tikzcd}
 \]
-The left hand pushout square is given by the insertion of \(U\) into \(T\) along \(Q\). The morphism \(\{\stdcoh T n\} \bullet \kappa_{T,Q,U}\) which runs vertically through the centre of the diagram is then equal to \(\{\stdcoh {\insertion T Q U} n\}\) by \cref{cor:standard-coh-insert}, allowing for the right hand pushout square to be formed as the insertion of \(\insertion T Q U\) into \(S\) along \(P\). By common properties of colimits, both of these constructions then arise as colimits of the same diagram, the shared top left boundary of both constructions. The results of this section are stated in the following lemma.
+The left-hand pushout square is given by the insertion of \(U\) into \(T\) along \(Q\). The morphism \(\{\stdcoh T n\} \bullet \kappa_{T,Q,U}\) which runs vertically through the centre of the diagram is then equal to \(\{\stdcoh {\insertion T Q U} n\}\) by \cref{cor:standard-coh-insert}, allowing for the right-hand pushout square to be formed as the insertion of \(\insertion T Q U\) into \(S\) along \(P\). By common properties of colimits, both of these constructions then arise as colimits of the same diagram, the shared top left boundary of both constructions. The results of this section are stated in the following lemma.
 
 \begin{lemma}
   \label{lem:inserted-insertion}
@@ -6146,7 +6146,7 @@ The implementation uses an approach closer to normalisation by evaluation for ty
 
 \cref{sec:models} provides a discussion of the models of the semistrict type theories \Cattsu and \Cattsua, demonstrating how they can be viewed as semistrict \(\infty\)-category. The section proves a partial conservativity result, which allows a proof that semistrictness is a property of a weak \(\infty\)-category, and not additional structure. A discussion is provided on some of the challenges that must be overcome to extend this partial conservativity result.
 
-The thesis ends with a review of avenues for future work in this area, including a discussion of further variants of \Catt which could be defined.
+The thesis ends with \cref{sec:future-work}, which provides a review of avenues for future work in this area, including a discussion of further variants of \Catt which could be defined.
 
 \section{Reduction}
 \label{sec:reduction}
@@ -6238,7 +6238,7 @@ The identity term was not present in the premise of the reduction, and the term 
 
 To prove termination, we will exploit that although each reduction creates new subterms, these subterms are all of a lower dimension that the dimension of the term that is being reduced. In the example above, the dimension of \(\Coh \Delta {\arr s A s} \sigma\) is greater than the dimension of the term \(s\), and so the reduction has still made progress towards a normal form by decreasing the complexity of the term in dimension \(\dim(A)+1\), even though it may introduce arbitrary complexity at \(\dim(A)\) and below.
 
-To this end we define the following notion of complexity for each class of syntax, which assigns an ordinal number to each term, which we its \emph{syntactic complexity}. As the ordinal numbers are well-founded, we aim to prove that our reduction is terminating by proving that each single-step reduction reduces the complexity of the term. To define syntactic complexity, we will need to use ordinal numbers up to \(\omega^\omega\). We will also need a construction known as the natural sum of ordinals, \(\alpha \+ \beta\), which is associative, commutative, and strictly monotone in both of its arguments~\cite{lipparini16}.
+To this end we define the following notion of complexity for each class of syntax, which assigns an ordinal number to each term, which we call its \emph{syntactic complexity}. As the ordinal numbers are well-founded, we aim to prove that our reduction is terminating by proving that each single-step reduction reduces the complexity of the term. To define syntactic complexity, we will need to use ordinal numbers up to \(\omega^\omega\). We will also need a construction known as the natural sum of ordinals, \(\alpha \+ \beta\), which is associative, commutative, and strictly monotone in both of its arguments~\cite{lipparini16}.
 
 \begin{definition}
   For all terms \(t\), types \(A\), and substitutions \(\sigma\), the \emph{syntactic complexity} \(\sc(t)\), \(\sc(A)\), and \(\sc(\sigma)\) are mutually defined as follows:
@@ -6258,7 +6258,7 @@ To this end we define the following notion of complexity for each class of synta
   \end{itemize}
 \end{definition}
 
-The syntactic complexity is given as an ordinal to leverage known results, though it should be noted that ordinals below \(\omega^\omega\) can be represented by a lists of natural numbers ordered lexicographically and under this interpretation the syntactic complexity effectively computes the number of coherences at each dimension. Therefore removing a coherence of dimension \(n\) reduces the complexity, even if we add arbitrary complexity at lower dimensions. Syntactic complexity also treats identities in a special way, as these play a special role in blocking reduction for the theories we will present.
+The syntactic complexity is given as an ordinal to leverage known results, though it should be noted that ordinals below \(\omega^\omega\) can be represented by a list of natural numbers ordered reverse lexicographically. Under this interpretation the syntactic complexity effectively computes the number of coherences at each dimension. Therefore, removing a coherence of dimension \(n\) reduces the complexity, even if we add arbitrary complexity at lower dimensions. Syntactic complexity also treats identities in a special way, as these play a special role in blocking reduction for the theories we will present.
 
 The syntactic complexity does not account for the type in a coherence, as this is difficult to encode. Instead of showing that all reductions reduce syntactic complexity, we instead show that all reduction which are not cell reduction (reductions that have the rule marked \textsc{cell} in their derivation) reduce syntactic complexity and deduce that a hypothetical infinite reduction sequence must only consist of cell reductions after a finite number of steps, and then appeal to an induction on dimension.
 
@@ -6282,7 +6282,7 @@ The syntactic complexity does not account for the type in a coherence, as this i
   \[ s_0 \red s_1 \red s_2 \red \cdots\]
   Then by assumption, only finitely many of these reductions do not use the cell rule, as otherwise by \cref{lem:termination-lem} we would obtain an infinite chain of ordinals
   \[ \sc(s_0) \geq \sc(s_1) \geq \sc(s_2) \geq \cdots\]
-  where infinitely many of these inequalities are strict. Therefore there is an \(n\) such that:
+  where infinitely many of these inequalities are strict. Therefore, there is an \(n\) such that:
   \[ s_n \leadsto s_{n+1} \leadsto \cdots\]
   are all cell reductions. Each of these reductions reduces one of finitely many subterms of \(s_n\), and each of these subterms has dimension less than \(k\), so by inductive hypothesis, none of these subterms can be reduced infinitely often, contradicting the existence of an infinite reduction sequence.
 \end{proof}
@@ -6314,7 +6314,7 @@ is a valid instance of endo-coherence removal for type \(A\) and term \(s\), whi
   \[\Coh \Delta {\arr s A s} \sigma \red_{\ecr'}^* \id(A\sub \sigma,s\sub\sigma)\]
 \end{lemma}
 \begin{proof}
-  If \(\Coh \Delta {\arr s A s} \sigma\) is not an identity then it can reduced by endo-coherence removal. Otherwise we have \(\Delta = D^n\) for some \(n\), \(s \equiv d_n\), \(A \equiv \wk(U^n)\), and \(\sigma \equiv \{B,t\}\) for some \(B\) and \(t\) and so:
+  If \(\Coh \Delta {\arr s A s} \sigma\) is not an identity then it can be reduced by endo-coherence removal. Otherwise, we have \(\Delta = D^n\) for some \(n\), \(s \equiv d_n\), \(A \equiv \wk(U^n)\), and \(\sigma \equiv \{B,t\}\) for some \(B\) and \(t\) and so:
   \[\id(A\sub \sigma,s \sub \sigma) \equiv \id(\wk(U^n)\sub{\{B,t\}}, d_n \sub {\{B,t\}}) \equiv \id(B,t) \]
 It follows that the reduction is trivial.
 \end{proof}
@@ -6433,7 +6433,7 @@ By \cref{prop:red-is-eq}, \(t' \red_{\mathcal{R}_n}^{\mathsf{rts}} u'\), and so 
   \end{tikzcd}
 \]
 
-If \(s \red_{\mathcal{R}_n} u\) was derived from \textsc{rule}, then finding a reduct can be found similarly to the first case by symmetry. We therefore consider the cases where neither \(s \red t\) or \(s \red u\) are derived using \textsc{rule}. Both reductions must be either cell or argument reductions, and so each reduces some subterm of \(s\). If they reduce distinct subterms of \(s\), then a common reduct \(v\) can be formed by applying both reductions to \(s\). Otherwise, both reductions act on the same subterm of \(s\), and a common reduct can be found by applying the inductive hypothesis for subterms.
+If \(s \red_{\mathcal{R}_n} u\) was derived from \textsc{rule}, then finding a reduct can be found similarly to the first case by symmetry. We therefore consider the cases where neither \(s \red t\) nor \(s \red u\) are derived using \textsc{rule}. Both reductions must be either cell or argument reductions, and so each reduces some subterm of \(s\). If they reduce distinct subterms of \(s\), then a common reduct \(v\) can be formed by applying both reductions to \(s\). Otherwise, both reductions act on the same subterm of \(s\), and a common reduct can be found by applying the inductive hypothesis for subterms.
 \end{proof}
 
 Once termination and confluence have been proven, a normalisation function can be defined, which repeatedly applies reductions until no more can be applied.
@@ -6446,7 +6446,7 @@ Once termination and confluence have been proven, a normalisation function can b
 
   Suppose \(s \red^{\mathsf{rts}} t\). Then there are terms \(s_i\) such that:
   \[ s \equiv s_0 \rightsquigarrow^* s_1 \leftsquigarrow^* s_2 \rightsquigarrow^* \cdots \leftsquigarrow^* s_k \equiv t\]
-  Now we must have \(\N(s_i) \equiv \N(s_{i+1})\) for each \(i\) as if \(s_i \rightsquigarrow^* s_{i+1}\) then both \(\N(s_i)\) and \(\N(s_{i+1})\) are normal forms of \(s_i\) and if \(s_i \leftsquigarrow^* s_{i+1}\) then both are normal forms of \(s_{i+1}\). Therefore \(\N(s)\) and \(\N(t)\) are syntactically equal as required.
+  Now we must have \(\N(s_i) \equiv \N(s_{i+1})\) for each \(i\) as if \(s_i \rightsquigarrow^* s_{i+1}\) then both \(\N(s_i)\) and \(\N(s_{i+1})\) are normal forms of \(s_i\) and if \(s_i \leftsquigarrow^* s_{i+1}\) then both are normal forms of \(s_{i+1}\). Therefore, \(\N(s)\) and \(\N(t)\) are syntactically equal as required.
 \end{proof}
 \begin{corollary}
   Let \(\mathcal{R}\) be tame and satisfy the preservation and support properties. Further suppose that \(\redr\) is strongly terminating and confluent, and it is decidable whether a term admits a reduction. Then the equality \(s = t\) is decidable.
@@ -6552,7 +6552,7 @@ where \(n = \dim(A)\), the first reduction is by pruning, and the second reducti
 \begin{definition}
   Define the reduction \(\red_{\su'}\) to be the reduction generated by the equality rule set \(\su'\) where
   \[ \su' = \dr \cup \prune' \cup \ecr'\]
-  where \ecr' is the endo-coherence removal set without identity to identity equalities and \prune' is the pruning set restricted to the triples where the left hand side term is not an identity.
+  where \ecr' is the endo-coherence removal set without identity to identity equalities and \prune' is the pruning set restricted to the triples where the left-hand side term is not an identity.
 \end{definition}
 
 The reduction \(\red_{\su'}\) applies equality rules from \Cattsu when the redex is not identity, effectively forcing identities to be normal forms of the theory. As applying a substitution to or suspending a non-identity term cannot result in an identity, it is clear that \su' is tame. Strong termination for \(\red_{\su'}\) can now be proven using \cref{cor:strong-term}, by showing that all rules reduce the syntactic complexity of terms.
@@ -6620,7 +6620,7 @@ We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and onl
 
   \textbf{Disc removal:} Suppose \(s \red t\) is a disc removal reduction. Then \(s \equiv \Coh {D^n} {\wk(U^n)} {\{A,t\}}\). We now split on the reduction \(s \red u\). We immediately know that \(s \red u\) cannot be an endo-coherence removal reduction, as \(s\) is not an endo-coherence. It also cannot be a cell reduction as \(wk(U^n)\) only contains variables and so is in normal form.
 
-  Let \(s \red u\) be an argument reduction. It must therefore be generated by a reduction on \(\{A,t\}\). If it is a reduction generated by \(A \red A'\) then \(u \red t\) by endo-coherence removal and so we are done. Otherwise it is generated by \(t \red t'\) and so \(t\) and \(u\) both reduce by disc removal to \(t'\).
+  Let \(s \red u\) be an argument reduction. It must therefore be generated by a reduction on \(\{A,t\}\). If it is a reduction generated by \(A \red A'\) then \(u \red t\) by endo-coherence removal and so we are done. Otherwise, it is generated by \(t \red t'\) and so \(t\) and \(u\) both reduce by disc removal to \(t'\).
 
   The only remaining case is where \(s \red u\) is an instance of pruning, which forces \(t \equiv \id(B,a)\) for some \(B\) and \(a\). As \(s\) is well-formed, we must have \(n > 0\) and so \(A \equiv \arr b {A'} c\). Therefore:
   \begin{align*}
@@ -6662,7 +6662,7 @@ We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and onl
   \[ s \equiv \Coh {\lfloor \mathcal{D} \rfloor} A \sigma\]
   for some \(\mathcal{D} : \Dyck_0\) with peak \(p : \Peak_{\mathcal{D}}\) such that \(\lfloor p \rfloor \sub \sigma\) is an identity. Then:
   \[ t \equiv \Coh {\lfloor \mathcal{D} \sslash p \rfloor} {A \sub {\pi_p}} {\sigma \sslash p}\]
-  We now split on the reduction \(s \red u\). First suppose it is given by an argument reduction \(\sigma \red \tau\). Identities do not admit head reductions, meaning \(\lfloor p \rfloor \sub \tau\) is still an identity. Therefore pruning can be applied to \(u\) to get:
+  We now split on the reduction \(s \red u\). First suppose it is given by an argument reduction \(\sigma \red \tau\). Identities do not admit head reductions, meaning \(\lfloor p \rfloor \sub \tau\) is still an identity. Therefore, pruning can be applied to \(u\) to get:
   \[ u \red \Coh {\lfloor \mathcal{D} \sslash p \rfloor} {A \sub {\pi_p}} {\tau \sslash p}\]
   Now \(\sigma \sslash p\) is simply \(\sigma\) with two terms removed, and so \(\sigma \sslash p \red^* \tau \sslash p\), meaning \(t\) reduces to the same term as \(u\).
 
@@ -6674,7 +6674,7 @@ We therefore have that two terms \(s\) and \(t\) are equal in \Cattsu if and onl
   \[ \Coh {\lfloor (\mathcal{D} \sslash p) \sslash q_p \rfloor} {A \sub {\pi_p} \sub{\pi_{q_p}}} {(\sigma \sslash p) \sslash q_p} \]
   which both reduce to by pruning if \(\lfloor q_p \rfloor\) and \(\lfloor p_q \rfloor\) are identities. However:
   \[\lfloor q_p \rfloor \equiv \lfloor q \rfloor \sub {\pi_p}\]
-  and \(\lfloor q \rfloor\) must be an identity for \(s \red u\) to be a valid instance of pruning. Therefore, as identities are preserved by application of substitution, \(\lfloor  q_p \rfloor\) is an identity. Similarly \(\lfloor p_q \rfloor\) is an identity, and so both \(t\) and \(u\) reduce to the term above.
+  and \(\lfloor q \rfloor\) must be an identity for \(s \red u\) to be a valid instance of pruning. Therefore, as identities are preserved by application of substitution, \(\lfloor  q_p \rfloor\) is an identity. Similarly, \(\lfloor p_q \rfloor\) is an identity, and so both \(t\) and \(u\) reduce to the term above.
 
   Any remaining cases follow by symmetry, completing the proof.
 \end{proof}
@@ -6686,7 +6686,7 @@ We take a brief moment to explore the theory \Cattsu in its entirety. For this s
 
 We begin by proving a property of terms over disc contexts, which we call \emph{disc trivialisation}. This is the following structure theorem: in a disc context \(D^n\), every term is either a variable, or the iterated identity on a variable, up to definitional equality. Restricting to those terms \(t : \Term_{D^n}\) that are full, that is \(\Supp(t) = \Var{D^n}\), then there is exactly one term (up to definitional equality) at each dimension \(k \geq n\). Hence, the type theory \Cattsu trivialises disc contexts.
 
-This property relates the type theory \Cattsu to the definitional of strictly unital \(\infty\)-categories of \citeauthor{Batanin2013}~\cite{Batanin2013}, whose \emph{reduced operads} enforce that there is a unique term of each dimension over a linear tree.
+This property relates the type theory \Cattsu to the definition of strictly unital \(\infty\)-categories of \citeauthor{Batanin2013}~\cite{Batanin2013}, whose \emph{reduced operads} enforce that there is a unique term of each dimension over a linear tree.
 
 We now state and prove disc trivialisation, recalling the definition of an iterated canonical identity from \cref{def:canonical-id}.
 
@@ -6697,11 +6697,11 @@ We now state and prove disc trivialisation, recalling the definition of an itera
 \begin{proof}
   Without loss of generality, we may assume that \(t\) is in \Cattsu normal form, and proceed to prove that \(t\) is an iterated canonical identity. We proceed by induction on subterms of the term \(t\). If \(t\) is a variable then we are done. Otherwise, we assume \(t\) is a coherence term \(\Coh \Delta U \sigma\).
 
-  We now show that \(\Delta\) must be a disc context by contradiction. We therefore assume that \(\Delta\) is not a disc, and hence \(t\) is not an identity. By induction on subterms, we must have that each term in \(\sigma\) is an iterated canonical identity on a variable. No locally maximal argument can be an identity, as otherwise pruning could be performed and \(t\) would not be in normal form, and so every locally maximal argument is a variable. Suppose there is some variable \(x\) such that \(x \sub\sigma\) is an identity, and let \(x\) be be a variable of maximal dimension with this property. As \(x\) cannot be locally maximal, there must either be the source or target of a variable \(y\), but this variable \(y\) must be sent to a variable of \(D^n\), which cannot have an identity as its source or target. Therefore the substitution \(\sigma\) is variable to variable.
+  We now show that \(\Delta\) must be a disc context by contradiction. We therefore assume that \(\Delta\) is not a disc, and hence \(t\) is not an identity. By induction on subterms, we must have that each term in \(\sigma\) is an iterated canonical identity on a variable. No locally maximal argument can be an identity, as otherwise pruning could be performed and \(t\) would not be in normal form, and so every locally maximal argument is a variable. Suppose there is some variable \(x\) such that \(x \sub\sigma\) is an identity, and let \(x\) be a variable of maximal dimension with this property. As \(x\) cannot be locally maximal, there must either be the source or target of a variable \(y\), but this variable \(y\) must be sent to a variable of \(D^n\), which cannot have an identity as its source or target. Therefore, the substitution \(\sigma\) is variable to variable.
 
   We now let \(\Gamma\) be the smallest ps-context prefix of \(\Delta\) such that \(\Gamma\) is not a disc. We must have:
   \[ \Gamma \equiv D^k, (y : A), (f : \arr x A y)\]
-  where \(D^k \vdash_{\mathsf{ps}} x : A\). Furthermore, the last rule used in this derivation must be \textsc{psd}, as if it were \textsc{pse} or \textsc{pss} then \(k = \dim(A)\) and \(\Gamma \equiv D^{k+1}\), breaking the assumption that \(\Gamma\) is not a disc. Therefore \(D^k \vdash_{\mathsf{ps}} g : \arr w A x\) for some variables \(g\) and \(x\). However, now \(g \sub \sigma\), \(x \sub \sigma\), and \(f \sub \sigma\) are variables of \(D^n\) such that \(\tgt(g \sub \sigma) \equiv x \sub \sigma \equiv \src(f \sub \sigma)\). No such variables exist in \(D^n\) and so we reach a contradiction. We therefore deduce that \(\Delta\) is a disc \(D^n\) for some \(n\).
+  where \(D^k \vdash_{\mathsf{ps}} x : A\). Furthermore, the last rule used in this derivation must be \textsc{psd}, as if it were \textsc{pse} or \textsc{pss} then \(k = \dim(A)\) and \(\Gamma \equiv D^{k+1}\), breaking the assumption that \(\Gamma\) is not a disc. Therefore, \(D^k \vdash_{\mathsf{ps}} g : \arr w A x\) for some variables \(g\) and \(x\). However, now \(g \sub \sigma\), \(x \sub \sigma\), and \(f \sub \sigma\) are variables of \(D^n\) such that \(\tgt(g \sub \sigma) \equiv x \sub \sigma \equiv \src(f \sub \sigma)\). No such variables exist in \(D^n\) and so we reach a contradiction. We therefore deduce that \(\Delta\) is a disc \(D^n\) for some \(n\).
 
   Now \(t \equiv \Coh {D^n} {\arr u A v} \sigma\) and so by induction on subterms, \(u\) and \(v\) are equal to iterated canonical identities. We now split on whether \(t\) is a composition or equivalence. If it is a composition then \(\Supp(u) = \bdry {n-1} - {D^n}\) and \(\Supp(v) = \bdry {n-1} + {D^n}\) and therefore neither \(u\) or \(v\) are identities (as then \(A\) would have the same support as \(u\) or \(v\) respectively) and so \(u = d_{n-1}^-\) and \(v = d_{n-1}^*\), but this makes \(t\) a disc removal redex, and so \(t\) is not in normal form.
 
@@ -6722,11 +6722,11 @@ Disc trivialisation allows us to prove the following results concerning terms an
   \[t \sub {\pi_p} : \Term_{\lfloor \mathcal{D}\sslash p \rfloor}\]
   Then \(\Supp(t \sub {\pi_p}) = \Supp(t)\), which contradicts the minimality of \(\mathcal{D}\). By a similar argument, \(y\) must also be in \(\Supp(t)\). It is also the case that if such a variable \(f : x \to y\) with \(f \not\in \Supp(t)\) and \(\{x,y\} \subseteq \Supp(t)\) exists, then \(\Supp(t)\) cannot be a ps-context, by an argument involving the linear order on ps-contexts introduced by \citeauthor{finster2017type}~\cite{finster2017type}.
 
-  Now suppose \(\mathcal{D}\) has a peak \(p\) that is not \(f\). Then \(f\sub{\pi_p} : x \sub{\pi_p} \to y \sub{\pi_p}\) is a locally maximal variable of \(\lfloor \mathcal{D} \sslash p \rfloor\) with \(f\sub{\pi_p} \not\in \Supp(t \sub {\pi_p})\) and \(\{x \sub {\pi_p}, y \sub {\pi_p}\} \subseteq \Supp(t \sub {\pi_p})\). Hence \(\Supp(t \sub {\pi_p})\) is not a ps-context, again breaking the minimality of \(\mathcal{D}\).
+  Now suppose \(\mathcal{D}\) has a peak \(p\) that is not \(f\). Then \(f\sub{\pi_p} : x \sub{\pi_p} \to y \sub{\pi_p}\) is a locally maximal variable of \(\lfloor \mathcal{D} \sslash p \rfloor\) with \(f\sub{\pi_p} \not\in \Supp(t \sub {\pi_p})\) and \(\{x \sub {\pi_p}, y \sub {\pi_p}\} \subseteq \Supp(t \sub {\pi_p})\). Hence, \(\Supp(t \sub {\pi_p})\) is not a ps-context, again breaking the minimality of \(\mathcal{D}\).
 
-  Therefore \(\mathcal{D}\) has one peak, and so \(\lfloor \mathcal{D} \rfloor \equiv D^n\) for some \(n\). Now by \cref{thm:disc-triv}, \(t\) is \Cattsu equal to a variable \(z\) or an iterated identity on a variable \(z\). Since \Cattsu preserves support, we must have \(\Supp(t) = \Supp(z)\), but \(\Supp(z)\) is a disc and so is a ps-context.
+  Therefore, \(\mathcal{D}\) has one peak, and so \(\lfloor \mathcal{D} \rfloor \equiv D^n\) for some \(n\). Now by \cref{thm:disc-triv}, \(t\) is \Cattsu equal to a variable \(z\) or an iterated identity on a variable \(z\). Since \Cattsu preserves support, we must have \(\Supp(t) = \Supp(z)\), but \(\Supp(z)\) is a disc and so is a ps-context.
 
-  Hence no such term \(t\) existed.
+  Hence, no such term \(t\) existed.
 \end{proof}
 
 Since any \Catt term is also a \Cattsu term, we get the following corollary.
@@ -6747,7 +6747,7 @@ We now move on to defining \Cattsua, the type theory for strictly unital and ass
 As we did for \Cattsu, we will prove in this section that \Cattsua satisfies standard meta-theoretic properties, and provide a reduction scheme for it which is strongly terminating and confluent.
 
 \begin{example}
-  We consider the the associator term, and its reductions in \Cattsua. The associator witnesses the associativity law in a weak \(\infty\)-category. Letting \(\Delta\) be the following ps-context:
+  We consider the associator term, and its reductions in \Cattsua. The associator witnesses the associativity law in a weak \(\infty\)-category. Letting \(\Delta\) be the following ps-context:
   \begin{alignat*}{2}
     \Delta = \lfloor [\emp,\emp,\emp] \rfloor ={}& (w : *)\\
                                                  &(x : *)&&(f : w \to x)\\
@@ -6783,7 +6783,7 @@ As before, when we do not specify an operation set, it should be assumed that th
 
   To prove that the support condition holds for \sua, we use the strategy introduced in \cref{sec:further-conditions} and instead show that \sua satisfies the \(\sua_{\mathsf{S}}\)-support condition. By \cref{lem:supp-sat-conds}, the equality rule set \(\sua_{\mathsf{S}}\), the restriction of \sua to support preserving equalities, is also tame. As it trivially satisfies the support condition, we have by \cref{prop:dr-supp,item:ecr-supp,prop:insert-supp} that disc removal, endo-coherence removal, and insertion satisfy the \(\sua_{\mathsf{S}}\)-support condition. Therefore, \sua satisfies the \(\sua_{\mathsf{S}}\)-support condition and so by \cref{lem:proof-strat-supp} \sua satisfies the support condition.
 
-  The \sua-preservation condition is satisfied by disc removal (by \cref{prop:dr-preserve}) and endo-coherence removal (by \cref{item:ecr-preserve}). If \(\mathcal{O}\) supports insertion, then insertion also satisfies the \sua-preservation condition by \cref{prop:insert-preserve}. Therefore \sua satisfies the preservation condition, completing the proof.
+  The \sua-preservation condition is satisfied by disc removal (by \cref{prop:dr-preserve}) and endo-coherence removal (by \cref{item:ecr-preserve}). If \(\mathcal{O}\) supports insertion, then insertion also satisfies the \sua-preservation condition by \cref{prop:insert-preserve}. Therefore, \sua satisfies the preservation condition, completing the proof.
 \end{proof}
 
 While the groupoidal operation set trivially supports insertion, we have not yet proven that the regular operation set, \Reg, supports insertion. This is done now using \cref{thm:sua-conds}.
@@ -6811,11 +6811,11 @@ While the groupoidal operation set trivially supports insertion, we have not yet
 
 Using the results of \cref{sec:reduction}, we give a normalisation algorithm for \Cattsua by defining a reduction scheme which generates the equality relation and proving that this reduction scheme is strongly terminating and confluent.
 
-As with \Cattsu, we can not directly use the reduction \(\red_\su\) directly, as we have seen already that the reduction \(\red_\ecr\) alone is non terminating. Similarly to pruning, allowing insertions into identity terms also creates non-terminating loops of reductions when combined with endo-coherence removal, as was explained in \cref{sec:reduction-cattsu}. We therefore restrict our reduction so that no head-reductions can be applied to identity terms.
+As with \Cattsu, we can not directly use the reduction \(\red_\su\) directly, as we have seen already that the reduction \(\red_\ecr\) alone is non-terminating. Similarly to pruning, allowing insertions into identity terms also creates non-terminating loops of reductions when combined with endo-coherence removal, as was explained in \cref{sec:reduction-cattsu}. We therefore restrict our reduction so that no head-reductions can be applied to identity terms.
 
 Although these restrictions are sufficient to ensure termination, we choose to further restrict the set of insertion reductions, in order to streamline the proof of confluence. Firstly, we only allow insertions of a locally maximal argument when that argument is either an identity or a standard composition. The motivation for this restriction is that identities and standard compositions are the only standard coherence that can be in normal form. Moreover, not allowing the insertion of endo-coherences avoids a difficult insertion/argument endo-coherence removal confluence case.
 
-We also disallow insertions into a unary composite and insertions of a unary composite, as we already seen in \cref{sec:further-properties} that discs act as a left and right unit for insertion, and so these two insertion reductions are subsumed by disc removal. Further, disallowing the insertion of discs removes another case where an insertable standard coherence is not in normal form. We now define the resulting reduction scheme.
+We also disallow insertions into a unary composite and insertions of a unary composite, as we have already seen in \cref{sec:further-properties} that discs act as a left and right unit for insertion, and so these two insertion reductions are subsumed by disc removal. Further, disallowing the insertion of discs removes another case where an insertable standard coherence is not in normal form. We now define the resulting reduction scheme.
 
 \begin{definition}
   Define the reduction \(\red_{\sua'}\) to be the reduction generated by the equality rule set \(\sua'\) where:
@@ -6855,7 +6855,7 @@ We now show that most insertion reductions can still be simulated up to bounded 
   \end{align*}
   where \(\stdtm T {\lh(P - 1)} \equiv \stdcoh T {\lh(P - 1)}\) as if \(\stdtm T {\lh(P)-1}\) was a variable then \(\stdcoh T {\lh(P)}\) would be an identity.
 
-  We now wish to show that \(2 + \bh(P) \leq \lh(P)\) so that \(P'\) exists as a branch of \(S \sslash P\). Since we always have \(1 + \bh(P) \leq \lh(P)\), we consider the case where \(1 + \bh(P) = \lh(P)\). We know that \(\bh(P) \leq \dep(T) \leq \lh(P)\) and so must be equal to one of the two. If \(\dep(T) = \lh(P)\) then \(\stdcoh T {\lh(P)}\) is an standard composite. If \(\dep(T) = \bh(P)\) then \(\th(T) = \dep(T)\) and so \(T\) is linear. However this makes \(\stdcoh T {\lh(P)}\) an identity. Either case is a contradiction and so \(2 + \bh(P) \leq \lh(P)\) and so \(P'\) is a branch of \(S \sslash P\).
+  We now wish to show that \(2 + \bh(P) \leq \lh(P)\) so that \(P'\) exists as a branch of \(S \sslash P\). Since we always have \(1 + \bh(P) \leq \lh(P)\), we consider the case where \(1 + \bh(P) = \lh(P)\). We know that \(\bh(P) \leq \dep(T) \leq \lh(P)\) and so must be equal to one of the two. If \(\dep(T) = \lh(P)\) then \(\stdcoh T {\lh(P)}\) is a standard composite. If \(\dep(T) = \bh(P)\) then \(\th(T) = \dep(T)\) and so \(T\) is linear. However, this makes \(\stdcoh T {\lh(P)}\) an identity. Either case is a contradiction and so \(2 + \bh(P) \leq \lh(P)\) and so \(P'\) is a branch of \(S \sslash P\).
 
   By \cref{lem:pruned-bp,lem:iota-kappa-comm}, we now have:
   \begin{align*}
@@ -6890,7 +6890,7 @@ We further show that insertions into discs can be simulated by disc removal.
                                                                                  &\equiv \stdcoh T n \sub M\\
                                                                                  &\equiv L(\olsi P)
   \end{align*}
-  Therefore the reduction \(a \red s \equiv L(\olsi P)\) is given by disc removal.
+  Therefore, the reduction \(a \red s \equiv L(\olsi P)\) is given by disc removal.
 \end{proof}
 
 Using these lemmas, we now show that the type theories \Cattsua and \(\Catt_{\sua'}\) are equivalent.
@@ -6990,7 +6990,7 @@ We split by cases on the reduction \(a \red b\), ignoring cases where both reduc
 
 \paragraph{Insertion on the inserted argument \(\bm{L(\olsi P)}\):} Suppose \(\stdcoh T {\lh(P)} \sub M\) admits an insertion along redex \((T, Q, U, \Gamma, M, N)\). Then:
 \[\stdcoh T {\lh(P)} \sub M \red \SCoh {\insertion T Q U} {\stdty T {\lh(P)}\sub{\kappa_{T,Q,U}}} {\insertion M Q N}\]
-We then have \(c \equiv \SCoh S A {L'}\) where \(L'\) is \(L\) with the reduction above applied. We can conclude that \(\stdcoh T {\lh(P)}\) must be a composite (i.e. not an identity) as otherwise the second insertion would not be possible. Similarly \(T\) cannot be linear as otherwise \(\stdcoh T {\lh(P)}\) would be a unary composite.
+We then have \(c \equiv \SCoh S A {L'}\) where \(L'\) is \(L\) with the reduction above applied. We can conclude that \(\stdcoh T {\lh(P)}\) must be a composite (i.e. not an identity) as otherwise the second insertion would not be possible. Similarly, \(T\) cannot be linear as otherwise \(\stdcoh T {\lh(P)}\) would be a unary composite.
 
 We now need the following lemmas, the second of which is a directed version of \cref{thm:std-insert-props} with more conditions.
 
@@ -7007,7 +7007,7 @@ We now need the following lemmas, the second of which is a directed version of \
   Let \((S,P,T)\) be an insertion point. Then if \(S\) is not linear or \(n \leq \dep(S)\), \(\stdty S n \sub{\kappa_{S,P,T}} \red^* \stdty {\insertion S P T} n\) and if \(\dep(S) \leq n\) and \(S\) is not linear or \(\dep(S) = n\) then \(\stdtm S n  \sub{\kappa_{S,P,T}} \red^* \stdtm {\insertion S P T} n\).
 \end{lemma}
 \begin{proof}
-  We proceed by induction on \(n\), starting with the statement for types. If \(n = 0\) then both standard types are \(\star\), so we are done. Otherwise we have:
+  We proceed by induction on \(n\), starting with the statement for types. If \(n = 0\) then both standard types are \(\star\), so we are done. Otherwise, we have:
    \begin{alignat*}{3}
     \stdty S {n+1} \sub {\kappa_{S,P,T}} \equiv{} &\stdtm {\bound n S} n \sub {\incbd n - S} \sub {\kappa_{S,P,T}} &\qquad& \stdty {\insertion S P T} {n+1} \equiv{}&&\stdtm {\bound n {\insertion S P T}} n \sub {\incbd n - {\insertion S P T}} \\
                                                   &\to_{\stdty S n \sub {\kappa_{S,P,T}}} &&&&\to_{\stdty {\insertion S P T} n}\\
@@ -7015,11 +7015,11 @@ We now need the following lemmas, the second of which is a directed version of \
   \end{alignat*}
   By inductive hypothesis: \(\stdty S n \sub{\kappa_{S,P,T}} \red^* \stdty {\insertion S P T} n\), and so we need to show that:
   \[\stdtm {\bound n S} n\sub{\incbd n \epsilon S \bullet \kappa_{S,P,T}} \red^* \stdty {\bound n {\insertion S P T}} n \sub{\incbd n \epsilon {\insertion S P T}}\]
-  We now note that either the conditions for \cref{lem:insertion-bd-1} or \cref{lem:insertion-bd-2} must hold. If conditions for \cref{lem:insertion-bd-1} hold then (as everything is well typed in \Catt) we get that the required reduction is trivial. Therefore we focus on the second case. Here we get from \cref{lem:insertion-bd-2} that:
+  We now note that either the conditions for \cref{lem:insertion-bd-1} or \cref{lem:insertion-bd-2} must hold. If conditions for \cref{lem:insertion-bd-1} hold then (as everything is well typed in \Catt) we get that the required reduction is trivial. Therefore, we focus on the second case. Here we get from \cref{lem:insertion-bd-2} that:
   \[\stdtm {\bound n S} n\sub{\incbd n \epsilon S \bullet \kappa_{S,P,T}} \equiv \stdtm {\bound n S} n\sub{\kappa_{\bound n S,\bound n P,\bound n T} \bullet \incbd n \epsilon {\insertion S P T}}\]
   Then we can apply the inductive hypothesis for terms as if \(n \leq \dim(S)\) then \(\dep(\bound n S) = n\) and otherwise \(\bound n S = S\) is not linear, and so we get the required reduction.
 
-  Now we move on to the case for terms. If \(\stdtm S n\) is a variable, then we must have that \(S\) is linear and so \(S = D^n\). We must also have in this case that \(\stdtm S n = \olsi P\). Then by \cref{lem:iota-kappa-comm}, \(\stdtm S n \sub {\kappa_{S,P,T}} \equiv \stdcoh T n \sub {\iota_{S,P,T}}\) and then by \cref{lem:disc-insertion-1,lem:comp-to-tm} this reduces to \(\stdtm {\insertion S P T} n\) as required. If \(\stdtm S n\) is not a variable, then \(\stdtm S n \equiv \stdcoh S n\), and \(\stdcoh S n\) cannot be an identity (as either \(S\) is non linear or \(n = \dim(S)\)). By \cref{lem:iota-kappa-comm} and other assumptions we get that \(\stdcoh S n \sub {\kappa_{S,P,T}}\) admits an insertion along branching point \(P\) and so:
+  Now we move on to the case for terms. If \(\stdtm S n\) is a variable, then we must have that \(S\) is linear and so \(S = D^n\). We must also have in this case that \(\stdtm S n = \olsi P\). Then by \cref{lem:iota-kappa-comm}, \(\stdtm S n \sub {\kappa_{S,P,T}} \equiv \stdcoh T n \sub {\iota_{S,P,T}}\) and then by \cref{lem:disc-insertion-1,lem:comp-to-tm} this reduces to \(\stdtm {\insertion S P T} n\) as required. If \(\stdtm S n\) is not a variable, then \(\stdtm S n \equiv \stdcoh S n\), and \(\stdcoh S n\) cannot be an identity (as either \(S\) is non-linear or \(n = \dim(S)\)). By \cref{lem:iota-kappa-comm} and other assumptions we get that \(\stdcoh S n \sub {\kappa_{S,P,T}}\) admits an insertion along branching point \(P\) and so:
   \begin{alignat*}{2}
     \stdtm S n\sub{\kappa_{S,P,T}} &\equiv{} &&\stdcoh S n\sub {\kappa_{S,P,T}}\\
     &\red{} &&\SCoh {\insertion S P T} {\stdty S n \sub {\kappa_{S,P,T}}} {\insertion {\kappa_{S,P,T}} P {\iota_{S,P,T}}}\\
@@ -7028,7 +7028,7 @@ We now need the following lemmas, the second of which is a directed version of \
     &\equiv{} &&\stdcoh {\insertion S P T} n\\
     &\red^*{} &&\stdtm {\insertion S P T} n
   \end{alignat*}
-  With the second equivalence coming from \cref{lem:kappa-iota-insert}, the second reduction coming from inductive hypothesis (which is well founded as the proof for types only uses the proof for terms on strictly lower values of \(n\)), and the last reduction coming from \cref{lem:comp-to-tm}.
+  With the second equivalence coming from \cref{lem:kappa-iota-insert}, the second reduction coming from inductive hypothesis (which is well-founded as the proof for types only uses the proof for terms on strictly lower values of \(n\)), and the last reduction coming from \cref{lem:comp-to-tm}.
 \end{proof}
 
 By this lemma (as \(T\) is not linear), we have
@@ -7054,7 +7054,7 @@ and then by \cref{lem:inserted-insertion} we get \(b' =_{\dim(a)} c''\) as requi
 
 Suppose \(M \leadsto M'\), and \(L'\) is \(L\) but with the argument for \(\olsi P\) replaced by \(\stdcoh T {\lh(P)} \sub {M'}\), such that \(L \red L'\) and \(a \red c \equiv \Coh S A {L'}\). Then \(c\) admits an insertion and reduces as follows:
 \[c \leadsto c' \equiv \Coh {\insertion S P T} {A \sub {\kappa_{S,P,T}}} {\insertion {L'} P {M'}}\]
-Since each term in \(\insertion {L} P {M}\) is a term of \(L\) or a term of \(M\), we can simply apply the same reductions from \(L \red L'\) and \(L \red M'\) to get \(\insertion L P M \red^* \insertion {L'} P {M'}\). Therefore \(b \red^* c'\).
+Since each term in \(\insertion {L} P {M}\) is a term of \(L\) or a term of \(M\), we can simply apply the same reductions from \(L \red L'\) and \(L \red M'\) to get \(\insertion L P M \red^* \insertion {L'} P {M'}\). Therefore, \(b \red^* c'\).
 
 \paragraph{Other reduction on the inserted argument \(\bm{L(\olsi P)}\):}
 
@@ -7095,7 +7095,7 @@ Where the second reduction is due to \cref{lem:always-ecr} and the equality is d
 
 Suppose \(a \leadsto c\) is also an insertion, along a branch \(Q\) of \(S\). We now split on whether \(\olsi P = \olsi Q\). First suppose \(\olsi P = \olsi Q\); then by \cref{lem:insertion-irrel}, we have \(b =_{\dim(a)} c\). Suppose now that \(\olsi P \neq \olsi Q\), and that \(L(\olsi Q) \equiv \stdcoh U {\lh(Q)} \sub N\), such that:
 \[c \equiv \SCoh {\insertion S Q U} {A \sub {\kappa_{S,Q,U}}} {\insertion L Q N}\]
-We now consider the case where \(b\) is an identity. As \(P\) and \(Q\) are distinct branches of \(S\), we must have that \(S\) itself is not linear. Therefore the insertion along \(P\) must be an insertion of an identity. Further, for \(b\) to have the correct type for an identity, we must have that \(A \sub {\pi_P} \equiv \SPath(\olsi Q) \to \SPath(\olsi Q)\). The only path sent to \(\olsi Q\) by \(\pi_P\) is \(\olsi Q\) itself, and so \(A \equiv \SPath(\olsi Q) \to \SPath(\olsi Q)\). Now, by \cref{lem:iota-kappa-comm}:
+We now consider the case where \(b\) is an identity. As \(P\) and \(Q\) are distinct branches of \(S\), we must have that \(S\) itself is not linear. Therefore, the insertion along \(P\) must be an insertion of an identity. Further, for \(b\) to have the correct type for an identity, we must have that \(A \sub {\pi_P} \equiv \SPath(\olsi Q) \to \SPath(\olsi Q)\). The only path sent to \(\olsi Q\) by \(\pi_P\) is \(\olsi Q\) itself, and so \(A \equiv \SPath(\olsi Q) \to \SPath(\olsi Q)\). Now, by \cref{lem:iota-kappa-comm}:
 \begin{align*}
   c &\equiv \SCoh {\insertion S Q U} {\stdcoh U {\lh(Q)} \sub {\iota} \to \stdcoh U {\lh(Q)} \sub {\iota}} {\insertion L Q N}\\
     &\red \id(\stdcoh U {\lh(Q)} \sub \iota) \sub {\insertion L Q N}&\text{ by endo-coherence removal}\\
@@ -7108,7 +7108,7 @@ The case where \(c\) is an identity is symmetric, so we now consider when neithe
   b &\red b' =_{\dim(a)} \SCoh {\insertion {(\insertion S P T)} {\insertion Q P T} U} {A\sub{\kappa_{S,P,T} \bullet \kappa_{\insertion S P T, \insertion Q P T, U}}} {\insertion {(\insertion L P M)} {\insertion Q P T} N}\\
   c &\red c' =_{\dim(a)} \SCoh {\insertion {(\insertion S Q U)} {\insertion P Q U} T} {A\sub{\kappa_{S,Q,U} \bullet \kappa_{\insertion S Q U, \insertion P Q U, T}}} {\insertion {(\insertion L Q N)} {\insertion P Q U} M}
 \end{align*}
-We show that the first reduction is valid with the validity of the second holding by symmetry. If \(b\) is a unary composite then we apply \cref{lem:disc-insertion-red} to obtain a suitable \(b'\): Otherwise we obtain the reduction via insertion, noting that:
+We show that the first reduction is valid with the validity of the second holding by symmetry. If \(b\) is a unary composite then we apply \cref{lem:disc-insertion-red} to obtain a suitable \(b'\): Otherwise, we obtain the reduction via insertion, noting that:
 \begin{align*}
   \olsi{\insertion Q P T} \sub {\insertion L P M} &\equiv \olsi{Q} \sub{\kappa} \sub{\insertion L P M}\\
                                            &\equiv L(Q)\\
@@ -7117,7 +7117,7 @@ We show that the first reduction is valid with the validity of the second holdin
 \end{align*}
 as required for the insertion, with the third equality coming from \cref{lem:ins-comm-max}. Lastly the trunk height condition is satisfied as \(\bh(Q) = \bh(\insertion Q P T)\).
 
-Therefore both reductions are valid. We now need the following lemma to complete the proof:
+Therefore, both reductions are valid. We now need the following lemma to complete the proof:
 
 \begin{lemma}
   Let \((S, P, T, \Gamma, L, M)\) be an insertion redex. Then:
@@ -7245,7 +7245,7 @@ We now move on to the core syntax of the tool. The overall form of the core synt
 \item The syntax is generic over a type \(P\) of positions. In practice, the type \(P\) is either the type of de Bruijn levels, for terms over a standard context, or paths, for terms over a tree context. Both of these types implement the \(\mathsf{Position}\) trait, allowing us to call the required functions that depend on the type of positions.
 \item The constructor for variables \(v\) in the raw syntax is replaced by two separate constructions, a constructor \(\mathsf{var}_p\) for local variables, where \(p : P\), and \(\mathsf{top\_lvl}(v, s)\) for a top-level symbol \(v\) which is bound to term \(s\).
 \item Application of substitutions and labellings are now separate constructors. This is primarily due to a limitation of the Rust type system which doesn't allow an \textsf{App} constructor to existentially quantify over the type of positions in the input term.
-\item The \(\mathsf{comp}\) constructor now records the tree it is composing over, and will be written \(\mathsf{comp}_T\). Similarly the \(\mathsf{id}\) constructor becomes \(\mathsf{id}_n\), with \(n\) recording the dimension of the term the identity is applied to.
+\item The \(\mathsf{comp}\) constructor now records the tree it is composing over, and will be written \(\mathsf{comp}_T\). Similarly, the \(\mathsf{id}\) constructor becomes \(\mathsf{id}_n\), with \(n\) recording the dimension of the term the identity is applied to.
 \end{itemize}
 The core syntax is defined by the following grammar. Following \cite{gratzer2019implementing}, a different colour is used for each of the three categories of syntax.
 \begin{alignat*}{4}
@@ -7345,7 +7345,7 @@ We now search for insertion redexes in the labelling \({\color{Diag2}L}\), split
 If an insertion redex \((S,P,T,\_,{\color{Diag2}L}, {\color{Diag2}M})\) is found, then \(S\) is replaced by \(\insertion S P T\), \({\color{Diag2}L}\) is replaced by \(\insertion {\color{Diag2}L} P {\color{Diag2}M}\), and \(\color{Diag1}A\) is replaced by \(\color{Diag1}A \sub {\kappa_{S,P,T}}\). This step is then repeated until no insertion redexes are found.
 
 \begin{remark}
-  At this critical step, the evaluation proceeds in a fashion closer to reduction than NbE, with insertions repeatedly applied by searching for redexes and applying reductions to the head term. This seems unavoidable; even if one could define a parallel insertion which inserted all insertable arguments at once, it is not clear how to deal with locally maximal arguments that are iterated identities. Despite this, we still claim that the overall structure of the evaluation follows an NbE style, especially in regards to the treatment of suspension and application of substitutions and labellings.
+  At this critical step, the evaluation proceeds in a fashion closer to reduction than NbE, with insertions repeatedly applied by searching for redexes and applying reductions to the head term. This seems unavoidable; even if one could define a parallel insertion which inserted all insertable arguments at once, it is not clear how to deal with locally maximal arguments that are iterated identities. Despite this, we still claim that the overall structure of the evaluation follows an NbE style, especially regarding the treatment of suspension and application of substitutions and labellings.
 \end{remark}
 
 We next obtain the type \({\color{Diag2}B} = \eval_{\color{Diag2}\id_S}({\color{Diag1}A})\), and split into cases:
@@ -7374,7 +7374,7 @@ Now that the three classes of syntax and the evaluation function have been intro
 
 By \cref{lem:ty-unique}, all \Catt terms \(s\) have a unique type, which is given by the canonical type \(\ty(s)\). However, for certain terms, such as the coherence term \(\mathsf{coh}[T : A]\), we will be able to further infer the context that a term lives in, which in this case is the tree context \(T\). In this case the pair of the inferred context and type is known as a \emph{principal typing}~\cite{10.1145/237721.237728}, which is not to be confused with a \emph{principal type} of a term in a fixed context.
 
-Due to our unique case where all types are inferable but the context in a judgement may or may not be inferable, we refer to judgements where the context is an input as \emph{checking} judgements and judgements where the context is output as \emph{inferring} judgements.
+Due to our unique case where all types are inferable, but the context in a judgement may or may not be inferable, we refer to judgements where the context is an input as \emph{checking} judgements and judgements where the context is output as \emph{inferring} judgements.
 
 \begin{remark}
   We justify this choice of terminology by noting the similarity of the judgements \(\Gamma \vdash s : A\) and \(\cdot \vdash \Pi_{\Gamma}\,s : \Gamma \to A\) in a type theory with (dependent) function types, where inferring the type of the second judgement would infer the context of the first. Of course, \Catt does not have function types, yet the intuition can still apply.
@@ -7413,9 +7413,9 @@ The typing rules for all judgements of this system are given in \cref{fig:bidire
 \item The rule for composites, marked \(\ruletwo\), is crucially a checking rule as there is no way to infer the tree \(T\) for the term \(\color{Diag1}\mathsf{comp}_T\).
 \item For the rule for the application of labellings, marked \(\rulethree\), the premise for the typing of the term is given by a checking judgement instead of an inferring judgement, as the tree \(T\) can be inferred form the labelling. This is in contrast to the corresponding rule for application of substitutions, where the context must be inferred from the inner term before the substitution can be checked. Combined with the point above, this allows a labelling applied to a \(\mathsf{comp}\) term to be checked.
 \item The rule marked \(\rulefour\) allows a substitution to be applied to a term over a tree context, by converting the substitution to a labelling. This is mainly a convenience feature, as given a \(s\) where we can infer that the context of \(s\) is a tree \(T\), it can be easier to give the locally maximal arguments for \(s\) as a list rather than describing the labelling.
-\item Lastly, we explain each component of the rule for the typing of a substitution, marked \(\rulefive\). We note that the first type in any \Catt context, which in the rule is given by the type \(\color{Diag1}A_0\), is always \(\star\). Therefore the type of the first term in a substitution \(\sigma\) should be equal to \(\star \sub \sigma \equiv \ty(\sigma)\). In the rule, the type of the first term is given by \(\color{Diag1}B_0\), explaining it's presence as the type of the substitution that gets evaluated to \(\color{Diag2}\rho\). We further note that \(\color{Diag2}\ty(\rho)\) is simply the evaluation of \(\color{Diag1}B_0\), which is why \(X\) is checked against it.
+\item Lastly, we explain each component of the rule for the typing of a substitution, marked \(\rulefive\). We note that the first type in any \Catt context, which in the rule is given by the type \(\color{Diag1}A_0\), is always \(\star\). Therefore, the type of the first term in a substitution \(\sigma\) should be equal to \(\star \sub \sigma \equiv \ty(\sigma)\). In the rule, the type of the first term is given by \(\color{Diag1}B_0\), explaining its presence as the type of the substitution that gets evaluated to \(\color{Diag2}\rho\). We further note that \(\color{Diag2}\ty(\rho)\) is simply the evaluation of \(\color{Diag1}B_0\), which is why \(X\) is checked against it.
 
-  Due to the choice to use de Bruijn levels instead of indices, weakening a term is the identity, and so \(s \sub \sigma \equiv s \sub {\langle \sigma,t \rangle}\) for any \(t\). Therefore, by inspecting the typing rules for substitutions in \Catt, it can be proven that to type \(\Gamma \vdash \sigma : \Delta\), it is sufficient to show that \(\Gamma \vdash x \sub \sigma : A \sub \sigma\) for all \((x : A) \in \Delta\). Observing the rule \(\rulefive\), this translates to proving that \(A_i \sub {(B_0,t_0,\dots,t_n)} = B_i\) recalling that \(B_0\) is the core syntax version of the type of the substitution. These equations can be shown by proving that the evaluation of each side is the same, but the evaluation of the left hand side is given by \(\eval_{\color{Diag2}\rho}({\color{Diag1}A_i})\) for each \(i\), and so for efficiency we factor out the calculation of \(\color{Diag2}\rho\).
+  Due to the choice to use de Bruijn levels instead of indices, weakening a term is the identity, and so \(s \sub \sigma \equiv s \sub {\langle \sigma,t \rangle}\) for any \(t\). Therefore, by inspecting the typing rules for substitutions in \Catt, it can be proven that to type \(\Gamma \vdash \sigma : \Delta\), it is sufficient to show that \(\Gamma \vdash x \sub \sigma : A \sub \sigma\) for all \((x : A) \in \Delta\). Observing the rule \(\rulefive\), this translates to proving that \(A_i \sub {(B_0,t_0,\dots,t_n)} = B_i\) recalling that \(B_0\) is the core syntax version of the type of the substitution. These equations can be shown by proving that the evaluation of each side is the same, but the evaluation of the left-hand side is given by \(\eval_{\color{Diag2}\rho}({\color{Diag1}A_i})\) for each \(i\), and so for efficiency we factor out the calculation of \(\color{Diag2}\rho\).
 \end{itemize}
 
 \begin{figure}[p]
@@ -7585,7 +7585,7 @@ Each element of the category of models has the structure of a weak \(\infty\)-ca
 \[ F(\lfloor \incbd {n-1} - {D^n} \rfloor), F(\lfloor \incbd {n-1} + {D^n} \rfloor) : F(D^n) \to F(D^{n-1})\]
 for which the globularity equations follow from the globularity of the inclusion maps. For each term over a ps-context in \Cattr, an operation on each of the models can be derived. We consider the action of the \(1\)-composition term, given by \(\stdcoh {[\emp,\emp]} 1\). For the model \(F\), this induces an operation:
 \[ F(\{\lfloor \stdcoh {[\emp, \emp]} 1 \rfloor\}) : F(D^1\vee D^1) \to F(D^1)\]
-Due the the preservation of globular sums, we have \(F(D^1 \vee D^1) = F(D^1) \times_{F(D^0)} F(D^1)\), which is exactly the set of composable \(1\)-cells, which the function above sends to their composition. Similarly the identity \(\id(d_0)\) induces a map \(F(D^0) \to F(D^1)\), giving the identity on each \(0\)-cell.
+Due to the preservation of globular sums, we have \(F(D^1 \vee D^1) = F(D^1) \times_{F(D^0)} F(D^1)\), which is exactly the set of composable \(1\)-cells, which the function above sends to their composition. Similarly, the identity \(\id(d_0)\) induces a map \(F(D^0) \to F(D^1)\), giving the identity on each \(0\)-cell.
 
 These operations can be combined, to get a compound operation of the following form:
 \[
@@ -7619,7 +7619,7 @@ which is the identity on objects. We now prove that this functor preserves globu
   \end{tikzcd}\]
 is a pushout for each \(\Gamma \vdash A\) in \Cattr. Suppose there is context \(\Delta\) with substitutions \(\sigma : \Gamma \to \Delta\) and \(\{B,t\} : D^n \to \Delta\) such that:
 \[\{B\} \equiv \{\wk(U^n)\} \bullet \{B, t\} = \{A\} \bullet \sigma \equiv \{A \sub \sigma\}\]
-Then the universal map is given by \(\langle \sigma, t \rangle\), with this map being well formed as \(\Delta \vdash t : B\) and \(B = A \sub \sigma\). The uniqueness of this universal map is clear. Hence, the square above is cocartesian. From this we get the following proposition.
+Then the universal map is given by \(\langle \sigma, t \rangle\), with this map being well-formed as \(\Delta \vdash t : B\) and \(B = A \sub \sigma\). The uniqueness of this universal map is clear. Hence, the square above is cocartesian. From this we get the following proposition.
 
 \begin{proposition}
   The functors \(K_{\mathcal{R}}\) and \(K_{\mathcal{R}}^{\mathsf{ps}}\) preserve globular sums.
@@ -7671,13 +7671,13 @@ is a \Cattsu normal form term over a pasting context, which is not well-formed i
 
 We now proceed with the proof of \cref{thm:rehydration}. We introduce three operations, which are mutually defined on terms of \Cattr over pasting contexts.
 \begin{itemize}
-\item The \emph{rehydration} \(R(t)\) of a term \(t\) recursively rehydrates all subterms of \(t\), and then pads the resulting term. For any \Cattr term \(t\), the rehydration is a \Catt term over the same context. For any term \(t\), we call \(R(N(t))\) its \emph{rehydrated normal form}, where \(N\) is the function taking any term to its normal form. We similarly define the rehydration \(R(A)\) of a type \(A\) over a pasting context and \(R(\sigma)\) of a substitution \(\sigma\) who's domain and codomain are pasting contexts.
+\item The \emph{rehydration} \(R(t)\) of a term \(t\) recursively rehydrates all subterms of \(t\), and then pads the resulting term. For any \Cattr term \(t\), the rehydration is a \Catt term over the same context. For any term \(t\), we call \(R(N(t))\) its \emph{rehydrated normal form}, where \(N\) is the function taking any term to its normal form. We similarly define the rehydration \(R(A)\) of a type \(A\) over a pasting context and \(R(\sigma)\) of a substitution \(\sigma\) whose domain and codomain are pasting contexts.
 \item The \emph{padding} \(P(t)\) of a \Catt term \(t\), which composes the term with coherences to ensure that its boundaries are in rehydrated normal form.
 \item The normaliser \(\phi(t)\), a coherence term from \(t\) to its rehydrated normal form \(R(N(t))\) for any \Catt term \(t\).
 \end{itemize}
 We give formal definitions for each of these, which we define mutually with proofs of the following statements, where we assume \(\Delta\) and \(\Gamma\) are pasting contexts:
 \begin{enumerate}
-\item Suppose \(\Delta \vdash_{\mathcal{R}} t : A\). Then \(\Delta \vdash R(t) : R(N(A))\). Similarly if \(\Delta \vdash_{\mathcal{R}} A\) or \(\Delta \vdash_{\mathcal{R}} \sigma : \Gamma\), then \(\Delta \vdash R(A)\) and \(\Delta \vdash R(\sigma) : \Gamma\).
+\item Suppose \(\Delta \vdash_{\mathcal{R}} t : A\). Then \(\Delta \vdash R(t) : R(N(A))\). Similarly, if \(\Delta \vdash_{\mathcal{R}} A\) or \(\Delta \vdash_{\mathcal{R}} \sigma : \Gamma\), then \(\Delta \vdash R(A)\) and \(\Delta \vdash R(\sigma) : \Gamma\).
 \item For a \Cattr well-formed term \(t\), type \(A\), and substitution \(\sigma\), we have \(\Delta \vdash t = R(t)\), \(\Delta \vdash A = R(A)\), and \(\Delta \vdash \sigma = R(\sigma)\) in \Cattr.
 \item Suppose \(\Delta \vdash t : A\) for a \Catt term \(t\), then \(P_k(t)\) is well-formed for \(k \leq \dim(t)\) and \(\Delta \vdash P(t) : R(N(A))\).
 \item Suppose \(t\) is a well-formed \Catt term. Then for each \(k \leq \dim(t)\), \(P_k(t) = t\).
@@ -7776,7 +7776,7 @@ By (1), \(\Coh \Delta {R(A)} {R(\sigma)}\) is a well-formed \Catt term, and so b
 
 For statement 3, we let \(\Delta \vdash t : A\) and prove for each \(k\) that \(P_k(t)\) is well-formed and that \(\src_m(P_k(t)) \equiv R(N(\src_m(t)))\) and \(\tgt_m(P_k(t)) \equiv R(N(\tgt_m(t)))\) for \(m \leq k\). We proceed by induction on \(k\). The case for \(k = 0\) is trivial, so we must prove that \(P_{k+1}(t)\) is well-formed, which is the term:
 \[\stdcoh {T_{k}^{n}} n \sub {\langle \phi(\src_{k}(P_{k}(t)))^{-1}, P_{k}(t), \phi(\tgt_k(P_{k}(t))) \rangle} \]
-By (5), noting that the inductive hypothesis on \(k\) implies that the types of \(\src_k(P_k(t))\) and \(\tgt_k(P_k(t))\) are in rehydrated normal form, we have that the normalisers are well-typed. Therefore \(P_{k+1}(t)\) is well-formed by the previous fact and the inductive hypothesis on \(k\). By simple calculation it follows that:
+By (5), noting that the inductive hypothesis on \(k\) implies that the types of \(\src_k(P_k(t))\) and \(\tgt_k(P_k(t))\) are in rehydrated normal form, we have that the normalisers are well-typed. Therefore, \(P_{k+1}(t)\) is well-formed by the previous fact and the inductive hypothesis on \(k\). By simple calculation it follows that:
 \[\src_m(P_k(t)) \equiv \src_m(P_m(t)) \equiv \src(\phi(\src_m(t))^{-1}) \equiv R(N(\src_m(t)))\]
 with a similar equation holding for the target. It then follows that \(\Delta \vdash P(t) : R(N(A))\).
 
@@ -7859,7 +7859,7 @@ We now turn out attention to the first problem presented above. One method for t
     \arrow[Rightarrow, from=2-2, to=1-1]
   \end{tikzcd}
 \]
-where the central arrow has type \(a * g \to f * a'\). If such a cylinder was invertible, which is the case when \(a\), \(b\), and the two dimensional cell are invertible, then it would be a cylindrical equivalence and would witness the equivalence of \(f\) and \(g\). Suppose two \(1\)-cylinders \(\alpha : f \to g\) and \(\beta : g \to h\) as below:
+where the central arrow has type \(a * g \to f * a'\). If such a cylinder was invertible, which is the case when \(a\), \(b\), and the two-dimensional cell are invertible, then it would be a cylindrical equivalence and would witness the equivalence of \(f\) and \(g\). Suppose two \(1\)-cylinders \(\alpha : f \to g\) and \(\beta : g \to h\) as below:
 \[
   \begin{tikzcd}
     x & z & v \\
@@ -7903,16 +7903,54 @@ Unfortunately, this method does not avoid the need to define new classes of oper
 
 The proofs of Eckmann-Hilton given in \cref{sec:examples} give an example of the result of each of these methods, with the proof in \texttt{/examples/eh.catt} proceeding by ``rehydration by dimension'', and the proof in \texttt{/examples/eh-cyll.catt} using cylinders. In both proofs, the only example of the second problem we encounter is proving that the left and right unitors on the identity are equivalent to the unbiased unitor. For the cylinder proof, the composition of \(1\)-cylinders is used and is given by the term \texttt{cyl\_comp}, which is then implicitly suspended by the tool. The rehydration by dimension proof needs a naturality move like the one described above, which is given by the term \texttt{compat\_move}.
 
-\section{Future work}
+\section{Future ideas}
 \label{sec:future-work}
 
-\todo[inline]{Generalised insertion}
+In this final section, we collect together some ideas for the continuation of this work, including ideas for different semistrict theories based on \Catt, and modifications to the existing theories. Some ideas for future avenues of research have already been discussed, such as the potential improvements to the implementation discussed in \cref{sec:further-work}, and the discussion of full rehydration given in \cref{sec:towards-gener-rehydr}, which we will not repeat here.
 
-\todo[inline]{Endo-coherence removal variation?}
+\paragraph{Further results for \Cattsua}
+\todo[inline]{Cattsua more complicated}
+\todo[inline]{At a first glance is not much more powerful}
+\todo[inline]{Look at analogue for disc removal}
+\todo[inline]{Cylinders are possible motivation here}
+\todo[inline]{Look at link to graphical methods}
 
+\paragraph{Generalised insertion}
+
+The conditions gave for insertion in \cref{sec:insertion} were not the most general conditions possible. In this section, we stated that to perform insertion we required an insertion redex \((S,P,T,\U,L,M)\), and one of the conditions of this insertion redex was that:
+\[ L(\olsi P) \equiv \stdcoh T {\lh(P)} \sub M\]
+It turns out that it is sufficient to give the weaker condition that the locally maximal argument is a coherence where the type contained in the coherence is sufficiently suspended:
+\[ L(\olsi P) \equiv \Coh T {\Sigma^{\bh(P)}(A)} M\]
+As \(\stdcoh {\Sigma(T)} {n+1} \equiv \Sigma (\stdcoh T n)\), and the original condition required that \(\th(T) \geq \bh(P)\), this alternative condition is a strict generalisation of the previous condition. Under the new condition, the exterior labelling must be modified. It firstly must take the type \(A\) as an argument. The case for \(P = [k]\) is then modified such that \(\kappa_{S,[k],T,A}\) (noting the extra type subscript) is given by:
+\[
+  \begin{tikzcd}[column sep=smaller,row sep = 20pt]
+    {[S_0,\dots,S_{k-1}]} & \doubleplus & {T} & \doubleplus & {[S_{k+1},\dots,S_n]} \\
+    \\
+    {[S_0,\dots,S_{k-1}]} & \vee & {\Sigma S_k} & \vee & {[S_{k+1},\dots,S_n]}
+    \arrow["{\{A, \Coh T A {\id_T}\}}"{description, font = \normalsize}, from=3-3, to=1-3]
+    \arrow["\id"{font = \normalsize}, from=3-1, to=1-1]
+    \arrow["\id"{font = \normalsize}, from=3-5, to=1-5]
+  \end{tikzcd}
+\]
+when \(S = [S_0,\dots,S_n]\). The inductive step of the exterior labelling then relies on the type \(A\) being sufficiently suspended to proceed, just as the original version depends on the trunk height of \(T\) being sufficiently high to proceed (we note that the trunk height condition is still needed in this generalisation).
+
+In some ways, this definition of insertion is more natural than the definition given earlier. We no longer rely on the syntactic condition of the locally maximal argument being a standard coherence, only relying on the far weaker suspendability property. In the proof for confluence of \Cattsua, a large focus was cases where a reduction modified a standard coherence into a term which was no longer a standard coherence. Cases like these do not happen with generalised insertion, as reductions do not break the suspendability property. More generally, a confluence proof for generalised insertion does not require any proof about the interaction of insertion with boundary inclusion maps and standard coherences (given in \cref{sec:further-properties} for the original definition).
+
+Unfortunately, there is
+
+\todo[inline]{Bad confluence case}
+
+
+\paragraph{A further strictification to \Cattsua}
 \todo[inline]{Missing equation from grey categories}
 
+\paragraph{Strict interchange}
 \todo[inline]{Interchange and generalised pasting diagrams}
+\todo[inline]{Forest counterexample to merging}
+% \paragraph{Alternatives to endo-coherence removal}
+% \todo[inline]{Endo-coherence removal variation?}
+
+% \paragraph{A comparison with \textsc{homotopy.io}}
 
 
 
