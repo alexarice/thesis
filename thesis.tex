@@ -7929,17 +7929,95 @@ As \(\stdcoh {\Sigma(T)} {n+1} \equiv \Sigma (\stdcoh T n)\), and the original c
     \arrow["\id"{font = \normalsize}, from=3-5, to=1-5]
   \end{tikzcd}
 \]
-when \(S = [S_0,\dots,S_n]\). The inductive step of the exterior labelling then relies on the type \(A\) being sufficiently suspended to proceed, just as the original version depends on the trunk height of \(T\) being sufficiently high to proceed (we note that the trunk height condition is still needed in this generalisation).
+when \(S = [S_0,\dots,S_n]\). The inductive step of the exterior labelling then relies on the type \(A\) being sufficiently suspended to proceed, just as the original version depends on the trunk height of \(T\) being sufficiently high to proceed (we note that the trunk height condition is still needed in this generalisation). For the necessary typing judgements to be satisfied, we must have \(\src_0(A) \equiv \fst(\lfloor T \rfloor)\) and \(\tgt_0(A) \equiv \snd(\lfloor T \rfloor)\), but no other extra condition is necessary.
 
 In some ways, this definition of insertion is more natural than the definition given earlier. We no longer rely on the syntactic condition of the locally maximal argument being a standard coherence, only relying on the far weaker suspendability property. In the proof for confluence of \Cattsua, a large focus was cases where a reduction modified a standard coherence into a term which was no longer a standard coherence. Cases like these do not happen with generalised insertion, as reductions do not break the suspendability property. More generally, a confluence proof for generalised insertion does not require any proof about the interaction of insertion with boundary inclusion maps and standard coherences (given in \cref{sec:further-properties} for the original definition).
 
-Unfortunately, there is
+Unfortunately, this generalised form of insertion can not be directly used in \Cattsua without breaking confluence. Let \(\Gamma\) be the following context given by the following diagram:
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzMsMCwiXFxidWxsZXQiXSxbNCwwLCJcXGJ1bGxldCJdLFswLDEsIiIsMCx7ImN1cnZlIjotNX1dLFswLDEsIiIsMix7ImN1cnZlIjo1fV0sWzEsMiwiZyIsMCx7ImN1cnZlIjotMn1dLFsxLDIsImYiLDIseyJjdXJ2ZSI6Mn1dLFsyLDMsImkiLDAseyJjdXJ2ZSI6LTJ9XSxbMiwzLCJoIiwyLHsiY3VydmUiOjJ9XSxbNSw0LCIiLDIseyJvZmZzZXQiOi01LCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzUsNCwiIiwwLHsib2Zmc2V0Ijo1LCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzcsNiwiXFxhbHBoYSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbOSw4LCJcXGJldGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzEwLDExLCJcXHBoaSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XV0=
+\[
+  \begin{tikzcd}
+    \bullet && \bullet & \bullet & \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "g", curve={height=-12pt}, from=1-3, to=1-4]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "f"', curve={height=12pt}, from=1-3, to=1-4]
+    \arrow[""{name=4, anchor=center, inner sep=0}, "i", curve={height=-12pt}, from=1-4, to=1-5]
+    \arrow[""{name=5, anchor=center, inner sep=0}, "h"', curve={height=12pt}, from=1-4, to=1-5]
+    \arrow[""{name=6, anchor=center, inner sep=0}, "\gamma", shift left=5, shorten <=8pt, shorten >=8pt, Rightarrow, from=1, to=0]
+    \arrow[""{name=7, anchor=center, inner sep=0}, "\delta"', shift right=5, shorten <=8pt, shorten >=8pt, Rightarrow, from=1, to=0]
+    \arrow["\alpha"', shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=2]
+    \arrow["\beta"', shorten <=3pt, shorten >=3pt, Rightarrow, from=5, to=4]
+    \arrow["\phi"', shorten <=4pt, shorten >=4pt, Rightarrow,
+    nfold=3, from=6, to=7]
+  \end{tikzcd}
+\]
+and consider the terms:
+\begin{align*}
+  I &= (\alpha *_0 h) *_1 (g *_0 \beta)\\
+  E &= \Coh {\Supp(I)} {I \to I} {\id}\\
+  X &= \phi *_0 E
+\end{align*}
+We now have the following critical pair: \(X\) can reduce by inserting the locally maximal argument \(E\), as the branch has branching height \(0\) making the suspendability condition vacuous, but \(E\) also reduces by endo-coherence removal. By performing the generalised insertion we obtain the coherence:
+\[ \Coh \Gamma {\gamma *_0 I \to \delta *_0 I} \id\]
+Let \(W(x,y,z)\) refer to the standard composite over the diagram:
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzIsMCwiXFxidWxsZXQiXSxbMCwxLCIiLDAseyJjdXJ2ZSI6LTN9XSxbMCwxLCIiLDIseyJjdXJ2ZSI6M31dLFsxLDIsIiIsMix7ImN1cnZlIjotNX1dLFsxLDIsIiIsMix7ImN1cnZlIjo1fV0sWzEsMl0sWzQsMywiIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs2LDcsIiIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbNyw1LCIiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV1d
+\[
+  \begin{tikzcd}
+    \bullet & \bullet & \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-18pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=18pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=30pt}, from=1-2, to=1-3]
+    \arrow[""{name=4, anchor=center, inner sep=0}, from=1-2, to=1-3]
+    \arrow[shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow[shorten <=4pt, shorten >=4pt, Rightarrow, from=3, to=4]
+    \arrow[shorten <=4pt, shorten >=4pt, Rightarrow, from=4, to=2]
+  \end{tikzcd}
+\]
+Then the coherence term above admits further cell reduction which converts the composites \(\gamma *_0 I\) and \(\delta *_0 I\) to \(W(\gamma, (\alpha *_0 h), (g *_0 \beta))\) and \(W(\delta, (\alpha *_0 h), (g *_0 \beta))\).
 
-\todo[inline]{Bad confluence case}
-
+but reduces no further. If the endo-coherence removal is performed, then \(E\) reduces to \(\id(I)\), which can be pruned from the original composite. After a further reductions, we obtain a coherence over the context \(\Delta\) given by the following diagram:
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzMsMCwiXFxidWxsZXQiXSxbMCwxLCIiLDAseyJjdXJ2ZSI6LTV9XSxbMCwxLCIiLDAseyJjdXJ2ZSI6NX1dLFsxLDIsIiIsMCx7ImN1cnZlIjotMn1dLFsxLDIsIiIsMix7ImN1cnZlIjoyfV0sWzQsMywiIiwwLHsib2Zmc2V0IjotNSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs0LDMsIiIsMix7Im9mZnNldCI6NSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs2LDUsIkIiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzcsOCwiQSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XV0=
+\[
+  \begin{tikzcd}
+    \bullet && \bullet & \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=30pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-3, to=1-4]
+    \arrow[""{name=6, anchor=center, inner sep=0}, curve={height=0pt}, from=1-3, to=1-4]
+    \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=30pt}, from=1-3, to=1-4]
+    \arrow[""{name=4, anchor=center, inner sep=0}, "x", shift left=5, shorten <=8pt, shorten >=8pt, Rightarrow, from=1, to=0]
+    \arrow[""{name=5, anchor=center, inner sep=0}, "y"', shift right=5, shorten <=8pt, shorten >=8pt, Rightarrow, from=1, to=0]
+    \arrow["B"', shorten <=3pt, shorten >=3pt, Rightarrow, from=3, to=6]
+    \arrow["C"', shorten <=3pt, shorten >=3pt, Rightarrow, from=6, to=2]
+    \arrow["A"', shorten <=4pt, shorten >=4pt, Rightarrow, nfold=3, from=4, to=5]
+  \end{tikzcd}
+\]
+In particular, the result of these reductions is the following coherence:
+\[ \Coh \Delta {W(x,B,C) \to W(y,B,C)} {\langle \phi, (\alpha *_0 h), (g *_0 \beta) \rangle}\]
+which admits no further reductions, hence breaking confluence. It is even unclear which of these reduction paths is the more canonical for such a system, the first moves the complexity of \(I\) to the type in the coherence, whereas the second keeps the complexity of \(I\) in the arguments of the coherence. Conjecturally, one could consider generalisations to endo-coherence removal could factor out the common structure of \(W(\gamma, (\alpha *_0 h), (g *_0 \beta))\) and \(W(\delta, (\alpha *_0 h), (g *_0 \beta))\), reducing the result of the first reduction path to the result of the second reduction path, though we have not explored any such definition.
 
 \paragraph{A further strictification to \Cattsua}
-\todo[inline]{Missing equation from grey categories}
+
+\citeauthor{douglas2016internal} give an explicit representation a Gray category~\cite[Definition~2.8]{douglas2016internal}, which can be used as a direct point of comparison to \Cattsua, as Gray categories are semistrict \(3\)-categories with strict unitors and associators. The weak structure in their presentation of Gray categories is given by an invertible \(3\)-cell they call \emph{switch}, which has the same form as the \Catt term which we called \(\mathsf{swap}\) in \cref{sec:cattsu}.
+
+In their paper, all of the equalities between \(2\)-cells are generated by a set of axioms [S2-4] to [S2-15]. Each of these equalities is contained in the definitional equality of \Cattsua, with the exception of [S2-9] and [S2-10], which witness a compatibility between whiskering and vertical composition. We consider the axiom [S2-9], as [S2-10] can be treated symmetrically. Let \(\Delta\) be the context given by diagram:
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzIsMCwiXFxidWxsZXQiXSxbMCwxLCJmIl0sWzEsMiwiIiwwLHsiY3VydmUiOi00fV0sWzEsMiwiIiwwLHsiY3VydmUiOjR9XSxbMSwyXSxbNSw2LCJcXGFscGhhIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs2LDQsIlxcYmV0YSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XV0=
+\[
+  \begin{tikzcd}
+    \bullet & \bullet & \bullet
+    \arrow["f", from=1-1, to=1-2]
+    \arrow[""{name=0, anchor=center, inner sep=0}, curve={height=-24pt}, from=1-2, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, curve={height=24pt}, from=1-2, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, from=1-2, to=1-3]
+    \arrow["\alpha"', shorten <=3pt, shorten >=3pt, Rightarrow, from=1, to=2]
+    \arrow["\beta"', shorten <=3pt, shorten >=3pt, Rightarrow, from=2, to=0]
+  \end{tikzcd}
+\]
+and consider the following terms of \(\Delta\):
+\[ (f *_0 \alpha) *_1 (f *_0 \beta) \qquad f *_0 (\alpha *_1 \beta)\]
+while the second term reduces to the standard composite over \(\Delta\), the first does not reduce, as no insertion can be performed due to the condition on trunk height, and hence these two terms are not equal in \Cattsua, unlike in Gray categories. Although it could be argued that these axioms reside in the interchange family of laws for \(\infty\)-categories, one could attempt to define a stricter version of \Cattsua which incorporates these equalities, which the aim of proving that \(3\)-truncated models of this stricter type theory are equivalent to Gray categories.
 
 \paragraph{Strict interchange}
 \todo[inline]{Interchange and generalised pasting diagrams}
