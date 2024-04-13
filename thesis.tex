@@ -7560,10 +7560,25 @@ The \(\mathsf{size}\) command demonstrates that the \Catt Eckmann-Hilton proof i
 \subsection{Further work}
 \label{sec:further-work}
 
-\todo[inline]{Unification}
-\todo[inline]{Modules etc?}
-\todo[inline]{Unfolding}
-\todo[inline]{Lsp?}
+We end the discussion of this implementation with some options for improving the tool. Each of these suggestions could make the tool the tool easier to use and interact with, which in turn extends what can be achieved with it.
+
+Currently, the tool completely relies on the bidirectional typing rules to perform all of its type inference. While this is effective in some scenarios, for example labellings and implicit suspension, it is lacking in others, such as the lack of implicit arguments in substitutions.
+
+One could try to implement such features by adding metavariables and a unification procedure to the typechecker. Unlike what is possible with the fully weak \Catt, unification for \Cattsu and \Cattsua is non-trivial. Suppose we wished to unify the following two terms:
+\[ f *_0 g = h *_0 i\]
+where \(f\),\(g\),\(h\), and \(i\) may contain metavariables. In \Catt, this problem could be reduced to the unification problems \(f = h\) and \(g = i\). In \Cattsu however, this cannot be done, as a potential solution is \(f = h *_0 i\) and \(g = \id\). It is likely that any unification that can be implemented for \Cattsu (and \Cattsua) is quite limited, but an investigation into the limits of unification in these settings could be valuable.
+
+Even without a powerful unification algorithm, there are still instances where an argument could be inferred by the tool. One such example is the Eckmann-Hilton term presented in the previous section. This term is defined in the context:
+\[ (x : \star)\ (\alpha : \id(x) \to \id(x))\ (\beta : \id(x) \to \id(x)) \]
+Here, the \(x\) should be inferable as it is the \(0\)-source of \(\alpha\). The tool currently has no way to deduce this.
+
+Separately, improvements could be made to the treatment of unfolding of top-level definitions in the tool. Whenever a term is evaluated by the tool, any top-level definition is unfolded to its normal form. This is not always desirable, as it means that error messages frequently contain fully expanded terms, increasing the length and readability of terms in addition to losing the information associated with the name given to the definition.
+
+Conversely, the full unfolding of evaluation often means that we avoid evaluating terms before displaying them to the user, even when a (partial) evaluation would simplify the term. A notable example is that when giving a new definition, its type is not simplified before being displayed, often resulting in terms such as \verb|p0{x{f}y}|.
+
+A better approach would likely add top-level definitions to the normal form syntax as a head term, allowing their unfolding to be optional. One potential approach for efficient unfolding is given by \citeauthor{andrastalk}~\cite{andrastalk}.
+
+Finally, the accessibility of the tool could be improved with proper editor integration, for example by implementing the language server protocol (see \url{https://microsoft.github.io/language-server-protocol/}), which would allow errors to be displayed directly in the editor, among other code refactoring features.
 
 \section{Models}
 \label{sec:models}
