@@ -1067,11 +1067,6 @@ We now turn our attention back to the proof of Eckmann-Hilton from \cref{fig:eh}
 The first and last equalities however are more problematic, although at first we may believe that there should exist some horizontal unitor isomorphism, upon closer inspection the two compositions do not even have the same boundary and so are not parallel. The composition \(\alpha *_1 \beta\) has source and target \(\id(x)\), whereas the source of \(\alpha *_0 \id(\id(x))\) is \(\id(x) *_0 \id(x)\).
 
 To recover the proof in a weak setting, the intermediate composites must be composed with unitors so that they all have source and target \(\id(x)\). To give equivalences for the first and last step, these unitors must be moved around with naturality moves, and at a critical point the isomorphism \(\lambda_{\id(x)} \simeq \rho_{\id(x)}\) is required. Multiple full proofs of Eckmann-Hilton will be given in \cref{sec:rehydration}. The proof of Eckmann-Hilton is vastly simpler in strict case, mainly due to the presence of the equation \(\id(x) *_0 \id(x) = \id(x)\).
-%  It is natural to ask whether it is necessary to work with weak higher categories at all, given the extra complexity.
-
-% For bicategories, it turns out that the answer is no. Every bicategory is biequivalent to a strict 2-category~\cite[Theorem 1.4]{gordon1995coherence}, meaning that to prove any equation holds in a bicategory, it suffices to prove that the same equation holds in a strict 2-category. This allows the more general notion of bicategory to be used without incurring extra proof burden.
-
-% For more than 2-dimensions, this full strictification is no longer possible.\todo{This should all likely go in the introduction}
 
 \subsection{Computads}
 \label{sec:computads}
@@ -2230,20 +2225,6 @@ The groupoidal operation set clearly contains the standard operations, and the r
   \label{cor:disc-op}
   Both \((D^{n+1}, d_n^-, d_n^+)\) and \((D^n, d_n, d_n)\) are in \(\Std\) for each \(n\).
 \end{corollary}
-
-% \subsection{Invertible generators}
-% \label{sec:invertibility}
-
-% \todo[inline]{Ideas about invertibility here?}
-
-% \todo[inline]{New type generator}
-
-% \todo[inline]{Limitation of this generator}
-
-% \todo[inline]{Some variations on support schemes}
-
-% \todo[inline]{Explain results you would want to prove}
-% \todo[inline]{Pasting contexts vs Contractible contexts}
 
 \section[The set of equality rules \texorpdfstring{\(\mathcal{R}\)}{R}]{The set of equality rules \texorpdfstring{\boldmath\(\mathcal{R}\)}{R}}
 \label{sec:ruleset}
@@ -6739,9 +6720,6 @@ Since any \Catt term is also a \Cattsu term, we get the following corollary.
   \label{cor:supp-ps}
   If \(\Gamma \vdash t : A\) in \Catt, and \(\Gamma\) is a ps-context, then \(\Supp(t)\) is a ps-context.
 \end{corollary}
-
-\todo[inline]{Isos of ps contexts}
-
 
 \section{\texorpdfstring{\Cattsua}{Cattsua}}
 \label{sec:cattsua}
