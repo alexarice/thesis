@@ -7921,11 +7921,32 @@ The proofs of Eckmann-Hilton given in \cref{sec:examples} give an example of the
 In this final section, we collect together some ideas for the continuation of this work, including ideas for different semistrict theories based on \Catt, and modifications to the existing theories. Some ideas for future avenues of research have already been discussed, such as the potential improvements to the implementation discussed in \cref{sec:further-work}, and the discussion of full rehydration given in \cref{sec:towards-gener-rehydr}, which we will not repeat here.
 
 \paragraph{Further results for \Cattsua}
-\todo[inline]{Cattsua more complicated}
-\todo[inline]{At a first glance is not much more powerful}
-\todo[inline]{Look at analogue for disc removal}
-\todo[inline]{Cylinders are possible motivation here}
-\todo[inline]{Look at link to graphical methods}
+
+The metatheory of \Cattsua is more complicated than the corresponding metatheory of \Cattsu, though at first glance the relative increase in power does not match this complexity. The jump from \Catt to \Cattsu vastly simplified the proof of Eckmann-Hilton, allowed the syllepsis to be proven, and lead to results such as disc trivialisation. In contrast, \Cattsua provides no further simplification to Eckmann-Hilton and only slightly simplifies the syllepsis, removing some associators from the proof.
+
+One potential utility of \Cattsua could be simplifying the composites of cylinders, as briefly introduced in \cref{sec:towards-gener-rehydr}. Consider the following diagram from that section which contains two composable \(1\)-cylinders.
+\[
+  \begin{tikzcd}
+    x & z & v \\
+    w & y & u
+    \arrow["f", from=2-1, to=1-1]
+    \arrow["g"{description}, from=2-2, to=1-2]
+    \arrow["a"', from=2-1, to=2-2]
+    \arrow["{a'}", from=1-1, to=1-2]
+    \arrow["X", Rightarrow,from=2-2, to=1-1]
+    \arrow["h"', from=2-3, to=1-3]
+    \arrow["b"', from=2-2, to=2-3]
+    \arrow["{b'}", from=1-2, to=1-3]
+    \arrow["Y", Rightarrow,from=2-3, to=1-2]
+  \end{tikzcd}
+\]
+In \Catt, the \(1\)-composite of these cylinders is a term \((a*b)*h \to f*(a'*b')\) given by:
+\[ \alpha_{a,b,h} *_1 (a *_0 Y) *_1 \alpha_{a,g,b'}^{-1} *_1 (X *_0 b') * \alpha_{f,a',b'}\]
+where each \(\alpha\) term is an associator. This would of course simplify in \Cattsua to \((a *_0 Y) *_1 (X *_0 b')\). Such a simplification could make it simpler to define higher cylinder coherences, such as associator for \(1\)-cylinders, which would be trivial in \Cattsua, but far more involved in \Catt.
+
+Further future work for \Cattsua could involve the search for an analogue of disc trivialisation for \Cattsua. We would expect there to be a more general class of contexts that are trivialised by \Cattsua but are not trivialised. The contexts present in the cylinder contexts presented above could form a starting point for such a study.
+
+A separate avenue for further study is to explore the links between \Cattsua and more graphical presentations of semistrict \(\infty\)-categories. String diagrams are a common graphical method for working with monoidal categories and bicategories~\cite{selinger2011survey}, and their higher dimensional counterparts, such as those implemented in the tool \textsf{homotopy.io}, can be viewed as strictly associative and unital finitely presented \(\infty\)-categories, much like contexts of \Cattsua. Translation results in either direction between these two settings, while highly non-trivial due to the contrast in the way each system approaches composition, would be highly valuable.
 
 \paragraph{Generalised insertion}
 
@@ -7985,9 +8006,9 @@ Let \(W(x,y,z)\) refer to the standard composite over the diagram:
     \arrow[""{name=2, anchor=center, inner sep=0}, curve={height=-30pt}, from=1-2, to=1-3]
     \arrow[""{name=3, anchor=center, inner sep=0}, curve={height=30pt}, from=1-2, to=1-3]
     \arrow[""{name=4, anchor=center, inner sep=0}, from=1-2, to=1-3]
-    \arrow[shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
-    \arrow[shorten <=4pt, shorten >=4pt, Rightarrow, from=3, to=4]
-    \arrow[shorten <=4pt, shorten >=4pt, Rightarrow, from=4, to=2]
+    \arrow["x"',shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow["y"',shorten <=4pt, shorten >=4pt, Rightarrow, from=3, to=4]
+    \arrow["z"',shorten <=4pt, shorten >=4pt, Rightarrow, from=4, to=2]
   \end{tikzcd}
 \]
 Then the coherence term above admits further cell reduction which converts the composites \(\gamma *_0 I\) and \(\delta *_0 I\) to \(W(\gamma, (\alpha *_0 h), (g *_0 \beta))\) and \(W(\delta, (\alpha *_0 h), (g *_0 \beta))\).
@@ -8035,15 +8056,119 @@ and consider the following terms of \(\Delta\):
 while the second term reduces to the standard composite over \(\Delta\), the first does not reduce, as no insertion can be performed due to the condition on trunk height, and hence these two terms are not equal in \Cattsua, unlike in Gray categories. Although it could be argued that these axioms reside in the interchange family of laws for \(\infty\)-categories, one could attempt to define a stricter version of \Cattsua which incorporates these equalities, which the aim of proving that \(3\)-truncated models of this stricter type theory are equivalent to Gray categories.
 
 \paragraph{Strict interchange}
-\todo[inline]{Interchange and generalised pasting diagrams}
-\todo[inline]{Forest counterexample to merging}
-% \paragraph{Alternatives to endo-coherence removal}
-% \todo[inline]{Endo-coherence removal variation?}
 
-% \paragraph{A comparison with \textsc{homotopy.io}}
+In contrast to the reductions in this thesis which strictify units, one could instead consider reductions that strictify all composition, making the associativity and interchange laws strict, leaving only units weak. Such a form of semistrictness is often called \emph{Simpson semistrictness}, due to a conjecture of \citeauthor{simpson1998homotopy}~\cite{simpson1998homotopy} that leaving units weak is sufficient to retain the full expressiveness of weak \(\infty\)-categories.
 
+To achieve this, one could try an approach similar to insertion of merging arguments of a term into the head coherence, when all the involved terms are standard coherences. To be able strictify terms such as the \(\mathsf{swap}\) term given in \cref{sec:cattsu}, the trunk height condition of insertion must be dropped. This immediately leads to composites over contexts which are not pasting diagrams: Consider the context generated by the diagram:
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJ4Il0sWzEsMCwieSJdLFsyLDAsInoiXSxbMCwxLCJnIiwwLHsiY3VydmUiOi0zfV0sWzAsMSwiZiIsMix7ImN1cnZlIjozfV0sWzEsMiwiaSIsMCx7ImN1cnZlIjotM31dLFsxLDIsImgiLDIseyJjdXJ2ZSI6M31dLFs0LDMsIlxcYWxwaGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzYsNSwiXFxiZXRhIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dXQ==
+\[
+  \begin{tikzcd}
+    x & y & z
+    \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "i", curve={height=-18pt}, from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "h"', curve={height=18pt}, from=1-2, to=1-3]
+    \arrow["\alpha"', shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow["\beta"', shorten <=5pt, shorten >=5pt, Rightarrow, from=3, to=2]
+  \end{tikzcd}
+\]
+and then consider the following composite in this context:
+\[ \alpha *_0 ((\beta *_0 \id(\id(z))) *_1 \rho_i)\]
+where \(\rho_i\) is the right unitor on \(i\). Allowing a more general form of merging would lead to this term becoming a composite of the following form:
+% https://q.uiver.app/#q=WzAsNCxbMCwwLCJ4Il0sWzEsMCwieSJdLFsyLDAsInoiXSxbMywwLCJ6Il0sWzAsMSwiZyIsMCx7ImN1cnZlIjotM31dLFswLDEsImYiLDIseyJjdXJ2ZSI6M31dLFsxLDIsImkiXSxbMSwyLCJoIiwyLHsiY3VydmUiOjN9XSxbMiwzLCJcXGlkKHopIiwyXSxbMSwzLCIiLDAseyJjdXJ2ZSI6LTV9XSxbMiwzLCJcXGlkKHopIiwyLHsiY3VydmUiOjN9XSxbNSw0LCJcXGFscGhhIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs3LDYsIlxcYmV0YSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbMiw5LCJcXHJob19pIiwyLHsic2hvcnRlbiI6eyJ0YXJnZXQiOjIwfX1dLFsxMCw4LCJcXGlkKFxcaWQoeikpIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dXQ==
+\[
+  \begin{tikzcd}
+    x & y & z & z
+    \arrow[""{name=0, anchor=center, inner sep=0}, "g", curve={height=-18pt}, from=1-1, to=1-2]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=18pt}, from=1-1, to=1-2]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "i", from=1-2, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "h"', curve={height=25pt}, from=1-2, to=1-3]
+    \arrow[""{name=4, anchor=center, inner sep=0}, "{\id}", from=1-3, to=1-4]
+    \arrow[""{name=5, anchor=center, inner sep=0}, "i", curve={height=-40pt}, from=1-2, to=1-4]
+    \arrow[""{name=6, anchor=center, inner sep=0}, "{\id}"', curve={height=25pt}, from=1-3, to=1-4]
+    \arrow["\alpha"', shorten <=5pt, shorten >=5pt, Rightarrow, from=1, to=0]
+    \arrow["\beta"', shorten <=2pt, shorten >=2pt, Rightarrow, from=3, to=2]
+    \arrow["{\rho_i}"'{pos=0.4}, shorten >=3pt, Rightarrow, from=1-3, to=5]
+    \arrow["{\id^2}"', shorten <=2pt, shorten >=2pt, Rightarrow, from=6, to=4]
+  \end{tikzcd}
+\]
+Although this diagram is not a pasting diagram, as it is not a globular set, we would still expect it to fulfil a similar contractability property to the one pasting diagrams do. One may therefore be lead to believe that strict interchange could be achieved in a type theory similar to \Catt by allowing a more general class of pasting diagrams. This, however, does not work. We consider the following counterexample due to \citeauthor{forest2022unifying}~\cite{forest2022unifying}: let \(\Gamma\) be the context generated by the following diagram.
+% https://q.uiver.app/#q=WzAsMyxbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzQsMCwiXFxidWxsZXQiXSxbMCwxLCIiLDAseyJjdXJ2ZSI6LTV9XSxbMCwxLCIiLDIseyJjdXJ2ZSI6NX1dLFswLDFdLFsxLDIsIiIsMSx7ImN1cnZlIjotNX1dLFsxLDIsIiIsMSx7ImN1cnZlIjo1fV0sWzEsMl0sWzQsNSwiXFxhbHBoYSIsMix7Im9mZnNldCI6LTQsInNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbNCw1LCJcXGFscGhhJyIsMix7Im9mZnNldCI6NCwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs1LDMsIlxcYmV0YSIsMix7Im9mZnNldCI6LTQsInNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbNSwzLCJcXGJldGEnIiwyLHsib2Zmc2V0Ijo0LCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzgsNiwiXFxkZWx0YSIsMix7Im9mZnNldCI6LTQsInNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbOCw2LCJcXGRlbHRhJyIsMix7Im9mZnNldCI6NCwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs3LDgsIlxcZ2FtbWEiLDIseyJvZmZzZXQiOi00LCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzcsOCwiXFxnYW1tYSciLDIseyJvZmZzZXQiOjQsInNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XV0=
+\[
+  \begin{tikzcd}
+    \bullet && \bullet && \bullet
+    \arrow[""{name=0, anchor=center, inner sep=0}, "h", curve={height=-40pt}, from=1-1, to=1-3]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "f"', curve={height=40pt}, from=1-1, to=1-3]
+    \arrow[""{name=2, anchor=center, inner sep=0}, "g"{description}, from=1-1, to=1-3]
+    \arrow[""{name=3, anchor=center, inner sep=0}, "k", curve={height=-40pt}, from=1-3, to=1-5]
+    \arrow[""{name=4, anchor=center, inner sep=0}, "i"', curve={height=40pt}, from=1-3, to=1-5]
+    \arrow[""{name=5, anchor=center, inner sep=0}, "j"{description}, from=1-3, to=1-5]
+    \arrow["\alpha\vphantom{\alpha'}"', shift left=3, shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
+    \arrow["{\alpha'}"', shift right=3, shorten <=4pt, shorten >=4pt, Rightarrow, from=1, to=2]
+    \arrow["\beta\vphantom{\beta'}"', shift left=3, shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+    \arrow["{\beta'}"', shift right=3, shorten <=4pt, shorten >=4pt, Rightarrow, from=2, to=0]
+    \arrow["\delta\vphantom{\delta'}"', shift left=3, shorten <=4pt, shorten >=4pt, Rightarrow, from=5, to=3]
+    \arrow["{\delta'}"', shift right=3, shorten <=4pt, shorten >=4pt, Rightarrow, from=5, to=3]
+    \arrow["\gamma\vphantom{\gamma'}"', shift left=3, shorten <=4pt, shorten >=4pt, Rightarrow, from=4, to=5]
+    \arrow["{\gamma'}"', shift right=3, shorten <=4pt, shorten >=4pt, Rightarrow, from=4, to=5]
+  \end{tikzcd}
+\]
+and let \(\Delta = \Gamma, (X : \alpha *_0 \delta \to \alpha' *_0 \delta'), (Y : \beta *_0 \gamma \to \beta' *_0 \gamma')\). We then have the following distinct composites:
+\[
+  \left(
+    \begin{matrix}
+      f *_0 \gamma\\
+      *_1\\
+      X\\
+      *_1\\
+      \beta *_0 k
+    \end{matrix}
+  \right)
+  *_2
+  \left(
+    \begin{matrix}
+      \alpha' *_0 i\\
+      *_1\\
+      Y\\
+      *_1\\
+      h *_0 \delta'
+    \end{matrix}
+  \right)
+  \not\cong
+  \left(
+    \begin{matrix}
+      \alpha *_0 i\\
+      *_1\\
+      Y\\
+      *_1\\
+      h *_0 \delta
+    \end{matrix}
+  \right)
+  *_2
+  \left(
+    \begin{matrix}
+      f *_0 \gamma'\\
+      *_1\\
+      X\\
+      *_1\\
+      \beta' *_0 k
+    \end{matrix}
+  \right)
+\]
+which are intuitively the composite of \(X\) and \(Y\) in either order, where \(X\) and \(Y\) have been whiskered with the appropriate terms. We note that the matrix notation above is only used to aid comprehension, and does not represent the application of any matrix notation. The approach described above of merging together composites would lead to both of the above composites of \(X\) and \(Y\) being reduced to the same composite over \(\Delta\), contradicting the viability of such an approach.
 
+An alternative, non-rewriting based approach could be defined by the following equality rule:
+\begin{equation*}
+  \left\{ (\Gamma, s \sub \sigma, t \sub \sigma) \mathrel{\bigg\vert}{}
+  \begin{matrix*}[l]
+    \text{\(s\) and \(t\) are pure composite terms,}\\
+    s = t \text{ in a strict \(\infty\)-category}
+  \end{matrix*}
+  \right\}
+\end{equation*}
+where a \emph{pure composite} is a term constructed only using standard composites. Such an approach avoids the counter example above, as the two composites of \(X\) and \(Y\) are not equal in a strict \(\infty\)-category, and so would not be equated in the type theory generated by this equality rule set.
 
+We note that due to an algorithm of \citeauthor{makkai2005word}~\cite{makkai2005word}, which is also described and implemented by \citeauthor{forest2021computational}~\cite{forest2021computational}, it can be decided whether terms \(s\) and \(t\) are equal in a strict \(\infty\)-category. Therefore, to decide equality of the above system, we need a method of finding the correct decomposition of a term into a substitution applied to a purely compositional term. We conjecture that there exists a factorisation system on \(\mathsf{Catt}\) with the left class of morphisms given by purely compositional substitutions, substitutions whose contained terms are all pure composites, which could be used for this purpose. We leave all details of such a construction for future work.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
