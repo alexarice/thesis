@@ -7501,7 +7501,7 @@ which allows definitions to be given for terms which witness the triangle and pe
                        ]
                      ]
 \end{lstlisting}
-We note the direct use of the \(\mathsf{comp}\) constructor to easily provide a ternary composite without needing to give a new top-level definition. Using the \(\mathsf{normalise}\) command, it can be show that the triangle reduces to the identity with \Cattsu normalisation enabled, and the pentagon reduces to the identity with \Cattsua normalisation enabled.
+We note the direct use of the \(\mathsf{comp}\) constructor to easily provide a ternary composite without needing to give a new top-level definition. Using the \(\mathsf{normalise}\) command, it can be shown that the triangle reduces to the identity with \Cattsu normalisation enabled, and the pentagon reduces to the identity with \Cattsua normalisation enabled.
 
 In the files \texttt{/examples/eh.catt} and \texttt{/examples/eh-cyll.catt}, we give two \Catt proofs of the Eckmann-Hilton argument (see \cref{prop:eh}). In \Cattsu, these both normalise to the following vastly smaller term:
 \begin{lstlisting}[language=Catt]
@@ -7516,7 +7516,7 @@ The \(\mathsf{size}\) command demonstrates that the \Catt Eckmann-Hilton proof i
 \subsection{Further work}
 \label{sec:further-work}
 
-We end the discussion of this implementation with some options for improving the tool. Each of these suggestions could make the tool the tool easier to use and interact with, which in turn extends what can be achieved with it.
+We end the discussion of this implementation with some options for improving the tool. Each of these suggestions could make the tool easier to use and interact with, which in turn extends what can be achieved with it.
 
 Currently, the tool completely relies on the bidirectional typing rules to perform all of its type inference. While this is effective in some scenarios, for example labellings and implicit suspension, it is lacking in others, such as the lack of implicit arguments in substitutions.
 
@@ -7748,7 +7748,7 @@ By (5), noting that the inductive hypothesis on \(k\) implies that the types of 
 \[\src_m(P_k(t)) \equiv \src_m(P_m(t)) \equiv \src(\phi(\src_m(t))^{-1}) \equiv R(N(\src_m(t)))\]
 with a similar equation holding for the target. It then follows that \(\Delta \vdash P(t) : R(N(A))\).
 
-Statement 4 holds by a simple induction on \(k\), using statement (6) to reduce each normaliser to an identity, and the using pruning and disc removal to get the equality:
+Statement 4 holds by a simple induction on \(k\), using statement (6) to reduce each normaliser to an identity, and then using pruning and disc removal to get the equality:
 \[ \stdcoh {T_{k}^{n}} n \sub {\langle \id(\src_{k}(P_{k}(t))), P_{k}(t), \id(\tgt_k(P_{k}(t))) \rangle} = P_k(t) \]
 which along with the inductive hypothesis on \(k\) is sufficient.
 
@@ -7906,7 +7906,7 @@ A separate avenue for further study is to explore the links between \Cattsua and
 
 \paragraph{Generalised insertion}
 
-The conditions gave for insertion in \cref{sec:insertion} were not the most general conditions possible. In this section, we stated that to perform insertion we required an insertion redex \((S,P,T,\U,L,M)\), and one of the conditions of this insertion redex was that:
+The conditions given for insertion in \cref{sec:insertion} were not the most general conditions possible. In this section, we stated that to perform insertion we required an insertion redex \((S,P,T,\U,L,M)\), and one of the conditions of this insertion redex was that:
 \[ L(\olsi P) \equiv \stdcoh T {\lh(P)} \sub M\]
 It turns out that it is sufficient to give the weaker condition that the locally maximal argument is a coherence where the type contained in the coherence is sufficiently suspended:
 \[ L(\olsi P) \equiv \Coh T {\Sigma^{\bh(P)}(A)} M\]
@@ -7925,7 +7925,7 @@ when \(S = [S_0,\dots,S_n]\). The inductive step of the exterior labelling then 
 
 In some ways, this definition of insertion is more natural than the definition given earlier. We no longer rely on the syntactic condition of the locally maximal argument being a standard coherence, only relying on the far weaker suspendability property. In the proof for confluence of \Cattsua, a large focus was cases where a reduction modified a standard coherence into a term which was no longer a standard coherence. Cases like these do not happen with generalised insertion, as reductions do not break the suspendability property. More generally, a confluence proof for generalised insertion does not require any proof about the interaction of insertion with boundary inclusion maps and standard coherences (given in \cref{sec:further-properties} for the original definition).
 
-Unfortunately, this generalised form of insertion can not be directly used in \Cattsua without breaking confluence. Let \(\Gamma\) be the following context given by the following diagram:
+Unfortunately, this generalised form of insertion cannot be directly used in \Cattsua without breaking confluence. Let \(\Gamma\) be the following context given by the following diagram:
 % https://q.uiver.app/#q=WzAsNCxbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzMsMCwiXFxidWxsZXQiXSxbNCwwLCJcXGJ1bGxldCJdLFswLDEsIiIsMCx7ImN1cnZlIjotNX1dLFswLDEsIiIsMix7ImN1cnZlIjo1fV0sWzEsMiwiZyIsMCx7ImN1cnZlIjotMn1dLFsxLDIsImYiLDIseyJjdXJ2ZSI6Mn1dLFsyLDMsImkiLDAseyJjdXJ2ZSI6LTJ9XSxbMiwzLCJoIiwyLHsiY3VydmUiOjJ9XSxbNSw0LCIiLDIseyJvZmZzZXQiOi01LCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzUsNCwiIiwwLHsib2Zmc2V0Ijo1LCJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzcsNiwiXFxhbHBoYSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XSxbOSw4LCJcXGJldGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzEwLDExLCJcXHBoaSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XV0=
 \[
   \begin{tikzcd}
@@ -7969,7 +7969,7 @@ Let \(W(x,y,z)\) refer to the standard composite over the diagram:
 \]
 Then the coherence term above admits further cell reduction which converts the composites \(\gamma *_0 I\) and \(\delta *_0 I\) to \(W(\gamma, (\alpha *_0 h), (g *_0 \beta))\) and \(W(\delta, (\alpha *_0 h), (g *_0 \beta))\).
 
-but reduces no further. If the endo-coherence removal is performed, then \(E\) reduces to \(\id(I)\), which can be pruned from the original composite. After a further reductions, we obtain a coherence over the context \(\Delta\) given by the following diagram:
+but reduces no further. If the endo-coherence removal is performed, then \(E\) reduces to \(\id(I)\), which can be pruned from the original composite. After further reductions, we obtain a coherence over the context \(\Delta\) given by the following diagram:
 % https://q.uiver.app/#q=WzAsMyxbMCwwLCJcXGJ1bGxldCJdLFsyLDAsIlxcYnVsbGV0Il0sWzMsMCwiXFxidWxsZXQiXSxbMCwxLCIiLDAseyJjdXJ2ZSI6LTV9XSxbMCwxLCIiLDAseyJjdXJ2ZSI6NX1dLFsxLDIsIiIsMCx7ImN1cnZlIjotMn1dLFsxLDIsIiIsMix7ImN1cnZlIjoyfV0sWzQsMywiIiwwLHsib2Zmc2V0IjotNSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs0LDMsIiIsMix7Im9mZnNldCI6NSwic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dLFs2LDUsIkIiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzcsOCwiQSIsMix7InNob3J0ZW4iOnsic291cmNlIjoyMCwidGFyZ2V0IjoyMH19XV0=
 \[
   \begin{tikzcd}
@@ -8015,7 +8015,7 @@ while the second term reduces to the standard composite over \(\Delta\), the fir
 
 In contrast to the reductions in this thesis which strictify units, one could instead consider reductions that strictify all composition, making the associativity and interchange laws strict, leaving only units weak. Such a form of semistrictness is often called \emph{Simpson semistrictness}, due to a conjecture of \citeauthor{simpson1998homotopy}~\cite{simpson1998homotopy} that leaving units weak is sufficient to retain the full expressiveness of weak \(\infty\)-categories.
 
-To achieve this, one could try an approach similar to insertion of merging arguments of a term into the head coherence, when all the involved terms are standard coherences. To be able strictify terms such as the \(\mathsf{swap}\) term given in \cref{sec:cattsu}, the trunk height condition of insertion must be dropped. This immediately leads to composites over contexts which are not pasting diagrams: Consider the context generated by the diagram:
+To achieve this, one could try an approach similar to insertion of merging arguments of a term into the head coherence, when all the involved terms are standard coherences. To be able to strictify terms such as the \(\mathsf{swap}\) term given in \cref{sec:cattsu}, the trunk height condition of insertion must be dropped. This immediately leads to composites over contexts which are not pasting diagrams: Consider the context generated by the diagram:
 % https://q.uiver.app/#q=WzAsMyxbMCwwLCJ4Il0sWzEsMCwieSJdLFsyLDAsInoiXSxbMCwxLCJnIiwwLHsiY3VydmUiOi0zfV0sWzAsMSwiZiIsMix7ImN1cnZlIjozfV0sWzEsMiwiaSIsMCx7ImN1cnZlIjotM31dLFsxLDIsImgiLDIseyJjdXJ2ZSI6M31dLFs0LDMsIlxcYWxwaGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV0sWzYsNSwiXFxiZXRhIiwyLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfX1dXQ==
 \[
   \begin{tikzcd}
