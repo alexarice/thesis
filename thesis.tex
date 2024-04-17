@@ -4712,7 +4712,7 @@ We next state two factorisation properties for the interior and exterior labelli
   Hence, the maps \(L\) and \(M\) factor through the labellings \(\kappa\) and \(\iota\) respectively.
 \end{lemma}
 \begin{proof}
-  See \func{Catt.Tree.Insertion.Properties}{ι-comm} and \func{Catt.Tree.Insertion.Properties}{κ-comm} in \module{Catt.Tree.Insertion.Properties}.
+  See \funcn{Catt.Tree.Insertion.Properties}{4201}{ι-comm} and \funcn{Catt.Tree.Insertion.Properties}{4738}{κ-comm} in \module{Catt.Tree.Insertion.Properties}.
 \end{proof}
 
 We can now proceed with the proof of \cref{thm:univ-prop}.
@@ -5101,7 +5101,7 @@ The situation here is less clear than before, as the map \(D^n \to D^n\) is not 
   if \(\mathcal{R}\) is a (tame) equality rule set which has disc removal.
 \end{lemma}
 \begin{proof}
-  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-disc} and \func{Catt.Tree.Insertion.Properties}{disc-label-from-2} in the formalisation module \module{Catt.Tree.Insertion.Properties} and \func{Catt.Typing.Insertion.Equality}{κ-disc} in \module{Catt.Typing.Insertion.Equality}.
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-disc} and \func{Catt.Tree.Insertion.Properties}{disc-label-from-2} in the formalisation module \module{Catt.Tree.Insertion.Properties} and \funcn{Catt.Typing.Insertion.Equality}{10459}{κ-disc} in \module{Catt.Typing.Insertion.Equality}.
 \end{proof}
 
 \paragraph{Insertion of an endo-coherence} We now turn our attention to the interaction between insertion and endo-coherence removal. Unlike in \Cattsu, the locally maximal argument in an insertion redex need not be in normal form. In particular, since the only condition on the locally maximal argument is that it is a standard coherence, it may be an endo-coherence. In such a situation there are two distinct ways of applying equalities:
@@ -5219,7 +5219,7 @@ These results appear in the next lemma.
   \[\insertion {(\insertion {L} P {(\{\stdcoh T {\lh(P) - 1}\} \bullet M)})} {P'} {M} \equiv^{\max} \insertion L P M\]
 \end{lemma}
 \begin{proof}
-  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-pruned-branch}, \func{Catt.Tree.Insertion.Properties}{pruned-branch-prop}, and \func{Catt.Tree.Insertion.Properties}{label-from-pruned-branch} in formalisation module \module{Catt.Tree.Insertion.Properties}, and \func{Catt.Typing.Insertion.Equality}{pruned-branch-κ} in \module{Catt.Typing.Insertion.Equality}.
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-pruned-branch}, \func{Catt.Tree.Insertion.Properties}{pruned-branch-prop}, and \func{Catt.Tree.Insertion.Properties}{label-from-pruned-branch} in formalisation module \module{Catt.Tree.Insertion.Properties}, and \funcn{Catt.Typing.Insertion.Equality}{3281}{pruned-branch-κ} in \module{Catt.Typing.Insertion.Equality}.
 \end{proof}
 
 \paragraph{Branch irrelevance}
@@ -5507,7 +5507,7 @@ The construction is therefore given by the colimit of the top-left border of the
 for any insertion redexes \((S,P,T,\U,L,M)\) and \((S,P,T,\U,L,N)\).
 \end{lemma}
 \begin{proof}
-  See functions \func{Catt.Tree.Insertion.Properties}{insertion-parallel}, \func{Catt.Tree.Insertion.Properties}{κ-parallel}, and \func{Catt.Tree.Insertion.Properties}{label-from-parallel} in formalisation module \module{Catt.Tree.Insertion.Properties}.
+  See functions \func{Catt.Tree.Insertion.Properties}{insertion-parallel}, \funcn{Catt.Tree.Insertion.Properties}{33917}{κ-parallel}, and \funcn{Catt.Tree.Insertion.Properties}{40709}{label-from-parallel} in formalisation module \module{Catt.Tree.Insertion.Properties}.
 \end{proof}
 
 \paragraph{Boundaries of inserted trees}
@@ -5690,7 +5690,7 @@ We examine the action of each side of the equation on the path \(\olsi {\bound n
   for \(\epsilon \in \{-,+\}\).
 \end{lemma}
 \begin{proof}
-  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-bd-2} and \func{Catt.Tree.Insertion.Properties}{bd-κ-comm-2} in the formalisation module \module{Catt.Tree.Insertion.Properties}.
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-bd-2} and \funcn{Catt.Tree.Insertion.Properties}{50068}{bd-κ-comm-2} in the formalisation module \module{Catt.Tree.Insertion.Properties}.
 \end{proof}
 
 Both of the further conditions in \cref{lem:insertion-bd-2} imply that \(n > \bh(P)\). We have therefore seen 3 conditions that can be put on \(n\), \(P\), and \(T\):
@@ -6067,7 +6067,7 @@ The left-hand pushout square is given by the insertion of \(U\) into \(T\) along
   for any \(L : S \to \U\), \(M : T \to \U\), and \(N : U \to \U\).
 \end{lemma}
 \begin{proof}
-  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-inserted-branch} and \func{Catt.Tree.Insertion.Properties}{label-from-inserted-branch} in the formalisation module \module{Catt.Tree.Insertion.Properties}, and \func{Catt.Typing.Insertion.Equality}{κ-inserted-branch} in module \module{Catt.Typing.Insertion.Equality}.
+  See the functions \func{Catt.Tree.Insertion.Properties}{insertion-tree-inserted-branch} and \func{Catt.Tree.Insertion.Properties}{label-from-inserted-branch} in the formalisation module \module{Catt.Tree.Insertion.Properties}, and \funcn{Catt.Typing.Insertion.Equality}{22361}{κ-inserted-branch} in module \module{Catt.Typing.Insertion.Equality}.
 \end{proof}
 
 
