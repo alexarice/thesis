@@ -1,4 +1,4 @@
-* TODO p11: (m,n)-categories defined poorly
+* DONE p11: (m,n)-categories defined poorly
 * DONE 7731 unbalanced paren
 * DONE around 7731 statement numbers in brackets
 * TODO Page 33 Globular sets should be finitely generated
