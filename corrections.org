@@ -6,5 +6,6 @@
 * TODO Page 54 Operation set
 * DONE Correct PSE rule in figure 1.3
 * DONE Fix example 1.2.3
+* DONE Fix globular sum arrow direction
 
 
