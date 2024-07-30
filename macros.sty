@@ -104,3 +104,7 @@
 \newlist{lemmaenum}{enumerate}{1} % should only occur inside lemma env.
 \setlist[lemmaenum]{label=(\roman*),ref=\thelemma(\roman*)}
 \crefalias{lemmaenumi}{lemma}
+
+\newlist{statements}{enumerate}{1}
+\setlist[statements]{label=(\arabic*),ref=(\arabic*)}
+\crefname{statementsi}{statement}{statements}
