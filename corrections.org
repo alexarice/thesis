@@ -8,5 +8,9 @@
 * DONE Fix example 1.2.3
 * DONE Fix globular sum arrow direction
 * DONE Use globular structure instead of globular category
+* TODO Exposition on coherators
+* TODO Boundary set example
+* TODO Arrow choice
+* TODO Comp vs coh in impl
 
 
