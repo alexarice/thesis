@@ -12,9 +12,9 @@
 * DONE Environment definition (restriction)
 * DONE metavariables -> meta-variables
 * DONE Fix colours on evaluation
-* TODO Exposition on coherators
+* DONE Exposition on coherators
 * TODO Boundary set example
-* TODO Arrow choice
+* DONE Arrow choice
 * TODO Comp vs coh in impl
 
 

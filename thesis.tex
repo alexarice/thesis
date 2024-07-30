@@ -1872,8 +1872,8 @@ coherator such that the opposite functor preserves globular sums.
   For example, one could add the lift for 1-composition twice, to get two
   distinct 1-composition operations, as long as one also added a lift between
   these now parallel operations. Grothendieck gives a general schema for
-  producing coherators, and conjectures that any two coherators give rise to
-  equivalent models of \(\infty\)-categories.
+  producing (invertible) coherators, and conjectures that any two of these give rise to
+  equivalent models of \(\infty\)-groupoids. Despite the similarities in their constructions, the author is not aware of a more general definition of coherator which includes both the Grothendieck and Maltsiniotis variants and has more structure than a globular extension.
 \end{remark}
 
 We now turn our attention back to the proof of Eckmann-Hilton from
@@ -2061,13 +2061,17 @@ substitution only extending to a partial operation on terms. We write \(\Ctx\)
 for the set of contexts, \(\Term_\Gamma\) for the set of terms in a context
 \(\Gamma\), \(\Type_\Gamma\) for the set of types in a context \(\Gamma\), and
 write \(\sigma : \Delta \to \Gamma\) when \(\sigma\) is a substitution taking
-variables of \(\Delta\) to terms of \(\Gamma\). In the literature,
-substitutions are often written as going in the opposite direction. We
-emphasise here that the direction of our substitution morphisms agrees with
-the direction of the function from variables to terms, the direction of the
-induced functor between the \(\infty\)-categories freely generated from the
-domain and codomain contexts, and the direction of arrows in a Grothendieck
-coherator.
+variables of \(\Delta\) to terms of \(\Gamma\).
+
+\begin{remark}
+  \label{rem:arrow-direction}
+  In the literature, substitutions are often written as going in the opposite
+  direction. We emphasise here that the direction of our substitution morphisms
+  agrees with the direction of the function from variables to terms, the
+  direction of the induced functor between the \(\infty\)-categories freely
+  generated from the domain and codomain contexts, and the direction of arrows
+  in a Grothendieck coherator.
+\end{remark}
 
 We write \(\equiv\) for \emph{syntactic equality}, up to renaming of variables
 and \(\alpha\)-equivalence. The various pieces of syntax will be considered as
@@ -4435,7 +4439,9 @@ operation set is suspendable, we prove the following proposition.
       By \cref{cor:id-sub-ty}, the identity substitution is a well-defined
       morphism, and the above two propositions prove that composition is
       well-defined. Composition satisfies associativity and unitality by
-      \cref{prop:categorical}.
+      \cref{prop:categorical}. We remind the reader that the direction of
+      morphisms in this category is opposite to the direction of morphisms in most
+      categorical models of type theory, as explained in \cref{rem:arrow-direction}.
     \end{definition}
 
     By taking the weakening of the identity substitution \(\id_\Gamma : \Gamma
