@@ -7728,7 +7728,7 @@ We now prove the required properties, starting with statement 1. The statements 
 Then it follows from induction on subterms that \(\Gamma \vdash R(B)\) and \(\Delta \vdash R(\sigma) : \Gamma\), and so:
 \[ \Delta \vdash \Coh \Gamma {R(B)} {R(\sigma)} : R(B) \sub {R(\sigma)}\]
 Then by induction on statement (3), we get:
-\[ \Delta \vdash P(\Coh \Gamma {R(B)} {R(\sigma)} : R(N(R(B) \sub {R(\sigma)})) \]
+\[ \Delta \vdash P(\Coh \Gamma {R(B)} {R(\sigma)}) : R(N(R(B) \sub {R(\sigma)})) \]
 By induction on statement (2), we have \(R(B) \sub {R(\sigma)} = B \sub \sigma\). By inspection of the original typing derivation, we have \(B \sub \sigma = A\), and so \(R(N(R(B) \sub {R(\sigma)})) \equiv R(N(A))\), as required.
 
 Now consider statement 2. The cases for types and substitutions follow by an easy induction from the result for terms. Since the case for variables is trivial, we restrict to the cases for the coherence terms, where we must prove that:
