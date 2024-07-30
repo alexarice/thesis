@@ -12364,7 +12364,7 @@ exactly how it is written above, apart from a few cases:
   \item The application of substitution \(s \sub \sigma\) and \(A \sub \sigma\)
     is simply written \(s\ \sigma\) and \(A\ \sigma\) respectively.
   \item The constructor \(\mathsf{inc}_n^m\) is not parsed and is used as an
-    internal operation for defining the external substitution (see
+    internal operation for defining the external labelling (see
     \cref{sec:insertion}). It is displayed as \(\mathsf{inc}\verb|<n-m>|\).
   \item The suspension can be given by the characters \(\Sigma\) or \(S\), to
     avoid the user being forced to type Unicode characters.
@@ -12608,7 +12608,7 @@ contained type is \(\star\), returning a labelling.
   \ty(\rho)}\) and \({\color{Diag2}\restrict \rho(n)} =
   {\color{Diag2}\rho(n+2)}\). For \(P = \mathsf{Path}\), we let
   \({\color{Diag2}\ty(\restrict \rho)} = {\color{Diag2}(\rho([0]), \rho([1])) ::
-  \ty(\rho)}\) and \({\color{Diag2}\unrestrict \rho(p) = \rho(0::p)}\).
+  \ty(\rho)}\) and \({\color{Diag2}\restrict \rho(p) = \rho(0::p)}\).
 
   If \(\color{Diag2}\rho\) is a \(\mathsf{Path}\)-environment, then there is a
   labelling \(\color{Diag2}\unrestrict \rho\), obtained by popping pairs of
@@ -12644,9 +12644,9 @@ syntax. Intuitively, \(\eval_{\color{Diag2}\rho}({\color{Diag1}s})\) computes
 the normal form of \(s \sub \rho\).
 
 We define \(\eval_{\color{Diag2}\rho}({\color{Diag1}s})\),
-\(\eval_{\color{Diag2}\rho}({\color{Diag2}A})\),
-\(\eval_{\color{Diag2}\rho}({\color{Diag2}\sigma})\),
-\(\eval_{\color{Diag2}\rho}({\color{Diag2}L})\), to be respectively a normal
+\(\eval_{\color{Diag2}\rho}({\color{Diag1}A})\),
+\(\eval_{\color{Diag2}\rho}({\color{Diag1}\sigma})\),
+\(\eval_{\color{Diag2}\rho}({\color{Diag1}L})\), to be respectively a normal
 form term, a normal form type, an \(\mathbb{N}\)-environment, and a
 \(\mathsf{Path}\)-environment. We proceed by case analysis, giving the easier
 cases below.
@@ -13269,12 +13269,12 @@ perform all of its type inference. While this is effective in some scenarios,
 for example labellings and implicit suspension, it is lacking in others, such
 as the lack of implicit arguments in substitutions.
 
-One could try to implement such features by adding metavariables and a
+One could try to implement such features by adding meta-variables and a
 unification procedure to the typechecker. Contrary to the situation for the
 fully weak \Catt, unification for \Cattsu and \Cattsua is non-trivial. Suppose
 we wished to unify the following two terms:
 \[ f *_0 g = h *_0 i\]
-where \(f\),\(g\),\(h\), and \(i\) may contain metavariables. In \Catt, this
+where \(f\),\(g\),\(h\), and \(i\) may contain meta-variables. In \Catt, this
 problem could be reduced to the unification problems \(f = h\) and \(g = i\).
 In \Cattsu however, this cannot be done, as a potential solution is \(f = h
 *_0 i\) and \(g = \id\). It is likely that any unification that can be
