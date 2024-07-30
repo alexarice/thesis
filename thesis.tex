@@ -497,7 +497,7 @@ argued that such a definition can model strict interchange, though the classes
 of diagrams that can be composed in this theory are restricted to those that
 are \emph{spherical}, which disallows horizontal composites in the form stated
 above and makes comparison difficult.
-\citeauthor{Batanin2013}~\cite{Batanin2013} defines a notion of
+\citeauthor{Batanin2013}~\cite{Batanin2013} define a notion of
 \(\infty\)-category with strict units based on the language of operads. % A
 % key axiom in this theory is \emph{disc reduction} which states that
 % composites trivialise over certain configurations of cells known as discs.
@@ -2204,7 +2204,7 @@ represents the same globular set but is not a ps-context.
     \inferrule{ }{(x : \star) \vdash_{\mathsf{ps}} x : \star} {(\textsc{pss})}
     \and
     \inferrule{\Gamma \vdash_{\mathsf{ps}} x : A}{\Gamma, (y : A), (f : \arr x
-    A y)} {(\textsc{pse})}
+    A y) \vdash_{\mathsf{ps}} f : \arr x A y} {(\textsc{pse})}
     \and
     \inferrule{\Gamma \vdash_{\mathsf{ps}} x : \arr s A t}{\Gamma
     \vdash_{\mathsf{ps}} t : A} {(\textsc{psd})}
