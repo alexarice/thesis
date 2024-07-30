@@ -1,7 +1,7 @@
 * DONE p11: (m,n)-categories defined poorly
 * DONE 7731 unbalanced paren
 * DONE around 7731 statement numbers in brackets
-* TODO Page 33 Globular sets should be finitely generated
+* DONE Page 33 Globular sets should be finitely generated
 * TODO Page 49 Warning about spheres
 * TODO Page 54 Operation set
 * DONE Correct PSE rule in figure 1.3
