@@ -1425,7 +1425,7 @@ to be closed under these specific colimits. In fact, it is sufficient to
 contain a class of colimits known as \emph{globular sums}.
 
 \begin{definition}
-  A globular category is a category \(\mathcal{C}\), equipped with a disc
+  A \emph{globular structure} on a category \(\mathcal{C}\) is a
   functor \(D : \mathbf{G} \to \mathcal{C}\), specifying certain objects as
   discs in the category. A \emph{globular sum} is a colimit of a diagram of the
   form:
@@ -1451,15 +1451,16 @@ contain a class of colimits known as \emph{globular sums}.
   \[ D(i_0) \amalg_{D(j_0)} D(i_1) \amalg_{D(j_1)} D(i_2) \cdots D(i_n)
   \amalg_{D(j_n)} D(i_{n+ 1})\]
 
-  A \emph{globular extension} is a globular category where all globular sums
-  exist, and a morphism of globular extensions is a functor of the underlying
-  categories commuting with the disc functors and preserving globular sums.
+  A \emph{globular extension} is a category equipped with a globular structure
+  where all globular sums exist, and a morphism of globular extensions is a
+  functor of the underlying categories commuting with the disc functors and
+  preserving globular sums.
 \end{definition}
 
 We can now give our first definition of a pasting diagram.
 
 \begin{definition}
-  The category \(\mathbf{Glob}\) is a globular category with functor
+  The category \(\mathbf{Glob}\) has a globular structure
   \(\mathbf{G} \to \mathbf{Glob}\) given by the Yoneda embedding. The category
   of \emph{pasting diagrams}, \(\mathbf{Pd}\), is the full subcategory
   containing the globular sets which are globular sums.
@@ -1470,8 +1471,8 @@ We can now give our first definition of a pasting diagram.
   pasting diagram.
 \end{definition}
 
-The category of pasting diagrams clearly forms a globular category, with the
-functor \(\mathbf{G} \to \mathbf{Pd}\) sending \(n\) to \(D^n\). It is a
+The category of pasting diagrams has a globular structure \(\mathbf{G} \to
+\mathbf{Pd}\) sending \(n\) to \(D^n\). It is a
 globular extension and is in fact the universal globular extension; it is
 initial in the category of globular extensions~\cite{Ara}.
 
@@ -13315,9 +13316,9 @@ Despite claiming that the type theories \Cattsu and \Cattsua model semistrict
 recall the definition of a model for these theories, and discuss some
 properties of these models.
 
-The definitions of \emph{globular category} and \emph{globular sum} were given
-in \cref{sec:background}. Any variant of \Cattr can be equipped with the
-structure of a globular category by choosing the disc objects to be the disc
+The definitions of \emph{globular structure} and \emph{globular sum} were given
+in \cref{sec:background}. Any variant of \Cattr can be equipped with a
+globular structure by choosing the disc objects to be the disc
 contexts and letting the source and target maps be given by the inclusions
 \(\lfloor \incbd  {n} \epsilon {D^{n+1}} \rfloor\) for \(\epsilon \in
 \{-,+\}\). We then define the category of models of \Cattsu and \Cattsua.
