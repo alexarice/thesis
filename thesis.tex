@@ -3338,8 +3338,8 @@ and non-well-formed terms being equated.
   {%
     \begin{figure}[hbtp]
       \centering
-      \fbox{
-        \begin{subfigure}{0.47\textwidth}
+      \fbox*[boxsep=2pt]{
+        \begin{subfigure}{0.48\textwidth}
           \begin{mathpar}
             \inferrule{ }{\star : \Type_\Gamma}
             \and
@@ -3364,9 +3364,8 @@ and non-well-formed terms being equated.
             \Delta \star \Gamma}{\Coh \Delta A \sigma : \Term_\Gamma}
           \end{mathpar}
           \caption{Syntax.}
-      \end{subfigure}}
-      \hfill
-      \fbox{
+        \end{subfigure}}\hspace{7pt}
+      \fbox*[boxsep=2pt]{
         \begin{subfigure}{0.48\textwidth}
           \begin{mathpar}
             \inferrule{ }{\emptyset \vdash}
@@ -3397,11 +3396,12 @@ and non-well-formed terms being equated.
             \sigma} {A \sub \sigma} {t \sub \sigma}}
           \end{mathpar}
           \caption{Typing.}
-      \end{subfigure}}
+        \end{subfigure}%
+      }
 
       \vspace{7pt}
-      \fbox{
-        \begin{subfigure}{0.9852\textwidth}
+      \fbox*{
+        \begin{subfigure}{0.9771\textwidth}
           \begin{mathpar}
             \inferrule{\Gamma \vdash s : A \\ (\Gamma, s, t) \in
             \mathcal{R}}{\Gamma \vdash s = t}\textsc{rule} \and
@@ -3425,12 +3425,12 @@ and non-well-formed terms being equated.
       \end{subfigure}}
 
       \vspace{7pt}
-      \fbox{
-        \begin{subfigure}{0.47\textwidth}
+      \fbox*[boxsep=2pt]{
+        \begin{subfigure}{0.48\textwidth}
           \vspace{3.7pt}
           \begin{mathpar}
             \inferrule{ }{(x : \star) \vdash_{\mathsf{ps}} x : \star}
-            \and
+            \\
             \inferrule{\Gamma \vdash_{\mathsf{ps}} x : A}{\Gamma, (y : A), (f :
             \arr x A y)}
             \and
@@ -3441,9 +3441,8 @@ and non-well-formed terms being equated.
             \vdash_{\mathsf{ps}}}
           \end{mathpar}
           \caption{Ps-contexts.}
-      \end{subfigure}}
-      \hfill
-      \fbox{
+      \end{subfigure}}\hspace{7pt}
+      \fbox*[boxsep=2pt]{
         \begin{subfigure}{0.48\textwidth}
           \begin{mathpar}
             \FV(\star) = \{\}
