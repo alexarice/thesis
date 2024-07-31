@@ -13,7 +13,7 @@
 * DONE metavariables -> meta-variables
 * DONE Fix colours on evaluation
 * DONE Exposition on coherators
-* TODO Boundary set example
+* DONE Boundary set example
 * DONE Arrow choice
 * DONE Comp vs coh in impl
 * DONE Typo in bidirectional rules

@@ -3364,7 +3364,7 @@ and non-well-formed terms being equated.
             \Delta \star \Gamma}{\Coh \Delta A \sigma : \Term_\Gamma}
           \end{mathpar}
           \caption{Syntax.}
-        \end{subfigure}}\hspace{7pt}
+      \end{subfigure}}\hspace{7pt}
       \fbox*[boxsep=2pt]{
         \begin{subfigure}{0.48\textwidth}
           \begin{mathpar}
@@ -3718,6 +3718,40 @@ inclusions of pasting diagrams until \cref{sec:trees}.
   These boundary sets appear in the formalisation as
   \func{Catt.Support}{pd-bd-vs}.
 \end{definition}
+
+\begin{example}
+  We consider the boundaries of the pasting context \(\Delta\) given by the
+  following diagram:
+  % https://q.uiver.app/#q=WzAsMyxbMCwwLCJ4Il0sWzEsMCwieSJdLFsyLDAsInoiXSxbMCwxLCJmIl0sWzEsMiwiZyIsMix7ImN1cnZlIjozfV0sWzEsMiwiaCIsMCx7ImN1cnZlIjotM31dLFs0LDUsIlxcYWxwaGEiLDIseyJzaG9ydGVuIjp7InNvdXJjZSI6MjAsInRhcmdldCI6MjB9fV1d
+  \[
+    \begin{tikzcd}
+      x & y & z
+      \arrow["f", from=1-1, to=1-2]
+      \arrow[""{name=0, anchor=center, inner sep=0}, "g"', curve={height=18pt},
+      from=1-2, to=1-3]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "h", curve={height=-18pt},
+      from=1-2, to=1-3]
+      \arrow["\alpha"', shorten <=5pt, shorten >=5pt, Rightarrow, from=0, to=1]
+    \end{tikzcd}
+  \]
+  Letting \(\Gamma\) be the prefix of \(\Delta\) without \(h\) and \(\alpha\)
+  (such that \(\Delta = \Gamma, (h : y \to z), (\alpha : g \to h)\)), we
+  immediately see that:
+  \begin{align*}
+    \bdry 1 \epsilon \Gamma &= \bdry 1 \epsilon {(x : \star), (y : \star), (f :
+    x \to y)} \cup \{z, g\}\\
+    &= \bdry 1 \epsilon {(x : \star)} \cup \{y,f,z,g\}\\
+    &= \{x,y,f,z,g\}
+  \end{align*}
+  and therefore we have that:
+  \begin{align*}
+    \bdry 1 - \Delta &= \bdry 1 - \Gamma = \Var(\Gamma)\\
+    \bdry 1 + \Delta &= (\bdry 1 - \Gamma \cup \{h\}) \setminus \{g\} =
+    \{x,y,f,z,h\}
+  \end{align*}
+  Similar calculations show that \(\bdry 2 \epsilon \Delta = \Var(\Delta)\),
+  \(\bdry 0 - \Delta = \{x\}\), and \(\bdry 0 + \Delta = \{z\}\).
+\end{example}
 
 The following lemma is immediate:
 
