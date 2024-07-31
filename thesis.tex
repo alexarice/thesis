@@ -1872,8 +1872,11 @@ coherator such that the opposite functor preserves globular sums.
   For example, one could add the lift for 1-composition twice, to get two
   distinct 1-composition operations, as long as one also added a lift between
   these now parallel operations. Grothendieck gives a general schema for
-  producing (invertible) coherators, and conjectures that any two of these give rise to
-  equivalent models of \(\infty\)-groupoids. Despite the similarities in their constructions, the author is not aware of a more general definition of coherator which includes both the Grothendieck and Maltsiniotis variants and has more structure than a globular extension.
+  producing (invertible) coherators, and conjectures that any two of these give
+  rise to equivalent models of \(\infty\)-groupoids. Despite the similarities in
+  their constructions, the author is not aware of a more general definition of
+  coherator which includes both the Grothendieck and Maltsiniotis variants and
+  has more structure than a globular extension.
 \end{remark}
 
 We now turn our attention back to the proof of Eckmann-Hilton from
@@ -12410,7 +12413,18 @@ regular substitutions by the evaluation function introduced in
 \cref{sec:evaluation}, which applies the appropriate number of suspensions to
 the head term. An example of this is given in \cref{sec:examples}.
 
-The syntax includes two new base constructors for terms alongside the \textsf{coh} constructor: \textsf{comp} and \textsf{id}. These allow easy access to common terms that are prevalent in most \Catt terms; the \textsf{id} constructor produces an identity term and the \textsf{comp} constructor produces a standard composite (a term of the form \(\stdcoh T {\dim(T)}\), see \cref{sec:standard-coherences}). The dimension of the identity term and the tree \(T\) that the \textsf{comp} term composes over can be inferred during typechecking (\cref{sec:typechecking}), simplifying the syntax of many common terms. The evaluator (\cref{sec:evaluation}), converts coherence terms of the appropriate form to these constructors and leverages this to identify regexes, noting that composites and identities are the normal forms of standard coherences (see \cref{thm:std-ecr}) in \Cattsu and \Cattsua.
+The syntax includes two new base constructors for terms alongside the
+\textsf{coh} constructor: \textsf{comp} and \textsf{id}. These allow easy
+access to common terms that are prevalent in most \Catt terms; the \textsf{id}
+constructor produces an identity term and the \textsf{comp} constructor
+produces a standard composite (a term of the form \(\stdcoh T {\dim(T)}\), see
+\cref{sec:standard-coherences}). The dimension of the identity term and the
+tree \(T\) that the \textsf{comp} term composes over can be inferred during
+typechecking (\cref{sec:typechecking}), simplifying the syntax of many common
+terms. The evaluator (\cref{sec:evaluation}), converts coherence terms of the
+appropriate form to these constructors and leverages this to identify regexes,
+noting that composites and identities are the normal forms of standard
+coherences (see \cref{thm:std-ecr}) in \Cattsu and \Cattsua.
 
 We also provide a command language on top of the raw syntax for \Catt, which
 allows the user to perform various operations on terms, such as binding them
