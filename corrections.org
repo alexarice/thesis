@@ -15,7 +15,7 @@
 * DONE Exposition on coherators
 * TODO Boundary set example
 * DONE Arrow choice
-* TODO Comp vs coh in impl
+* DONE Comp vs coh in impl
 * DONE Typo in bidirectional rules
 
 
