@@ -4913,10 +4913,12 @@ operation set is suspendable, we prove the following proposition.
       : \Gamma\). Since \(\mathcal{R}_\mathsf{S}\) satisfies the support rule,
       we
       can use \cref{cor:dc-sub} to get:
-      \[ \Supp(s \sub \sigma) = \DC_\Gamma(\FV(s) \sub \sigma) = \Supp(s) \sub
-        \sigma = \Supp(t) \sub \sigma = \DC_\Gamma(\FV(t) \sub \sigma) =
+      \[
+        \Supp(s \sub \sigma)\hspace{-0.02cm} =\hspace{-0.02cm} \DC_\Gamma(\FV(s) \sub \sigma)\hspace{-0.02cm} =\hspace{-0.02cm} \Supp(s) \sub
+        \sigma\hspace{-0.02cm} =\hspace{-0.02cm} \Supp(t) \sub \sigma\hspace{-0.02cm} =\hspace{-0.02cm} \DC_\Gamma(\FV(t) \sub \sigma)\hspace{-0.02cm} =\hspace{-0.02cm}
         \Supp(t \sub
-      \sigma) \]
+      \sigma)
+      \]
       as required.
     \end{proof}
 
@@ -5244,7 +5246,7 @@ operation set is suspendable, we prove the following proposition.
   with will be tame, as will be case for all theories introduced in
   \cref{cha:cattstrict}.
 
-  This chapter builds up to the following two constructions, that can be viewed
+  This chapter builds up to the following constructions, that can be viewed
   as meta-operations on \Cattr.
   \begin{itemize}
     \item The \emph{pruning} operation will be introduced in \cref{sec:pruning}
@@ -5578,8 +5580,7 @@ operation set is suspendable, we prove the following proposition.
     maximal variable.
   \end{example}
 
-  As all disc contexts are pasting diagrams, and hence are the associated
-  context of a Dyck word.
+  All disc contexts are pasting diagrams, and hence are the associated context of a Dyck word.
 
   \begin{definition}
     Let \(\mathcal{D}^n\) be the Dyck word with \(n\) upwards moves followed by
@@ -5597,7 +5598,7 @@ operation set is suspendable, we prove the following proposition.
     Dyck words are closed under suspension. We define the suspension of a Dyck
     word \(\mathcal{D} : \Dyck_d\) to be the Dyck word \(\Sigma(\mathcal{D}) :
     \Dyck_{d+1}\) which is obtained by inserting an additional up move to the
-    start of the work, or can alternatively be inductively defined by:
+    start of the word, or can alternatively be inductively defined by:
     \[ \Sigma(\circleddash) = \circleddash \Uparrow \qquad
       \Sigma(\mathcal{D}\Uparrow) = \Sigma(\mathcal{D})\Uparrow \qquad
     \Sigma(\mathcal{D}\Downarrow) = \Sigma(\mathcal{D})\Downarrow \]
