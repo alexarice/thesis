@@ -254,7 +254,7 @@ First year report submitted
 \ifcam@secondyr
 Second year report submitted
 \else
-This dissertation is submitted
+This thesis is submitted
 \fi
 \fi
 \ifcam@firstyr
